@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 
 export class PropertyCardElement implements OnInit {
-  @Input() property : any
+  @Input() property : any //Input, poate sa imprumute proprietatile obiectului Property
     Property : any = {
         "Id" : 1,
         "Type" : "House",
