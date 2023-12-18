@@ -1,10 +1,21 @@
 <div class="card d-flex p-3">
-  <img class="propImg" src={{property_index.Image}}>
-    <div class="card-body p-2">
-      <h1>{{property_index.Name}}</h1>
-      <h1>{{property_index.Type}}</h1>
-      <h2>{{property_index.Price}}</h2>
-      <!-- Acest input property poate fi folosit ca parametru pentru tag-ul app-property-card, intr-un ngFor -->
+  <div class="card-img-wrapper">
+    <img class="card-img-top" src="{{property_index.Image}}">
+    <ul class="list-inline text-center member-icons animate">
+      <li class="list-inline-item">
+        <button class="btn btn-primary"><i class="far fa-edit"></i></button>
+      </li>
+      <li class="list-inline-item">
+        <button class="btn btn-primary"><i class="far fa-address-book"></i></button>
+      </li>
+    </ul>
+  </div>
+
+
+  <div class="card-body p-2">
+    <h1>{{property_index.Name}}</h1>
+    <h1>{{property_index.Type}}</h1>
+    <h2>{{property_index.Price}}</h2>
+    <!-- Acest input property poate fi folosit ca parametru pentru tag-ul app-property-card, intr-un ngFor -->
   </div>
 </div>
-
