@@ -1,9 +1,9 @@
 <div class="card d-flex p-3">
-  <img class="propImg" src="assets/images/house_default.png" style="object-fit: cover;">
+  <img class="propImg" src={{property_index.Image}}>
     <div class="card-body p-2">
-      <h1>{{property.Name}}</h1>
-      <h1>{{property.Type}}</h1>
-      <h2>{{property.Price}}</h2>
+      <h1>{{property_index.Name}}</h1>
+      <h1>{{property_index.Type}}</h1>
+      <h2>{{property_index.Price}}</h2>
       <!-- Acest input property poate fi folosit ca parametru pentru tag-ul app-property-card, intr-un ngFor -->
   </div>
 </div>
