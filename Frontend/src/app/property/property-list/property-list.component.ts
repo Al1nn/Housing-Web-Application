@@ -6,7 +6,7 @@ import { HousingService } from '../../services/housing.service';
   selector: 'app-property-list',
   templateUrl: './property-list.component.html',
   styleUrls: ['./property-list.component.css']
-})
+}) //End of tutorial 10
 export class PropertyListComponent implements OnInit {
 
   Properties: any;
