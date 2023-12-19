@@ -8,19 +8,22 @@ import { PropertyListComponent } from './property/property-list/property-list.co
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import {HttpClientModule, provideHttpClient, withFetch} from '@angular/common/http'
 import { HousingService } from './services/housing.service';
+import { AddPropertyComponent } from './property/add-property/add-property.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PropertyCardElement,
     PropertyListComponent,
-    NavBarComponent
+    NavBarComponent,
+    AddPropertyComponent
    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+
   ],
   providers: [
     provideClientHydration(),
