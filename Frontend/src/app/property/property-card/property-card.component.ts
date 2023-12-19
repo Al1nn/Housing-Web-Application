@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IProperty } from '../IProperty.interface';
 
 @Component({
     selector: 'app-property-card',
@@ -7,14 +8,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 
 export class PropertyCardElement implements OnInit {
-  @Input() property_index : any //Input, poate sa imprumute proprietatile obiectului Property
-    Property : any = {
-        "Id" : 1,
-        "Type" : "House",
-        "Name" : "Birla House",
-        "Price" : 12000,
-        "Image" : "assets/images/house_default.png"
-    }
+  @Input() property_index : IProperty ; //Input, poate sa imprumute proprietatile obiectului Property
+
 
     constructor() { }
 

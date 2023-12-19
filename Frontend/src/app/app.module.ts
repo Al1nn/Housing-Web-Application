@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { PropertyCardElement } from './property/property-card/property-card.component';
 import { PropertyListComponent } from './property/property-list/property-list.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-import {HttpClientModule} from '@angular/common/http'
+import {HttpClientModule, provideHttpClient, withFetch} from '@angular/common/http'
 import { HousingService } from './services/housing.service';
 
 @NgModule({
@@ -24,6 +24,7 @@ import { HousingService } from './services/housing.service';
   ],
   providers: [
     provideClientHydration(),
+    provideHttpClient(withFetch()),
     HousingService
   ],
   bootstrap: [AppComponent]
