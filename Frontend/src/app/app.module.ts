@@ -9,6 +9,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import {HttpClientModule, provideHttpClient, withFetch} from '@angular/common/http'
 import { HousingService } from './services/housing.service';
 import { AddPropertyComponent } from './property/add-property/add-property.component';
+import { RentPropertyComponent } from './property/rent-property/rent-property.component';
+import { PropertyDetailComponent } from './property/property-detail/property-detail.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { AddPropertyComponent } from './property/add-property/add-property.compo
     PropertyCardElement,
     PropertyListComponent,
     NavBarComponent,
-    AddPropertyComponent
+    AddPropertyComponent,
+    RentPropertyComponent,
+    PropertyDetailComponent
    ],
   imports: [
     BrowserModule,

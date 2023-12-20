@@ -5,14 +5,14 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="">Buy <span class="sr-only">(current)</span></a>
+      <li class="nav-item">
+        <a class="nav-link" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active" routerLink="">Buy <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="">Sell</a>
+        <a class="nav-link" routerLinkActive="active" routerLink="/rent-property">Rent</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/add-property">List Property (Free)</a>
+        <a class="nav-link" routerLinkActive="active" routerLink="/add-property">List Property (Free)</a>
       </li>
 
     </ul>

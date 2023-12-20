@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -6,11 +7,16 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './add-property.component.html',
   styleUrls: ['./add-property.component.css']
 })
+
 export class AddPropertyComponent implements OnInit {
-  binding : string = "wowowowow";
-  constructor() { }
+
+  constructor(private route : Router) { }
 
   ngOnInit() {
+  }
+
+  onBack(){
+      this.route.navigate(['/']);
   }
 
 }
