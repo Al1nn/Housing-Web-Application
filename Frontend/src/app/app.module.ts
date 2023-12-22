@@ -11,6 +11,7 @@ import { HousingService } from './services/housing.service';
 import { AddPropertyComponent } from './property/add-property/add-property.component';
 import { RentPropertyComponent } from './property/rent-property/rent-property.component';
 import { PropertyDetailComponent } from './property/property-detail/property-detail.component';
+import { PropertyContactsComponent } from './property/property-contacts/property-contacts.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PropertyDetailComponent } from './property/property-detail/property-det
     NavBarComponent,
     AddPropertyComponent,
     RentPropertyComponent,
-    PropertyDetailComponent
+    PropertyDetailComponent,
+    PropertyContactsComponent
    ],
   imports: [
     BrowserModule,

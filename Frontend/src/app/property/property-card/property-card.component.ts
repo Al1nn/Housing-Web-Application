@@ -8,10 +8,14 @@ import { IProperty } from '../IProperty.interface';
 })
 
 export class PropertyCardElement implements OnInit {
-  @Input() property_index : IProperty ; //Input, poate sa imprumute proprietatile obiectului Property
 
+  @Input() property_index : IProperty ; //Input, poate sa imprumute proprietatile obiectului Property
 
     constructor() { }
 
     ngOnInit() { }
+
+
+
+
 }

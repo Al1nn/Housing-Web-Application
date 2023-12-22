@@ -16,6 +16,7 @@ getAllProperties() : Observable<IProperty[]>{
     map(
       data => {
       const propertiesArray: Array<IProperty> = [];
+      debugger;
       for (const id in data) {
         if (data.hasOwnProperty(id)) {
           propertiesArray.push(data[id as keyof object]);
@@ -23,6 +24,12 @@ getAllProperties() : Observable<IProperty[]>{
       }
       return propertiesArray;
     })
+  );
+}
+
+getPropertyById(propertyId: number): Observable<IProperty> {
+  return this.http.get<IProperty[]>('data/properties.json').pipe(
+    map(properties => properties.find(p => p.Id === propertyId) as IProperty)
   );
 }
 

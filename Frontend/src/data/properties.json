@@ -1,44 +1,150 @@
 [
   {
   "Id" : 1,
+  "SellRent": 1,
   "Type" : "House",
   "Name" : "Birla House",
   "Price" : 15000,
-  "Image" : "assets/images/house_default.png"
+  "Image" : "prop-1",
+  "Contacts" : [
+    {
+      "Id" : 1,
+      "Phone" : "0723456636",
+      "Address" : "Str. Telesti Nr. 3",
+      "Name" : "Vincent"
+    },
+    {
+      "Id" : 2,
+      "Phone" : "0745345636",
+      "Address" : "Str. Vincent Nr. 3",
+      "Name" : "Joseph"
+    },
+    {
+      "Id" : 3,
+      "Phone" : "0765255636",
+      "Address" : "Str. Iuliu Maniu Nr. 3",
+      "Name" : "Amandth"
+    },
+    {
+      "Id" : 4,
+      "Phone" : "0725255636",
+      "Address" : "Str. Alba Iulia Nr. 3",
+      "Name" : "Amandth"
+    }
+  ]
   },
+
   {
     "Id" : 2,
+    "SellRent": 2,
     "Type" : "House",
     "Name" : "Erose Villa",
     "Price" : 20000,
-    "Image" : "assets/images/house_default2.png"
+    "Image" : "prop-2",
+    "Contacts" : [
+      {
+        "Id" : 5,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3",
+        "Name" : "Aladin"
+      },
+      {
+        "Id" : 6,
+        "Phone" : "0745345636",
+        "Address" : "Str. Vincent Nr. 3",
+        "Name" : "Mona"
+      }
+    ]
   },
   {
     "Id" : 3,
+    "SellRent": 3,
     "Type" : "House",
     "Name" : "Aston Villa",
     "Price" : 5000,
-    "Image" : "assets/images/house_default.png"
+    "Image" : "prop-3",
+    "Contacts" : [
+      {
+        "Id" : 7,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3",
+        "Name" : "Asan"
+      },
+      {
+        "Id" : 8,
+        "Phone" : "0745345636",
+        "Address" : "Str. Vincent Nr. 3",
+        "Name" : "Vali"
+      },
+      {
+        "Id" : 9,
+        "Phone" : "0765255636",
+        "Address" : "Str. Alba Iulia Nr. 3",
+        "Name" : "Alin"
+      }
+    ]
   },
   {
     "Id" : 4,
+    "SellRent": 4,
     "Type" : "House",
     "Name" : "Vice City Estate",
     "Price" : 10000,
-    "Image" : "assets/images/house_default2.png"
+    "Image" : "prop-4",
+    "Contacts" : [
+      {
+        "Id" : 10,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3",
+        "Name" : "Cristina"
+      },
+      {
+        "Id" : 11,
+        "Phone" : "0745345636",
+        "Address" : "Str. Vincent Nr. 3",
+        "Name" : "Joseph"
+      }
+    ]
   },
   {
     "Id" : 5,
+    "SellRent": 5,
     "Type" : "House",
     "Name" : "Addams Property",
     "Price" : 8000,
-    "Image" : "assets/images/house_default.png"
+    "Image" : "prop-5",
+
+    "Contacts" : [
+      {
+        "Id" : 12,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3",
+        "Name" : "Lamba Andrei"
+      },
+      {
+        "Id" : 13,
+        "Phone" : "0745345636",
+        "Address" : "Str. Vincent Nr. 3",
+        "Name" : "Andreas"
+      }
+    ]
+
   },
   {
     "Id" : 6,
+    "SellRent": 6,
     "Type" : "House",
     "Name" : "Miami Estate",
     "Price" : 15000,
-    "Image" : "assets/images/house_default2.png"
+    "Image" : "prop-6",
+    "Contacts" : [
+      {
+        "Id" : 14,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3",
+        "Name" : "Avant"
+      }
+    ]
+
   }
 ]

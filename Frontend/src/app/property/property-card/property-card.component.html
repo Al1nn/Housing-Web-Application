@@ -1,12 +1,12 @@
 <div class="card d-flex p-3">
   <div class="card-img-wrapper">
-    <img class="card-img-top" src="{{property_index.Image}}">
+    <img class="card-img-top" src="assets/images/{{property_index.Image}}.jpg">
     <ul class="list-inline text-center member-icons animate">
       <li class="list-inline-item">
         <button class="btn btn-primary" routerLink="/property-detail/{{property_index.Id}}"><i class="far fa-edit"></i></button>
       </li>
       <li class="list-inline-item">
-        <button class="btn btn-primary" ><i class="far fa-address-book"></i></button>
+        <button class="btn btn-primary" routerLink="/property-contacts/{{property_index.Id}}" ><i class="far fa-address-book"></i></button>
       </li>
     </ul>
   </div>
@@ -16,6 +16,8 @@
     <h1>{{property_index.Name}}</h1>
     <h1>{{property_index.Type}}</h1>
     <h2>{{property_index.Price}}</h2>
+
     <!-- Acest input property poate fi folosit ca parametru pentru tag-ul app-property-card, intr-un ngFor -->
   </div>
+
 </div>
