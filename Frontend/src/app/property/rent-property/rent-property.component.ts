@@ -13,15 +13,18 @@ export class RentPropertyComponent implements OnInit {
   rentProperties : IProperty[];
 
   constructor(private housingService : HousingService) { 
-      this.housingService.getAllProperties().subscribe(
+      
+  }
+
+  ngOnInit() : void {
+    this.housingService.getAllProperties().subscribe(
         data => {
           this.rentProperties = data.filter( (p) => p.hasOwnProperty("SellRent"));  
         }
-        , error => {console.error();}
-      )
-  }
-
-  ngOnInit() {
+        , error => {
+          console.log('httperror : ')
+          console.log(error);}
+    )
   }
 
 }

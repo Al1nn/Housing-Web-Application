@@ -3,7 +3,7 @@
   "Id" : 1,
   "SellRent": 1,
   "Type" : "House",
-  "Name" : "Birla House",
+  "Name" : "Birla Property",
   "Price" : 15000,
   "Image" : "prop-1",
   "Contacts" : [
@@ -143,5 +143,67 @@
       }
     ]
 
+  },
+  {
+    "Id" : 7,
+    "Type" : "House",
+    "Name" : "Alabama Property",
+    "Price": 25000,
+    "Image" : "prop-7",
+    "Contacts" : [
+      {
+        "Id" : 15,
+        "Phone" : "0725255636",
+        "Address" :"Str. Telesti Nr. 3",
+        "Name" : "Selena"
+      }
+    ]
+  },
+  {
+    "Id" : 8,
+    "Type" : "House",
+    "Name" : "New Jersey Property",
+    "Price": 20000,
+    "Image" : "prop-8",
+    "Contacts" : [
+      {
+        "Id" : 16,
+        "Phone" : "0725255636",
+        "Address" :"Str. Telesti Nr. 3",
+        "Name" : "Alina"
+      }
+    ]
+  },
+  {
+    "Id" : 9,
+    "SellRent" : 4,
+    "Type" : "Penthouse",
+    "Name" : "L.A Property",
+    "Price": 100000,
+    "Image" : "prop-9",
+    "Contacts" : [
+      {
+        "Id" : 15,
+        "Phone" : "0725255636",
+        "Address" :"Laureate Street Nr. 3",
+        "Name" : "Wiz Khalifa"
+      }
+    ]
+  },
+  {
+    "Id" : 10,
+    "SellRent" : 5,
+    "Type" : "House",
+    "Name" : "Arkansas Property",
+    "Price": 10000,
+    "Image" : "prop-10",
+    "Contacts" : [
+      {
+        "Id" : 15,
+        "Phone" : "0725255636",
+        "Address" :"Str. Telesti Nr. 3",
+        "Name" : "Calin"
+      }
+    ]
   }
 ]
