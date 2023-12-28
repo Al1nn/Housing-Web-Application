@@ -16,7 +16,6 @@ getAllProperties() : Observable<IProperty[]>{
     map(
       data => {
       const propertiesArray: Array<IProperty> = [];
-      debugger;
       for (const id in data) {
         if (data.hasOwnProperty(id)) {
           propertiesArray.push(data[id as keyof object]);

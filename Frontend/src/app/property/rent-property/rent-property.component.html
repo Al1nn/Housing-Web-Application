@@ -1,3 +1,5 @@
-<p>
-  rent-property works!
-</p>
+<div class="row">
+  <div *ngFor="let property of rentProperties" class="shadow-lg col-sm-4 p-3">
+    <app-property-card [property_index]="property" ></app-property-card>
+  </div>
+</div>

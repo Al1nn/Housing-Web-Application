@@ -10,7 +10,7 @@ import { IProperty } from '../IProperty.interface';
 }) //End of tutorial 10
 export class PropertyListComponent implements OnInit {
 
-  Properties: Array<IProperty> = [];
+  Properties: IProperty[];
 
   constructor(private housingService : HousingService) { }
 
@@ -18,7 +18,7 @@ export class PropertyListComponent implements OnInit {
     this.housingService.getAllProperties().subscribe(
       data =>{
         console.log(data);
-        this.Properties = data;
+        this.Properties = data.filter( (p) => !p.hasOwnProperty("SellRent"));
       }
       , error => {
         console.log('httperror : ')

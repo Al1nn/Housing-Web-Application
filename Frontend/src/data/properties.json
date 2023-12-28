@@ -86,7 +86,6 @@
   },
   {
     "Id" : 4,
-    "SellRent": 4,
     "Type" : "House",
     "Name" : "Vice City Estate",
     "Price" : 10000,
@@ -108,7 +107,6 @@
   },
   {
     "Id" : 5,
-    "SellRent": 5,
     "Type" : "House",
     "Name" : "Addams Property",
     "Price" : 8000,
@@ -132,7 +130,6 @@
   },
   {
     "Id" : 6,
-    "SellRent": 6,
     "Type" : "House",
     "Name" : "Miami Estate",
     "Price" : 15000,
