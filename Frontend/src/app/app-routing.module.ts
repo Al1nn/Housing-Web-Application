@@ -5,12 +5,16 @@ import { PropertyListComponent } from './property/property-list/property-list.co
 import { RentPropertyComponent } from './property/rent-property/rent-property.component';
 import { PropertyDetailComponent } from './property/property-detail/property-detail.component';
 import { PropertyContactsComponent } from './property/property-contacts/property-contacts.component';
+import { UserLoginComponent } from './user/user-login/user-login.component';
+import { UserRegisterComponent } from './user/user-register/user-register.component';
 const routes: Routes = [
   {path: '', component: PropertyListComponent},
   {path: 'rent-property', component: RentPropertyComponent},
   {path: 'add-property', component: AddPropertyComponent},
   {path: 'property-detail/:id', component: PropertyDetailComponent},
   {path: 'property-contacts/:id', component: PropertyContactsComponent},
+  {path: 'user/login', component: UserLoginComponent},
+  {path: 'user/register', component: UserRegisterComponent},
   {path: '**', component: PropertyListComponent}
 ];
 

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PropertyCardElement } from './property/property-card/property-card.component';
@@ -12,6 +12,8 @@ import { AddPropertyComponent } from './property/add-property/add-property.compo
 import { RentPropertyComponent } from './property/rent-property/rent-property.component';
 import { PropertyDetailComponent } from './property/property-detail/property-detail.component';
 import { PropertyContactsComponent } from './property/property-contacts/property-contacts.component';
+import { UserLoginComponent } from './user/user-login/user-login.component';
+import { UserRegisterComponent } from './user/user-register/user-register.component';
 
 @NgModule({
   declarations: [
@@ -22,12 +24,15 @@ import { PropertyContactsComponent } from './property/property-contacts/property
     AddPropertyComponent,
     RentPropertyComponent,
     PropertyDetailComponent,
-    PropertyContactsComponent
+    PropertyContactsComponent,
+    UserLoginComponent,
+    UserRegisterComponent
    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
 
   ],

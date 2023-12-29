@@ -16,13 +16,22 @@
       </li>
 
     </ul>
+    <div class="user-bar" style="margin-left: 78.5%;">
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link"
+          [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active"
+          routerLink="user/register">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+          [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active"
+          routerLink="user/login"
+          >Login</a>
+        </li>
+      </ul>
+    </div>
   </div>
 
-  <!-- Right-aligned search bar with gap between search field and button -->
-  <div class="navbar-nav ml-auto">
-    <form class="form-inline my-2 my-lg-0 d-flex align-items-center">
-      <input class="form-control" style="margin-right: 10px;" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 20px;" type="submit">Search</button>
-    </form>
-  </div>
+  
 </nav>

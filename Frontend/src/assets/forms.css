@@ -1,0 +1,12 @@
+input[type = "text"]:focus{
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .ng-invalid.ng-touched{
+    border-color: red;
+  }
+  
+  .error-block{
+    color: red;
+  }
