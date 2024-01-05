@@ -14,6 +14,7 @@ import { PropertyDetailComponent } from './property/property-detail/property-det
 import { PropertyContactsComponent } from './property/property-contacts/property-contacts.component';
 import { UserLoginComponent } from './user/user-login/user-login.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
+import { UserService } from './services/user-service.service';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { UserRegisterComponent } from './user/user-register/user-register.compon
   providers: [
     provideClientHydration(),
     provideHttpClient(withFetch()),
-    HousingService
+    HousingService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

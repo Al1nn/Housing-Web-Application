@@ -15,6 +15,11 @@ export class AddPropertyComponent implements OnInit {
   constructor(private route : Router) { }
 
   ngOnInit() {
+
+
+      // setTimeout( () => {
+      //   this.addPropertyForm.controls['Name'].setValue('wowowow');
+      // }) Template driven form is unpredictable. setTimeout not always work
   }
 
   onBack(){
@@ -22,6 +27,6 @@ export class AddPropertyComponent implements OnInit {
   }
   onSubmit() {
     console.log(this.addPropertyForm);
-    
+
   }
 }

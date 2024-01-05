@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validator, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormBuilder, FormGroup, ValidationErrors, Validator, Validators, Form } from '@angular/forms';
+import { UserService } from '../../services/user-service.service';
+import { IUser } from '../../model/IUser.interface';
 
 @Component({
   selector: 'app-user-register',
@@ -8,28 +10,40 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validator, V
 })
 export class UserRegisterComponent implements OnInit {
 
-  
-  registerationForm : FormGroup;
 
-  constructor() { }
+  registerationForm : FormGroup;
+  user : IUser;
+  userSubmitted : boolean;
+
+  constructor(private fb : FormBuilder, private userService : UserService) { }
 
   ngOnInit() {
-    this.registerationForm = new FormGroup(
-      {
-        userName: new FormControl(null, Validators.required),
-        email: new FormControl(null, [Validators.required, Validators.email]),  
-        password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
-        confirmPassword: new FormControl(null, [Validators.required]),
-        mobile: new FormControl(null, [Validators.required, Validators.maxLength(10)])
-      }
-     , this.passwordMatchingValidator 
-    );
+    this.createRegistrationForm();
+  }
+
+  createRegistrationForm(){
+    this.registerationForm = this.fb.group({
+        userName: [null, Validators.required],
+        email : [null, [Validators.required, Validators.email]],
+        password : [null, [Validators.required, Validators.minLength(8)]],
+        confirmPassword : [null, Validators.required],
+        mobile : [null, [Validators.required, Validators.maxLength(10)] ]
+    }, {validators: this.passwordMatchingValidator});
   }
 
   passwordMatchingValidator(fc: AbstractControl): ValidationErrors | null {
     return fc.get('password')?.value === fc.get('confirmPassword')?.value ? null :
       { notmatched: true }
   };
+
+  userData() : IUser {
+    return this.user = {
+      userName : this.userName.value,
+      email : this.email.value,
+      password: this.password.value,
+      mobile: this.mobile.value
+    };
+  }
 
   //Getter methods from all controls
   get userName(){
@@ -54,6 +68,17 @@ export class UserRegisterComponent implements OnInit {
 
   onSubmit() {
     console.log(this.registerationForm);
+    this.userSubmitted = true;
+    if(this.registerationForm.valid){
+      // this.user = Object.assign(this.user, this.registerationForm.value);
+
+      this.userService.addUser(this.userData());
+      this.registerationForm.reset();
+      this.userSubmitted = false;
     }
+
+  }
+
+
 
 }
