@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormBuilder, FormGroup, ValidationErrors, Validator, Validators, Form } from '@angular/forms';
 import { UserService } from '../../services/user-service.service';
 import { IUser } from '../../model/IUser.interface';
+declare let alertify : any;
 
 @Component({
   selector: 'app-user-register',
@@ -19,6 +20,7 @@ export class UserRegisterComponent implements OnInit {
 
   ngOnInit() {
     this.createRegistrationForm();
+    alertify.success("Working");
   }
 
   createRegistrationForm(){
