@@ -15,6 +15,7 @@ import { PropertyContactsComponent } from './property/property-contacts/property
 import { UserLoginComponent } from './user/user-login/user-login.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
 import { UserService } from './services/user-service.service';
+import { AlertifyService } from './services/alertify.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { UserService } from './services/user-service.service';
     provideClientHydration(),
     provideHttpClient(withFetch()),
     HousingService,
-    UserService
+    UserService,
+    AlertifyService
   ],
   bootstrap: [AppComponent]
 })
