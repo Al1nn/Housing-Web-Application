@@ -1,5 +1,7 @@
+import { AlertifyService } from './../services/alertify.service';
 import { Component, OnInit } from '@angular/core';
 import { NgModel } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar',
@@ -9,20 +11,22 @@ import { NgModel } from '@angular/forms';
 
 export class NavBarComponent implements OnInit {
 
-  //binding : string = ""; //Initializeaza inputul ngModel
+  loggedInUser : string;
+  constructor(private router : Router, private alertifyService : AlertifyService) {
 
-  constructor() { 
-    
   }
 
-  // myFirstMethod() : string{
-    
-  //   // this.binding = "Button Clicked";
-  //   // return this.binding;
-  // }
+  loggedIn(){
+    this.loggedInUser = typeof localStorage !== 'undefined' ? localStorage.getItem('token') as string  : '';
+    return this.loggedInUser;
+  }
+
+  onLogout() {
+    localStorage.removeItem('token');
+    this.alertifyService.success("You are logged out !");
+  }
 
   ngOnInit() {
-    //this.binding = "wowww"; // Se respecta methoda OnInit() chiar daca am initializat binding
 
   }
 

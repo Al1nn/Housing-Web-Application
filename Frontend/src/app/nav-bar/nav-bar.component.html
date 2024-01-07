@@ -18,17 +18,46 @@
     </ul>
     <div class="user-bar" style="margin-left: auto;">
       <ul class="nav navbar-nav">
-        <li class="nav-item">
+        <li *ngIf="!loggedIn()" class="nav-item">
           <a class="nav-link"
-          [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active"
-          routerLink="user/register">Register</a>
+          [routerLinkActiveOptions]="{exact: true}"
+          routerLinkActive="active"
+          routerLink="user/register"
+          >Register</a>
         </li>
-        <li class="nav-item">
+        <li *ngIf="!loggedIn()" class="nav-item">
           <a class="nav-link"
-          [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}"
+          routerLinkActive="active"
           routerLink="user/login"
           >Login</a>
         </li>
+
+        <div *ngIf="loggedIn()" class="dropdown" style="margin-right: 65px;" dropdown>
+          <a href="#" class="dropdown-toggle text-light" dropdownToggle (click)="false">
+            Welcome {{loggedInUser}}
+          </a>
+          <div class="dropdown-menu" *dropdownMenu>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-tachometere-alt"></i> View Dashboard</a>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-user-circle"></i> My Profile</a>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-key"></i> Change Password</a>
+            <a href="#" class="dropdown-item" (click)="onLogout()">
+              <i class="fas fa-sign-out-alt"></i> Logout</a>
+
+          </div>
+        </div>
+
+        <!-- <li *ngIf="loggedIn()" class="nav-item">
+          <a class="nav-link"
+          (click)="onLogout()"
+          >Logout</a>
+        </li> -->
+
+
+
       </ul>
     </div>
   </div>
