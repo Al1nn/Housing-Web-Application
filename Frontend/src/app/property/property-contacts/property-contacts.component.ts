@@ -1,7 +1,8 @@
 import { HousingService } from './../../services/housing.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IProperty } from '../../model/IProperty.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-property-contacts',
@@ -10,8 +11,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PropertyContactsComponent implements OnInit {
 
-  property : IProperty
+  @ViewChild('Form') contactsForm : NgForm;
+
+  property : IProperty;
   propertyId: number;
+  numberOfProperties : number;
 
   constructor(private route: ActivatedRoute, private router: Router, private housingService : HousingService) { }
 
@@ -26,11 +30,42 @@ export class PropertyContactsComponent implements OnInit {
 
     this.housingService.getPropertyById(this.propertyId).subscribe(
       property => {
-
           this.property = property;
-
       }
     );
+
+    this.housingService.getNumberOfProperties().subscribe(
+      length => {
+        this.numberOfProperties = length;
+      }
+    );
+
+  }
+
+  onSelectNext() {
+    this.propertyId += 1;
+    
+    this.housingService.getPropertyById(this.propertyId).subscribe(
+      property => {
+          this.property = property;
+      }
+    );
+    this.router.navigate(['property-contacts', this.propertyId]);
+  }
+
+  onSelectPrevious() {
+    this.propertyId -= 1;
+    
+    this.housingService.getPropertyById(this.propertyId).subscribe(
+      property => {
+          this.property = property;
+      }
+    );
+    this.router.navigate(['property-contacts', this.propertyId]);
+  }
+
+  onSubmit() {
+  throw new Error('Method not implemented.');
   }
 
 }
