@@ -32,5 +32,10 @@ getPropertyById(propertyId: number): Observable<IProperty> {
   );
 }
 
+getNumberOfProperties() : Observable<number> {
+  return this.http.get<IProperty[]>('data/properties.json').pipe(
+    map(properties => properties.length as number)
+  );
+}
 
 }

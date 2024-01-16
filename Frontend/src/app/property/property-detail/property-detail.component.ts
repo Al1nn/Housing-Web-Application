@@ -12,11 +12,12 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./property-detail.component.css']
 })
 export class PropertyDetailComponent implements OnInit {
+
   @ViewChild('Form') detailsForm : NgForm;
 
   propertyId: number;
   property : IProperty;
-  
+  numberOfProperties : number;
 
   constructor(private route: ActivatedRoute, private router: Router, private housingService: HousingService) {}
 
@@ -36,16 +37,40 @@ export class PropertyDetailComponent implements OnInit {
 
       }
     );
+    
+    
+    this.housingService.getNumberOfProperties().subscribe(
+      length =>{
+        this.numberOfProperties = length;
+      }
+    );
 
+    
+    
   }
 
   onSelectNext() {
     this.propertyId += 1;
+    
+    this.housingService.getPropertyById(this.propertyId).subscribe(
+      property => {
+          this.property = property;
+      }
+    );
     this.router.navigate(['property-detail', this.propertyId]);
 
   }
 
-  
+  onSelectPrevious() {
+    this.propertyId -= 1;
+    
+    this.housingService.getPropertyById(this.propertyId).subscribe(
+      property => {
+          this.property = property;
+      }
+    );
+    this.router.navigate(['property-detail', this.propertyId]);
+  }
 
   onSubmit() {
     console.log(this.detailsForm);
