@@ -1,16 +1,42 @@
-<p>
-  property-detail works! <br>
-  Selected Property id is {{ propertyId }}
-  <br/><br/>
 
-  <br/><br/>
-  <button class="btn btn-primary" (click)="onSelectNext()">Select Next Page</button>
-  <br/><br/>
-  <button routerLink="/property-detail/1" class="btn btn-primary">1</button>
-  <button routerLink="/property-detail/2" class="btn btn-primary">2</button>
-  <button routerLink="/property-detail/3" class="btn btn-primary">3</button>
-  <button [routerLink]="['/property-detail','4']" class="btn btn-primary">4</button>
-</p>
+<div class="card d-flex p-3" *ngIf="property">
+
+  <div class="card-img-wrapper"  >
+
+    <img class="card-img-top" src="assets/images/{{property.Image}}.jpg" >
+    <div class="card-details p-3">
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control mb-3" formControlName="propertyName" >
+        </div>
+        <div class="form-group" *ngIf="property?.SellRent">
+          <label for="sellRent">SellRent</label>
+          <input type="text" class="form-control mb-3" formControlName="propertySellRent" >
+        </div>
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input type="text" class="form-control mb-3" formControlName="propertyPrice" >
+        </div>
+        <div class="form-group">
+          <label for="type">Type</label>
+          <input type="text" class="form-control mb-3" formControlName="propertyType" >
+        </div>
+        <button type="button" class="btn btn-primary" (click)="onSelectNext()">Select Next Page</button>
+      </form>
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+
+
+
+
 
 <!-- <div *ngFor="let contact of property.Contacts">
   <p>Contact:</p>

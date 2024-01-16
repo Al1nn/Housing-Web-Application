@@ -1,4 +1,4 @@
-import { IContact } from "./property-contacts/IContacts.interface";
+import { IContact } from "./IContacts.interface";
 
 export interface IProperty{
   Id: number,
@@ -6,6 +6,6 @@ export interface IProperty{
   Type: string,
   Name: string,
   Price: number,
-  Image?: string,
+  Image: string,
   Contacts : IContact[]
 }
