@@ -5,22 +5,26 @@
 
     <img class="card-img-top" src="assets/images/{{property.Image}}.jpg" >
     <div class="card-details p-3">
-      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
+      <form (ngSubmit)="onSubmit()" #Form="ngForm" >
+        <div class="form-group col-12">
           <label for="name">Name</label>
-          <input type="text" class="form-control mb-3" formControlName="propertyName" >
+          <input type="text" class="form-control mb-3" [(ngModel)]="property.Name" #propertyName="ngModel"
+          ngModel name="propertyName" >
         </div>
         <div class="form-group" *ngIf="property?.SellRent">
           <label for="sellRent">SellRent</label>
-          <input type="text" class="form-control mb-3" formControlName="propertySellRent" >
+          <input type="text" class="form-control mb-3" [(ngModel)]="property.SellRent" #propertySellRent="ngModel"
+          ngModel name="propertySellRent">
         </div>
         <div class="form-group">
           <label for="price">Price</label>
-          <input type="text" class="form-control mb-3" formControlName="propertyPrice" >
+          <input type="text" class="form-control mb-3" [(ngModel)]="property.Price" #propertyPrice="ngModel"
+          ngModel name="propertyPrice">
         </div>
         <div class="form-group">
           <label for="type">Type</label>
-          <input type="text" class="form-control mb-3" formControlName="propertyType" >
+          <input type="text" class="form-control mb-3" [(ngModel)]="property.Type"  #propertyType="ngModel"
+          ngModel name="propertyType">
         </div>
         <button type="button" class="btn btn-primary" (click)="onSelectNext()">Select Next Page</button>
       </form>

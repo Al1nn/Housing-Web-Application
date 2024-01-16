@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IProperty } from '../../model/IProperty.interface';
 import { HousingService } from '../../services/housing.service';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { NgForm } from '@angular/forms';
+
 
 
 @Component({
@@ -11,13 +12,13 @@ import { FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./property-detail.component.css']
 })
 export class PropertyDetailComponent implements OnInit {
-
+  @ViewChild('Form') detailsForm : NgForm;
 
   propertyId: number;
   property : IProperty;
-  editForm: FormGroup;
+  
 
-  constructor(private fb : FormBuilder, private route: ActivatedRoute, private router: Router, private housingService: HousingService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private housingService: HousingService) {}
 
   ngOnInit() {
     const id = 'id';
@@ -31,15 +32,7 @@ export class PropertyDetailComponent implements OnInit {
     this.housingService.getPropertyById(this.propertyId).subscribe(
       property => {
           this.property = property;
-          if(this.property){
-            this.createEditForm();
-            this.editForm.patchValue({
-            propertyName: this.property.Name,
-            propertySellRent: this.property.SellRent,
-            propertyPrice: this.property.Price,
-            propertyType: this.property.Type
-          });
-        }
+        
 
       }
     );
@@ -52,16 +45,9 @@ export class PropertyDetailComponent implements OnInit {
 
   }
 
-  createEditForm(){
-    this.editForm = this.fb.group({
-      propertyName: ['', Validators.required],
-      propertySellRent : ['', Validators.required],
-      propertyPrice : ['', Validators.required],
-      propertyType : ['', Validators.required],
-    });
-  }
+  
 
   onSubmit() {
-    console.log(this.editForm);
+    console.log(this.detailsForm);
   }
 }
