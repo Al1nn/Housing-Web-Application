@@ -6,7 +6,10 @@ import { AppComponent } from './app.component';
 import { PropertyCardElement } from './property/property-card/property-card.component';
 import { PropertyListComponent } from './property/property-list/property-list.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-import {HttpClientModule, provideHttpClient, withFetch} from '@angular/common/http'
+import {HttpClientModule, provideHttpClient, withFetch} from '@angular/common/http';
+import {TabsModule} from 'ngx-bootstrap/tabs';
+import {ButtonsModule} from 'ngx-bootstrap/buttons';
+import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 import { HousingService } from './services/housing.service';
 import { AddPropertyComponent } from './property/add-property/add-property.component';
 import { RentPropertyComponent } from './property/rent-property/rent-property.component';
@@ -40,7 +43,10 @@ import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
+    ButtonsModule.forRoot(),
+    BsDatepickerModule.forRoot()
   ],
   providers: [
     provideClientHydration(),

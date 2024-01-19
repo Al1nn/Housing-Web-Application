@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { IProperty } from '../../model/IProperty.interface';
 
 
 @Component({
@@ -11,6 +13,20 @@ import { Router } from '@angular/router';
 
 export class AddPropertyComponent implements OnInit {
   @ViewChild('Form') addPropertyForm : NgForm;
+  @ViewChild('formTabs', {static: false}) formTabs : TabsetComponent;
+  
+  //This later will come from the database
+  propertyTypes : Array<string>  = ['House','Apartment','Duplex'];
+  furnishTypes : Array<string> = ['Fully', 'Semi', 'Unfurnished'];
+  propertyView : IProperty= { 
+    Id: null,
+    SellRent: null,
+    Type : null,
+    Name : null,
+    Price : null,
+    Image : 'house_default',
+    Contacts : []
+  };
 
   constructor(private route : Router) { }
 
@@ -27,6 +43,9 @@ export class AddPropertyComponent implements OnInit {
   }
   onSubmit() {
     console.log(this.addPropertyForm);
+  }
 
+  selectTab(tabId : number){
+    this.formTabs.tabs[tabId].active = true;
   }
 }

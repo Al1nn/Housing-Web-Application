@@ -10,3 +10,9 @@ input[type = "text"]:focus , input[type = "password"]:focus{
   .error-block{
     color: red;
   }
+
+.btn-group > label[ng-reflect-btn-radio]{
+  border-radius: 44px;
+  padding:0 15px;
+  line-height: 30px;
+}  
