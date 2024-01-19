@@ -1,20 +1,20 @@
 <div class="row mb-5">
-  <div class="col-8">
+  <div class="col-8 shadow-lg p-0 bg-white">
     <div class="card">
       <div class="card-header">
         <h3>List Your Property</h3>
       </div>
       <div class="card-body">
     <form (ngSubmit)="onSubmit()" #Form="ngForm" >
-      <div>
-        <tabset #formTabs>
+      <div class="tab-panel">
+        <tabset class="member-tabset" #formTabs>
           
-          <tab heading="Basic Info">
+          <tab heading="Basic Info" ngModelGroup="BasicInfo" #BasicInfo="ngModelGroup">
 
             <div class="form-group col-12 mt-3">
               <p class="mt-3">I want to</p>
 
-              <div class="btn-group" btnRadioGroup>
+              <div class="btn-group" btnRadioGroup ngModel name="SellRent" required>
                 <label class="btn btn-outline-primary" btnRadio=1 tabindex=0 role="button" name="SellRent">Sell</label>
                 <label class="btn btn-outline-primary mx-2" btnRadio=2 tabindex=0 role="button" name="SellRent">Rent</label>
               </div>
@@ -24,7 +24,8 @@
             <div class="form-group col-12 mt-3">
               <p class="mt-3">BHK</p>
 
-              <div class="btn-group" btnRadioGroup>
+              <div class="btn-group" btnRadioGroup name="propBHK"
+              [(ngModel)]="propertyView.BHK">
                 <label 
                 *ngFor="let bhk of [1,2,3,4]"
                 class="btn btn-outline-primary mx-2"
@@ -38,8 +39,8 @@
             <div class="form-group col-12 mt-3">
               <p class="mt-3">Property Type</p>
 
-              <div class="btn-group" btnRadioGroup name="propType"
-              [(ngModel)]="propertyView.Type">
+              <div class="btn-group" btnRadioGroup name="propPType"
+              [(ngModel)]="propertyView.PType">
                 <label 
                 *ngFor="let ptype of propertyTypes"
                 class="btn btn-outline-primary mx-2"
@@ -53,7 +54,8 @@
             <div class="form-group col-12 mt-3">
               <p class="mt-3">Furnish Type</p>
 
-              <div class="btn-group" btnRadioGroup>
+              <div class="btn-group" btnRadioGroup name="propFType"
+              [(ngModel)]="propertyView.FType">
                 <label 
                 *ngFor="let ftype of furnishTypes"
                 class="btn btn-outline-primary mx-2"
@@ -67,7 +69,7 @@
             <div class="form-group col-12 mt-3">
               <label for="name">In Bulding/Society/Project</label>
               <input type="text" class="form-control m-2" #propName="ngModel"
-              ngModel name="Name" required minlength="5" [(ngModel)]="propertyView.Name"> 
+              ngModel name="propName" required minlength="5" [(ngModel)]="propertyView.Name"> 
               <span *ngIf="!propName.valid && propName.touched" class="error-block">
               <span *ngIf="propName.errors?.['required']">Please provide name</span>
               <span *ngIf="propName.errors?.['minlength']">Name must be atleast 5 characters</span>
@@ -76,11 +78,12 @@
 
             <div class="form-group col-12">
               <label for="price">City</label>
-              <input type="text" class="form-control m-2"> 
+              <input type="text" class="form-control m-2" name="propCity"
+              [(ngModel)]="propertyView.City"> 
             </div>
 
             <div class="form-group col-12">
-                <button type="button" (click)="selectTab(1)"  class="btn btn-primary form-control m-2">Next</button>
+                <button type="button" (click)="selectTab(1)" [disabled]="!BasicInfo.valid" class="btn btn-primary form-control m-2">Next</button>
             </div>
           </tab>
 
@@ -104,12 +107,13 @@
 
             <div class="form-group col-12 mt-3">
               <label>Built Area (in Sqr Feet)</label>
-              <input type="text" class="form-control m-2">
+              <input type="text" class="form-control m-2" name="propBuiltArea"
+              [(ngModel)]="propertyView.BuiltArea">
             </div>
 
             <div class="form-group col-12 mt-3">
               <label>Carpet Area(in Sqr Feet)</label>
-              <input type="text" class="form-control m-2">
+              <input type="text" class="form-control m-2" >
             </div>
 
             <div class="form-group col-12 mt-3">
@@ -217,8 +221,10 @@
           </tab>
 
         </tabset>
+      </div>
         
-      </div> 
+        
+      
       
 
     </form>
@@ -226,16 +232,13 @@
     </div>
   </div>
   <div class="col-4">
-    <div class="card">
       <div class="card-header">
-      <h3>Your Property Preview</h3>
-      <div>
-        <app-property-card [property_index]="propertyView"></app-property-card>
+        <h3>Your Property Preview</h3>
       </div>
-    </div>
-    </div>
-    
-    
+      <div class="shadow-lg p-3 bg-white">
+        <app-property-card [property_index]="propertyView" [hideIcons]="true"></app-property-card>
+      </div>
+  
   </div>
 </div>
 

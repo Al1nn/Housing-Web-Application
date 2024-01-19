@@ -20,10 +20,17 @@ export class AddPropertyComponent implements OnInit {
   furnishTypes : Array<string> = ['Fully', 'Semi', 'Unfurnished'];
   propertyView : IProperty= { 
     Id: null,
+    Name: '',
+    Price: null,
     SellRent: null,
-    Type : null,
-    Name : null,
-    Price : null,
+    PType: null,
+    FType: null,
+    BHK: null,
+    City: '',
+    Description: '',
+    BuiltArea: null,
+    CarpetArea: null,
+    RTM: null,
     Image : 'house_default',
     Contacts : []
   };
@@ -42,6 +49,8 @@ export class AddPropertyComponent implements OnInit {
       this.route.navigate(['/']);
   }
   onSubmit() {
+    console.log("Congrats, form Submitted");
+    console.log("SellRent = " + this.addPropertyForm.value.BasicInfo.SellRent);
     console.log(this.addPropertyForm);
   }
 

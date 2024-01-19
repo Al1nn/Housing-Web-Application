@@ -1,23 +1,30 @@
-<div class="card d-flex p-3">
+<div class="card">
   <div class="card-img-wrapper">
-    <img class="card-img-top" src="assets/images/{{property_index.Image}}.jpg">
-    <ul class="list-inline text-center member-icons animate">
+    <img *ngIf="property_index.Image" class="card-img-top" src="assets/images/{{property_index.Image}}.jpg">
+    <img *ngIf="!property_index.Image" class="card-img-top" src="assets/images/house_default.jpg">
+    <ul *ngIf="!hideIcons" class="list-inline text-center member-icons animate">
       <li class="list-inline-item">
         <button class="btn btn-primary" routerLink="/property-detail/{{property_index.Id}}"><i class="far fa-edit"></i></button>
       </li>
       <li class="list-inline-item">
-        <button class="btn btn-primary" routerLink="/property-contacts/{{property_index.Id}}" ><i class="far fa-address-book"></i></button>
+        <button class="btn btn-primary"><i class="far fa-address-book"></i></button>
       </li>
     </ul>
+
   </div>
-<!-- PUSH FROM MACBOOK-->
+  <div class="card-body p-1">
+    <h1 class="mb-0"> {{property_index.BHK}} BHK {{property_index.PType}} </h1>
 
-  <div class="card-body p-2">
-    <h1>{{property_index.Name}}</h1>
-    <h1>{{property_index.Type}}</h1>
-    <h2>{{property_index.Price}}</h2>
+    in {{property_index.Name}}
+    <span *ngIf="property_index.Name">,</span>
+    {{property_index.City}}
 
-    <!-- Acest input property poate fi folosit ca parametru pentru tag-ul app-property-card, intr-un ngFor -->
+    <h6  class="mt-2">{{property_index.FType}}
+    <span *ngIf="property_index.FType !== 'Unfurnished'">Furnished</span> | Ready to Move</h6>
+
+    <hr class="mt-0 mb-2">
+
+    <h6 class="mb-0">Price: <span class>{{property_index.Price}} USD.</span> |
+      Area:  <span>{{property_index.BuiltArea}} Sq Ft </span> </h6>
   </div>
-
 </div>

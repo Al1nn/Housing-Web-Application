@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IProperty } from '../../model/IProperty.interface';
+import { IPropertyBase } from '../../model/IPropertyBase.interface';
 
 @Component({
     selector: 'app-property-card',
@@ -9,8 +9,8 @@ import { IProperty } from '../../model/IProperty.interface';
 
 export class PropertyCardElement implements OnInit {
 
-  @Input() property_index : IProperty ; //Input, poate sa imprumute proprietatile obiectului Property
-
+  @Input() property_index : IPropertyBase ; //Input, poate sa imprumute proprietatile obiectului Property
+  @Input() hideIcons : boolean;
     constructor() { }
 
     ngOnInit() { }

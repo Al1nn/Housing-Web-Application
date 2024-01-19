@@ -1,11 +1,7 @@
 import { IContact } from "./IContacts.interface";
+import { IPropertyBase } from "./IPropertyBase.interface";
 
-export interface IProperty{
-  Id: number | null,
-  SellRent: number | null,
-  Type: string | null,
-  Name: string | null,
-  Price: number | null,
-  Image?: string,
-  Contacts : IContact[]
-}
+export interface IProperty extends IPropertyBase {
+    Description: string | null,
+    Contacts : IContact[]
+  }
