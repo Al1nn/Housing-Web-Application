@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { IPropertyBase } from '../../model/IPropertyBase.interface';
 import { Property } from '../../model/Property.interface';
+import { HousingService } from '../../services/housing.service';
+import { AlertifyService } from '../../services/alertify.service';
 @Component({
   selector: 'app-add-property',
   templateUrl: './add-property.component.html',
@@ -43,7 +45,12 @@ export class AddPropertyComponent implements OnInit {
     Image: 'house_default',
   };
 
-  constructor(private fb: FormBuilder, private route: Router) {}
+  constructor(
+    private alertifyService: AlertifyService,
+    private housingService: HousingService,
+    private fb: FormBuilder,
+    private route: Router
+  ) {}
 
   ngOnInit() {
     this.CreateAddPropertyForm();
@@ -98,15 +105,26 @@ export class AddPropertyComponent implements OnInit {
       console.log('Congrats, your property listed succesfully on our website');
       console.log(this.addPropertyForm);
       this.mapProperty();
-      // console.log(
-      //   'Successfully stored property contacts:' + this.property.Contacts
-      // ); HOW TO CONSOLE LOG this.property.contacts TO SEE ALL THE ARRAY VALUESSSSSS
+      this.housingService.addProperty(this.property);
+      this.alertifyService.success(
+        'Congrats, your property listed successfully on our website'
+      );
+
+      if (this.SellRent.value === '2') {
+        this.route.navigate(['/rent-property']);
+      } else {
+        this.route.navigate(['/']);
+      }
+
       console.log(
         'Successfully stored property contacts:',
         this.property.Contacts
       );
     } else {
       console.log('Please review the form and add all entries');
+      this.alertifyService.error(
+        'Please review the form and provide all valid entries'
+      );
     }
   }
 
@@ -124,7 +142,6 @@ export class AddPropertyComponent implements OnInit {
     this.property.CarpetArea = this.CarpetArea.value;
     this.property.FloorNo = this.FloorNo.value;
     this.property.TotalFloor = this.TotalFloor.value;
-    // this.property.Contacts = this.Contacts.value; HOW TO MAP THIS this.property.Contacts correctly !!@!!!!!!#!#!#
     this.property.Contacts = (this.Contacts as FormArray).controls.map(
       (contactControl: AbstractControl) => {
         const address = (contactControl as FormGroup).get('Address')?.value;
@@ -139,7 +156,7 @@ export class AddPropertyComponent implements OnInit {
     this.property.AOP = this.AOP.value;
     this.property.Gated = this.Gated.value;
     this.property.MainEntrance = this.MainEntrance.value;
-    this.property.Possession = this.PossessionOn.value; // TypeError: undefined is not an object (evaluating 'this.PossessionOn.value')
+    this.property.Possession = this.PossessionOn.value;
     this.property.Description = this.Description.value;
     this.property.PostedOn = new Date().toString();
   }

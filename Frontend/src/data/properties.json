@@ -1,6 +1,7 @@
 [
   {
     "Id":1,
+    "SellRent":1,
     "Name":"Birla House",
     "PType":"House",
     "BHK":2,
@@ -51,7 +52,7 @@
 
   {
     "Id":2,
-    
+    "SellRent":1,
     "Name":"Erose Flat",
     "PType":"Aparment",
     "BHK":3,
@@ -89,7 +90,7 @@
   },
   {
     "Id":3,
-    
+    "SellRent":1,
     "Name":"Gun Hill",
     "PType":"House",
     "BHK":3,
@@ -133,7 +134,7 @@
   },
   {
     "Id":4,
-    
+    "SellRent":1,
     "Name":"Macro Home",
     "PType":"Duplex",
     "BHK":4,
@@ -171,7 +172,7 @@
   },
   {
     "Id":5,
-    
+    "SellRent":1,
     "Name":"Saint Church Villa",
     "PType":"House",
     "BHK":2,
@@ -211,7 +212,7 @@
   },
   {
     "Id":6,
-    "SellRent":1,
+    "SellRent":2,
     "Name":"Santa Clauss",
     "PType":"Duplex",
     "BHK":1,
@@ -244,7 +245,7 @@
   },
   {
     "Id":7,
-    "SellRent":1,
+    "SellRent":2,
     "Name":"Chicago Duplex",
     "PType":"Duplex",
     "BHK":2,
@@ -276,7 +277,7 @@
   },
   {
     "Id":8,
-    "SellRent":1,
+    "SellRent":2,
     "Name":"Texas House",
     "PType":"House",
     "BHK":2,
@@ -308,7 +309,7 @@
   },
   {
     "Id":9,
-    "SellRent":1,
+    "SellRent":2,
     "Name":"L.A Penthouse",
     "PType":"Apartment",
     "BHK":3,
@@ -340,7 +341,7 @@
   },
   {
     "Id":10,
-    "SellRent":1,
+    "SellRent":2,
     "Name":"Philadelphia Property",
     "PType":"House",
     "BHK":1,

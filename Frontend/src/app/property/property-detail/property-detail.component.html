@@ -5,7 +5,8 @@
     </div>
   <div class="card-img-wrapper"  >
 
-    <img class="card-img-top" src="assets/images/{{property.Image}}.jpg" >
+    <img *ngIf="property.Image" class="card-img-top" src="assets/images/{{property.Image}}.jpg">
+    <img *ngIf="!property.Image" class="card-img-top" src="assets/images/house_default.jpg">
     <div class="card-details p-4">
       <form (ngSubmit)="onSubmit()" #Form="ngForm" >
         <div class="form-group col-12">
