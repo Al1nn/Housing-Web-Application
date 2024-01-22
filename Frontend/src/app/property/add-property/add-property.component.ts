@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -8,8 +9,8 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { IProperty } from '../../model/IProperty.interface';
-
+import { IPropertyBase } from '../../model/IPropertyBase.interface';
+import { Property } from '../../model/Property.interface';
 @Component({
   selector: 'app-add-property',
   templateUrl: './add-property.component.html',
@@ -22,12 +23,13 @@ export class AddPropertyComponent implements OnInit {
 
   nextClicked: boolean;
   contactAdded: boolean = false;
+  property = new Property();
 
   //This later will come from the database
   propertyTypes: Array<string> = ['House', 'Apartment', 'Duplex'];
   furnishTypes: Array<string> = ['Fully', 'Semi', 'Unfurnished'];
-  propertyView: IProperty = {
-    Id: null,
+  propertyView: IPropertyBase = {
+    Id: 0,
     Name: '',
     Price: null,
     SellRent: null,
@@ -35,12 +37,10 @@ export class AddPropertyComponent implements OnInit {
     FType: null,
     BHK: null,
     City: '',
-    Description: '',
     BuiltArea: null,
     CarpetArea: null,
     RTM: null,
     Image: 'house_default',
-    Contacts: [],
   };
 
   constructor(private fb: FormBuilder, private route: Router) {}
@@ -79,7 +79,7 @@ export class AddPropertyComponent implements OnInit {
 
       OtherInfo: this.fb.group({
         RTM: [null, Validators.required],
-        PossesionOn: [null],
+        PossessionOn: [null],
         AOP: [null],
         Gated: [null],
         MainEntrance: [null],
@@ -97,9 +97,51 @@ export class AddPropertyComponent implements OnInit {
     if (this.allTabsValid()) {
       console.log('Congrats, your property listed succesfully on our website');
       console.log(this.addPropertyForm);
+      this.mapProperty();
+      // console.log(
+      //   'Successfully stored property contacts:' + this.property.Contacts
+      // ); HOW TO CONSOLE LOG this.property.contacts TO SEE ALL THE ARRAY VALUESSSSSS
+      console.log(
+        'Successfully stored property contacts:',
+        this.property.Contacts
+      );
     } else {
       console.log('Please review the form and add all entries');
     }
+  }
+
+  mapProperty(): void {
+    this.property.SellRent = +this.SellRent.value;
+    this.property.BHK = this.BHK.value;
+    this.property.PType = this.PType.value;
+    this.property.Name = this.Name.value;
+    this.property.City = this.City.value;
+    this.property.FType = this.FType.value;
+    this.property.Price = this.Price.value;
+    this.property.Security = this.Security.value;
+    this.property.Maintenance = this.Maintenance.value;
+    this.property.BuiltArea = this.BuiltArea.value;
+    this.property.CarpetArea = this.CarpetArea.value;
+    this.property.FloorNo = this.FloorNo.value;
+    this.property.TotalFloor = this.TotalFloor.value;
+    // this.property.Contacts = this.Contacts.value; HOW TO MAP THIS this.property.Contacts correctly !!@!!!!!!#!#!#
+    this.property.Contacts = (this.Contacts as FormArray).controls.map(
+      (contactControl: AbstractControl) => {
+        const address = (contactControl as FormGroup).get('Address')?.value;
+        const phone = (contactControl as FormGroup).get('Phone')?.value;
+
+        // Return a contact object
+        return { Address: address, Phone: phone };
+      }
+    );
+
+    this.property.RTM = this.RTM.value;
+    this.property.AOP = this.AOP.value;
+    this.property.Gated = this.Gated.value;
+    this.property.MainEntrance = this.MainEntrance.value;
+    this.property.Possession = this.PossessionOn.value; // TypeError: undefined is not an object (evaluating 'this.PossessionOn.value')
+    this.property.Description = this.Description.value;
+    this.property.PostedOn = new Date().toString();
   }
 
   allTabsValid(): boolean {

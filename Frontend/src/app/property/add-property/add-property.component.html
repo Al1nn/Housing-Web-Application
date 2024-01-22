@@ -152,38 +152,40 @@
                   <input type="text" class="form-control m-2" formControlName="LandMark">
                 </div>
 
-                <div class="form-group col-12 mt-3">
+                <div class="form-group col-12 mt-3" formArrayName="Contacts">
                   <button type="button" class="btn btn-primary" (click)="addContact()">
                     <i class="fa-solid fa-address-book"> +</i>
                   </button>
                   <div class="error-block" *ngIf="Contacts.invalid && nextClicked && Contacts.length == 0 ">
                     Please insert a contact
                   </div>
+
+                  <div class="form-group col-12 mt-3" *ngFor="let contact of Contacts.controls; let i = index">
+                    <div class="form-group col-12">
+                      <label>Address {{i + 1}}</label>
+                      <input type="text" class="form-control m-2" [formControl]="getContactAddress(i)">
+                      <div class="error-block" *ngIf="getContactAddress(i).invalid && (nextClicked || (getContactAddress(i).touched && !getContactAddress(i).untouched))">
+                        Please enter an address
+                      </div>
+                    </div>
+                  
+                    <div class="form-group col-12 mt-3">
+                      <label>Phone Number {{i + 1}}</label>
+                      <input type="text" class="form-control m-2" [formControl]="getContactPhone(i)">
+                      <div class="error-block" *ngIf="getContactPhone(i).invalid && (nextClicked || (getContactPhone(i).touched && !getContactPhone(i).untouched))">
+                        Please enter a phone number
+                      </div>
+                    </div>
+                  
+                    <button type="button" class="btn btn-danger" (click)="removeContact(i)">
+                      Delete
+                      <i class="fa-solid fa-address-book"> </i>
+                    </button>
+
+                  </div>
                 </div>
 
-                <div class="form-group col-12 mt-3" *ngFor="let contact of Contacts.controls; let i = index">
-                  <div class="form-group col-12">
-                    <label>Address {{i + 1}}</label>
-                    <input type="text" class="form-control m-2" [formControl]="getContactAddress(i)">
-                    <div class="error-block" *ngIf="getContactAddress(i).invalid && (nextClicked || (getContactAddress(i).touched && !getContactAddress(i).untouched))">
-                      Please enter an address
-                    </div>
-                  </div>
                 
-                  <div class="form-group col-12 mt-3">
-                    <label>Phone Number {{i + 1}}</label>
-                    <input type="text" class="form-control m-2" [formControl]="getContactPhone(i)">
-                    <div class="error-block" *ngIf="getContactPhone(i).invalid && (nextClicked || (getContactPhone(i).touched && !getContactPhone(i).untouched))">
-                      Please enter a phone number
-                    </div>
-                  </div>
-                
-                  <button type="button" class="btn btn-danger" (click)="removeContact(i)">
-                    Delete
-                    <i class="fa-solid fa-address-book"> </i>
-                  </button>
-
-                </div>
                 
                 
                 
@@ -223,7 +225,7 @@
 
                 <div class="form group col-3 mt-3" *ngIf="RTM.value == 2">
                   <label>Possesion/Available from</label>
-                  <input type="text" placeholder="Datepicker" class="form-control" formControlName="PossesionOn" bsDatepicker
+                  <input type="text" placeholder="Datepicker" class="form-control" formControlName="PossessionOn" bsDatepicker
                     [bsConfig]="{containerClass : 'theme-dark-blue', dateInputFormat : 'DD-MM-YYYY' }">
                 </div>
 
