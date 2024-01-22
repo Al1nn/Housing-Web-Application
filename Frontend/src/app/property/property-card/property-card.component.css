@@ -1,6 +1,15 @@
 .card{
   min-height: 510px;
 }
+.card-body h1{
+  font-family: 'Times New Roman', Times, serif, bold;
+  color: #0069d9;
+}
+
+.font-highlight{
+  font-style:  italic;
+  color: red;
+}
 
 .card-img-wrapper {
   overflow: hidden;
