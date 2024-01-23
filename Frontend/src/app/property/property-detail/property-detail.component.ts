@@ -33,44 +33,21 @@ export class PropertyDetailComponent implements OnInit {
     this.housingService.getPropertyById(this.propertyId).subscribe(
       property => {
           this.property = property;
-        
-
       }
     );
-    
-    
+
+
     this.housingService.getNumberOfProperties().subscribe(
       length =>{
         this.numberOfProperties = length;
       }
     );
 
-    
-    
-  }
 
-  onSelectNext() {
-    this.propertyId += 1;
-    
-    this.housingService.getPropertyById(this.propertyId).subscribe(
-      property => {
-          this.property = property;
-      }
-    );
-    this.router.navigate(['property-detail', this.propertyId]);
 
   }
 
-  onSelectPrevious() {
-    this.propertyId -= 1;
-    
-    this.housingService.getPropertyById(this.propertyId).subscribe(
-      property => {
-          this.property = property;
-      }
-    );
-    this.router.navigate(['property-detail', this.propertyId]);
-  }
+
 
   onSubmit() {
     console.log(this.detailsForm);

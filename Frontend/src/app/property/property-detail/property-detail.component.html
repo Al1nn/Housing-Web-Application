@@ -3,10 +3,11 @@
     <div class="card-title">
       <h1>Property Details {{propertyId}}</h1>
     </div>
-  <div class="card-img-wrapper"  >
+  <div class="card-img-wrapper" *ngIf="property">
 
     <img *ngIf="property.Image" class="card-img-top" src="assets/images/{{property.Image}}.jpg">
-    <img *ngIf="!property.Image" class="card-img-top" src="assets/images/house_default.jpg">
+    <img *ngIf="!property.Image" class="card-img-top" src="/assets/images/house_default.jpg">
+
     <div class="card-details p-4">
       <form (ngSubmit)="onSubmit()" #Form="ngForm" >
         <div class="form-group col-12">
@@ -30,10 +31,6 @@
           ngModel name="propertyType">
         </div>
 
-          <button type="button" class="btn btn-primary" (click)="onSelectPrevious()">Select Previous Page</button>
-
-
-          <button type="button" class="btn btn-primary mx-2" (click)="onSelectNext()">Select Next Page</button>
 
 
 
