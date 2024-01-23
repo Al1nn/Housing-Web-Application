@@ -5,7 +5,6 @@
 }
 
 .card-img-wrapper img {
-  width: 50%;
   height: 370px;
   object-fit: cover;
 }
