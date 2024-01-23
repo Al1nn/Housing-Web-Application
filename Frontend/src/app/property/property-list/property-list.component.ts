@@ -29,15 +29,7 @@ export class PropertyListComponent implements OnInit {
       (data) => {
         this.Properties = data;
 
-        if (isPlatformBrowser(this.platformId)) {
-          const newProperty = JSON.parse(
-            localStorage.getItem('newProp') as string
-          );
 
-          if (newProperty && newProperty.SellRent === this.SellRent) {
-            this.Properties = [newProperty, ...this.Properties];
-          }
-        }
 
         console.log(data);
       },

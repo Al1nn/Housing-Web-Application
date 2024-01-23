@@ -25,5 +25,5 @@ export class Property implements IPropertyBase {
   Image?: string;
   Description?: string;
   PostedOn: string;
-  PostedBy: number;
+  PostedBy: string;
 }

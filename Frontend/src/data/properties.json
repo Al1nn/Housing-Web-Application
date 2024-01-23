@@ -27,25 +27,25 @@
       "Id" : 1,
       "Phone" : "0723456636",
       "Address" : "Str. Telesti Nr. 3"
-      
+
     },
     {
       "Id" : 2,
       "Phone" : "0745345636",
       "Address" : "Str. Vincent Nr. 3"
-      
+
     },
     {
       "Id" : 3,
       "Phone" : "0765255636",
       "Address" : "Str. Iuliu Maniu Nr. 3"
-      
+
     },
     {
       "Id" : 4,
       "Phone" : "0725255636",
       "Address" : "Str. Alba Iulia Nr. 3"
-      
+
     }
   ]
   },
@@ -54,7 +54,7 @@
     "Id":2,
     "SellRent":1,
     "Name":"Erose Flat",
-    "PType":"Aparment",
+    "PType":"Apartment",
     "BHK":3,
     "FType":"Unfurnished",
     "Price":5000,
@@ -78,13 +78,13 @@
         "Id" : 5,
         "Phone" : "0723456636",
         "Address" : "Str. Telesti Nr. 3"
-        
+
       },
       {
         "Id" : 6,
         "Phone" : "0745345636",
         "Address" : "Str. Vincent Nr. 3"
-        
+
       }
     ]
   },
@@ -116,19 +116,19 @@
         "Id" : 7,
         "Phone" : "0723456636",
         "Address" : "Str. Telesti Nr. 3"
-       
+
       },
       {
         "Id" : 8,
         "Phone" : "0745345636",
         "Address" : "Str. Vincent Nr. 3"
-        
+
       },
       {
         "Id" : 9,
         "Phone" : "0765255636",
         "Address" : "Str. Alba Iulia Nr. 3"
-        
+
       }
     ]
   },
@@ -160,13 +160,13 @@
         "Id" : 10,
         "Phone" : "0723456636",
         "Address" : "Str. Telesti Nr. 3"
-        
+
       },
       {
         "Id" : 11,
         "Phone" : "0745345636",
         "Address" : "Str. Vincent Nr. 3"
-        
+
       }
     ]
   },
@@ -199,13 +199,13 @@
         "Id" : 12,
         "Phone" : "0723456636",
         "Address" : "Str. Telesti Nr. 3"
-        
+
       },
       {
         "Id" : 13,
         "Phone" : "0745345636",
         "Address" : "Str. Vincent Nr. 3"
-        
+
       }
     ]
 
@@ -238,7 +238,7 @@
         "Id" : 14,
         "Phone" : "0723456636",
         "Address" : "Str. Telesti Nr. 3"
-        
+
       }
     ]
 
@@ -271,7 +271,7 @@
         "Id" : 15,
         "Phone" : "0725255636",
         "Address" :"Str. Telesti Nr. 3"
-    
+
       }
     ]
   },
@@ -303,7 +303,7 @@
         "Id" : 16,
         "Phone" : "0725255636",
         "Address" :"Str. Telesti Nr. 3"
-       
+
       }
     ]
   },
@@ -335,7 +335,7 @@
         "Id" : 15,
         "Phone" : "0725255636",
         "Address" :"Laureate Street Nr. 3"
-       
+
       }
     ]
   },
@@ -367,7 +367,7 @@
         "Id" : 15,
         "Phone" : "0725255636",
         "Address" :"Str. Telesti Nr. 3"
-     
+
       }
     ]
   }

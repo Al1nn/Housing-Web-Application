@@ -1,7 +1,7 @@
 
-<div class="card d-flex p-3" *ngIf="property">
+<div class="card d-flex p-3" >
     <div class="card-title">
-      <h1>Property Details</h1>
+      <h1>Property Details {{propertyId}}</h1>
     </div>
   <div class="card-img-wrapper"  >
 
@@ -29,17 +29,17 @@
           <input type="text" class="form-control mb-3" [(ngModel)]="property.PType"  #propertyType="ngModel"
           ngModel name="propertyType">
         </div>
-        <span *ngIf="propertyId > 1">
+
           <button type="button" class="btn btn-primary" (click)="onSelectPrevious()">Select Previous Page</button>
-        </span>
-        <span *ngIf="propertyId < numberOfProperties">
+
+
           <button type="button" class="btn btn-primary mx-2" (click)="onSelectNext()">Select Next Page</button>
-        </span>  
-          
-        
+
+
+
       </form>
     </div>
-    
+
 
 
   </div>
