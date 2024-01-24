@@ -204,11 +204,54 @@
                       </div>
                     </div>
 
+
+                    <div class="form-group col-12 mt-3">
+                      <p class="mt-3">Main Entrance</p>
+
+                      <div class="btn-group" btnRadioGroup >
+                        <label class="btn btn-outline-primary"
+                        [ngClass]="{'custom-active': property.MainEntrance === 1}"
+                        [disabled]="property.MainEntrance !== 1"
+                        btnRadio=1
+                        tabindex=0
+                        role="button"
+                          name="Entrance">East</label>
+
+                        <label class="btn btn-outline-primary mx-2"
+                        [ngClass]="{'custom-active': property.MainEntrance === 2}"
+                        [disabled]="property.MainEntrance !== 2"
+                        btnRadio=2
+                        tabindex=0
+                        role="button"
+                          name="Entrance">West</label>
+
+                        <label class="btn btn-outline-primary"
+                        [ngClass]="{'custom-active': property.MainEntrance === 3}"
+                        [disabled]="property.MainEntrance !== 3"
+                        btnRadio=3
+                        tabindex=0
+                        role="button"
+                          name="Entrance">South</label>
+
+                        <label class="btn btn-outline-primary mx-2"
+                        [ngClass]="{'custom-active': property.MainEntrance === 4}"
+                        [disabled]="property.MainEntrance !== 4"
+                        btnRadio=4
+                        tabindex=0
+                        role="button"
+                          name="Entrance">North</label>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group col-12 mt-3">
+                      <label>Description</label>
+                      <textarea type="text" class="form-control m-2" [(ngModel)]="property.Description" rows="6"></textarea>
+                    </div>
+
                   </div>
                 </tab>
-                <tab heading="Location">
 
-                </tab>
             </tabset>
 
       </div>
