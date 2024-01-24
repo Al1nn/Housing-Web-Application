@@ -102,12 +102,12 @@
 
                   <div class="form-group col-12 mt-3">
                     <label>Name</label>
-                    <input type="text" name="Name" [(ngModel)]="property.Name" class="form-control" >
+                    <input type="text" name="Name" [(ngModel)]="property.Name" class="form-control" [disabled]="true" >
                   </div>
 
                   <div class="form-group col-12 mt-3">
                     <label>City</label>
-                    <input type="text" name="Name" [(ngModel)]="property.City" class="form-control" >
+                    <input type="text" name="Name" [(ngModel)]="property.City" class="form-control" [disabled]="true">
                   </div>
 
                 </tab>
@@ -116,37 +116,37 @@
                   <div class="form-group col-12 mt-3">
                     <label *ngIf="property.SellRent === 1">Price (in USD)</label>
                     <label *ngIf="property.SellRent === 2">Rent (in USD)</label>
-                    <input type="text" name="Name" [(ngModel)]="property.Price" class="form-control" >
+                    <input type="text" name="Name" [(ngModel)]="property.Price" class="form-control" [disabled]="true">
                   </div>
 
                   <div class="form-group col-12 mt-3" *ngIf="property.SellRent === 2">
                     <label>Security</label>
-                    <input type="text" name="Name" [(ngModel)]="property.Security" class="form-control" >
+                    <input type="text" name="Name" [(ngModel)]="property.Security" class="form-control" [disabled]="true">
                   </div>
 
                   <div class="form-group col-12 mt-3" *ngIf="property.SellRent === 2">
                     <label>Maintenance</label>
-                    <input type="text" name="Name" [(ngModel)]="property.Maintenance" class="form-control" >
+                    <input type="text" name="Name" [(ngModel)]="property.Maintenance" class="form-control" [disabled]="true" >
                   </div>
 
                   <div class="form-group col-12 mt-3" >
                     <label>Built Area</label>
-                    <input type="text" name="Name" [(ngModel)]="property.BuiltArea" class="form-control" >
+                    <input type="text" name="Name" [(ngModel)]="property.BuiltArea" class="form-control" [disabled]="true">
                   </div>
 
                   <div class="form-group col-12 mt-3" >
                     <label>Carpet Area</label>
-                    <input type="text" name="Name" [(ngModel)]="property.CarpetArea" class="form-control" >
+                    <input type="text" name="Name" [(ngModel)]="property.CarpetArea" class="form-control" [disabled]="true">
                   </div>
 
                   <div class="form-group col-12 mt-3">
                     <label>Floor</label>
-                    <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.FloorNo">
+                    <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.FloorNo" [disabled]="true">
                   </div>
 
                   <div class="form-group col-12 mt-3">
                     <label>Total Floors</label>
-                    <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.TotalFloor">
+                    <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.TotalFloor" [disabled]="true">
                   </div>
 
                 </tab>
@@ -175,12 +175,12 @@
 
                     <div class="form-group col-12 mt-3" *ngIf="property.RTM === 1">
                       <label>Age Of Property</label>
-                      <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.AOP">
+                      <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.AOP" [disabled]="true">
                     </div>
 
                     <div class="form-group col-12 mt-3" *ngIf="property.RTM === 2">
                       <label>Possession On</label>
-                      <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.Possession">
+                      <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.Possession" [disabled]="true">
                     </div>
 
                     <div class="form-group col-12 mt-3">
@@ -247,7 +247,7 @@
 
                     <div class="form-group col-12 mt-3">
                       <label>Description</label>
-                      <textarea type="text" class="form-control m-2" [(ngModel)]="property.Description" rows="6"></textarea>
+                      <textarea type="text" class="form-control m-2" [(ngModel)]="property.Description" rows="6" [disabled]="true"></textarea>
                     </div>
 
                   </div>
