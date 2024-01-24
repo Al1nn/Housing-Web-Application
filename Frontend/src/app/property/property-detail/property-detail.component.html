@@ -114,8 +114,8 @@
                 <tab heading="Pricing Details">
 
                   <div class="form-group col-12 mt-3">
-                    <label *ngIf="property.SellRent === 1">Price</label>
-                    <label *ngIf="property.SellRent === 2">Rent</label>
+                    <label *ngIf="property.SellRent === 1">Price (in USD)</label>
+                    <label *ngIf="property.SellRent === 2">Rent (in USD)</label>
                     <input type="text" name="Name" [(ngModel)]="property.Price" class="form-control" >
                   </div>
 
@@ -124,11 +124,87 @@
                     <input type="text" name="Name" [(ngModel)]="property.Security" class="form-control" >
                   </div>
 
+                  <div class="form-group col-12 mt-3" *ngIf="property.SellRent === 2">
+                    <label>Maintenance</label>
+                    <input type="text" name="Name" [(ngModel)]="property.Maintenance" class="form-control" >
+                  </div>
 
+                  <div class="form-group col-12 mt-3" >
+                    <label>Built Area</label>
+                    <input type="text" name="Name" [(ngModel)]="property.BuiltArea" class="form-control" >
+                  </div>
+
+                  <div class="form-group col-12 mt-3" >
+                    <label>Carpet Area</label>
+                    <input type="text" name="Name" [(ngModel)]="property.CarpetArea" class="form-control" >
+                  </div>
+
+                  <div class="form-group col-12 mt-3">
+                    <label>Floor</label>
+                    <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.FloorNo">
+                  </div>
+
+                  <div class="form-group col-12 mt-3">
+                    <label>Total Floors</label>
+                    <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.TotalFloor">
+                  </div>
 
                 </tab>
                 <tab heading="Other Details">
+                  <div class="form-group col-12 mt-3">
+                    <p class="mt-3">Ready To Move</p>
 
+                    <div class="btn-group" btnRadioGroup >
+                      <label class="btn btn-outline-primary"
+                      [ngClass]="{'custom-active': property.RTM === 1}"
+                      [disabled]="property.RTM !== 1"
+                      btnRadio=1
+                      tabindex=0
+                      role="button"
+
+                      name="RTM">Yes</label>
+                      <label class="btn btn-outline-primary mx-2"
+                      [ngClass]="{'custom-active': property.RTM === 2}"
+                      [disabled]="property.RTM !== 2"
+                      btnRadio=2
+                      tabindex=0
+                      role="button"
+
+                        name="RTM">No</label>
+                    </div>
+
+                    <div class="form-group col-12 mt-3" *ngIf="property.RTM === 1">
+                      <label>Age Of Property</label>
+                      <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.AOP">
+                    </div>
+
+                    <div class="form-group col-12 mt-3" *ngIf="property.RTM === 2">
+                      <label>Possession On</label>
+                      <input type="text" class="form-control m-2" name="Floor" [(ngModel)]="property.Possession">
+                    </div>
+
+                    <div class="form-group col-12 mt-3">
+                      <p class="mt-3">Gated Community</p>
+
+                      <div class="btn-group" btnRadioGroup>
+                        <label class="btn btn-outline-primary"
+                        [ngClass]="{'custom-active': property.Gated === 1}"
+                        [disabled]="property.Gated !== 1"
+                        btnRadio=1
+                        tabindex=0
+                        role="button"
+                        name="Gated">Yes</label>
+                        <label class="btn btn-outline-primary mx-2"
+                        [ngClass]="{'custom-active': property.Gated === 2}"
+                        [disabled]="property.Gated !== 2"
+                        btnRadio=2
+                        tabindex=0
+                        role="button"
+                          name="Gated">No</label>
+                      </div>
+                    </div>
+
+                  </div>
                 </tab>
                 <tab heading="Location">
 

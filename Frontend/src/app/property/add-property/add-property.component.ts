@@ -153,10 +153,10 @@ export class AddPropertyComponent implements OnInit {
       }
     );
 
-    this.property.RTM = this.RTM.value;
-    this.property.AOP = this.AOP.value;
-    this.property.Gated = this.Gated.value;
-    this.property.MainEntrance = this.MainEntrance.value;
+    this.property.RTM = Number(this.RTM.value);
+    this.property.AOP = Number(this.AOP.value);
+    this.property.Gated = Number(this.Gated.value);
+    this.property.MainEntrance = Number(this.MainEntrance.value);
     this.property.Possession = this.PossessionOn.value;
     this.property.Description = this.Description.value;
     this.property.PostedOn = new Date().toString();
