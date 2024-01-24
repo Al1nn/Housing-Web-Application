@@ -9,6 +9,6 @@ export interface IProperty extends IPropertyBase {
     TotalFloor : number | null,
     Possession : string | null,
     Gated: number | null,
-    MainEntrance : number | null,
+    MainEntrance : string | null,
     Contacts : IContact[]
   }
