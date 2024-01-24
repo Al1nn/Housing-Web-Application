@@ -11,7 +11,7 @@ import { NgForm } from '@angular/forms';
 })
 export class PropertyContactsComponent implements OnInit {
 
-  @ViewChild('Form') contactsForm : NgForm;
+
 
   property : IProperty;
   propertyId: number;
@@ -42,27 +42,7 @@ export class PropertyContactsComponent implements OnInit {
 
   }
 
-  onSelectNext() {
-    this.propertyId += 1;
-    
-    this.housingService.getPropertyById(this.propertyId).subscribe(
-      property => {
-          this.property = property;
-      }
-    );
-    this.router.navigate(['property-contacts', this.propertyId]);
-  }
 
-  onSelectPrevious() {
-    this.propertyId -= 1;
-    
-    this.housingService.getPropertyById(this.propertyId).subscribe(
-      property => {
-          this.property = property;
-      }
-    );
-    this.router.navigate(['property-contacts', this.propertyId]);
-  }
 
   onSubmit() {
   throw new Error('Method not implemented.');
