@@ -14,4 +14,13 @@
 }
 
 
+.card-gallery{
+  display: block;
+  width: 100%;
+  max-height: 500px;
+}
 
+.custom-active{
+  background-color: #0D6EFD; /* Set your desired background color for the active state */
+  color: #fff;
+}

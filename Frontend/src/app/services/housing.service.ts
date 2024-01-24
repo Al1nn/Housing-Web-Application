@@ -50,27 +50,10 @@ export class HousingService {
           (properties) =>{
 
             if(typeof localStorage !== 'undefined'){
-              let property : IProperty = {
-                Description: null,
-                Contacts: [],
-                Id: null,
-                SellRent: null,
-                Name: null,
-                PType: null,
-                FType: null,
-                Price: null,
-                BHK: null,
-                BuiltArea: null,
-                CarpetArea: null,
-                City: null,
-                RTM: null
-              };
-
               const localProperties = JSON.parse(localStorage.getItem('newProp') as string);
               for (const id in localProperties) {
                 if (localProperties.hasOwnProperty(id) && localProperties[id].Id === propertyId) {
-                    property = localProperties[id];
-                    return property;
+                  return localProperties[id] as IProperty;
                 }
               }
             }

@@ -16,6 +16,7 @@ import {
 } from '@angular/common/http';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { HousingService } from './services/housing.service';
 import { AddPropertyComponent } from './property/add-property/add-property.component';
@@ -51,6 +52,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ButtonsModule.forRoot(),
+    CarouselModule.forRoot(),
     BsDatepickerModule.forRoot(),
   ],
   providers: [

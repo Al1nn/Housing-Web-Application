@@ -15,32 +15,128 @@
     </div>
 
   </div>
-  <div class="col-8 shadow-lg  bg-white">
+  <div class="col-8 shadow-lg  bg-white" *ngIf="property">
 
       <div class="card-header"><h3>Property Details</h3></div>
       <div class="shadow-lg p-3 bg-white">
-        <tabset class="member-tabset">
-          <tab heading="Gallery">
 
-          </tab>
+              <tabset class="member-tabset">
 
-          <tab heading="Basic Details">
+                <tab heading="Gallery">
 
-          </tab>
-          <tab heading="Pricing Details">
+                  <carousel [noWrap]="false" [showIndicators]="true">
+                    <slide *ngFor="let slide of slides; let index = index">
+                      <img [src]="slide.image" alt="image slide" class="card-gallery" >
+                      <div class="carousel-caption">
 
-          </tab>
-          <tab heading="Other Details">
+                        <h4>{{slide.text}}</h4>
+                      </div>
+                    </slide>
+                  </carousel>
 
-          </tab>
-          <tab heading="Location">
 
-          </tab>
-        </tabset>
+                </tab>
+
+                <tab heading="Basic Details">
+                  <div class="form-group col-12 mb-3">
+                    <label>Property for</label>
+                  </div>
+
+
+
+                  <div class="btn-group" btnRadioGroup *ngIf="property.SellRent === 1">
+                    <label class="btn btn-outline-primary active" btnRadio=1 tabindex=0 role="button"
+                     name="Sell" >Sell</label>
+                    <label class="btn btn-outline-primary mx-2" btnRadio=2 tabindex=0 role="button"
+                     name="Rent" [disabled]="true">Rent</label>
+                  </div>
+
+                  <div class="btn-group" btnRadioGroup *ngIf="property.SellRent === 2">
+                    <label class="btn btn-outline-primary" btnRadio=1 tabindex=0 role="button"
+                     name="Sell" [disabled]="true" >Sell</label>
+                    <label class="btn btn-outline-primary mx-2 active" btnRadio=2 tabindex=0 role="button"
+                     name="Rent" >Rent</label>
+                  </div>
+
+                  <div class="form-group col-12 mt-3">
+                    <p class="mt-3">BHK</p>
+
+                    <div class="btn-group" btnRadioGroup name="BHK">
+                      <label *ngFor="let bhk of [1, 2, 3, 4]"
+                        class="btn btn-outline-primary mx-2"
+                        [ngClass]="{'custom-active': property.BHK === bhk}"
+                        [disabled]="property.BHK !== bhk ? true : false"
+                        [btnRadio]="bhk"
+                        tabindex="0" role="button" name="BHK">
+                        {{bhk}}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-12 mt-3">
+                    <p class="mt-3">Property Type</p>
+
+                    <div class="btn-group" btnRadioGroup >
+                      <label *ngFor="let ptype of propertyTypes"
+                      class="btn btn-outline-primary mx-2"
+                      [ngClass]="{'custom-active': property.PType === ptype}"
+                      [disabled]="property.PType !== ptype ? true : false"
+                      [btnRadio]="ptype"
+                        role="button" name="SellRent">{{ptype}}</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-12 mt-3">
+                    <p class="mt-3">Furnish Type</p>
+
+                    <div class="btn-group" btnRadioGroup >
+                      <label *ngFor="let ftype of furnishTypes"
+                      class="btn btn-outline-primary mx-2"
+                      [ngClass]="{'custom-active': property.FType === ftype}"
+                      [disabled]="property.FType !== ftype? true : false"
+                      [btnRadio]="ftype"
+                        role="button" name="SellRent">{{ftype}}</label>
+                    </div>
+
+                  </div>
+
+                  <div class="form-group col-12 mt-3">
+                    <label>Name</label>
+                    <input type="text" name="Name" [(ngModel)]="property.Name" class="form-control" >
+                  </div>
+
+                  <div class="form-group col-12 mt-3">
+                    <label>City</label>
+                    <input type="text" name="Name" [(ngModel)]="property.City" class="form-control" >
+                  </div>
+
+                </tab>
+                <tab heading="Pricing Details">
+
+                  <div class="form-group col-12 mt-3">
+                    <label *ngIf="property.SellRent === 1">Price</label>
+                    <label *ngIf="property.SellRent === 2">Rent</label>
+                    <input type="text" name="Name" [(ngModel)]="property.Price" class="form-control" >
+                  </div>
+
+                  <div class="form-group col-12 mt-3" *ngIf="property.SellRent === 2">
+                    <label>Security</label>
+                    <input type="text" name="Name" [(ngModel)]="property.Security" class="form-control" >
+                  </div>
+
+
+
+                </tab>
+                <tab heading="Other Details">
+
+                </tab>
+                <tab heading="Location">
+
+                </tab>
+            </tabset>
+
       </div>
-
   </div>
-
 </div>
 
 
@@ -50,12 +146,6 @@
 
 
 
-<!-- <div *ngFor="let contact of property.Contacts">
-  <p>Contact:</p>
-  <p>{{contact.Id}}</p>
-  <p>{{contact.Phone}}</p>
-  <p>{{contact.Address}}</p>
-  <p>{{contact.Name}}</p>
-</div> -->
+
 
 
