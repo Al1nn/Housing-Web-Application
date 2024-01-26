@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Property } from '../model/Property.interface';
 import { IPropertyBase } from '../model/IPropertyBase.interface';
+import { error } from 'console';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +13,12 @@ import { IPropertyBase } from '../model/IPropertyBase.interface';
 export class HousingService {
   constructor(private http: HttpClient) {}
 
-  getAllProperties(SellRent?: number): Observable<IPropertyBase[]> {
+  getAllProperties(SellRent?: number): Observable<Property[]> {
     return this.http
       .get<{ [key: string]: IPropertyBase }>('data/properties.json')
       .pipe(
         map((data) => {
-          const propertiesArray: IPropertyBase[] = [];
+          const propertiesArray: Property[] = [];
 
           if (typeof localStorage !== 'undefined') {
             const localProperties = JSON.parse(
@@ -43,21 +44,24 @@ export class HousingService {
           for (const id in data) {
             if (SellRent) {
               if (data.hasOwnProperty(id) && data[id].SellRent === SellRent) {
-                propertiesArray.push(data[id]);
+                propertiesArray.push(data[id] as Property);
               }
             } else {
-              propertiesArray.push(data[id]);
+              propertiesArray.push(data[id] as Property);
             }
           }
 
           return propertiesArray;
         })
       );
+
+    return this.http.get<Property[]>('data/properties.json');
   }
 
   getPropertyById(id: number) {
     return this.getAllProperties().pipe(
       map((propertiesArray) => {
+        // throw new Error('Some error here');
         return propertiesArray.find((p) => p.Id === id) as Property;
       })
     );

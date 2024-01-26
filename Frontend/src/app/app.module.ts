@@ -27,8 +27,10 @@ import { UserRegisterComponent } from './user/user-register/user-register.compon
 import { UserService } from './services/user-service.service';
 import { AlertifyService } from './services/alertify.service';
 import { AuthService } from './services/auth.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PropertyDetailResolverService } from './property/property-detail/property-detail-resolver.service';
+import { GalleryComponent } from '@daelmaak/ngx-gallery';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -48,20 +50,22 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ButtonsModule.forRoot(),
     CarouselModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    GalleryComponent,
   ],
   providers: [
     provideClientHydration(),
     provideHttpClient(withFetch()),
+    provideAnimations(),
     HousingService,
     UserService,
     AlertifyService,
     AuthService,
+    PropertyDetailResolverService,
   ],
   bootstrap: [AppComponent],
 })

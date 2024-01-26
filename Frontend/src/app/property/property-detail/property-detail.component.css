@@ -28,3 +28,8 @@
   background-color: #0D6EFD; /* Set your desired background color for the active state */
   color: #fff;
 }
+
+.gallery-container{
+  width: 100%;
+  height: 465px;
+}

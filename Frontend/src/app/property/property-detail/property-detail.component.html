@@ -38,7 +38,7 @@
 
   </div>
   <div class="col-sm-8 p-0">
-    <div class="tab-panel">
+    <div class="tab-panel p-3">
       <tabset class="member-tabset">
         <tab heading="Overview">
           <h1>Overview</h1>
@@ -111,8 +111,7 @@
           </div>
         </tab>
         <tab heading="Photos">
-          <h1>Photos</h1>
-
+          <gallery [items]="images" class="gallery-container"></gallery>
         </tab>
         <tab heading="Contact">
           <h1>Contact Details</h1>
