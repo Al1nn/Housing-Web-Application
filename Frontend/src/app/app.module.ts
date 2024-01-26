@@ -31,6 +31,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PropertyDetailResolverService } from './property/property-detail/property-detail-resolver.service';
 import { GalleryComponent } from '@daelmaak/ngx-gallery';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { FilterPipe } from './pipes/filter.pipe';
+import { SortPipe } from './pipes/sort.pipe';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
     PropertyContactsComponent,
     UserLoginComponent,
     UserRegisterComponent,
+    FilterPipe,
+    SortPipe,
   ],
   imports: [
     BrowserModule,
