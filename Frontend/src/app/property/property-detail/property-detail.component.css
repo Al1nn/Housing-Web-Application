@@ -11,9 +11,13 @@
 
 .card {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-height: 600px;
+  height: 250px;
 }
 
-
+.card img{
+  padding: 10px;
+}
 .card-gallery{
   display: block;
   width: 100%;

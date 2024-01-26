@@ -29,8 +29,6 @@ export class PropertyListComponent implements OnInit {
       (data) => {
         this.Properties = data;
 
-
-
         console.log(data);
       },
       (error) => {

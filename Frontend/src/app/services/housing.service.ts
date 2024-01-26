@@ -12,58 +12,55 @@ import { IPropertyBase } from '../model/IPropertyBase.interface';
 export class HousingService {
   constructor(private http: HttpClient) {}
 
-  getAllProperties(SellRent: number): Observable<IPropertyBase[]> {
+  getAllProperties(SellRent?: number): Observable<IPropertyBase[]> {
     return this.http
       .get<{ [key: string]: IPropertyBase }>('data/properties.json')
       .pipe(
         map((data) => {
           const propertiesArray: IPropertyBase[] = [];
 
-          if(typeof localStorage !== 'undefined'){
-            const localProperties = JSON.parse(localStorage.getItem('newProp') as string);
-            if(localProperties){
+          if (typeof localStorage !== 'undefined') {
+            const localProperties = JSON.parse(
+              localStorage.getItem('newProp') as string
+            );
+            if (localProperties) {
               for (const id in localProperties) {
-                if (localProperties.hasOwnProperty(id) && localProperties[id].SellRent === SellRent) {
+                if (SellRent) {
+                  if (
+                    localProperties.hasOwnProperty(id) &&
+                    localProperties[id] &&
+                    localProperties[id].SellRent === SellRent
+                  ) {
+                    propertiesArray.push(localProperties[id]);
+                  }
+                } else {
                   propertiesArray.push(localProperties[id]);
                 }
               }
             }
           }
 
-
-
           for (const id in data) {
-            if (data.hasOwnProperty(id) && data[id].SellRent === SellRent) {
+            if (SellRent) {
+              if (data.hasOwnProperty(id) && data[id].SellRent === SellRent) {
+                propertiesArray.push(data[id]);
+              }
+            } else {
               propertiesArray.push(data[id]);
             }
           }
+
           return propertiesArray;
         })
       );
   }
 
-  getPropertyById(propertyId: number): Observable<IProperty> {
-    return this.http
-      .get<IProperty[]>('data/properties.json')
-      .pipe(
-        map(
-          (properties) =>{
-
-            if(typeof localStorage !== 'undefined'){
-              const localProperties = JSON.parse(localStorage.getItem('newProp') as string);
-              for (const id in localProperties) {
-                if (localProperties.hasOwnProperty(id) && localProperties[id].Id === propertyId) {
-                  return localProperties[id] as IProperty;
-                }
-              }
-            }
-            return properties.find((p) => p.Id === propertyId) as IProperty;
-          }
-
-
-
-        )
-      );
+  getPropertyById(id: number) {
+    return this.getAllProperties().pipe(
+      map((propertiesArray) => {
+        return propertiesArray.find((p) => p.Id === id) as Property;
+      })
+    );
   }
 
   getNumberOfProperties(): Observable<number> {
@@ -75,32 +72,34 @@ export class HousingService {
   addProperty(property: Property) {
     let newProp = [property];
 
-
     //Add new prop in array if newProp already exists in local storage
-    if(typeof localStorage !== 'undefined' && localStorage.getItem('newProp')){
-      newProp = [property,
-                ...JSON.parse(localStorage.getItem('newProp') as string)]
+    if (
+      typeof localStorage !== 'undefined' &&
+      localStorage.getItem('newProp')
+    ) {
+      newProp = [
+        property,
+        ...JSON.parse(localStorage.getItem('newProp') as string),
+      ];
     }
 
     localStorage.setItem('newProp', JSON.stringify(newProp));
   }
 
-  newPropID(){
-    if(typeof localStorage !== 'undefined'){
+  newPropID() {
+    if (typeof localStorage !== 'undefined') {
       let currentPID = localStorage.getItem('PID');
 
       if (currentPID !== null) {
-          localStorage.setItem('PID', String(+currentPID + 1));
-          return +currentPID;
+        localStorage.setItem('PID', String(+currentPID + 1));
+        return +currentPID;
       } else {
-
-          localStorage.setItem('PID', '1');
-          return 101;
+        localStorage.setItem('PID', '1');
+        return 101;
       }
-    }else{
+    } else {
       console.error('localStorage is not available in this environment.');
       return -1; // or any other appropriate value
     }
-
   }
 }
