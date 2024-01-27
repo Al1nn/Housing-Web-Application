@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Property } from '../model/Property.interface';
 import { IPropertyBase } from '../model/IPropertyBase.interface';
-import { error } from 'console';
 
 @Injectable({
   providedIn: 'root',

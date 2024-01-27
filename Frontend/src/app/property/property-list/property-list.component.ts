@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
 import { IPropertyBase } from '../../model/IPropertyBase.interface';
-import { PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+
 @Component({
   selector: 'app-property-list',
   templateUrl: './property-list.component.html',
@@ -20,8 +19,7 @@ export class PropertyListComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private housingService: HousingService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    private housingService: HousingService
   ) {}
 
   ngOnInit(): void {

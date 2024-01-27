@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HousingService } from '../../services/housing.service';
+import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
-import { error } from 'console';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 
 @Component({
@@ -35,11 +33,7 @@ export class PropertyDetailComponent implements OnInit {
       thumbSrc: 'assets/gallery/internal-5.jpg',
     },
   ];
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private housingService: HousingService
-  ) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.propertyId = +this.route.snapshot.params['id'];

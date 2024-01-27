@@ -1,8 +1,4 @@
-import { HousingService } from './../../services/housing.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IProperty } from '../../model/IProperty.interface';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-property-contacts',

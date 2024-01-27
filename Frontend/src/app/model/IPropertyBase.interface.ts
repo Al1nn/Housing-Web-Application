@@ -1,5 +1,3 @@
-import { IContact } from './IContacts.interface';
-
 export interface IPropertyBase {
   Id: number | null;
   SellRent: number | null;
@@ -12,6 +10,6 @@ export interface IPropertyBase {
   CarpetArea: number | null;
   City: string | null;
   RTM: number | null;
-  AOP? : number | null;
+  AOP?: number | null;
   Image?: string | null;
 }
