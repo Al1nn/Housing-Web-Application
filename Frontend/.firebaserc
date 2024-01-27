@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "my-first-app-angular17"
+  },
+  "targets": {
+    "my-first-app-angular17": {
+      "hosting": {
+        "my-first-app": [
+          "my-first-app-angular17"
+        ]
+      }
+    }
   }
 }
