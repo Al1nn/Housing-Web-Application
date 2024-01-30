@@ -12,6 +12,10 @@ import { IPropertyBase } from '../model/IPropertyBase.interface';
 export class HousingService {
   constructor(private http: HttpClient) {}
 
+  getAllCities(): Observable<string[]> {
+    return this.http.get<string[]>('http://localhost:5182/api/city');
+  }
+
   getAllProperties(SellRent?: number): Observable<Property[]> {
     return this.http
       .get<{ [key: string]: IPropertyBase }>('data/properties.json')

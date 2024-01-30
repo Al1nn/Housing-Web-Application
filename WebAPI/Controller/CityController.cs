@@ -18,7 +18,10 @@ namespace WebAPI.Controller
         [HttpGet("")]
         public IEnumerable<string> Getstrings()
         {
-            return new string[] { "Olanda", "Franta", "Spania", "Chicago", "Los Angeles" };
+            return new string[] { "New York", "California", "Texas"
+            , "Kansas", "Los Angeles", "Miami"
+            , "Washington","San Francisco","Seatles"
+            ,"Philadelphia","Vancouver","New Jersey" };
         }
 
     }

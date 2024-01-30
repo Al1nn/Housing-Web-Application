@@ -30,6 +30,8 @@ export class AddPropertyComponent implements OnInit {
   //This later will come from the database
   propertyTypes: Array<string> = ['House', 'Apartment', 'Duplex'];
   furnishTypes: Array<string> = ['Fully', 'Semi', 'Unfurnished'];
+  cityList: string[];
+
   propertyView: IPropertyBase = {
     Id: 0,
     Name: '',
@@ -54,10 +56,10 @@ export class AddPropertyComponent implements OnInit {
 
   ngOnInit() {
     this.CreateAddPropertyForm();
-
-    // setTimeout( () => {
-    //   this.addPropertyForm.controls['Name'].setValue('wowowow');
-    // }) Template driven form is unpredictable. setTimeout not always work
+    this.housingService.getAllCities().subscribe((data) => {
+      this.cityList = data;
+      console.log(data);
+    });
   }
 
   CreateAddPropertyForm() {
