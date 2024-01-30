@@ -14,5 +14,5 @@ Frontend/src/assets/image/prop-7.jpg
 Frontend/src/assets/image/prop-8.jpg
 Frontend/src/assets/image/prop-9.jpg
 Frontend/src/assets/image/prop-10.jpg
-WebAPI/bin
-WebAPI/obj
+WebAPI/bin/
+WebAPI/obj/
