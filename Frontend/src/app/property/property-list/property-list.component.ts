@@ -12,11 +12,14 @@ export class PropertyListComponent implements OnInit {
   SellRent = 1;
   Properties: IPropertyBase[];
   Today = new Date();
-  City = '';
-  SearchCity = '';
-  SortbyParam: '';
+  filterInput = '';
+
+  SortbyParam = '';
   SortDirection = 'asc';
 
+  min = 0;
+  max = 0;
+  priceAndAreaRange = [0,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,15000,20000,25000,30000,35000,40000,45000,50000,100000,150000,200000,500000];
   constructor(
     private route: ActivatedRoute,
     private housingService: HousingService
@@ -41,14 +44,13 @@ export class PropertyListComponent implements OnInit {
     );
   }
 
-  onCityFilter() {
-    this.SearchCity = this.City;
+  clearFilters(){
+    this.min = 0;
+    this.max = 0;
+    this.filterInput = '';
   }
 
-  onCityFilterClear() {
-    this.SearchCity = '';
-    this.City = '';
-  }
+
   onSortDirection() {
     if (this.SortDirection === 'desc') {
       this.SortDirection = 'asc';

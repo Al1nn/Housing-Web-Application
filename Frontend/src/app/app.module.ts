@@ -33,6 +33,7 @@ import { GalleryComponent } from '@daelmaak/ngx-gallery';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { FilterPipe } from './pipes/filter.pipe';
 import { SortPipe } from './pipes/sort.pipe';
+import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { SortPipe } from './pipes/sort.pipe';
     UserRegisterComponent,
     FilterPipe,
     SortPipe,
+    PriceAreaFilterPipe,
   ],
   imports: [
     BrowserModule,

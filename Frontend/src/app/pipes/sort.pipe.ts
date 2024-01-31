@@ -1,5 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+/*
+  pricePerSqr = price / sqrArea
+  Sortare dupa pricePerSqr, dar fara sa contina var. auxiliara
+  argumente de la metoda de sortare, price , sqrArea
+*/
 @Pipe({
   name: 'sort',
 })
@@ -11,22 +15,21 @@ export class SortPipe implements PipeTransform {
 
     const sortField = args[0];
     const sortDirection = args[1];
-    let multiplier = 1;
+    const price = args[2];
+    const builtArea = args[3];
 
-    if (sortDirection === 'desc') {
-      multiplier = -1;
-    }
+    const multiplier = sortDirection === 'desc' ? -1 : 1;
 
-    value.sort((a: any, b: any) => {
-      if (a[sortField] < b[sortField]) {
+    return value.sort((a: any, b: any) => {
+
+
+      if (a[sortField] < b[sortField] || a['Price'] < (price / builtArea) || b['Price'] < (price / builtArea)) {
         return -1 * multiplier;
-      } else if (a[sortField] > b[sortField]) {
+      } else if (a[sortField] > b[sortField] || a['Price'] > (price / builtArea) || b['Price'] > (price / builtArea)) {
         return 1 * multiplier;
       } else {
         return 0;
       }
     });
-
-    return value;
   }
 }

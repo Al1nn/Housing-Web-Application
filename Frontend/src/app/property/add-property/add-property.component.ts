@@ -138,7 +138,7 @@ export class AddPropertyComponent implements OnInit {
     this.property.Name = this.Name.value;
     this.property.City = this.City.value;
     this.property.FType = this.FType.value;
-    this.property.Price = this.Price.value;
+    this.property.Price = Number(this.Price.value);
     this.property.Security = this.Security.value;
     this.property.Maintenance = this.Maintenance.value;
     this.property.BuiltArea = this.BuiltArea.value;
