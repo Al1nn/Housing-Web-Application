@@ -15,17 +15,16 @@ export class SortPipe implements PipeTransform {
 
     const sortField = args[0];
     const sortDirection = args[1];
-    const price = args[2];
-    const builtArea = args[3];
+
 
     const multiplier = sortDirection === 'desc' ? -1 : 1;
 
     return value.sort((a: any, b: any) => {
 
 
-      if (a[sortField] < b[sortField] || a['Price'] < (price / builtArea) || b['Price'] < (price / builtArea)) {
+      if (a[sortField] < b[sortField] ) {
         return -1 * multiplier;
-      } else if (a[sortField] > b[sortField] || a['Price'] > (price / builtArea) || b['Price'] > (price / builtArea)) {
+      } else if (a[sortField] > b[sortField] ) {
         return 1 * multiplier;
       } else {
         return 0;

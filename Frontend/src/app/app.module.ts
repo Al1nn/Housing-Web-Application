@@ -34,6 +34,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { FilterPipe } from './pipes/filter.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
+import { PricePerAreaPipe } from './pipes/price-per-area.pipe';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
     FilterPipe,
     SortPipe,
     PriceAreaFilterPipe,
+    PricePerAreaPipe
   ],
   imports: [
     BrowserModule,

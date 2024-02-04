@@ -3,41 +3,57 @@
 <input [(ngModel)]="filterInput" ><br>
 
 
-<label>Filter Price & SqrArea</label>
+<label>Filter Price & SqrArea : </label><br>
 
-<label>Min</label>
+<label>Min :</label>
 <select [(ngModel)]="min">
-  <option *ngFor="let number of priceAndAreaRange" [value]="number">
+  <option *ngFor="let number of filterPriceAndAreaRange" [value]="number">
     {{number}}
   </option>
 </select>
 
-<label>Max</label>
+<label>Max : </label>
 <select [(ngModel)]="max">
-  <option *ngFor="let number of priceAndAreaRange" [value]="number">
+  <option *ngFor="let number of filterPriceAndAreaRange" [value]="number">
+    {{number}}
+  </option>
+</select><br><br>
+
+
+
+
+
+<label>Sort by Price divided by Area</label><br>
+<label>Price Per Area: </label>
+<select [(ngModel)]="pricePerArea">
+  <option *ngFor="let number of sortPricePerAreaRange" [value]="number">
     {{number}}
   </option>
 </select><br>
 
-<button type="button" (click)="clearFilters()">Clear</button>
-<br><br>
+
+
+
 
 <label>Sort by &nbsp;</label>
 <select [(ngModel)]="SortbyParam">
   <option value="City">City</option>
   <option value="Price">Price</option>
 </select>
+
 <button type="button" (click)="onSortDirection()">
   <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down"></i>
   <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up"></i>
-</button>
-
+</button><br>
+<button type="button" (click)="clearFilters()">Clear</button>
+<br><br>
 
 <div class="row">
   <div *ngFor="let property of Properties
    | filter: filterInput : ['Name','City','PType']
    | priceAreaFilter: min : max
-   | sort:[SortbyParam,SortDirection,500001,100]"
+   | sort:[SortbyParam,SortDirection]
+   | pricePerAreaSort : pricePerArea"
     class="shadow-lg col-sm-4 p-3">
 
     <app-property-card [property_index]="property" ></app-property-card>
