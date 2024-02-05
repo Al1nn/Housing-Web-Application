@@ -30,7 +30,7 @@ export class AddPropertyComponent implements OnInit {
   //This later will come from the database
   propertyTypes: Array<string> = ['House', 'Apartment', 'Duplex'];
   furnishTypes: Array<string> = ['Fully', 'Semi', 'Unfurnished'];
-  cityList: string[];
+  cityList: any[];
 
   propertyView: IPropertyBase = {
     Id: 0,
