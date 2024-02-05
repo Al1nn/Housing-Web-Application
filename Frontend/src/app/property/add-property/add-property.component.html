@@ -78,7 +78,7 @@
                   formControlName="City"
                   [(ngModel)]="propertyView.City">
                     <option value="">--Select City --</option>
-                    <option *ngFor="let city of ['Miami, America','Texas, America','Vancouver, Canada','Toronto, Canada']"
+                    <option *ngFor="let city of cityList"
                       value={{city}} >
                       {{city}}
                     </option>

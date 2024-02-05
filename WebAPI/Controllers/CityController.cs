@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public string[] GetCities()
         {
-            return ["Atlanta", "Narnia", "America"];
+            return ["Atlanta, America", "Narnia, Canada", "Los Angeles, America"];
         }
 
     }
