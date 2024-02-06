@@ -25,6 +25,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCities()
         {
+            //throw new UnauthorizedAccessException("You are not allowed to access this content");
             var cities = await uow.CityRepository.GetCitiesAsync();
             var citiesDto = mapper.Map<IEnumerable<CityDto>>(cities);
 
@@ -82,7 +83,7 @@ namespace WebAPI.Controllers
 
                 mapper.Map(cityDto, cityFromDb);
 
-                //throw new Exception("Some unknown error occured");
+                throw new Exception("Some unknown error occured");
                 await uow.SaveAsync();
 
                 return StatusCode(200);

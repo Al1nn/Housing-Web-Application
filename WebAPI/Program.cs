@@ -1,7 +1,11 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using WebAPI.Data;
+using WebAPI.Extensions;
 using WebAPI.Helpers;
 using WebAPI.Interfaces;
+using WebAPI.Middlewares;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,13 +22,19 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+
+//app.ConfigureExceptionHandler(app.Environment);
+
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseSwagger();
+
+app.UseSwaggerUI();
 
 app.UseRouting();
 
