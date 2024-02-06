@@ -1,8 +1,8 @@
 ﻿using WebAPI.Models;
 
-namespace WebAPI.Data.Repo
+namespace WebAPI.Interfaces
 {
-    public interface ICityRepository 
+    public interface ICityRepository
     {
         Task<IEnumerable<City>> GetCitiesAsync();
 
@@ -10,6 +10,5 @@ namespace WebAPI.Data.Repo
 
         void DeleteCity(int CityId);
 
-        Task<bool> SaveAsync();
     }
 }

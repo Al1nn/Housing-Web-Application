@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebAPI.Data.Repo;
+using WebAPI.Interfaces;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -8,18 +8,17 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CityController : ControllerBase
     {
-        
-        private readonly ICityRepository repository;
+        private readonly IUnitOfWork uow;
 
-        public CityController( ICityRepository repository)
+        public CityController(IUnitOfWork uow)
         {
-            this.repository = repository;
+            this.uow = uow;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCities()
         {
-            var cities = await repository.GetCitiesAsync();
+            var cities = await uow.CityRepository.GetCitiesAsync();
             return Ok(cities);
         }
 
@@ -29,8 +28,8 @@ namespace WebAPI.Controllers
         {
             //City city = new City();
             //city.Name = cityName;
-            repository.AddCity(city);
-            await repository.SaveAsync();
+            uow.CityRepository.AddCity(city);
+            await uow.SaveAsync();
             return StatusCode(201);
         }
 
@@ -38,9 +37,23 @@ namespace WebAPI.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteCity(int id)
         {
-            repository.DeleteCity(id);
-            await repository.SaveAsync();
+            uow.CityRepository.DeleteCity(id);
+            await uow.SaveAsync();
             return Ok(id);
         }
+
+
+        // Post api/city/add?cityname=Miami
+        // Post api/city/add/Los Angeles
+        // [HttpPost("add")]
+        // [HttpPost("add/{cityname}")]
+        // public async Task<IActionResult> AddCity(string cityName)
+        // {
+        //     City city = new City();
+        //     city.Name = cityName;
+        //     await dc.Cities.AddAsync(city);
+        //     await dc.SaveChangesAsync();
+        //     return Ok(city);
+        // }
     }
 }
