@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebAPI.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Data.Repo;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -10,51 +8,38 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CityController : ControllerBase
     {
-        private readonly DataContext dc;
+        
+        private readonly ICityRepository repository;
 
-        public CityController(DataContext dc) {
-            this.dc = dc;
+        public CityController( ICityRepository repository)
+        {
+            this.repository = repository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCities()
         {
-            var cities = await dc.Cities.ToListAsync();
+            var cities = await repository.GetCitiesAsync();
             return Ok(cities);
-        }
-
-        //Post api/City/add?cityName=Miami
-        [HttpPost("add")]
-        
-        [HttpPost("add/{cityName}")]
-        //public async Task<IActionResult> AddCity(string cityName)
-        public async Task<IActionResult> AddCity(City city)
-        {
-           // City city = new City();
-            //city.Name = cityName;
-            await dc.Cities.AddAsync(city);
-            await dc.SaveChangesAsync();
-            return Ok(city);
         }
 
 
         [HttpPost("post")]
-        public async Task<IActionResult> AddCity(string cityName)
+        public async Task<IActionResult> AddCity(City city)
         {
-            City city = new City();
-            city.Name = cityName;
-            await dc.Cities.AddAsync(city);
-            await dc.SaveChangesAsync();
-            return Ok(city);
+            //City city = new City();
+            //city.Name = cityName;
+            repository.AddCity(city);
+            await repository.SaveAsync();
+            return StatusCode(201);
         }
 
 
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteCity(int id)
         {
-            var city = await dc.Cities.FindAsync(id);
-            dc.Cities.Remove(city);
-            await dc.SaveChangesAsync();
+            repository.DeleteCity(id);
+            await repository.SaveAsync();
             return Ok(id);
         }
     }
