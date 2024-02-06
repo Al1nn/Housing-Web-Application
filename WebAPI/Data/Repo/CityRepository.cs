@@ -30,7 +30,9 @@ namespace WebAPI.Data.Repo
             dc.Cities.Remove(city);
         }
 
-
-       
+        public async Task<City> FindCity(int id)
+        {
+            return await dc.Cities.FindAsync(id);
+        }
     }
 }
