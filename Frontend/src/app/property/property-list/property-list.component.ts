@@ -19,11 +19,9 @@ export class PropertyListComponent implements OnInit {
 
   min = 0;
   max = 0;
-  filterPriceAndAreaRange = [0,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,15000,20000,25000,30000,35000,40000,45000,50000,100000,150000,200000,500000];
+  filterPriceAndAreaRange = [0,500,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,15000,20000,25000,30000,35000,40000,45000,50000,100000,150000,200000,500000];
 
-  pricePerArea = 0;
-
-  sortPricePerAreaRange = [0,10,20,30,40,50,60,70,80,90,100,150,200,250,300,400,450,500,750,1000,1200,1400,1500,2000,2500];
+  filteredCities : string[];
 
   constructor(
     private route: ActivatedRoute,
@@ -47,13 +45,32 @@ export class PropertyListComponent implements OnInit {
         console.log(error);
       }
     );
+
+    
+  }
+
+  onFilterCityAPI(filterInput : string){
+    if(filterInput !== ''){
+        this.housingService.getAllFilteredCities(filterInput).subscribe(
+        (data) => {
+          console.log("Data = "+ data);
+          this.filteredCities = data;
+          
+          },(error) => {
+          console.log('httperror:');
+          console.log(error);
+        }
+      );
+    }else {
+      console.log("Filter Input empty");
+      this.filteredCities = [];
+    }
+    
   }
 
   clearFilters(){
     this.min = 0;
     this.max = 0;
-    this.pricePerArea = 0;
-    this.SortbyParam = '';
     this.filterInput = '';
   }
 

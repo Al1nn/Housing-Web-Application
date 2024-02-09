@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { Property } from '../model/Property.interface';
 import { IPropertyBase } from '../model/IPropertyBase.interface';
 
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,6 +16,18 @@ export class HousingService {
 
   getAllCities(): Observable<string[]> {
     return this.http.get<string[]>('http://localhost:5207/api/city');
+  }
+  
+  // Get method cu filtrare
+
+  getAllFilteredCities(filterWord : string){
+    return this.http.get<string[]>(`http://localhost:5207/api/city/filter/` + filterWord).pipe(
+      map( response => {
+        const jsonString = JSON.stringify(response);
+        const stringArray = jsonString.split(',');
+        return stringArray;
+      })
+    );
   }
 
   getAllProperties(SellRent?: number): Observable<Property[]> {

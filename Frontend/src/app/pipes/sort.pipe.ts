@@ -3,6 +3,9 @@ import { Pipe, PipeTransform } from '@angular/core';
   pricePerSqr = price / sqrArea
   Sortare dupa pricePerSqr, dar fara sa contina var. auxiliara
   argumente de la metoda de sortare, price , sqrArea
+
+  //Adaugare in combobox
+
 */
 @Pipe({
   name: 'sort',
@@ -19,17 +22,31 @@ export class SortPipe implements PipeTransform {
 
     const multiplier = sortDirection === 'desc' ? -1 : 1;
 
-    return value.sort((a: any, b: any) => {
+      if(sortField === "Price Per Area"){
+        return value.sort((a: any, b: any) => {
+          if(a['Price'] / a['BuiltArea'] < b['Price'] / b['BuiltArea']){
+            return -1 * multiplier;
+          }else if(a['Price'] / a['BuiltArea'] > b['Price'] / b['BuiltArea']){
+            return 1 * multiplier;
+          }else{
+            return 0;
+          }
+        });
+      }
 
-
+    
+      return value.sort((a: any, b: any) => {
       if (a[sortField] < b[sortField] ) {
-        return -1 * multiplier;
+          return -1 * multiplier;
       } else if (a[sortField] > b[sortField] ) {
-        return 1 * multiplier;
+          return 1 * multiplier;
       } else {
         return 0;
       }
     });
+    
+
+    
   }
 
 

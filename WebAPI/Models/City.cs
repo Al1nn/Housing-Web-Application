@@ -12,6 +12,9 @@ namespace WebAPI.Models
         [Required]
         public string Country { get; set; }
 
+        [Required]
+        public string PropertyType { get; set; }
+
         public DateTime LastUpdatedOn { get; set; }
         
         public int LastUpdatedBy { get; set; }

@@ -28,9 +28,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 
-//app.ConfigureExceptionHandler(app.Environment);
+app.ConfigureExceptionHandler(app.Environment);
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+//ExceptionMiddlewareExtensions.ConfigureExceptionHandler(app, app.Environment);
 
 app.UseSwagger();
 
