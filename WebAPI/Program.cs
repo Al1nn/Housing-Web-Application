@@ -30,9 +30,7 @@ var app = builder.Build();
 
 app.ConfigureExceptionHandler(app.Environment);
 
-app.UseMiddleware<ExceptionMiddleware>();
-
-//ExceptionMiddlewareExtensions.ConfigureExceptionHandler(app, app.Environment);
+//app.ConfigureBuiltInExceptionHandler(app.Environment);
 
 app.UseSwagger();
 

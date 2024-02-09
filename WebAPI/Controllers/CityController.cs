@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCities()
         {
-            //throw new UnauthorizedAccessException("You are not allowed to access this content");
+            throw new UnauthorizedAccessException("You are not allowed to access this content");
             var cities = await uow.CityRepository.GetCitiesAsync();
             var citiesDto = mapper.Map<IEnumerable<CityDto>>(cities);
 
