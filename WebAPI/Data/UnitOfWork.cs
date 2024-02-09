@@ -16,6 +16,7 @@ namespace WebAPI.Data
 
         //Add multiple instances of (Name)Repository 
 
+        public IUserRepository UserRepository => new UserRepository(dc);    
 
 
         public async Task<bool> SaveAsync()
