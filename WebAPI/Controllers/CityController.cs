@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dtos;
@@ -9,7 +10,8 @@ using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
-    
+
+    [Authorize]
     public class CityController : BaseController
     {
         private readonly IUnitOfWork uow;
@@ -22,9 +24,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+
         public async Task<IActionResult> GetCities()
         {
-            throw new UnauthorizedAccessException("You are not allowed to access this content");
+           
             var cities = await uow.CityRepository.GetCitiesAsync();
             var citiesDto = mapper.Map<IEnumerable<CityDto>>(cities);
 
