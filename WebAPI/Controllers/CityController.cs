@@ -12,6 +12,7 @@ namespace WebAPI.Controllers
 {
 
     [Authorize]
+ 
     public class CityController : BaseController
     {
         private readonly IUnitOfWork uow;
@@ -23,8 +24,8 @@ namespace WebAPI.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]
-
+        [HttpGet ("cities")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCities()
         {
            
@@ -63,18 +64,12 @@ namespace WebAPI.Controllers
         [HttpPost("post")]
         public async Task<IActionResult> AddCity(CityDto cityDto)
         {
-            //City city = new City();
-            //city.Name = cityName;
-            //var city = new City
-            //{
-            //    Name = cityDto.Name,
-            //    LastUpdatedBy = 1,
-            //    LastUpdatedOn = DateTime.Now,
-            //};
+            
 
             var city = mapper.Map<City>(cityDto);
             city.LastUpdatedBy = 1;
             city.LastUpdatedOn = DateTime.Now;
+            city.PropertyType = "House";
 
             uow.CityRepository.AddCity(city);
             await uow.SaveAsync();
@@ -103,7 +98,7 @@ namespace WebAPI.Controllers
 
                 mapper.Map(cityDto, cityFromDb);
 
-                throw new Exception("Some unknown error occured");
+                
                 await uow.SaveAsync();
 
                 return StatusCode(200);

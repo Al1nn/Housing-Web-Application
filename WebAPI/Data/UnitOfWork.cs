@@ -6,18 +6,37 @@ namespace WebAPI.Data
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DataContext dc;
+        private ICityRepository _cityRepository;
+        private IUserRepository _userRepository;
 
         public UnitOfWork(DataContext dc)
         {
             this.dc = dc;
         }
 
-        public ICityRepository CityRepository => new CityRepository(dc);
+        public ICityRepository CityRepository
+        {
+            get
+            {
+                if (_cityRepository == null)
+                {
+                    _cityRepository = new CityRepository(dc);
+                }
+                return _cityRepository;
+            }
+        }
 
-        //Add multiple instances of (Name)Repository 
-
-        public IUserRepository UserRepository => new UserRepository(dc);    
-
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                if (_userRepository == null)
+                {
+                    _userRepository = new UserRepository(dc);
+                }
+                return _userRepository;
+            }
+        }
 
         public async Task<bool> SaveAsync()
         {
