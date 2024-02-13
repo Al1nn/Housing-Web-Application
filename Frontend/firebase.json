@@ -1,25 +1,16 @@
 {
-  "hosting": [
-    {
-      "public": "dist/my-first-app/browser",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "my-first-app",
-      "source": ".",
-      "frameworksBackend": {
-        "region": "europe-west1"
+  "hosting": {
+    "public": "dist/my-first-app/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
       }
-    }
-  ]
+    ]
+  }
 }
