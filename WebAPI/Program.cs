@@ -18,13 +18,17 @@ builder.Host.ConfigureHostConfiguration(webBuilder => { webBuilder.AddEnvironmen
 // Add services to the container.
 var connectionBuilder = new SqlConnectionStringBuilder(
         builder.Configuration.GetConnectionString("Default"));
+        
 
 connectionBuilder.Password = builder.Configuration.GetSection("DBPassword").Value;
 
 var connectionString = connectionBuilder.ConnectionString;
 
 
-builder.Services.AddDbContext<DataContext>( options => options.UseSqlServer(connectionString) );
+builder.Services.AddDbContext<DataContext>( options => { 
+    options.UseSqlServer(connectionString); 
+
+});
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddCors();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
