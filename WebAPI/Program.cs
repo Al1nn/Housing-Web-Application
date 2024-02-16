@@ -16,8 +16,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureHostConfiguration(webBuilder => { webBuilder.AddEnvironmentVariables(prefix: "MYFIRSTAPP_"); });
 
 // Add services to the container.
+string dbCredentials = "";
+if (builder.Environment.IsProduction())
+{
+    dbCredentials = "Default";
+}else if (builder.Environment.IsDevelopment())
+{
+    dbCredentials = "Default_Local";
+}
+
 var connectionBuilder = new SqlConnectionStringBuilder(
-        builder.Configuration.GetConnectionString("Default"));
+        builder.Configuration.GetConnectionString(dbCredentials));
         
 
 connectionBuilder.Password = builder.Configuration.GetSection("DBPassword").Value;
@@ -26,7 +35,15 @@ var connectionString = connectionBuilder.ConnectionString;
 
 
 builder.Services.AddDbContext<DataContext>( options => { 
-    options.UseSqlServer(connectionString); 
+            options.UseSqlServer(connectionString,
+             sqlServerOptionsAction: sqlOptions =>
+             {
+                 sqlOptions.EnableRetryOnFailure(
+                     maxRetryCount: 5,
+                     maxRetryDelay: TimeSpan.FromSeconds(30),
+                     errorNumbersToAdd: null);
+             }
+        ); 
 
 });
 builder.Services.AddControllers().AddNewtonsoftJson();
