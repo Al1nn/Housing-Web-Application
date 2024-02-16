@@ -19,10 +19,10 @@ builder.Host.ConfigureHostConfiguration(webBuilder => { webBuilder.AddEnvironmen
 string dbCredentials = "";
 if (builder.Environment.IsProduction())
 {
-    dbCredentials = "Default";
+    dbCredentials = "Default_Production";
 }else if (builder.Environment.IsDevelopment())
 {
-    dbCredentials = "Default_Local";
+    dbCredentials = "Default";
 }
 
 var connectionBuilder = new SqlConnectionStringBuilder(
