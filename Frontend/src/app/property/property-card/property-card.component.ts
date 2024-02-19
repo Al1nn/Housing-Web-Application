@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/component-class-suffix */
 import { Component, Input, OnInit } from '@angular/core';
 import { IPropertyBase } from '../../model/IPropertyBase.interface';
 
@@ -9,8 +10,8 @@ import { IPropertyBase } from '../../model/IPropertyBase.interface';
 
 export class PropertyCardElement implements OnInit {
 
-  @Input() property_index : IPropertyBase ; //Input, poate sa imprumute proprietatile obiectului Property
-  @Input() hideIcons : boolean;
+    @Input() property_index: IPropertyBase ; // Input, poate sa imprumute proprietatile obiectului Property
+    @Input() hideIcons: boolean;
     constructor() { }
 
     ngOnInit() { }

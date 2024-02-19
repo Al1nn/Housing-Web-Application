@@ -2,26 +2,26 @@ import { AlertifyService } from './../services/alertify.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css'],
+    selector: 'app-nav-bar',
+    templateUrl: './nav-bar.component.html',
+    styleUrls: ['./nav-bar.component.css'],
 })
 export class NavBarComponent implements OnInit {
-  loggedInUser: string;
-  constructor(private alertifyService: AlertifyService) {}
+    loggedInUser: string;
+    constructor(private alertifyService: AlertifyService) {}
 
-  loggedIn() {
-    this.loggedInUser =
+    loggedIn() {
+        this.loggedInUser =
       typeof localStorage !== 'undefined'
-        ? (localStorage.getItem('token') as string)
-        : '';
-    return this.loggedInUser;
-  }
+          ? (localStorage.getItem('token') as string)
+          : '';
+        return this.loggedInUser;
+    }
 
-  onLogout() {
-    localStorage.removeItem('token');
-    this.alertifyService.success('You are logged out !');
-  }
+    onLogout() {
+        localStorage.removeItem('token');
+        this.alertifyService.success('You are logged out !');
+    }
 
-  ngOnInit() {}
+    ngOnInit() {}
 }

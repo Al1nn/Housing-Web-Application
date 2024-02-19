@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import {
-  BrowserModule,
-  provideClientHydration,
+    BrowserModule,
+    provideClientHydration,
 } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
@@ -10,9 +10,9 @@ import { PropertyCardElement } from './property/property-card/property-card.comp
 import { PropertyListComponent } from './property/property-list/property-list.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import {
-  HttpClientModule,
-  provideHttpClient,
-  withFetch,
+    HttpClientModule,
+    provideHttpClient,
+    withFetch,
 } from '@angular/common/http';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
@@ -37,43 +37,43 @@ import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PropertyCardElement,
-    PropertyListComponent,
-    NavBarComponent,
-    AddPropertyComponent,
-    PropertyDetailComponent,
-    PropertyContactsComponent,
-    UserLoginComponent,
-    UserRegisterComponent,
-    FilterPipe,
-    SortPipe,
-    PriceAreaFilterPipe,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    BsDropdownModule.forRoot(),
-    TabsModule.forRoot(),
-    ButtonsModule.forRoot(),
-    CarouselModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-    GalleryComponent,
-  ],
-  providers: [
-    provideClientHydration(),
-    provideHttpClient(withFetch()),
-    provideAnimations(),
-    HousingService,
-    UserService,
-    AlertifyService,
-    AuthService,
-    PropertyDetailResolverService,
-  ],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        PropertyCardElement,
+        PropertyListComponent,
+        NavBarComponent,
+        AddPropertyComponent,
+        PropertyDetailComponent,
+        PropertyContactsComponent,
+        UserLoginComponent,
+        UserRegisterComponent,
+        FilterPipe,
+        SortPipe,
+        PriceAreaFilterPipe,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        BsDropdownModule.forRoot(),
+        TabsModule.forRoot(),
+        ButtonsModule.forRoot(),
+        CarouselModule.forRoot(),
+        BsDatepickerModule.forRoot(),
+        GalleryComponent,
+    ],
+    providers: [
+        provideClientHydration(),
+        provideHttpClient(withFetch()),
+        provideAnimations(),
+        HousingService,
+        UserService,
+        AlertifyService,
+        AuthService,
+        PropertyDetailResolverService,
+    ],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
