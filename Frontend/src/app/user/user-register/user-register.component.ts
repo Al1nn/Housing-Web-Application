@@ -7,9 +7,9 @@ import {
     ValidationErrors,
     Validators,
 } from '@angular/forms';
-import { UserService } from '../../services/user-service.service';
-import { IUser } from '../../model/IUser.interface';
+import { IUserForRegister } from '../../model/IUser.interface';
 import { AlertifyService } from '../../services/alertify.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-user-register',
@@ -18,17 +18,17 @@ import { AlertifyService } from '../../services/alertify.service';
 })
 export class UserRegisterComponent implements OnInit {
     registerationForm: FormGroup;
-    user: IUser;
+    user: IUserForRegister;
     userSubmitted: boolean;
 
     constructor(
         private fb: FormBuilder,
-        private userService: UserService,
+        private authService: AuthService,
         private alertifyService: AlertifyService
-    ) {}
+    ) { }
 
-    get userName() {
-        return this.registerationForm.get('userName') as FormControl;
+    get username() {
+        return this.registerationForm.get('username') as FormControl;
     }
 
     get email() {
@@ -54,7 +54,7 @@ export class UserRegisterComponent implements OnInit {
     createRegistrationForm() {
         this.registerationForm = this.fb.group(
             {
-                userName: [null, Validators.required],
+                username: [null, Validators.required],
                 email: [null, [Validators.required, Validators.email]],
                 password: [null, [Validators.required, Validators.minLength(8)]],
                 confirmPassword: [null, Validators.required],
@@ -70,9 +70,9 @@ export class UserRegisterComponent implements OnInit {
             : { notmatched: true };
     }
 
-    userData(): IUser {
+    userData(): IUserForRegister {
         return (this.user = {
-            userName: this.userName.value,
+            username: this.username.value,
             email: this.email.value,
             password: this.password.value,
             mobile: this.mobile.value,
@@ -86,14 +86,20 @@ export class UserRegisterComponent implements OnInit {
         console.log(this.registerationForm);
         this.userSubmitted = true;
         if (this.registerationForm.valid) {
-            // this.user = Object.assign(this.user, this.registerationForm.value);
+            this.authService.registerUser(this.userData()).subscribe(() => {
+                this.onReset();
+                this.alertifyService.success('Congrats, you are now registered');
+            }, error => {
+                console.log(error);
+                this.alertifyService.error(error.status + " : " + error.statusText + " User already exists please try something else");
+            }
+            );
 
-            this.userService.addUser(this.userData());
-            this.registerationForm.reset();
-            this.userSubmitted = false;
-            this.alertifyService.success('Congrats, you are now registered');
-        } else {
-            this.alertifyService.error('Kindly provide the required fields');
         }
+    }
+
+    onReset() {
+        this.userSubmitted = false;
+        this.registerationForm.reset();
     }
 }

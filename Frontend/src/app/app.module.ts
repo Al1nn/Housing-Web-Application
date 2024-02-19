@@ -24,7 +24,6 @@ import { PropertyDetailComponent } from './property/property-detail/property-det
 import { PropertyContactsComponent } from './property/property-contacts/property-contacts.component';
 import { UserLoginComponent } from './user/user-login/user-login.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
-import { UserService } from './services/user-service.service';
 import { AlertifyService } from './services/alertify.service';
 import { AuthService } from './services/auth.service';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -69,11 +68,10 @@ import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
         provideHttpClient(withFetch()),
         provideAnimations(),
         HousingService,
-        UserService,
         AlertifyService,
         AuthService,
         PropertyDetailResolverService,
     ],
     bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

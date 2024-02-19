@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { AlertifyService } from '../../services/alertify.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { IUserForLogin } from '../../model/IUser.interface';
 
 @Component({
     selector: 'app-user-login',
@@ -14,19 +15,25 @@ export class UserLoginComponent implements OnInit {
         private alertifyService: AlertifyService,
         private authService: AuthService,
         private router: Router
-    ) {}
+    ) { }
 
     onLogin(loginForm: NgForm) {
         console.log(loginForm.value);
-        const token = this.authService.authUser(loginForm.value);
-        if (token) {
-            localStorage.setItem('token', token.userName);
-            this.alertifyService.success('Login Successful');
-            this.router.navigate(['/']);
-        } else {
-            this.alertifyService.error('User id or password is wrong');
-        }
+        this.authService.authUser(loginForm.value).subscribe(
+            (response: IUserForLogin) => {
+                const user = response;
+                localStorage.setItem('token', user.token);
+                console.log(typeof (user.username));
+                localStorage.setItem('username', user.username);
+                this.alertifyService.success("Login successful");
+                this.router.navigate(['/']);
+            },
+            (error) => {
+                console.log(error);
+                this.alertifyService.error(error.status + " : " + error.statusText + "Change User ID or Password");
+            }
+        );
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 }

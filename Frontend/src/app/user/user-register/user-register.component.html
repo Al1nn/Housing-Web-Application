@@ -8,8 +8,8 @@
       <form [formGroup]="registerationForm" (ngSubmit)="onSubmit()">
         <div class="form-group col-12 mb-3">
             <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" formControlName="userName">
-            <span class="error-block" *ngIf="!userName.valid && (userName.touched || userSubmitted)">
+            <input type="text" class="form-control" formControlName="username">
+            <span class="error-block" *ngIf="!username.valid && (username.touched || userSubmitted)">
               Please provide a name
             </span>
         </div>
