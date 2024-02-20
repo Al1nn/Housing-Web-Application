@@ -10,6 +10,7 @@ import { PropertyCardElement } from './property/property-card/property-card.comp
 import { PropertyListComponent } from './property/property-list/property-list.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import {
+    HTTP_INTERCEPTORS,
     HttpClientModule,
     provideHttpClient,
     withFetch,
@@ -33,6 +34,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { FilterPipe } from './pipes/filter.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
+import { HttpErrorInterceptorService } from './services/httperror-interceptor.service';
 
 
 @NgModule({
@@ -71,6 +73,11 @@ import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
         AlertifyService,
         AuthService,
         PropertyDetailResolverService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpErrorInterceptorService,
+            multi: true
+        }
     ],
     bootstrap: [AppComponent],
 })

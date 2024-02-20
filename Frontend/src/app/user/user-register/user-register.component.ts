@@ -89,9 +89,6 @@ export class UserRegisterComponent implements OnInit {
             this.authService.registerUser(this.userData()).subscribe(() => {
                 this.onReset();
                 this.alertifyService.success('Congrats, you are now registered');
-            }, error => {
-                console.log(error);
-                this.alertifyService.error(error.status + " : " + error.statusText + " User already exists please try something else");
             }
             );
 

@@ -27,10 +27,6 @@ export class UserLoginComponent implements OnInit {
                 localStorage.setItem('username', user.username);
                 this.alertifyService.success("Login successful");
                 this.router.navigate(['/']);
-            },
-            (error) => {
-                console.log(error);
-                this.alertifyService.error(error.status + " : " + error.statusText + "Change User ID or Password");
             }
         );
     }

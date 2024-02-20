@@ -1,4 +1,9 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using WebAPI.Errors;
 
 namespace WebAPI.Middlewares
@@ -9,18 +14,23 @@ namespace WebAPI.Middlewares
         private readonly ILogger<ExceptionMiddleware> logger;
         private readonly IHostEnvironment env;
 
-        public ExceptionMiddleware(RequestDelegate next
-            , ILogger<ExceptionMiddleware> logger
-            , IHostEnvironment env)
+        public ExceptionMiddleware(RequestDelegate next,
+                                    ILogger<ExceptionMiddleware> logger,
+                                    IHostEnvironment env)
         {
+            this.env = env;
             this.next = next;
             this.logger = logger;
-            this.env = env;
         }
-        public async Task Invoke(HttpContext context) {
-            try {
+
+        public async Task Invoke(HttpContext context)
+        {
+            try
+            {
                 await next(context);
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 ApiError response;
                 HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
                 String message;
@@ -34,15 +44,12 @@ namespace WebAPI.Middlewares
                 else
                 {
                     statusCode = HttpStatusCode.InternalServerError;
-                    message = "Some unknown error occured";
+                    message = "Some unknown error occoured";
                 }
-                    //Add more exception cases
 
-
-                if(env.IsDevelopment())
+                if (env.IsDevelopment())
                 {
-                    response = new ApiError((int)statusCode, ex.Message, ex.StackTrace);
-
+                    response = new ApiError((int)statusCode, ex.Message, ex.StackTrace.ToString());
                 }
                 else
                 {

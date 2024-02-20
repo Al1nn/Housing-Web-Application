@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebAPI.Dtos;
+using WebAPI.Errors;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 
@@ -29,10 +30,14 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Login(LoginReqDto loginReq)
         {
             var user = await uow.UserRepository.Authenticate(loginReq.Username,loginReq.Password);
-        
-            if(user == null)
+            
+            ApiError apiError = new ApiError();
+            if (user == null)
             {
-                return Unauthorized("Invalid User ID or password");
+                apiError.ErrorCode = Unauthorized().StatusCode;
+                apiError.ErrorMessage = "Invalid user name or password";
+                apiError.ErrorDetails = "This error appear when provided user id or password does not exists";
+                return Unauthorized(apiError);
             }
 
             var loginRes = new LoginResDto();
@@ -45,9 +50,20 @@ namespace WebAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(LoginReqDto loginReq)
         {
+            ApiError apiError = new ApiError();
+            if (string.IsNullOrEmpty(loginReq.Username.Trim()) ||
+                string.IsNullOrEmpty(loginReq.Password.Trim()))
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "User name or password can not be blank";
+                return BadRequest(apiError);
+            }
+
             if (await uow.UserRepository.UserAlreadyExists(loginReq.Username))
             {
-                return BadRequest("User already exist, please try something else");
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "User already exists, please try different user name";
+                return BadRequest(apiError);
             }
             uow.UserRepository.Register(loginReq.Username, loginReq.Password);
 
