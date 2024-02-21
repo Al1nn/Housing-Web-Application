@@ -55,7 +55,7 @@ namespace WebAPI.Controllers
             var filteredCities = from c in cities
                                  where c.Name.ToLower().Contains(filterWord.ToLower())
                                  || c.Country.ToLower().Contains(filterWord.ToLower())
-                                 || c.PropertyType.ToLower().Contains(filterWord.ToLower()) 
+                                  
                                  select c;
             return  Ok(filteredCities);
         }
@@ -69,7 +69,7 @@ namespace WebAPI.Controllers
             var city = mapper.Map<City>(cityDto);
             city.LastUpdatedBy = 1;
             city.LastUpdatedOn = DateTime.Now;
-            city.PropertyType = "House";
+           
 
             uow.CityRepository.AddCity(city);
             await uow.SaveAsync();
