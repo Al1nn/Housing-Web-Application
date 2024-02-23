@@ -31,18 +31,18 @@ export class AddPropertyComponent implements OnInit {
     cityList: any[];
 
     propertyView: IPropertyBase = {
-        Id: 0,
-        Name: '',
-        Price: null,
-        SellRent: null,
-        PType: null,
-        FType: null,
-        BHK: null,
-        City: '',
-        BuiltArea: null,
-        CarpetArea: null,
-        RTM: null,
-        Image: 'house_default',
+        id: 0,
+        name: '',
+        price: null,
+        sellRent: null,
+        propertyType: null,
+        furnishingType: null,
+        bhk: null,
+        city: '',
+        builtArea: null,
+        carpetArea: null,
+        readyToMove: null,
+        image: 'house_default',
     };
 
     constructor(
@@ -50,7 +50,7 @@ export class AddPropertyComponent implements OnInit {
         private housingService: HousingService,
         private fb: FormBuilder,
         private route: Router
-    ) {}
+    ) { }
 
     get BasicInfo() {
         return this.addPropertyForm.controls['BasicInfo'] as FormGroup;
@@ -230,18 +230,18 @@ export class AddPropertyComponent implements OnInit {
     }
 
     mapProperty(): void {
-        this.property.Id = this.housingService.newPropID();
-        this.property.SellRent = +this.SellRent.value;
-        this.property.BHK = this.BHK.value;
-        this.property.PType = this.PType.value;
-        this.property.Name = this.Name.value;
-        this.property.City = this.City.value;
-        this.property.FType = this.FType.value;
-        this.property.Price = Number(this.Price.value);
+        this.property.id = this.housingService.newPropID();
+        this.property.sellRent = +this.SellRent.value;
+        this.property.bhk = this.BHK.value;
+        this.property.propertyType = this.PType.value;
+        this.property.name = this.Name.value;
+        this.property.city = this.City.value;
+        this.property.furnishingType = this.FType.value;
+        this.property.price = Number(this.Price.value);
         this.property.Security = this.Security.value;
         this.property.Maintenance = this.Maintenance.value;
-        this.property.BuiltArea = this.BuiltArea.value;
-        this.property.CarpetArea = this.CarpetArea.value;
+        this.property.builtArea = this.BuiltArea.value;
+        this.property.carpetArea = this.CarpetArea.value;
         this.property.FloorNo = this.FloorNo.value;
         this.property.TotalFloor = this.TotalFloor.value;
         this.property.Contacts = (this.Contacts as FormArray).controls.map(
@@ -254,7 +254,7 @@ export class AddPropertyComponent implements OnInit {
             }
         );
 
-        this.property.RTM = Number(this.RTM.value);
+        this.property.readyToMove = Number(this.RTM.value);
         this.property.AOP = Number(this.AOP.value);
         this.property.Gated = Number(this.Gated.value);
         this.property.MainEntrance = this.MainEntrance.value;

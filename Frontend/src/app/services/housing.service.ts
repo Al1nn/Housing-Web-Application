@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Property } from '../model/Property.interface';
-import { IPropertyBase } from '../model/IPropertyBase.interface';
 import { environment } from '../../environments/environment';
 
 
@@ -16,17 +15,17 @@ export class HousingService {
     baseUrl = environment.baseUrl;
 
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getAllCities(): Observable<string[]> {
-        return this.http.get<string[]>( this.baseUrl + '/city/cities');
+        return this.http.get<string[]>(this.baseUrl + '/city/cities');
     }
 
     // Get method cu filtrare
 
-    getAllFilteredCities(filterWord: string){
+    getAllFilteredCities(filterWord: string) {
         return this.http.get<string[]>('http://localhost:5207/api/city/filter/' + filterWord).pipe(
-            map( response => {
+            map(response => {
                 const jsonString = JSON.stringify(response);
                 const stringArray = jsonString.split(',');
                 return stringArray;
@@ -35,55 +34,14 @@ export class HousingService {
     }
 
     getAllProperties(SellRent?: number): Observable<Property[]> {
-        return this.http
-            .get<{ [key: string]: IPropertyBase }>('data/properties.json')
-            .pipe(
-                map((data) => {
-                    const propertiesArray: Property[] = [];
-
-                    if (typeof localStorage !== 'undefined') {
-                        const localProperties = JSON.parse(
-                            localStorage.getItem('newProp') as string
-                        );
-                        if (localProperties) {
-                            for (const id in localProperties) {
-                                if (SellRent) {
-                                    if (
-                                        localProperties.hasOwnProperty(id) &&
-                    localProperties[id] &&
-                    localProperties[id].SellRent === SellRent
-                                    ) {
-                                        propertiesArray.push(localProperties[id]);
-                                    }
-                                } else {
-                                    propertiesArray.push(localProperties[id]);
-                                }
-                            }
-                        }
-                    }
-
-                    for (const id in data) {
-                        if (SellRent) {
-                            if (data.hasOwnProperty(id) && data[id].SellRent === SellRent) {
-                                propertiesArray.push(data[id] as Property);
-                            }
-                        } else {
-                            propertiesArray.push(data[id] as Property);
-                        }
-                    }
-
-                    return propertiesArray;
-                })
-            );
-
-        return this.http.get<Property[]>('data/properties.json');
+        return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString());
     }
 
     getPropertyById(id: number) {
-        return this.getAllProperties().pipe(
+        return this.getAllProperties(1).pipe(
             map((propertiesArray) => {
                 // throw new Error('Some error here');
-                return propertiesArray.find((p) => p.Id === id) as Property;
+                return propertiesArray.find((p) => p.id === id) as Property;
             })
         );
     }
@@ -100,7 +58,7 @@ export class HousingService {
         // Add new prop in array if newProp already exists in local storage
         if (
             typeof localStorage !== 'undefined' &&
-      localStorage.getItem('newProp')
+            localStorage.getItem('newProp')
         ) {
             newProp = [
                 property,

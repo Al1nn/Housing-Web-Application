@@ -6,25 +6,25 @@
         <img class="card-img-top" *ngIf="!property.Image" src="assets/images/house_default.jpg">
       </div>
       <div class="card-body" *ngIf="property">
-        <h1 class="card-title">{{property.Name}}</h1>
+        <h1 class="card-title">{{property.name}}</h1>
         <div>
-          <strong>{{property.BHK}} BHK {{property.PType}} &#64; ${{property.Price}}</strong>
+          <strong>{{property.bhk}} BHK {{property.propertyType}} &#64; ${{property.price}}</strong>
         </div>
         <div>
-          <strong> in {{property.City}}</strong>
+          <strong> in {{property.city}}</strong>
         </div>
         <hr>
         <div>
           <strong>Build Area : </strong>
-          {{property.BuiltArea}} Sqft
+          {{property.builtArea}} Sqft
         </div>
         <div>
           <strong>Carpet Area : </strong>
-          {{property.CarpetArea}} Sqft
+          {{property.carpetArea}} Sqft
         </div>
         <div>
           <strong>Furnishing Type : </strong>
-          {{property.FType}}
+          {{property.furnishingType}}
         </div>
       </div>
       <div class="card-footer">
@@ -45,8 +45,8 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="heading">
-                <strong>Project Name</strong>
-                <p>{{property.Name}}</p>
+                <strong>Project name</strong>
+                <p>{{property.name}}</p>
               </div>
 
               <div class="heading">
@@ -105,8 +105,8 @@
               <hr>
             </div>
             <div class="heading">
-              <h1>City</h1>
-              <strong>{{property.City}}</strong>
+              <h1>city</h1>
+              <strong>{{property.city}}</strong>
             </div>
           </div>
         </tab>

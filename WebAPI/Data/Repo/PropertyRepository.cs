@@ -27,6 +27,12 @@ namespace WebAPI.Data.Repo
         public async Task<IEnumerable<Property>> GetPropertiesAsync(int sellRent)
         {
             var properties = await dc.Properties
+                            .Include(p => p.PropertyType)
+                            .Include(p => p.FurnishingType)
+                            .Include(p=> p.City)
+                            .Include(p=> p.Contact)
+                            .Include(p=> p.User)
+                            .Include(p=> p.Photos)
                             .Where(p => p.SellRent == sellRent)
                             .ToListAsync();
             return properties;
