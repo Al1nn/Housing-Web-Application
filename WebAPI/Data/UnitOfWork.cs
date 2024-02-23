@@ -8,6 +8,7 @@ namespace WebAPI.Data
         private readonly DataContext dc;
         private ICityRepository _cityRepository;
         private IUserRepository _userRepository;
+        private IPropertyRepository _propertyRepository;
 
         public UnitOfWork(DataContext dc)
         {
@@ -38,6 +39,19 @@ namespace WebAPI.Data
             }
         }
 
+        public IPropertyRepository PropertyRepository
+        {
+            get
+            {
+                if (_propertyRepository == null)
+                {
+                    _propertyRepository = new PropertyRepository(dc);
+                }
+                return _propertyRepository;
+            }
+        }
+
+        // Add more repos
         public async Task<bool> SaveAsync()
         {
             return await dc.SaveChangesAsync() > 0;

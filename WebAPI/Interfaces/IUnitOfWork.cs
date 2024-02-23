@@ -7,6 +7,8 @@
         //Add more Repositories 
         IUserRepository UserRepository { get; }
 
+        IPropertyRepository PropertyRepository { get; }
+
         public Task<bool> SaveAsync();
     }
 }
