@@ -219,7 +219,7 @@ export class AddPropertyComponent implements OnInit {
 
             console.log(
                 'Successfully stored property contacts:',
-                this.property.Contacts
+                this.property.contact
             );
         } else {
             console.log('Please review the form and add all entries');
@@ -238,29 +238,28 @@ export class AddPropertyComponent implements OnInit {
         this.property.city = this.City.value;
         this.property.furnishingType = this.FType.value;
         this.property.price = Number(this.Price.value);
-        this.property.Security = this.Security.value;
-        this.property.Maintenance = this.Maintenance.value;
+        this.property.security = this.Security.value;
+        this.property.maintenance = this.Maintenance.value;
         this.property.builtArea = this.BuiltArea.value;
         this.property.carpetArea = this.CarpetArea.value;
-        this.property.FloorNo = this.FloorNo.value;
-        this.property.TotalFloor = this.TotalFloor.value;
-        this.property.Contacts = (this.Contacts as FormArray).controls.map(
+        this.property.floorNo = this.FloorNo.value;
+        this.property.totalFloors = this.TotalFloor.value;
+        this.property.contact = (this.Contacts as FormArray).controls.map(
             (contactControl: AbstractControl) => {
                 const address = (contactControl as FormGroup).get('Address')?.value;
                 const phone = (contactControl as FormGroup).get('Phone')?.value;
 
                 // Return a contact object
-                return { Address: address, Phone: phone };
+                return { address: address, phoneNumber: phone };
             }
         );
 
         this.property.readyToMove = Number(this.RTM.value);
-        this.property.AOP = Number(this.AOP.value);
-        this.property.Gated = Number(this.Gated.value);
-        this.property.MainEntrance = this.MainEntrance.value;
-        this.property.Possession = this.PossessionOn.value;
-        this.property.Description = this.Description.value;
-        this.property.PostedOn = new Date().toString();
+        this.property.age = this.AOP.value;
+        this.property.gated = this.Gated.value;
+        this.property.mainEntrance = this.MainEntrance.value;
+        this.property.estPossessionOn = this.PossessionOn.value;
+        this.property.description = this.Description.value;
     }
 
     allTabsValid(): boolean {

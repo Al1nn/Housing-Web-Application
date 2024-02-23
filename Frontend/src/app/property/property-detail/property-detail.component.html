@@ -2,8 +2,8 @@
   <div class="col-sm-4 p-0">
     <div class="card">
       <div class="card-img-wrapper">
-        <img class="card-img-top" *ngIf="property.Image" src="assets/images/{{property.Image}}.jpg">
-        <img class="card-img-top" *ngIf="!property.Image" src="assets/images/house_default.jpg">
+        <img class="card-img-top" *ngIf="property.image" src="assets/images/{{property.image}}.jpg">
+        <img class="card-img-top" *ngIf="!property.image" src="assets/images/house_default.jpg">
       </div>
       <div class="card-body" *ngIf="property">
         <h1 class="card-title">{{property.name}}</h1>
@@ -25,6 +25,11 @@
         <div>
           <strong>Furnishing Type : </strong>
           {{property.furnishingType}}
+        </div>
+        <div>
+          <strong>Available for : </strong>
+          <span *ngIf="property.sellRent === 1">Purchase</span>
+          <span *ngIf="property.sellRent === 2">Rent</span>  
         </div>
       </div>
       <div class="card-footer">
@@ -51,17 +56,17 @@
 
               <div class="heading">
                 <strong>Floor Number</strong>
-                <p>{{property.FloorNo}}</p>
+                <p>{{property.floorNo}} of {{property.totalFloors}}</p>
               </div>
 
               <div class="heading">
                 <strong>Age Of Property</strong>
-                <p>{{property.AOP}}</p>
+                <p>{{property.age}}</p>
               </div>
 
               <div class="heading">
                 <strong>Posession</strong>
-                <p>{{property.Possession | date}}</p>
+                <p>{{property.estPossessionOn | date}}</p>
               </div>
 
             </div>
@@ -69,29 +74,31 @@
             <div class="col-sm-6">
               <div class="heading">
                 <strong>Main Entrance</strong>
-                <p>{{property.MainEntrance}}</p>
+                <p>{{property.mainEntrance}}</p>
               </div>
 
               <div class="heading">
                 <strong>Gated Community</strong>
-                <p>{{property.Gated}}</p>
+
+                <p *ngIf="property.gated">Yes</p>
+                <p *ngIf="!property.gated">No</p>
               </div>
 
               <div class="heading">
                 <strong>Security Deposit</strong>
-                <p>{{property.Security}}</p>
+                <p>{{property.security}}</p>
               </div>
 
               <div class="heading">
                 <strong>Maintenance</strong>
-                <p>{{property.Maintenance}}</p>
+                <p>{{property.maintenance}}</p>
               </div>
             </div>
 
             <div class="col-sm-12">
               <div class="heading">
                 <strong>About Property</strong>
-                <p>{{property.Description}}</p>
+                <p>{{property.description}}</p>
               </div>
             </div>
           </div>
@@ -99,13 +106,12 @@
         <tab heading="Address">
           <div class="col-sm-12">
             <h1>Address</h1>
-            <div class="heading" *ngFor="let contact of property.Contacts">
-              <strong>{{contact.Address}}</strong><br>
-              <strong>{{contact.Phone}}</strong>
-              <hr>
+            <div class="heading" *ngFor="let cont of property.contact">
+              {{cont.address}}
+              {{cont.phoneNumber}}
             </div>
             <div class="heading">
-              <h1>city</h1>
+              <h1>City</h1>
               <strong>{{property.city}}</strong>
             </div>
           </div>

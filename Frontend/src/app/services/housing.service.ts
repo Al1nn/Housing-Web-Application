@@ -38,12 +38,7 @@ export class HousingService {
     }
 
     getPropertyById(id: number) {
-        return this.getAllProperties(1).pipe(
-            map((propertiesArray) => {
-                // throw new Error('Some error here');
-                return propertiesArray.find((p) => p.id === id) as Property;
-            })
-        );
+        return this.http.get<Property>(this.baseUrl + '/property/detail/' + id.toString());
     }
 
     getNumberOfProperties(): Observable<number> {
@@ -84,5 +79,31 @@ export class HousingService {
             console.error('localStorage is not available in this environment.');
             return -1; // or any other appropriate value
         }
+    }
+
+
+    getPropertyAge(dateofEstablishment: string): string {
+        const today = new Date();
+        const estDate = new Date(dateofEstablishment);
+        let age = today.getFullYear() - estDate.getFullYear();
+        const m = today.getMonth() - estDate.getMonth();
+
+        // Current month smaller than establishment month or
+        // Same month but current date smaller than establishment date
+        if (m < 0 || (m === 0 && today.getDate() < estDate.getDate())) {
+            age--;
+        }
+
+        // Establshment date is future date
+        if (today < estDate) {
+            return '0';
+        }
+
+        // Age is less than a year
+        if (age === 0) {
+            return 'Less than a year';
+        }
+
+        return age.toString();
     }
 }

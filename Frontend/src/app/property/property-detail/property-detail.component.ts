@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
+import { HousingService } from '../../services/housing.service';
 
 @Component({
     selector: 'app-property-detail',
@@ -33,7 +34,7 @@ export class PropertyDetailComponent implements OnInit {
             thumbSrc: 'assets/gallery/internal-5.jpg',
         },
     ];
-    constructor(private route: ActivatedRoute) {}
+    constructor(private housingService: HousingService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -42,15 +43,19 @@ export class PropertyDetailComponent implements OnInit {
             this.property = data['property'];
         });
 
+
+
+        this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
+
         // this.route.params.subscribe((params) => {
         //   this.propertyId = +params['id'];
 
-    //   this.housingService.getPropertyById(this.propertyId).subscribe(
-    //     (data: Property) => {
-    //       this.property = data;
-    //     },
-    //     (error) => this.router.navigate(['/'])
-    //   );
-    // });
+        //   this.housingService.getPropertyById(this.propertyId).subscribe(
+        //     (data: Property) => {
+        //       this.property = data;
+        //     },
+        //     (error) => this.router.navigate(['/'])
+        //   );
+        // });
     }
 }
