@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Property } from '../model/Property.interface';
 import { environment } from '../../environments/environment';
+import { IKeyValuePair } from '../model/IKeyValuePair';
 
 
 @Injectable({
@@ -16,6 +17,14 @@ export class HousingService {
 
 
     constructor(private http: HttpClient) { }
+
+    getPropertyTypes(): Observable<IKeyValuePair[]> {
+        return this.http.get<IKeyValuePair[]>(this.baseUrl + '/PropertyType/list');
+    }
+
+    getFurnishingTypes(): Observable<IKeyValuePair[]> {
+        return this.http.get<IKeyValuePair[]>(this.baseUrl + '/FurnishingType/list');
+    }
 
     getAllCities(): Observable<string[]> {
         return this.http.get<string[]>(this.baseUrl + '/city/cities');

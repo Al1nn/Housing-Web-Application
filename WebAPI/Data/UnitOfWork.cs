@@ -15,43 +15,20 @@ namespace WebAPI.Data
             this.dc = dc;
         }
 
-        public ICityRepository CityRepository
-        {
-            get
-            {
-                if (_cityRepository == null)
-                {
-                    _cityRepository = new CityRepository(dc);
-                }
-                return _cityRepository;
-            }
-        }
+        public ICityRepository CityRepository => new CityRepository(dc);
 
-        public IUserRepository UserRepository
-        {
-            get
-            {
-                if (_userRepository == null)
-                {
-                    _userRepository = new UserRepository(dc);
-                }
-                return _userRepository;
-            }
-        }
+        public IUserRepository UserRepository => new UserRepository(dc);
+        
 
-        public IPropertyRepository PropertyRepository
-        {
-            get
-            {
-                if (_propertyRepository == null)
-                {
-                    _propertyRepository = new PropertyRepository(dc);
-                }
-                return _propertyRepository;
-            }
-        }
+        public IPropertyRepository PropertyRepository => new PropertyRepository(dc);
+        
 
+        public IPropertyTypeRepository PropertyTypeRepository => new PropertyTypeRepository(dc);
+
+        public IFurnishingTypeRepository FurnishingTypeRepository => new FurnishingTypeRepository(dc);
         // Add more repos
+
+
         public async Task<bool> SaveAsync()
         {
             return await dc.SaveChangesAsync() > 0;

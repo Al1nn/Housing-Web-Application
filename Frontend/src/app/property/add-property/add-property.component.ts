@@ -11,6 +11,7 @@ import { IPropertyBase } from '../../model/IPropertyBase.interface';
 import { Property } from '../../model/Property.interface';
 import { HousingService } from '../../services/housing.service';
 import { AlertifyService } from '../../services/alertify.service';
+import { IKeyValuePair } from '../../model/IKeyValuePair';
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
@@ -24,8 +25,8 @@ export class AddPropertyComponent implements OnInit {
     property = new Property();
 
     // This later will come from the database
-    propertyTypes: Array<string> = ['House', 'Apartment', 'Duplex'];
-    furnishTypes: Array<string> = ['Fully', 'Semi', 'Unfurnished'];
+    propertyTypes: IKeyValuePair[];
+    furnishTypes: IKeyValuePair[];
     cityList: any[];
 
     propertyView: IPropertyBase = {
@@ -163,6 +164,14 @@ export class AddPropertyComponent implements OnInit {
         this.housingService.getAllCities().subscribe((data) => {
             this.cityList = data;
             console.log(data);
+        });
+
+        this.housingService.getPropertyTypes().subscribe((data) => {
+            this.propertyTypes = data;
+        });
+
+        this.housingService.getFurnishingTypes().subscribe((data) => {
+            this.furnishTypes = data;
         });
     }
 

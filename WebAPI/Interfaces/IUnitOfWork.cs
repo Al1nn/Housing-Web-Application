@@ -9,6 +9,10 @@
 
         IPropertyRepository PropertyRepository { get; }
 
+        IPropertyTypeRepository PropertyTypeRepository { get; }
+
+        IFurnishingTypeRepository FurnishingTypeRepository { get; }
+
         public Task<bool> SaveAsync();
     }
 }
