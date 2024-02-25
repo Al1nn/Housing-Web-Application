@@ -10,5 +10,6 @@ export interface IPropertyBase {
     carpetArea: number | null;
     city: string | null;
     readyToMove: number | null;
+    estPossessionOn?: string;
     image?: string | null;
 }

@@ -72,14 +72,17 @@
                 </div>
 
                 <div class="form-group col-12">
-                  <label for="price">City</label>
+                  <label>City</label>
                   <select
                   class="form-control m-2"
+                  
                   formControlName="city"
-                  [(ngModel)]="propertyView.city">
+
+                  [(ngModel)]="propertyView.city"
+                  >
                     <option value="">--Select City --</option>
                     <option *ngFor="let city of cityList"
-                      value={{city.Id}} >
+                      value={{city.name}} >
                       {{city.name}}
                     </option>
 
@@ -167,11 +170,17 @@
                 <div class="form-group col-12 mt-3">
                   <label>Address</label>
                   <input type="text" class="form-control m-2" formControlName="address">
+                  <div class="error-block" *ngIf="address.invalid && (nextClicked || address.touched)">
+                    Please insert a address
+                  </div>
                 </div>
 
                 <div class="form-group col-12 mt-3">
                   <label>Phone Number</label>
                   <input type="text" class="form-control m-2" formControlName="phoneNumber">
+                  <div class="error-block" *ngIf="phoneNumber.invalid && (nextClicked || phoneNumber.touched)">
+                    Please insert a phone number
+                  </div>
                 </div>
 
               
@@ -190,8 +199,8 @@
                   <p class="mt-3">Ready To Move</p>
 
                   <div class="btn-group" btnRadioGroup formControlName="readyToMove">
-                    <label class="btn btn-outline-primary" btnRadio=1 tabindex=0 role="button" name="readyToMove">Yes</label>
-                    <label class="btn btn-outline-primary mx-2" btnRadio=2 tabindex=0 role="button"
+                    <label class="btn btn-outline-primary" btnRadio=1 tabindex=0 role="button" name="readyToMove" >Yes</label>
+                    <label class="btn btn-outline-primary mx-2" btnRadio=2 tabindex=0 role="button" 
                       name="readyToMove">No</label>
                   </div>
                   <div class="error-block" *ngIf="readyToMove.invalid && nextClicked">
@@ -210,6 +219,7 @@
                 <div class="form group col-3 mt-3" *ngIf="readyToMove.value == 2">
                   <label>Possesion/Available from</label>
                   <input type="text" placeholder="Datepicker" class="form-control" formControlName="estPossessionOn" bsDatepicker
+                   [(ngModel)]="propertyView.estPossessionOn"
                     [bsConfig]="{containerClass : 'theme-dark-blue', dateInputFormat : 'DD-MM-YYYY' }">
                 </div>
 

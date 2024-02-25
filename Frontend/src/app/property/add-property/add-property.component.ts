@@ -30,13 +30,13 @@ export class AddPropertyComponent implements OnInit {
 
     propertyView: IPropertyBase = {
         id: 0,
-        name: '',
+        name: null,
         price: null,
         sellRent: null,
         propertyType: null,
         furnishingType: null,
         bhk: null,
-        city: '',
+        city: null,
         builtArea: null,
         carpetArea: null,
         readyToMove: null,
@@ -187,8 +187,8 @@ export class AddPropertyComponent implements OnInit {
                 floorNo: [null],
                 totalFloors: [null],
                 landMark: [null],
-                address: [null],
-                phoneNumber: [null],
+                address: [null, Validators.required],
+                phoneNumber: [null, Validators.required],
             }),
 
             OtherInfo: this.fb.group({

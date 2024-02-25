@@ -18,10 +18,15 @@
     in {{property_index.name}}
     <span *ngIf="property_index.name">,</span>
     {{property_index.city}}
-
+  
     <h6  class="mt-2">{{property_index.furnishingType}}
-    <span *ngIf="property_index.furnishingType !== 'Unfurnished'">Furnished</span> | Ready to Move</h6>
+    <span *ngIf="property_index.furnishingType !== 'Unfurnished'">Furnished</span>
 
+     <span *ngIf="property_index.readyToMove"> | Ready To Move</span>
+    <span *ngIf="!property_index.readyToMove"> | Possesion : {{property_index.estPossessionOn | date}}</span>
+   
+    </h6>
+    
     <hr class="mt-0 mb-2">
 
     <h6 class="mb-0" >Price: <span class="font-highlight">{{property_index.price}} USD.</span> |
