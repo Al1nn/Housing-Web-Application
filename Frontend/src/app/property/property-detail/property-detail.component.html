@@ -106,10 +106,13 @@
         <tab heading="Address">
           <div class="col-sm-12">
             <h1>Address</h1>
-            <div class="heading" *ngFor="let cont of property.contact">
+            <strong>{{property.contact.address}}</strong><br>
+            <strong>Phone Number : {{property.contact.phoneNumber}}</strong>
+            <!-- <div class="heading" *ngFor="let cont of property.contact">
               {{cont.address}}
               {{cont.phoneNumber}}
-            </div>
+            </div> -->
+
             <div class="heading">
               <h1>City</h1>
               <strong>{{property.city}}</strong>

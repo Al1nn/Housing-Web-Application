@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-    AbstractControl,
-    FormArray,
     FormBuilder,
     FormControl,
     FormGroup,
@@ -68,89 +66,96 @@ export class AddPropertyComponent implements OnInit {
         return this.addPropertyForm.controls['OtherInfo'] as FormGroup;
     }
 
-    get SellRent() {
-        return this.BasicInfo.controls['SellRent'] as FormControl;
+    get sellRent() {
+        return this.BasicInfo.controls['sellRent'] as FormControl;
     }
 
-    get BHK() {
-        return this.BasicInfo.controls['BHK'] as FormControl;
+    get bhk() {
+        return this.BasicInfo.controls['bhk'] as FormControl;
     }
 
-    get PType() {
-        return this.BasicInfo.controls['PType'] as FormControl;
+    get propertyType() {
+        return this.BasicInfo.controls['propertyType'] as FormControl;
     }
 
-    get FType() {
-        return this.BasicInfo.controls['FType'] as FormControl;
+    get furnishingType() {
+        return this.BasicInfo.controls['furnishingType'] as FormControl;
     }
 
-    get Name() {
-        return this.BasicInfo.controls['Name'] as FormControl;
+    get name() {
+        return this.BasicInfo.controls['name'] as FormControl;
     }
 
-    get City() {
-        return this.BasicInfo.controls['City'] as FormControl;
+    get city() {
+        return this.BasicInfo.controls['city'] as FormControl;
     }
 
-    get Price() {
-        return this.PriceInfo.controls['Price'] as FormControl;
+    get price() {
+        return this.PriceInfo.controls['price'] as FormControl;
     }
 
-    get BuiltArea() {
-        return this.PriceInfo.controls['BuiltArea'] as FormControl;
+    get builtArea() {
+        return this.PriceInfo.controls['builtArea'] as FormControl;
     }
 
-    get CarpetArea() {
-        return this.PriceInfo.controls['CarpetArea'] as FormControl;
+    get carpetArea() {
+        return this.PriceInfo.controls['carpetArea'] as FormControl;
     }
 
-    get Security() {
-        return this.PriceInfo.controls['Security'] as FormControl;
+    get security() {
+        return this.PriceInfo.controls['security'] as FormControl;
     }
 
-    get Maintenance() {
-        return this.PriceInfo.controls['Maintenance'] as FormControl;
+    get maintenance() {
+        return this.PriceInfo.controls['maintenance'] as FormControl;
     }
 
-    get FloorNo() {
-        return this.AddressInfo.controls['FloorNo'] as FormControl;
+    get floorNo() {
+        return this.AddressInfo.controls['floorNo'] as FormControl;
     }
 
-    get TotalFloor() {
-        return this.AddressInfo.controls['TotalFloor'] as FormControl;
+    get totalFloors() {
+        return this.AddressInfo.controls['totalFloors'] as FormControl;
     }
 
-    get Contacts() {
-        return this.AddressInfo.controls['Contacts'] as FormArray;
+
+    get landMark() {
+        return this.AddressInfo.controls['landMark'] as FormControl;
     }
 
-    get LandMark() {
-        return this.AddressInfo.controls['LandMark'] as FormControl;
+    get address() {
+        return this.AddressInfo.controls['address'] as FormControl;
     }
 
-    get RTM() {
-        return this.OtherInfo.controls['RTM'] as FormControl;
+    get phoneNumber() {
+        return this.AddressInfo.controls['phoneNumber'] as FormControl;
     }
 
-    get PossessionOn() {
-        return this.OtherInfo.controls['PossessionOn'] as FormControl;
+    get readyToMove() {
+        return this.OtherInfo.controls['readyToMove'] as FormControl;
     }
 
-    get AOP() {
-        return this.OtherInfo.controls['AOP'] as FormControl;
+    get estPossessionOn() {
+        return this.OtherInfo.controls['estPossessionOn'] as FormControl;
     }
 
-    get Gated() {
-        return this.OtherInfo.controls['Gated'] as FormControl;
+    get age() {
+        return this.OtherInfo.controls['age'] as FormControl;
     }
 
-    get MainEntrance() {
-        return this.OtherInfo.controls['MainEntrance'] as FormControl;
+    get gated() {
+        return this.OtherInfo.controls['gated'] as FormControl;
     }
 
-    get Description() {
-        return this.OtherInfo.controls['Description'] as FormControl;
+    get mainEntrance() {
+        return this.OtherInfo.controls['mainEntrance'] as FormControl;
     }
+
+    get description() {
+        return this.OtherInfo.controls['description'] as FormControl;
+    }
+
+
 
 
     ngOnInit() {
@@ -164,34 +169,35 @@ export class AddPropertyComponent implements OnInit {
     CreateAddPropertyForm() {
         this.addPropertyForm = this.fb.group({
             BasicInfo: this.fb.group({
-                SellRent: ['1', Validators.required],
-                BHK: [null, Validators.required],
-                PType: [null, Validators.required],
-                FType: [null, Validators.required],
-                Name: [null, Validators.required],
-                City: [null, Validators.required],
+                sellRent: ['1', Validators.required],
+                bhk: [null, Validators.required],
+                propertyType: [null, Validators.required],
+                furnishingType: [null, Validators.required],
+                name: [null, Validators.required],
+                city: [null, Validators.required],
             }),
             PriceInfo: this.fb.group({
-                Price: [null, Validators.required],
-                BuiltArea: [null, Validators.required],
-                CarpetArea: [null],
-                Security: [null],
-                Maintenance: [null],
+                price: [null, Validators.required],
+                builtArea: [null, Validators.required],
+                carpetArea: [null],
+                security: [null],
+                maintenance: [null],
             }),
             AddressInfo: this.fb.group({
-                FloorNo: [null],
-                TotalFloor: [null],
-                Contacts: this.fb.array([], Validators.required),
-                LandMark: [null],
+                floorNo: [null],
+                totalFloors: [null],
+                landMark: [null],
+                address: [null],
+                phoneNumber: [null],
             }),
 
             OtherInfo: this.fb.group({
-                RTM: [null, Validators.required],
-                PossessionOn: [null],
-                AOP: [null],
-                Gated: [null],
-                MainEntrance: [null],
-                Description: [null],
+                readyToMove: [null, Validators.required],
+                estPossessionOn: [null],
+                age: [null],
+                gated: [null],
+                mainEntrance: [null],
+                description: [null],
             }),
         });
     }
@@ -211,7 +217,7 @@ export class AddPropertyComponent implements OnInit {
                 'Congrats, your property listed successfully on our website'
             );
 
-            if (this.SellRent.value === '2') {
+            if (this.sellRent.value === '2') {
                 this.route.navigate(['/rent-property']);
             } else {
                 this.route.navigate(['/']);
@@ -231,35 +237,38 @@ export class AddPropertyComponent implements OnInit {
 
     mapProperty(): void {
         this.property.id = this.housingService.newPropID();
-        this.property.sellRent = +this.SellRent.value;
-        this.property.bhk = this.BHK.value;
-        this.property.propertyType = this.PType.value;
-        this.property.name = this.Name.value;
-        this.property.city = this.City.value;
-        this.property.furnishingType = this.FType.value;
-        this.property.price = Number(this.Price.value);
-        this.property.security = this.Security.value;
-        this.property.maintenance = this.Maintenance.value;
-        this.property.builtArea = this.BuiltArea.value;
-        this.property.carpetArea = this.CarpetArea.value;
-        this.property.floorNo = this.FloorNo.value;
-        this.property.totalFloors = this.TotalFloor.value;
-        this.property.contact = (this.Contacts as FormArray).controls.map(
-            (contactControl: AbstractControl) => {
-                const address = (contactControl as FormGroup).get('Address')?.value;
-                const phone = (contactControl as FormGroup).get('Phone')?.value;
+        this.property.sellRent = +this.sellRent.value;
+        this.property.bhk = this.bhk.value;
+        this.property.propertyType = this.propertyType.value;
+        this.property.name = this.name.value;
+        this.property.city = this.city.value;
+        this.property.furnishingType = this.furnishingType.value;
+        this.property.price = Number(this.price.value);
+        this.property.security = this.security.value;
+        this.property.maintenance = this.maintenance.value;
+        this.property.builtArea = this.builtArea.value;
+        this.property.carpetArea = this.carpetArea.value;
+        this.property.floorNo = this.floorNo.value;
+        this.property.totalFloors = this.totalFloors.value;
+        //De modificat contact
+        // this.property.contact = (this.Contacts as FormArray).controls.map(
+        //     (contactControl: AbstractControl) => {
+        //         const address = (contactControl as FormGroup).get('Address')?.value;
+        //         const phone = (contactControl as FormGroup).get('Phone')?.value;
 
-                // Return a contact object
-                return { address: address, phoneNumber: phone };
-            }
-        );
+        //         // Return a contact object
+        //         return { address: address, phoneNumber: phone };
+        //     }
+        // );
+        this.property.contact.address = this.address.value;
+        this.property.contact.phoneNumber = this.phoneNumber.value;
 
-        this.property.readyToMove = Number(this.RTM.value);
-        this.property.age = this.AOP.value;
-        this.property.gated = this.Gated.value;
-        this.property.mainEntrance = this.MainEntrance.value;
-        this.property.estPossessionOn = this.PossessionOn.value;
-        this.property.description = this.Description.value;
+        this.property.readyToMove = Number(this.readyToMove.value);
+        this.property.age = this.age.value;
+        this.property.gated = this.gated.value;
+        this.property.mainEntrance = this.mainEntrance.value;
+        this.property.estPossessionOn = this.estPossessionOn.value;
+        this.property.description = this.description.value;
     }
 
     allTabsValid(): boolean {
@@ -292,17 +301,9 @@ export class AddPropertyComponent implements OnInit {
         }
     }
 
-    addContact() {
-        const newContact = this.fb.group({
-            Address: [null, Validators.required],
-            Phone: [null, Validators.required],
-        });
-        this.Contacts.push(newContact);
-    }
 
-    removeContact(index: number) {
-        this.Contacts.removeAt(index);
-    }
+
+
 
     // #region <Getter Methods>
     // #region <FormGroups>
@@ -313,13 +314,6 @@ export class AddPropertyComponent implements OnInit {
     // #region <Form Controls>
 
 
-    getContactAddress(index: number) {
-        return this.Contacts.at(index).get('Address') as FormControl;
-    }
-
-    getContactPhone(index: number) {
-        return this.Contacts.at(index).get('Phone') as FormControl;
-    }
 
 
 

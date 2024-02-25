@@ -46,7 +46,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models.Contact", b =>
@@ -73,7 +73,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Contacts", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models.FurnishingType", b =>
@@ -96,7 +96,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FurnishingTypes");
+                    b.ToTable("FurnishingTypes", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models.Photo", b =>
@@ -127,7 +127,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("PropertyId");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photos", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models.Property", b =>
@@ -225,7 +225,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("PropertyTypeId");
 
-                    b.ToTable("Properties");
+                    b.ToTable("Properties", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models.PropertyType", b =>
@@ -248,7 +248,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PropertyTypes");
+                    b.ToTable("PropertyTypes", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models.User", b =>
@@ -279,7 +279,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models.Photo", b =>
