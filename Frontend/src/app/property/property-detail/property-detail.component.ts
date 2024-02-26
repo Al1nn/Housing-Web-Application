@@ -4,6 +4,7 @@ import { Property } from '../../model/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { HousingService } from '../../services/housing.service';
 
+
 @Component({
     selector: 'app-property-detail',
     templateUrl: './property-detail.component.html',

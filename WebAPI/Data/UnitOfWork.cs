@@ -26,6 +26,8 @@ namespace WebAPI.Data
         public IPropertyTypeRepository PropertyTypeRepository => new PropertyTypeRepository(dc);
 
         public IFurnishingTypeRepository FurnishingTypeRepository => new FurnishingTypeRepository(dc);
+        
+        public IContactRepository ContactRepository => new ContactRepository(dc);
         // Add more repos
 
 

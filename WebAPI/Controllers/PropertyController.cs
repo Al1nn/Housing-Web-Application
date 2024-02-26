@@ -46,10 +46,20 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> AddProperty(PropertyDto propertyDto)
         {
             var property = mapper.Map<Property>(propertyDto);
+
+           
+
+            // Set other properties
             property.PostedBy = 1;
             property.LastUpdatedBy = 1;
+            property.Contact.LastUpdatedBy = 1;
+            // Add property to repository
             uow.PropertyRepository.AddProperty(property);
+
+            // Save changes to insert property
             await uow.SaveAsync();
+
+            // Return success response
             return StatusCode(201);
         }
     }

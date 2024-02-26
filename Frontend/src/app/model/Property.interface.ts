@@ -1,4 +1,4 @@
-import { IContact } from './IContacts.interface';
+import { Contact } from './Contact.interface';
 import { IPropertyBase } from './IPropertyBase.interface';
 
 export class Property implements IPropertyBase {
@@ -14,7 +14,7 @@ export class Property implements IPropertyBase {
     builtArea: number;
     carpetArea: number;
     contactId: number;
-    contact: IContact;
+    contact: Contact;
     cityId: number;
     city: string;
     floorNo?: string;

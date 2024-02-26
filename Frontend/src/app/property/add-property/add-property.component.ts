@@ -13,6 +13,7 @@ import { HousingService } from '../../services/housing.service';
 import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
+import { Contact } from '../../model/Contact.interface';
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
@@ -24,7 +25,7 @@ export class AddPropertyComponent implements OnInit {
     nextClicked: boolean;
     contactAdded = false;
     property = new Property();
-
+    contact = new Contact();
     // This later will come from the database
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
@@ -191,8 +192,8 @@ export class AddPropertyComponent implements OnInit {
                 price: [null, Validators.required],
                 builtArea: [null, Validators.required],
                 carpetArea: [null],
-                security: [null],
-                maintenance: [null],
+                security: [0],
+                maintenance: [0],
             }),
             AddressInfo: this.fb.group({
                 floorNo: [null],
@@ -204,7 +205,7 @@ export class AddPropertyComponent implements OnInit {
 
             OtherInfo: this.fb.group({
                 readyToMove: [null, Validators.required],
-                estPossessionOn: [null],
+                estPossessionOn: [null, Validators.required],
                 age: [null],
                 gated: [null],
                 mainEntrance: [null],
@@ -240,6 +241,7 @@ export class AddPropertyComponent implements OnInit {
     }
 
     mapProperty(): void {
+
         this.property.id = this.housingService.newPropID();
         this.property.sellRent = +this.sellRent.value;
         this.property.bhk = this.bhk.value;
@@ -251,10 +253,18 @@ export class AddPropertyComponent implements OnInit {
         this.property.security = this.security.value;
         this.property.maintenance = this.maintenance.value;
         this.property.builtArea = this.builtArea.value;
-        this.property.carpetArea = this.carpetArea.value;
+        this.property.carpetArea = +this.carpetArea.value;
         this.property.floorNo = this.floorNo.value;
         this.property.totalFloors = this.totalFloors.value;
-        this.property.contactId = 1;
+
+
+
+
+        this.contact.address = this.address.value;
+        this.contact.phoneNumber = this.phoneNumber.value;
+
+        this.property.contact = this.contact;
+
         this.property.readyToMove = this.readyToMove.value;
         this.property.gated = this.gated.value;
         this.property.mainEntrance = this.mainEntrance.value;
