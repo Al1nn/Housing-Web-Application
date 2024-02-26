@@ -67,7 +67,13 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
         } else if (error.error && error.error.errorMessage) {
             // Server-side error with an errorMessage property
             errorMessage = error.error.errorMessage;
-        } else {
+        } else if (error.status === 401) {
+            errorMessage = "You are not logged in";
+        } else if (error.status === 400) {
+            errorMessage = "You did not introduced all fields"
+        }
+
+        else {
             // Other types of errors
             errorMessage = error.message || errorMessage;
         }

@@ -163,6 +163,10 @@ export class AddPropertyComponent implements OnInit {
 
 
     ngOnInit() {
+        if (!localStorage.getItem('username')) {
+            this.alertifyService.error("You must be logged in to add a property");
+            this.router.navigate(['/user/login']);
+        }
         this.CreateAddPropertyForm();
         this.housingService.getAllCities().subscribe((data) => {
             this.cityList = data;
@@ -256,9 +260,6 @@ export class AddPropertyComponent implements OnInit {
         this.property.carpetArea = +this.carpetArea.value;
         this.property.floorNo = this.floorNo.value;
         this.property.totalFloors = this.totalFloors.value;
-
-
-
 
         this.contact.address = this.address.value;
         this.contact.phoneNumber = this.phoneNumber.value;

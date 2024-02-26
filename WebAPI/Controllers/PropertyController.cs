@@ -42,17 +42,17 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> AddProperty(PropertyDto propertyDto)
         {
             var property = mapper.Map<Property>(propertyDto);
-
+            var userId = GetUserId();
            
 
             // Set other properties
-            property.PostedBy = 1;
-            property.LastUpdatedBy = 1;
-            property.Contact.LastUpdatedBy = 1;
+            property.PostedBy = userId;
+            property.LastUpdatedBy = userId;
+            property.Contact.LastUpdatedBy = userId;
             // Add property to repository
             uow.PropertyRepository.AddProperty(property);
 
