@@ -10,6 +10,8 @@ namespace WebAPI.Helpers
         {
             CreateMap<City, CityDto>().ReverseMap();
             CreateMap<City, CityUpdateDto>().ReverseMap();
+
+            CreateMap<Property,PropertyDto>().ReverseMap();
             //Add methods to map Model to Dto
             CreateMap<Property, PropertyListDto>()
                 .ForMember(d => d.City, opt => opt.MapFrom(src => src.City.Name))

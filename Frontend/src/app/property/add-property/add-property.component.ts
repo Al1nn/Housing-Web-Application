@@ -12,6 +12,7 @@ import { Property } from '../../model/Property.interface';
 import { HousingService } from '../../services/housing.service';
 import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
+import { DatePipe } from '@angular/common';
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
@@ -40,15 +41,16 @@ export class AddPropertyComponent implements OnInit {
         city: null,
         builtArea: null,
         carpetArea: null,
-        readyToMove: null,
+        readyToMove: false,
         image: 'house_default',
     };
 
     constructor(
+        private datePipe: DatePipe,
         private alertifyService: AlertifyService,
         private housingService: HousingService,
         private fb: FormBuilder,
-        private route: Router
+        private router: Router
     ) { }
 
     get BasicInfo() {
@@ -212,35 +214,28 @@ export class AddPropertyComponent implements OnInit {
     }
 
     onBack() {
-        this.route.navigate(['/']);
+        this.router.navigate(['/']);
     }
 
     onSubmit() {
         this.nextClicked = true;
         if (this.allTabsValid()) {
-            console.log('Congrats, your property listed succesfully on our website');
-            console.log(this.addPropertyForm);
             this.mapProperty();
-            this.housingService.addProperty(this.property);
-            this.alertifyService.success(
-                'Congrats, your property listed successfully on our website'
+            this.housingService.addProperty(this.property).subscribe(
+                () => {
+                    this.alertifyService.success('Congrats, your property listed successfully on our website');
+                    console.log(this.addPropertyForm);
+
+                    if (this.sellRent.value === '2') {
+                        this.router.navigate(['/rent-property']);
+                    } else {
+                        this.router.navigate(['/']);
+                    }
+                }
             );
 
-            if (this.sellRent.value === '2') {
-                this.route.navigate(['/rent-property']);
-            } else {
-                this.route.navigate(['/']);
-            }
-
-            console.log(
-                'Successfully stored property contacts:',
-                this.property.contact
-            );
         } else {
-            console.log('Please review the form and add all entries');
-            this.alertifyService.error(
-                'Please review the form and provide all valid entries'
-            );
+            this.alertifyService.error('Please review the form and provide all valid entries');
         }
     }
 
@@ -248,35 +243,22 @@ export class AddPropertyComponent implements OnInit {
         this.property.id = this.housingService.newPropID();
         this.property.sellRent = +this.sellRent.value;
         this.property.bhk = this.bhk.value;
-        this.property.propertyType = this.propertyType.value;
+        this.property.propertyTypeId = this.propertyType.value;
         this.property.name = this.name.value;
-        this.property.city = this.city.value;
-        this.property.furnishingType = this.furnishingType.value;
-        this.property.price = Number(this.price.value);
+        this.property.cityId = this.city.value;
+        this.property.furnishingTypeId = this.furnishingType.value;
+        this.property.price = this.price.value;
         this.property.security = this.security.value;
         this.property.maintenance = this.maintenance.value;
         this.property.builtArea = this.builtArea.value;
         this.property.carpetArea = this.carpetArea.value;
         this.property.floorNo = this.floorNo.value;
         this.property.totalFloors = this.totalFloors.value;
-        //De modificat contact
-        // this.property.contact = (this.Contacts as FormArray).controls.map(
-        //     (contactControl: AbstractControl) => {
-        //         const address = (contactControl as FormGroup).get('Address')?.value;
-        //         const phone = (contactControl as FormGroup).get('Phone')?.value;
-
-        //         // Return a contact object
-        //         return { address: address, phoneNumber: phone };
-        //     }
-        // );
-        this.property.contact.address = this.address.value;
-        this.property.contact.phoneNumber = this.phoneNumber.value;
-
-        this.property.readyToMove = Number(this.readyToMove.value);
-        this.property.age = this.age.value;
+        this.property.contactId = 1;
+        this.property.readyToMove = this.readyToMove.value;
         this.property.gated = this.gated.value;
         this.property.mainEntrance = this.mainEntrance.value;
-        this.property.estPossessionOn = this.estPossessionOn.value;
+        this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.property.description = this.description.value;
     }
 

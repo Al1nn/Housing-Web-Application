@@ -35,6 +35,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
 import { HttpErrorInterceptorService } from './services/httperror-interceptor.service';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -69,6 +70,7 @@ import { HttpErrorInterceptorService } from './services/httperror-interceptor.se
         provideClientHydration(),
         provideHttpClient(withFetch()),
         provideAnimations(),
+        DatePipe,
         HousingService,
         AlertifyService,
         AuthService,
