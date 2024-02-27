@@ -19,6 +19,15 @@ namespace WebAPI.Services
             cloudinary = new Cloudinary(account);
         }
 
+        public async Task<DeletionResult> DeletePhotoAsync(string publicId)
+        {
+            var deleteParams = new DeletionParams(publicId);
+
+            var result = await cloudinary.DestroyAsync(deleteParams);
+
+            return result;
+        }
+
         public async Task<ImageUploadResult> UploadPhotoAsync(IFormFile photo)
         {
             var uploadResult = new ImageUploadResult();
@@ -35,5 +44,7 @@ namespace WebAPI.Services
             }
             return uploadResult;
         }
+
+        
     }
 }

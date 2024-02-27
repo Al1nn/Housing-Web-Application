@@ -5,6 +5,7 @@ namespace WebAPI.Interfaces
     public interface IPhotoService
     {
         Task<ImageUploadResult> UploadPhotoAsync(IFormFile photo);
-        //Add more method for deleting photo
+
+        Task<DeletionResult> DeletePhotoAsync(string publicId);
     }
 }
