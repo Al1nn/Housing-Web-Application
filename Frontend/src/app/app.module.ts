@@ -36,6 +36,7 @@ import { SortPipe } from './pipes/sort.pipe';
 import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
 import { HttpErrorInterceptorService } from './services/httperror-interceptor.service';
 import { DatePipe } from '@angular/common';
+import { CloudinaryModule } from '@cloudinary/ng';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import { DatePipe } from '@angular/common';
         CarouselModule.forRoot(),
         BsDatepickerModule.forRoot(),
         GalleryComponent,
+        CloudinaryModule,
     ],
     providers: [
         provideClientHydration(),

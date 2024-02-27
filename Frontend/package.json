@@ -23,6 +23,8 @@
     "@angular/platform-server": "^17.0.0",
     "@angular/router": "^17.0.0",
     "@angular/ssr": "^17.0.6",
+    "@cloudinary/ng": "^2.0.2",
+    "@cloudinary/url-gen": "^1.18.0",
     "@daelmaak/ngx-gallery": "^3.0.2",
     "alertifyjs": "^1.13.1",
     "bootstrap": "^5.3.2",
