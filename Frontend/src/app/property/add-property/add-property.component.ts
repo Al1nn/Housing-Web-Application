@@ -43,7 +43,7 @@ export class AddPropertyComponent implements OnInit {
         builtArea: null,
         carpetArea: null,
         readyToMove: false,
-        image: 'house_default',
+        photo: 'house_default',
     };
 
     constructor(
