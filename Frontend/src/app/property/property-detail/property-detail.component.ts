@@ -5,6 +5,7 @@ import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { HousingService } from '../../services/housing.service';
 
 
+
 @Component({
     selector: 'app-property-detail',
     templateUrl: './property-detail.component.html',
@@ -12,29 +13,9 @@ import { HousingService } from '../../services/housing.service';
 })
 export class PropertyDetailComponent implements OnInit {
     public propertyId: number;
+    public mainPhotoUrl: string;
     property = new Property();
-    images: GalleryItem[] = [
-        {
-            src: 'assets/gallery/internal-1.jpg',
-            thumbSrc: 'assets/gallery/internal-1.jpg',
-        },
-        {
-            src: 'assets/gallery/internal-2.jpg',
-            thumbSrc: 'assets/gallery/internal-2.jpg',
-        },
-        {
-            src: 'assets/gallery/internal-3.jpg',
-            thumbSrc: 'assets/gallery/internal-3.jpg',
-        },
-        {
-            src: 'assets/gallery/internal-4.jpg',
-            thumbSrc: 'assets/gallery/internal-4.jpg',
-        },
-        {
-            src: 'assets/gallery/internal-5.jpg',
-            thumbSrc: 'assets/gallery/internal-5.jpg',
-        },
-    ];
+    galleryImages: GalleryItem[];
     constructor(private housingService: HousingService, private route: ActivatedRoute) { }
 
     ngOnInit() {
@@ -42,6 +23,7 @@ export class PropertyDetailComponent implements OnInit {
 
         this.route.data.subscribe((data) => {
             this.property = data['property'];
+            console.log(this.property.photos);
         });
 
 
@@ -58,5 +40,23 @@ export class PropertyDetailComponent implements OnInit {
         //     (error) => this.router.navigate(['/'])
         //   );
         // });
+        this.galleryImages = this.getPropertyPhotos();
+    }
+
+    getPropertyPhotos(): GalleryItem[] {
+        const photoUrls: GalleryItem[] = [];
+        for (const photo of this.property.photos) {
+            if (photo.isPrimary) this.mainPhotoUrl = photo.imageUrl;
+            else {
+                photoUrls.push({
+                    src: photo.imageUrl,
+                    thumbSrc: photo.imageUrl
+                })
+            }
+
+
+
+        }
+        return photoUrls;
     }
 }

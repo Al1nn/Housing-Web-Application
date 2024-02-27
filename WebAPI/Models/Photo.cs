@@ -6,7 +6,8 @@ namespace WebAPI.Models
     [Table("Photos")]
     public class Photo : BaseEntity
     {
-       
+        [Required]
+        public string PublicId {  get; set; }
         
         [Required]
         public string ImageUrl { get; set; }

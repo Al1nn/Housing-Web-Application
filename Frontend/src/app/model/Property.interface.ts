@@ -1,5 +1,6 @@
 import { Contact } from './Contact.interface';
 import { IPropertyBase } from './IPropertyBase.interface';
+import { IPhoto } from './IPhoto';
 
 export class Property implements IPropertyBase {
     id: number;
@@ -28,4 +29,5 @@ export class Property implements IPropertyBase {
     estPossessionOn: string;
     image?: string;
     description?: string;
+    photos: IPhoto[];
 }

@@ -13,6 +13,8 @@ namespace WebAPI.Helpers
             CreateMap<Contact, ContactDto>().ReverseMap();
 
             CreateMap<Property,PropertyDto>().ReverseMap();
+            CreateMap<Photo, PhotoDto>().ReverseMap();
+
             //Add methods to map Model to Dto
             CreateMap<Property, PropertyListDto>()
                 .ForMember(d => d.City, opt => opt.MapFrom(src => src.City.Name))
