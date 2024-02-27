@@ -90,6 +90,35 @@ namespace WebAPI.Controllers
             property.Photos.Add(photo);
             await uow.SaveAsync();
             return StatusCode(201);
-        } 
+        }
+
+
+        //property/set-primary-photo/1/safasfsagsd
+        [HttpPost("set-primary-photo/{propId}/{photoPublicId}")]
+        [Authorize]
+        public async Task<IActionResult> SetPrimaryPhoto(int propId, string photoPublicId)
+        {
+            var userId = GetUserId();
+            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
+            
+            if (property == null) return BadRequest("No such property or photo exists");
+            
+            if(property.PostedBy != userId) return BadRequest("You are not authorised to change the photo");
+
+            var photo = property.Photos.FirstOrDefault(p => p.PublicId == photoPublicId);
+
+            if(photo == null) return BadRequest("No such property or photo exists");
+
+            if (photo.IsPrimary) return BadRequest("This is already a primary photo");
+
+            var currentPrimary = property.Photos.FirstOrDefault(p => p.IsPrimary);
+            if (currentPrimary != null) currentPrimary.IsPrimary = false;
+
+            photo.IsPrimary = true;
+
+            if (await uow.SaveAsync()) return NoContent();
+
+            return BadRequest("Some error has occured, failed to set primary photo");
+        }
     }
 }
