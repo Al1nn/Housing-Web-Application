@@ -1,5 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Property } from '../../model/Property.interface';
+import { IPhoto } from '../../model/IPhoto';
+import { HousingService } from '../../services/housing.service';
+
 
 @Component({
   selector: 'app-photo-editor',
@@ -9,9 +12,24 @@ import { Property } from '../../model/Property.interface';
 export class PhotoEditorComponent implements OnInit {
 
   @Input() property: Property;
-  constructor() { }
+  @Output() mainPhotoChangedEvent = new EventEmitter<string>();
+  constructor(private housingService: HousingService) { }
+
+  mainPhotoChanged(url: string) {
+    this.mainPhotoChangedEvent.emit(url);
+  }
 
   ngOnInit() {
   }
 
+
+  setPrimaryPhoto(propertyId: number, photo: IPhoto) {
+    this.housingService.setPrimaryPhoto(propertyId, photo.publicId).subscribe(() => {
+      this.mainPhotoChanged(photo.imageUrl);
+      this.property.photos.forEach(p => {
+        if (p.isPrimary) { p.isPrimary = false; }
+        if (p.publicId === photo.publicId) { p.isPrimary = true; }
+      })
+    });
+  }
 }

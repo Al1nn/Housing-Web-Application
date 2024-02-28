@@ -42,7 +42,9 @@ export class PropertyDetailComponent implements OnInit {
         // });
         this.galleryImages = this.getPropertyPhotos();
     }
-
+    changePrimaryPhoto(mainPhotoUrl: string) {
+        this.mainPhotoUrl = mainPhotoUrl;
+    }
     getPropertyPhotos(): GalleryItem[] {
         const photoUrls: GalleryItem[] = [];
         for (const photo of this.property.photos) {

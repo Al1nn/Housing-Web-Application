@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WebAPI.Dtos;
+using WebAPI.Errors;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 
@@ -70,10 +73,15 @@ namespace WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> AddPropertyPhoto(IFormFile file, int propId)
         {
+
+            ApiError apiError = new ApiError();
             var result = await photoService.UploadPhotoAsync(file);
             if(result.Error != null)
             {
-                return BadRequest(result.Error.Message);
+                apiError.ErrorCode = 400;
+                apiError.ErrorMessage = result.Error.Message;
+                apiError.ErrorDetails = "";
+                return BadRequest(apiError);
             }
 
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
@@ -98,18 +106,40 @@ namespace WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> SetPrimaryPhoto(int propId, string photoPublicId)
         {
+            ApiError apiError = new ApiError();
+
             var userId = GetUserId();
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
-            
-            if (property == null) return BadRequest("No such property or photo exists");
-            
-            if(property.PostedBy != userId) return BadRequest("You are not authorised to change the photo");
+
+            if (property == null) {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such property or photo exists";
+                apiError.ErrorDetails = "When you set a property photo that doesnt exist";
+                return BadRequest(apiError); 
+            }
+
+            if (property.PostedBy != userId) {
+                apiError.ErrorCode = Unauthorized().StatusCode;
+                apiError.ErrorMessage = "You are not authorised to change the photo";
+                apiError.ErrorDetails = "You must log in to your account";
+                return BadRequest(apiError); 
+            }
 
             var photo = property.Photos.FirstOrDefault(p => p.PublicId == photoPublicId);
 
-            if(photo == null) return BadRequest("No such property or photo exists");
+            if (photo == null) {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such property or photo exists";
+                apiError.ErrorDetails = "This error persist when you set no photo of property";
+                return BadRequest(apiError); 
+            }
 
-            if (photo.IsPrimary) return BadRequest("This is already a primary photo");
+            if (photo.IsPrimary) {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "This is already a primary photo";
+                apiError.ErrorDetails = "This error is when you click on already set primary photo";
+                return BadRequest(apiError); 
+            }
 
             var currentPrimary = property.Photos.FirstOrDefault(p => p.IsPrimary);
             if (currentPrimary != null) currentPrimary.IsPrimary = false;
@@ -118,7 +148,10 @@ namespace WebAPI.Controllers
 
             if (await uow.SaveAsync()) return NoContent();
 
-            return BadRequest("Some error has occured, failed to set primary photo");
+            apiError.ErrorCode = BadRequest().StatusCode;
+            apiError.ErrorMessage = "Some error has occured, failed to set primary photo";
+            apiError.ErrorDetails = "This error occurs when no primary photo is set";
+            return BadRequest(apiError);
         }
 
 
@@ -126,35 +159,68 @@ namespace WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> DeletePhoto(int propId, string photoPublicId)
         {
+            ApiError apiError = new ApiError();
             var userId = GetUserId();
 
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
 
             if (property.PostedBy != userId)
-                return BadRequest("You are not authorised to delete the photo");
+            {
+                apiError.ErrorCode = Unauthorized().StatusCode;
+                apiError.ErrorMessage = "You are not authorised to delete the photo";
+                apiError.ErrorDetails = "You must log in to your account";
+                return BadRequest(apiError);
+            }
+                
 
             if (property == null || property.PostedBy != userId)
-                return BadRequest("No such property or photo exists");
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such property or photo exists";
+                apiError.ErrorDetails = "You delete a non-existent photo or property";
+                return BadRequest(apiError);
+            }
+                
 
             var photo = property.Photos.FirstOrDefault(p => p.PublicId == photoPublicId);
 
             if (photo == null)
-                return BadRequest("No such property or photo exists");
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such property or photo exists";
+                apiError.ErrorDetails = "You delete a non-existent photo or property";
+                return BadRequest(apiError);
+            }
+                
 
             if (photo.IsPrimary)
-                return BadRequest("You can not delete primary photo");
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "You can not delete a primary photo";
+                apiError.ErrorDetails = "You tried to delete a primary photo";
+                return BadRequest(apiError);
+            }
+                
 
             if (photo.PublicId != null)
             {
                 var result = await photoService.DeletePhotoAsync(photo.PublicId);
-                if (result.Error != null) return BadRequest(result.Error.Message);
+                if (result.Error != null) {
+                    apiError.ErrorCode = BadRequest().StatusCode;
+                    apiError.ErrorMessage = result.Error.Message;
+                    apiError.ErrorDetails = "You deleted a non-existent public id photo";
+                    return BadRequest(apiError);
+                } 
             }
 
             property.Photos.Remove(photo);
 
             if (await uow.SaveAsync()) return Ok();
 
-            return BadRequest("Failed to delete photo");
+            apiError.ErrorCode = BadRequest().StatusCode;
+            apiError.ErrorMessage = "Failed to delete photo";
+            apiError.ErrorDetails = "An unknown error occured";
+            return BadRequest(apiError);
         }
     }
 }

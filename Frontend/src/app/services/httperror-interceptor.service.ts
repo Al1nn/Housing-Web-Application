@@ -50,32 +50,20 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
     }
 
     setError(error: HttpErrorResponse): string {
-        // let errorMessage = 'Unknown error occured';
-        // if (error.error.errorMessage instanceof ErrorEvent) {
-        //     //Client side error
-        //     errorMessage = error.message;
-        // } else {
-        //     if (error.status !== 0) {
-        //         errorMessage = error.error.errorMessage;
-        //     }
-        // }
-        // return errorMessage;
-        let errorMessage = 'Unknown error occurred';
-        if (error.error && typeof error.error === 'string') {
-            // Server-side error with a string error message
-            errorMessage = error.error;
-        } else if (error.error && error.error.errorMessage) {
-            // Server-side error with an errorMessage property
-            errorMessage = error.error.errorMessage;
-        } else if (error.status === 401) {
-            errorMessage = "You are not logged in";
-        } else if (error.status === 400) {
-            errorMessage = "You did not introduced all fields"
-        }
-
-        else {
-            // Other types of errors
-            errorMessage = error.message || errorMessage;
+        let errorMessage = 'Unknown error occured';
+        if (error.error instanceof ErrorEvent) {
+            //Client-Side error
+            errorMessage = error.error.message;
+        } else {
+            if (error.status === ErrorCode.unauthorised) {
+                return error.statusText;
+            }
+            if (error.error.errorMessage && error.status !== 0) {
+                errorMessage = error.error.errorMessage;
+            }
+            if (!error.error.errorMessage && error.error && error.status !== 0) {
+                errorMessage = error.error;
+            }
         }
         return errorMessage;
     }

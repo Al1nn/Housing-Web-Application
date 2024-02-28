@@ -16,6 +16,7 @@ export class HousingService {
     baseUrl = environment.baseUrl;
 
 
+
     constructor(private http: HttpClient) { }
 
     getPropertyTypes(): Observable<IKeyValuePair[]> {
@@ -82,7 +83,6 @@ export class HousingService {
         }
     }
 
-
     getPropertyAge(dateofEstablishment: string): string {
         const today = new Date();
         const estDate = new Date(dateofEstablishment);
@@ -106,5 +106,15 @@ export class HousingService {
         }
 
         return age.toString();
+    }
+
+    setPrimaryPhoto(propertyId: number, propertyPhotoId: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.post(this.baseUrl + '/property/set-primary-photo/' + propertyId
+            + '/' + propertyPhotoId, {}, httpOptions);
     }
 }

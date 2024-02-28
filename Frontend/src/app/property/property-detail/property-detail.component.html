@@ -123,7 +123,7 @@
           <gallery [items]="galleryImages" class="gallery-container"></gallery>
         </tab>
         <tab heading="Upload/Edit Photos">
-          <app-photo-editor [property]="property"></app-photo-editor>
+          <app-photo-editor [property]="property" (mainPhotoChangedEvent)="changePrimaryPhoto($event)" ></app-photo-editor>
         </tab>
       </tabset>
     </div>
