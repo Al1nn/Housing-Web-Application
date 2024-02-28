@@ -38,6 +38,7 @@ import { HttpErrorInterceptorService } from './services/httperror-interceptor.se
 import { DatePipe } from '@angular/common';
 import { CloudinaryModule } from '@cloudinary/ng';
 import { PhotoEditorComponent } from './property/photo-editor/photo-editor.component';
+import { FileUploadModule } from 'ng2-file-upload';
 
 
 @NgModule({
@@ -69,6 +70,7 @@ import { PhotoEditorComponent } from './property/photo-editor/photo-editor.compo
         BsDatepickerModule.forRoot(),
         GalleryComponent,
         CloudinaryModule,
+        FileUploadModule,
     ],
     providers: [
         provideClientHydration(),

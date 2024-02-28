@@ -71,7 +71,7 @@ namespace WebAPI.Controllers
         //property/add/photo/1
         [HttpPost("add/photo/{propId}")]
         [Authorize]
-        public async Task<IActionResult> AddPropertyPhoto(IFormFile file, int propId)
+        public async Task<ActionResult<PhotoDto>> AddPropertyPhoto(IFormFile file, int propId)
         {
 
             ApiError apiError = new ApiError();
@@ -96,8 +96,12 @@ namespace WebAPI.Controllers
                 photo.IsPrimary = true;
             }
             property.Photos.Add(photo);
-            await uow.SaveAsync();
-            return StatusCode(201);
+            if(await uow.SaveAsync()) return mapper.Map<PhotoDto>(photo);
+
+            apiError.ErrorCode = BadRequest().StatusCode;
+            apiError.ErrorMessage = "Some error occured in uploading the photo please retry";
+            apiError.ErrorDetails = "Unknown error";
+            return BadRequest(apiError);
         }
 
 
