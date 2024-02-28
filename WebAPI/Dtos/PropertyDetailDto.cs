@@ -5,6 +5,7 @@ namespace WebAPI.Dtos
     public class PropertyDetailDto : PropertyListDto
     {
         public int CarpetArea { get; set; }
+        public string LandMark { get; set; }
         public int ContactId { get; set; }
         public Contact Contact { get; set; }
         public int FloorNo { get; set; }

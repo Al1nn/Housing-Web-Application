@@ -19,6 +19,7 @@ namespace WebAPI.Models
         public City City { get; set; }
         public bool ReadyToMove { get; set; }
         public int CarpetArea { get; set; }
+        public string LandMark {  get; set; }
         public int ContactId { get; set; }
         public Contact Contact { get; set; }
         public int FloorNo { get; set; }

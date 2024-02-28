@@ -176,6 +176,10 @@ namespace WebAPI.Migrations
                     b.Property<bool>("Gated")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LandMark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("LastUpdatedBy")
                         .HasColumnType("int");
 

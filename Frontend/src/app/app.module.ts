@@ -37,6 +37,7 @@ import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
 import { HttpErrorInterceptorService } from './services/httperror-interceptor.service';
 import { DatePipe } from '@angular/common';
 import { CloudinaryModule } from '@cloudinary/ng';
+import { PhotoEditorComponent } from './property/photo-editor/photo-editor.component';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { CloudinaryModule } from '@cloudinary/ng';
         FilterPipe,
         SortPipe,
         PriceAreaFilterPipe,
+        PhotoEditorComponent,
     ],
     imports: [
         BrowserModule,

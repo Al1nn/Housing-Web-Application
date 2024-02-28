@@ -14,6 +14,7 @@ export class Property implements IPropertyBase {
     price: number;
     builtArea: number;
     carpetArea: number;
+    landMark: string;
     contactId: number;
     contact: Contact;
     cityId: number;

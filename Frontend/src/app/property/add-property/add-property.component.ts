@@ -260,7 +260,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.carpetArea = +this.carpetArea.value;
         this.property.floorNo = this.floorNo.value;
         this.property.totalFloors = this.totalFloors.value;
-
+        this.property.landMark = this.landMark.value;
         this.contact.address = this.address.value;
         this.contact.phoneNumber = this.phoneNumber.value;
 

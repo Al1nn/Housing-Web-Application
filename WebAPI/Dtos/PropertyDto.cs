@@ -24,6 +24,8 @@ namespace WebAPI.Dtos
         public bool ReadyToMove { get; set; }
 
         public int CarpetArea { get; set; }
+        
+        public string LandMark { get; set; }
 
         public int ContactId { get; set; }
 

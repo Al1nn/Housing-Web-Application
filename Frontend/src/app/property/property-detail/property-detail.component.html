@@ -105,9 +105,9 @@
         </tab>
         <tab heading="Address">
           <div class="col-sm-12">
-            <h1>Address</h1>
-            <strong>{{property.contact.address}}</strong><br>
-            <strong>Phone Number : {{property.contact.phoneNumber}}</strong>
+            <h1>Landmark</h1>
+            <strong>{{property.landMark}}</strong><br>
+            
             <!-- <div class="heading" *ngFor="let cont of property.contact">
               {{cont.address}}
               {{cont.phoneNumber}}
@@ -122,10 +122,8 @@
         <tab heading="Photos">
           <gallery [items]="galleryImages" class="gallery-container"></gallery>
         </tab>
-        <tab heading="Contact">
-          <h1>Contact Details</h1>
-          This should be restricted area and only registered user should be able to see seller contacts
-
+        <tab heading="Upload/Edit Photos">
+          <app-photo-editor [property]="property"></app-photo-editor>
         </tab>
       </tabset>
     </div>
