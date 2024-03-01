@@ -11,7 +11,7 @@ export class PriceAreaFilterPipe implements PipeTransform {
 
         return value.filter(property => {
             // return (property.Price >= min && property.Price <= max) || (property.BuiltArea >= min && property.BuiltArea <= max);
-            return (property.BuiltArea >= min && property.BuiltArea <= max);
+            return (property.builtArea >= min && property.builtArea <= max);
         });
     }
 }

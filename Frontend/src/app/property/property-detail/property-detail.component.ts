@@ -30,16 +30,7 @@ export class PropertyDetailComponent implements OnInit {
 
         this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
 
-        // this.route.params.subscribe((params) => {
-        //   this.propertyId = +params['id'];
 
-        //   this.housingService.getPropertyById(this.propertyId).subscribe(
-        //     (data: Property) => {
-        //       this.property = data;
-        //     },
-        //     (error) => this.router.navigate(['/'])
-        //   );
-        // });
         this.galleryImages = this.getPropertyPhotos();
     }
     changePrimaryPhoto(mainPhotoUrl: string) {

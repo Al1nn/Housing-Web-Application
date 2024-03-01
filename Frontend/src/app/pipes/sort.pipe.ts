@@ -22,13 +22,13 @@ export class SortPipe implements PipeTransform {
 
         const multiplier = sortDirection === 'desc' ? -1 : 1;
 
-        if(sortField === 'Price Per Area'){
+        if (sortField === 'Price Per Area') {
             return value.sort((a: any, b: any) => {
-                if(a['Price'] / a['BuiltArea'] < b['Price'] / b['BuiltArea']){
+                if (a['price'] / a['builtArea'] < b['price'] / b['builtArea']) {
                     return -1 * multiplier;
-                }else if(a['Price'] / a['BuiltArea'] > b['Price'] / b['BuiltArea']){
+                } else if (a['Price'] / a['BuiltArea'] > b['Price'] / b['BuiltArea']) {
                     return 1 * multiplier;
-                }else{
+                } else {
                     return 0;
                 }
             });
@@ -36,9 +36,9 @@ export class SortPipe implements PipeTransform {
 
 
         return value.sort((a: any, b: any) => {
-            if (a[sortField] < b[sortField] ) {
+            if (a[sortField] < b[sortField]) {
                 return -1 * multiplier;
-            } else if (a[sortField] > b[sortField] ) {
+            } else if (a[sortField] > b[sortField]) {
                 return 1 * multiplier;
             } else {
                 return 0;
