@@ -119,7 +119,7 @@
             </div>
           </div>
         </tab>
-        <tab heading="Photos">
+        <tab heading="Photos / {{getPhotosCount()}}" (selectTab)="updateGalleryImages()">
           <gallery [items]="galleryImages" class="gallery-container"></gallery>
         </tab>
         <tab heading="Upload/Edit Photos">

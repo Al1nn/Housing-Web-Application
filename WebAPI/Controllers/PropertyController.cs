@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Reflection.Metadata.Ecma335;
 using WebAPI.Dtos;
 using WebAPI.Errors;
 using WebAPI.Interfaces;
@@ -33,6 +34,24 @@ namespace WebAPI.Controllers
             var properties = await uow.PropertyRepository.GetPropertiesAsync(sellRent);
             var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
             return Ok(propertyListDto);
+        }
+
+        [HttpGet("filter/{sellRent}/{filterWord}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPropertiesFiltered(int sellRent, string filterWord)
+        {
+            var properties = await uow.PropertyRepository.GetPropertiesAsync(sellRent);
+            var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
+
+            var filteredPropertyList = from property in propertyListDto
+                                       where property.Name.ToLower().Contains(filterWord.ToLower()) 
+                                            || property.PropertyType.ToLower().Contains(filterWord.ToLower())
+                                            || property.City.ToLower().Contains(filterWord.ToLower())
+
+                                       select property; 
+                                       
+
+            return Ok(filteredPropertyList);
         }
 
         //property/add
@@ -100,7 +119,7 @@ namespace WebAPI.Controllers
 
             apiError.ErrorCode = BadRequest().StatusCode;
             apiError.ErrorMessage = "Some error occured in uploading the photo please retry";
-            apiError.ErrorDetails = "Unknown error";
+            apiError.ErrorDetails = "Unknown error"; 
             return BadRequest(apiError);
         }
 

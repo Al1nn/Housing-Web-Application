@@ -45,6 +45,16 @@ export class PropertyDetailComponent implements OnInit {
     changePrimaryPhoto(mainPhotoUrl: string) {
         this.mainPhotoUrl = mainPhotoUrl;
     }
+
+    updateGalleryImages() {
+        this.galleryImages = this.getPropertyPhotos();
+    }
+
+    getPhotosCount(): number {
+        return this.property.photos.filter(photo => !photo.isPrimary).length;
+    }
+
+
     getPropertyPhotos(): GalleryItem[] {
         const photoUrls: GalleryItem[] = [];
         for (const photo of this.property.photos) {
@@ -55,10 +65,8 @@ export class PropertyDetailComponent implements OnInit {
                     thumbSrc: photo.imageUrl
                 })
             }
-
-
-
         }
+
         return photoUrls;
     }
 }

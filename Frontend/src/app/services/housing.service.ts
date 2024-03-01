@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Property } from '../model/Property.interface';
 import { environment } from '../../environments/environment';
 import { IKeyValuePair } from '../model/IKeyValuePair';
+import { IPropertyBase } from '../model/IPropertyBase.interface';
 
 
 @Injectable({
@@ -33,14 +34,8 @@ export class HousingService {
 
     // Get method cu filtrare
 
-    getAllFilteredCities(filterWord: string) {
-        return this.http.get<string[]>('http://localhost:5207/api/city/filter/' + filterWord).pipe(
-            map(response => {
-                const jsonString = JSON.stringify(response);
-                const stringArray = jsonString.split(',');
-                return stringArray;
-            })
-        );
+    getAllFilteredProperties(sellRent: number, filterWord: string) {
+        return this.http.get<IPropertyBase[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord);
     }
 
     getAllProperties(SellRent?: number): Observable<Property[]> {

@@ -42,23 +42,23 @@ namespace WebAPI.Controllers
             return Ok(citiesDto);
         }
 
-        [HttpGet("filter/{filterWord}")]
-        public async Task<IActionResult> GetCitiesFiltered(string filterWord)
-        {
-            var cities = await uow.CityRepository.GetCitiesAsync();
-            // var citiesDto = mapper.Map<IEnumerable<CityDto>>(cities);
+        //[HttpGet("filter/{filterWord}")]
+        //public async Task<IActionResult> GetCitiesFiltered(string filterWord)
+        //{
+        //    var cities = await uow.CityRepository.GetCitiesAsync();
+        //    // var citiesDto = mapper.Map<IEnumerable<CityDto>>(cities);
 
 
-            //Metode LINQ pentru filtrare City
+        //    //Metode LINQ pentru filtrare City
            
 
-            var filteredCities = from c in cities
-                                 where c.Name.ToLower().Contains(filterWord.ToLower())
-                                 || c.Country.ToLower().Contains(filterWord.ToLower())
+        //    var filteredCities = from c in cities
+        //                         where c.Name.ToLower().Contains(filterWord.ToLower())
+        //                         || c.Country.ToLower().Contains(filterWord.ToLower())
                                   
-                                 select c;
-            return  Ok(filteredCities);
-        }
+        //                         select c;
+        //    return  Ok(filteredCities);
+        //}
 
 
         [HttpPost("post")]

@@ -19,15 +19,15 @@ export class PropertyListComponent implements OnInit {
 
     min = 0;
     max = 0;
-    filterPriceAndAreaRange = [0,500,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000
-        ,15000,20000,25000,30000,35000,40000,45000,50000,100000,150000,200000,500000];
+    filterPriceAndAreaRange = [0, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000
+        , 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 100000, 150000, 200000, 500000];
 
     filteredCities: string[];
 
     constructor(
         private route: ActivatedRoute,
         private housingService: HousingService
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         const urlSegments = this.route.snapshot.url;
@@ -50,26 +50,36 @@ export class PropertyListComponent implements OnInit {
 
     }
 
-    onFilterCityAPI(filterInput: string){
-        if(filterInput !== ''){
-            this.housingService.getAllFilteredCities(filterInput).subscribe(
+    onFilterCityAPI(filterInput: string) {
+        if (filterInput !== '') {
+            this.housingService.getAllFilteredProperties(this.SellRent, filterInput).subscribe(
                 (data) => {
-                    console.log('Data = '+ data);
-                    this.filteredCities = data;
+                    console.log('Data = ' + data);
+                    this.Properties = data;
 
-                },(error) => {
+                }, (error) => {
                     console.log('httperror:');
                     console.log(error);
                 }
             );
-        }else {
+        } else {
             console.log('Filter Input empty');
-            this.filteredCities = [];
+            this.housingService.getAllProperties(this.SellRent).subscribe(
+                (data) => {
+                    this.Properties = data;
+
+                    console.log(data);
+                },
+                (error) => {
+                    console.log('httperror:');
+                    console.log(error);
+                }
+            );
         }
 
     }
 
-    clearFilters(){
+    clearFilters() {
         this.min = 0;
         this.max = 0;
         this.filterInput = '';

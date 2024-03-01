@@ -44,7 +44,6 @@
 
 <div class="row">
   <div *ngFor="let property of Properties
-   | filter: filterInput : ['Name','City','PType']
    | priceAreaFilter: min : max
    | sort:[SortbyParam,SortDirection]"
     class="shadow-lg col-sm-4 p-3">
