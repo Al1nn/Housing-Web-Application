@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-    FormArray,
     FormBuilder,
     FormControl,
     FormGroup,
@@ -34,6 +33,8 @@ export class AddPropertyComponent implements OnInit {
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
     cityList: any[];
+    imageUrls: Array<string>;
+
 
     propertyView: IPropertyBase = {
         id: 0,
@@ -163,52 +164,16 @@ export class AddPropertyComponent implements OnInit {
         return this.OtherInfo.controls['description'] as FormControl;
     }
 
-    get photosArray() {
-        return this.addPropertyForm.controls['photos'] as FormArray;
-    }
+
     onPhotoSelected(event: any): void {
-        if (event && event.target && event.target.files) {
-            const files: FileList = event.target.files;
-            if (files && files.length > 0) {
-                this.photosArray.clear();
-                for (let i = 0; i < files.length; i++) {
-                    const file: File = files[i];
-                    const reader = new FileReader();
-
-                    reader.onload = (_e) => {
-                        this.photosArray.push(this.fb.group({
-                            imageUrl: reader.result,
-                            isPrimary: this.photosArray.length === 0
-                        }));
-                        this.setPrimaryPhoto(0);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        }
+        this.imageUrls = this.housingService.photosSelected(event);
     }
 
-    deletePhoto(photoIndex: number) {
-        this.photosArray.removeAt(photoIndex);
-
-        switch (this.photosArray.length) {
-            case 0:
-                this.propertyView.photo = undefined;
-                break;
-            default:
-                this.setPrimaryPhoto(0);
-                break;
-        }
+    deletePhoto(_photoIndex: number) {
 
     }
 
-    setPrimaryPhoto(photoIndex: number) {
-        for (let i = 0; i < this.photosArray.length; i++) {
-            const photoFormGroup = this.photosArray.at(i) as FormGroup;
-            const isPrimary = i === photoIndex;
-            photoFormGroup.patchValue({ isPrimary: isPrimary });
-        }
-        this.propertyView.photo = this.photosArray.at(photoIndex).value.imageUrl;
+    setPrimaryPhoto(_photoIndex: number) {
 
     }
 
@@ -267,7 +232,7 @@ export class AddPropertyComponent implements OnInit {
                 mainEntrance: [null],
                 description: [null],
             }),
-            photos: this.fb.array([])
+
         });
     }
 

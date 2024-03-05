@@ -9,6 +9,7 @@ import { IKeyValuePair } from '../model/IKeyValuePair';
 import { IPropertyBase } from '../model/IPropertyBase.interface';
 
 
+
 @Injectable({
     providedIn: 'root',
 })
@@ -61,13 +62,34 @@ export class HousingService {
         return this.http.post(this.baseUrl + "/property/add", property, httpOptions);
     }
 
-    addPropertyPhoto(id: number) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
+    //De implementat
+    // addPropertyPhoto(id: number) {
+
+    // }
+
+    photosSelected(event: any): Array<string> {
+
+        const files: FileList = event.target.files;
+        const imageUrls: string[] = [];
+
+        const handleLoad = (e: ProgressEvent<FileReader>) => {
+            const reader = e.target as FileReader;
+            if (reader && reader.result) { imageUrls.push(reader.result.toString()) }
         };
-        return this.http.post(this.baseUrl + "/add/photo/" + id, {}, httpOptions);
+
+        for (let i = 0; i < files.length; i++) {
+            const file: File = files[i];
+            const reader = new FileReader();
+
+            reader.onload = handleLoad;
+            reader.readAsDataURL(file);
+        }
+
+
+
+        return imageUrls;
+
+
     }
 
     newPropID() {
