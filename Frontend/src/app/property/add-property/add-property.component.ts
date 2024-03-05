@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
+    FormArray,
     FormBuilder,
     FormControl,
     FormGroup,
@@ -14,12 +15,15 @@ import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
 import { Contact } from '../../model/Contact.interface';
+
+
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
     styleUrls: ['./add-property.component.css'],
 })
 export class AddPropertyComponent implements OnInit {
+
     @ViewChild('formTabs', { static: false }) formTabs: TabsetComponent;
     addPropertyForm: FormGroup;
     nextClicked: boolean;
@@ -159,7 +163,54 @@ export class AddPropertyComponent implements OnInit {
         return this.OtherInfo.controls['description'] as FormControl;
     }
 
+    get photosArray() {
+        return this.addPropertyForm.controls['photos'] as FormArray;
+    }
+    onPhotoSelected(event: any): void {
+        if (event && event.target && event.target.files) {
+            const files: FileList = event.target.files;
+            if (files && files.length > 0) {
+                this.photosArray.clear();
+                for (let i = 0; i < files.length; i++) {
+                    const file: File = files[i];
+                    const reader = new FileReader();
 
+                    reader.onload = (_e) => {
+                        this.photosArray.push(this.fb.group({
+                            imageUrl: reader.result,
+                            isPrimary: this.photosArray.length === 0
+                        }));
+                        this.setPrimaryPhoto(0);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        }
+    }
+
+    deletePhoto(photoIndex: number) {
+        this.photosArray.removeAt(photoIndex);
+
+        switch (this.photosArray.length) {
+            case 0:
+                this.propertyView.photo = undefined;
+                break;
+            default:
+                this.setPrimaryPhoto(0);
+                break;
+        }
+
+    }
+
+    setPrimaryPhoto(photoIndex: number) {
+        for (let i = 0; i < this.photosArray.length; i++) {
+            const photoFormGroup = this.photosArray.at(i) as FormGroup;
+            const isPrimary = i === photoIndex;
+            photoFormGroup.patchValue({ isPrimary: isPrimary });
+        }
+        this.propertyView.photo = this.photosArray.at(photoIndex).value.imageUrl;
+
+    }
 
 
     ngOnInit() {
@@ -180,6 +231,7 @@ export class AddPropertyComponent implements OnInit {
         this.housingService.getFurnishingTypes().subscribe((data) => {
             this.furnishTypes = data;
         });
+
     }
 
     CreateAddPropertyForm() {
@@ -215,6 +267,7 @@ export class AddPropertyComponent implements OnInit {
                 mainEntrance: [null],
                 description: [null],
             }),
+            photos: this.fb.array([])
         });
     }
 
@@ -238,6 +291,8 @@ export class AddPropertyComponent implements OnInit {
                     }
                 }
             );
+            //Call API Endpoint for the added photos
+
 
         } else {
             this.alertifyService.error('Please review the form and provide all valid entries');
@@ -271,6 +326,12 @@ export class AddPropertyComponent implements OnInit {
         this.property.mainEntrance = this.mainEntrance.value;
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.property.description = this.description.value;
+        this.property.photos = [];
+
+
+
+        // Loop through the uploaded photos and add them to the property object
+
     }
 
     allTabsValid(): boolean {

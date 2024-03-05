@@ -61,6 +61,15 @@ export class HousingService {
         return this.http.post(this.baseUrl + "/property/add", property, httpOptions);
     }
 
+    addPropertyPhoto(id: number) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.post(this.baseUrl + "/add/photo/" + id, {}, httpOptions);
+    }
+
     newPropID() {
         if (typeof localStorage !== 'undefined') {
             const currentPID = localStorage.getItem('PID');
@@ -76,6 +85,12 @@ export class HousingService {
             console.error('localStorage is not available in this environment.');
             return -1; // or any other appropriate value
         }
+    }
+
+    getPropID() {
+        const currentPID = localStorage.getItem('PID');
+        if (currentPID !== null) return +currentPID;
+        else return -1;
     }
 
     getPropertyAge(dateofEstablishment: string): string {

@@ -15,10 +15,13 @@ import { environment } from '../../../environments/environment';
 export class PhotoEditorComponent implements OnInit {
 
   @Input() property: Property;
+  @Input() fromAddProperty: boolean;
   @Output() mainPhotoChangedEvent = new EventEmitter<string>();
+
   uploader: FileUploader;
   baseUrl = environment.baseUrl;
   maxAllowedFileSize = 10 * 1024 * 1024;
+
 
   constructor(private housingService: HousingService) { }
 
@@ -45,13 +48,24 @@ export class PhotoEditorComponent implements OnInit {
     this.uploader.onSuccessItem = (_item, response, _status, _headers) => {
       if (response) {
         const photo = JSON.parse(response);
+        console.log(photo);
         this.property.photos.push(photo);
       }
     }
   }
 
+  initializeAddFileUploader() {
+
+
+  }
+
   ngOnInit() {
-    this.initializeFileUploader();
+    if (!this.fromAddProperty) {
+      this.initializeFileUploader();
+    } else {
+      this.initializeAddFileUploader();
+    }
+
   }
 
 

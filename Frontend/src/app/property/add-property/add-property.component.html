@@ -275,14 +275,25 @@
               </tab>
 
               <tab heading="Photos">
-                <div class="form-group col-12">
-                  <div class="photo-control">
-                    <button class="mt-5" type="button">Upload</button> <br>
-                    This is under construction
+                <div class="form-group col-12 p-3" formArrayName="photos">
+                  <div class="row">  
+                  <div class="col-2 mb-3" *ngFor="let photo of this.addPropertyForm.value.photos; let i = index">
+                    <img src="{{photo.imageUrl}}" alt="{{photo.imageUrl}}" class="img-thumbnail p-1">
+                    <div class="text-center">
+                       <button class="btn btn-sm"  
+                       [ngClass]='photo.isPrimary ? "btn-success active" : "btn-outline-success" '
+                       (click)="setPrimaryPhoto(i)">Main</button>
+                       <button class="btn btn-sm btn-danger"  (click)="deletePhoto(i)">
+                        <i class="fa fa-trash"></i>
+                       </button> 
+                    </div>
                   </div>
+                  </div>
+                  <input id="fileInput" type="file" (change)="onPhotoSelected($event)" multiple>
+                
                 </div>
 
-                <div class="form-group col-12 mt-3">
+                <div class="form-group col-12 mt-3 ">
                   <button type="button" (click)="selectTab(3,true)"
                     class="btn btn-primary form-control m-2">Back</button>
                   <button type="reset" class="btn btn-primary form-control m-2">Cancel</button>

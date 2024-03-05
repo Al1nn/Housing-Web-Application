@@ -123,6 +123,7 @@ namespace WebAPI.Controllers
             return BadRequest(apiError);
         }
 
+     
 
         //property/set-primary-photo/1/safasfsagsd
         [HttpPost("set-primary-photo/{propId}/{photoPublicId}")]

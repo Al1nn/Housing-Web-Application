@@ -56,6 +56,7 @@ import { FileUploadModule } from 'ng2-file-upload';
         SortPipe,
         PriceAreaFilterPipe,
         PhotoEditorComponent,
+
     ],
     imports: [
         BrowserModule,

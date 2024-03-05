@@ -74,7 +74,10 @@
             <div class="col-sm-6">
               <div class="heading">
                 <strong>Main Entrance</strong>
-                <p>{{property.mainEntrance}}</p>
+                <p *ngIf="property.mainEntrance == 1">East</p>
+                <p *ngIf="property.mainEntrance == 2">West</p>
+                <p *ngIf="property.mainEntrance == 3">South</p>
+                <p *ngIf="property.mainEntrance == 4">North</p>
               </div>
 
               <div class="heading">
@@ -123,7 +126,7 @@
           <gallery [items]="galleryImages" class="gallery-container"></gallery>
         </tab>
         <tab heading="Upload/Edit Photos">
-          <app-photo-editor [property]="property" (mainPhotoChangedEvent)="changePrimaryPhoto($event)" ></app-photo-editor>
+          <app-photo-editor [property]="property" [fromAddProperty]="false" (mainPhotoChangedEvent)="changePrimaryPhoto($event)" ></app-photo-editor>
         </tab>
       </tabset>
     </div>
