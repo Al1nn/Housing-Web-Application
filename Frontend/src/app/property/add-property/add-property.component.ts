@@ -14,6 +14,7 @@ import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
 import { Contact } from '../../model/Contact.interface';
+import { IPhoto } from '../../model/IPhoto';
 
 
 @Component({
@@ -33,7 +34,7 @@ export class AddPropertyComponent implements OnInit {
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
     cityList: any[];
-    imageUrls: Array<string>;
+    thumbnails: IPhoto[] = [];
 
 
     propertyView: IPropertyBase = {
@@ -48,7 +49,7 @@ export class AddPropertyComponent implements OnInit {
         builtArea: null,
         carpetArea: null,
         readyToMove: false,
-        photo: 'house_default',
+        photo: '',
     };
 
     constructor(
@@ -166,7 +167,12 @@ export class AddPropertyComponent implements OnInit {
 
 
     onPhotoSelected(event: any): void {
-        this.imageUrls = this.housingService.photosSelected(event);
+        this.thumbnails = [];
+        this.housingService.photosSelected(event);
+        this.thumbnails = this.housingService.getThumbnails();
+        if (this.thumbnails.length > 0) {
+            this.propertyView.photo = this.thumbnails[0].publicId.toString();
+        }
     }
 
     deletePhoto(_photoIndex: number) {
@@ -196,7 +202,6 @@ export class AddPropertyComponent implements OnInit {
         this.housingService.getFurnishingTypes().subscribe((data) => {
             this.furnishTypes = data;
         });
-
     }
 
     CreateAddPropertyForm() {

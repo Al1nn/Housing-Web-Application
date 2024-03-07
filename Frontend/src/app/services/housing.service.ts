@@ -7,6 +7,11 @@ import { Property } from '../model/Property.interface';
 import { environment } from '../../environments/environment';
 import { IKeyValuePair } from '../model/IKeyValuePair';
 import { IPropertyBase } from '../model/IPropertyBase.interface';
+import { IPhoto } from '../model/IPhoto';
+
+
+
+
 
 
 
@@ -67,29 +72,105 @@ export class HousingService {
 
     // }
 
-    photosSelected(event: any): Array<string> {
+    photosSelected(event: any) {
 
         const files: FileList = event.target.files;
-        const imageUrls: string[] = [];
+        var originalSizes: IPhoto[] = [];
+        var thumbnails: IPhoto[] = [];
+        let fileProccessed = 0;
 
-        const handleLoad = (e: ProgressEvent<FileReader>) => {
-            const reader = e.target as FileReader;
-            if (reader && reader.result) { imageUrls.push(reader.result.toString()) }
+
+        const fileReaderLoad = (file: File) => (e: any) => {
+            const image: IPhoto = {
+                imageUrl: e.target.result.toString(),
+                publicId: file.name,
+                isPrimary: files.length === 1 || fileProccessed === 0
+            };
+            originalSizes.push(image);
+            fileProccessed++;
+            this.resizeImage(e.target.result.toString(), file.name, fileProccessed)
+                .then((thumbnail) => {
+                    thumbnails.push(thumbnail as IPhoto);
+                    if (thumbnails.length === files.length) {
+                        localStorage.setItem('AppConfig/thumbnails', JSON.stringify(thumbnails));
+                    }
+                })
+                .catch((error) => {
+                    console.error("Fail to resize image : ", error);
+                });
+            if (fileProccessed === files.length) {
+                localStorage.setItem('AppConfig/originalSizes', JSON.stringify(originalSizes));
+            }
+
+
+
+
+
+
+
         };
 
         for (let i = 0; i < files.length; i++) {
             const file: File = files[i];
             const reader = new FileReader();
 
-            reader.onload = handleLoad;
+            reader.onload = fileReaderLoad(file);
             reader.readAsDataURL(file);
         }
 
 
+    }
+    resizeImage(imageUrl: string, fileName: string, imageProcessed: number) {
 
-        return imageUrls;
+        return new Promise((resolve, reject) => {
+            //const maxSizeInMB = 4;
+            //const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+            const img = new Image();
+            img.src = imageUrl;
+            img.onload = function () {
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext('2d');
+                // const width = img.width;
+                // const height = img.height;
+                //const aspectRatio = width / height;
+                const newWidth = 250;
+                const newHeight = 250;
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                if (ctx !== null) {
+                    ctx.drawImage(img, 0, 0, 250, 250);
+                }
+                let quality = 0.4;
+                let dataURL = canvas.toDataURL('image/jpeg', quality);
+                const thumbnail: IPhoto = {
+                    imageUrl: dataURL,
+                    publicId: fileName,
+                    isPrimary: imageProcessed === 0
+                };
 
+                console.log(thumbnail + '\n');
+                imageProcessed++;
+                resolve(thumbnail);
+            };
+            img.onerror = function (error) {
+                reject(error);
+            };
+        });
+    }
 
+    clearPhotoStorage() {
+        localStorage.removeItem('AppConfig/originalSizes');
+        localStorage.removeItem('AppConfig/thumbnails');
+    }
+
+    getOriginalSizePhotos(): IPhoto[] {
+        var originalPhotos = JSON.parse(localStorage.getItem('AppConfig/originalSizes') as string);
+        return originalPhotos;
+    }
+
+    getThumbnails(): IPhoto[] {
+        var thumbnails = JSON.parse(localStorage.getItem('AppConfig/thumbnails') as string);
+        return thumbnails;
     }
 
     newPropID() {
