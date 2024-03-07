@@ -15,6 +15,7 @@ import { IPhoto } from '../model/IPhoto';
 
 
 
+
 @Injectable({
     providedIn: 'root',
 })
@@ -73,50 +74,49 @@ export class HousingService {
     // }
 
     photosSelected(event: any) {
+        if (event !== null) {
+            const files: FileList = event.target.files;
+            var originalSizes: IPhoto[] = [];
+            var thumbnails: IPhoto[] = [];
+            let fileProccessed = 0;
 
-        const files: FileList = event.target.files;
-        var originalSizes: IPhoto[] = [];
-        var thumbnails: IPhoto[] = [];
-        let fileProccessed = 0;
+
+            const fileReaderLoad = (file: File) => (e: any) => {
+                const image: IPhoto = {
+                    imageUrl: e.target.result.toString(),
+                    publicId: file.name,
+                    isPrimary: files.length === 1 || fileProccessed === 0
+                };
+                originalSizes.push(image);
+
+                this.resizeImage(e.target.result.toString(), file.name, fileProccessed)
+                    .then((thumbnail) => {
+                        thumbnails.push(thumbnail as IPhoto);
+                        if (thumbnails.length === files.length) {
+                            localStorage.setItem('AppConfig/originalSizes', JSON.stringify(originalSizes));
+                            localStorage.setItem('AppConfig/thumbnails', JSON.stringify(thumbnails));
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Fail to resize image : ", error);
+                    });
+
+                fileProccessed++;
 
 
-        const fileReaderLoad = (file: File) => (e: any) => {
-            const image: IPhoto = {
-                imageUrl: e.target.result.toString(),
-                publicId: file.name,
-                isPrimary: files.length === 1 || fileProccessed === 0
             };
-            originalSizes.push(image);
-            fileProccessed++;
-            this.resizeImage(e.target.result.toString(), file.name, fileProccessed)
-                .then((thumbnail) => {
-                    thumbnails.push(thumbnail as IPhoto);
-                    if (thumbnails.length === files.length) {
-                        localStorage.setItem('AppConfig/thumbnails', JSON.stringify(thumbnails));
-                    }
-                })
-                .catch((error) => {
-                    console.error("Fail to resize image : ", error);
-                });
-            if (fileProccessed === files.length) {
-                localStorage.setItem('AppConfig/originalSizes', JSON.stringify(originalSizes));
+
+            for (let i = 0; i < files.length; i++) {
+                const file: File = files[i];
+                const reader = new FileReader();
+
+                reader.onload = fileReaderLoad(file);
+                reader.readAsDataURL(file);
             }
-
-
-
-
-
-
-
-        };
-
-        for (let i = 0; i < files.length; i++) {
-            const file: File = files[i];
-            const reader = new FileReader();
-
-            reader.onload = fileReaderLoad(file);
-            reader.readAsDataURL(file);
+            return thumbnails;
         }
+        return [];
+
 
 
     }

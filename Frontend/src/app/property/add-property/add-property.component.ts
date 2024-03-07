@@ -166,13 +166,8 @@ export class AddPropertyComponent implements OnInit {
     }
 
 
-    onPhotoSelected(event: any): void {
-        this.thumbnails = [];
-        this.housingService.photosSelected(event);
-        this.thumbnails = this.housingService.getThumbnails();
-        if (this.thumbnails.length > 0) {
-            this.propertyView.photo = this.thumbnails[0].publicId.toString();
-        }
+    async onPhotoSelected(event: any): Promise<void> {
+        this.thumbnails = await this.housingService.photosSelected(event);
     }
 
     deletePhoto(_photoIndex: number) {
@@ -185,23 +180,30 @@ export class AddPropertyComponent implements OnInit {
 
 
     ngOnInit() {
-        if (!localStorage.getItem('username')) {
-            this.alertifyService.error("You must be logged in to add a property");
-            this.router.navigate(['/user/login']);
+        if (localStorage !== undefined) {
+            if (!localStorage.getItem('username')) {
+                this.alertifyService.error("You must be logged in to add a property");
+                this.router.navigate(['/user/login']);
+            }
+            this.CreateAddPropertyForm();
+            this.housingService.getAllCities().subscribe((data) => {
+                this.cityList = data;
+                console.log(data);
+            });
+
+            this.housingService.getPropertyTypes().subscribe((data) => {
+                this.propertyTypes = data;
+            });
+
+            this.housingService.getFurnishingTypes().subscribe((data) => {
+                this.furnishTypes = data;
+            });
+
+            if (localStorage.getItem('AppConfig/originalSizes') || localStorage.getItem('AppConfig/thumbnails')) {
+                this.housingService.clearPhotoStorage();
+            }
         }
-        this.CreateAddPropertyForm();
-        this.housingService.getAllCities().subscribe((data) => {
-            this.cityList = data;
-            console.log(data);
-        });
 
-        this.housingService.getPropertyTypes().subscribe((data) => {
-            this.propertyTypes = data;
-        });
-
-        this.housingService.getFurnishingTypes().subscribe((data) => {
-            this.furnishTypes = data;
-        });
     }
 
     CreateAddPropertyForm() {
