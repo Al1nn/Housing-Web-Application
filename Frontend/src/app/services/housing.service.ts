@@ -114,7 +114,7 @@ export class HousingService {
                 reader.readAsDataURL(file);
             }
             //var result = [ thumbnails, originalSizes ];
-            return thumbnails;
+            return [thumbnails, originalSizes];
         }
         return [];
 
@@ -141,7 +141,7 @@ export class HousingService {
                 if (ctx !== null) {
                     ctx.drawImage(img, 0, 0, 250, 250);
                 }
-                let quality = 0.4;
+                let quality = 0.6;
                 let dataURL = canvas.toDataURL('image/jpeg', quality);
                 const thumbnail: IPhoto = {
                     imageUrl: dataURL,

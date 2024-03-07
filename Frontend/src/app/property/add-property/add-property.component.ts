@@ -35,7 +35,7 @@ export class AddPropertyComponent implements OnInit {
     furnishTypes: IKeyValuePair[];
     cityList: any[];
     thumbnails: IPhoto[] = [];
-
+    originalSizes: IPhoto[] = [];
 
     propertyView: IPropertyBase = {
         id: 0,
@@ -167,7 +167,8 @@ export class AddPropertyComponent implements OnInit {
 
 
     async onPhotoSelected(event: any): Promise<void> {
-        this.thumbnails = await this.housingService.photosSelected(event);
+        [this.thumbnails, this.originalSizes] = await this.housingService.photosSelected(event);
+        this.propertyView.photo = this.originalSizes.at(0)?.imageUrl.toString();
     }
 
     deletePhoto(_photoIndex: number) {
