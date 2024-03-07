@@ -113,6 +113,7 @@ export class HousingService {
                 reader.onload = fileReaderLoad(file);
                 reader.readAsDataURL(file);
             }
+            //var result = [ thumbnails, originalSizes ];
             return thumbnails;
         }
         return [];
