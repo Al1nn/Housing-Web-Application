@@ -88,73 +88,45 @@ export class HousingService {
                 isPrimary: files.length === 1 || i === 0
             }
             originalSizes.push(image);
+            //localStorage.setItem('AppConfig/originalSizes/' + image.publicId, JSON.stringify(image));
 
-            const thumbnail = this.resizeImage(image.imageUrl, image.publicId, i);
+            const thumbnail = await this.resizeImage(imageURL, image.publicId, i);
             thumbnails.push(thumbnail);
+            //localStorage.setItem('AppConfig/thumbnails/' + thumbnail.publicId, JSON.stringify(thumbnail))
         }
 
         localStorage.setItem('AppConfig/originalSizes', JSON.stringify(originalSizes));
         localStorage.setItem('AppConfig/thumbnails', JSON.stringify(thumbnails));
     }
 
-    resizeImage(imageUrl: string, fileName: string, imageProcessed: number): IPhoto {
-
-        //const maxSizeInMB = 4;
-        //const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
-        const img = new Image();
-        img.src = imageUrl;
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext('2d');
-        const newWidth = 250;
-        const newHeight = 250;
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-        if (ctx !== null) {
-            ctx.drawImage(img, 0, 0, 250, 250);
-        }
-        let quality = 0.6;
-        let dataURL = canvas.toDataURL('image/jpeg', quality);
-        const thumbnail: IPhoto = {
-            imageUrl: dataURL,
-            publicId: fileName,
-            isPrimary: imageProcessed === 0
-        }
-        console.log(thumbnail + '\n');
-        return thumbnail;
-        // return new Promise((resolve, reject) => {
-        //     //const maxSizeInMB = 4;
-        //     //const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
-        //     const img = new Image();
-        //     img.src = imageUrl;
-        //     img.onload = function () {
-        //         const canvas = document.createElement("canvas");
-        //         const ctx = canvas.getContext('2d');
-        //         // const width = img.width;
-        //         // const height = img.height;
-        //         //const aspectRatio = width / height;
-        //         const newWidth = 250;
-        //         const newHeight = 250;
-        //         canvas.width = newWidth;
-        //         canvas.height = newHeight;
-        //         if (ctx !== null) {
-        //             ctx.drawImage(img, 0, 0, 250, 250);
-        //         }
-        //         let quality = 0.6;
-        //         let dataURL = canvas.toDataURL('image/jpeg', quality);
-        //         const thumbnail: IPhoto = {
-        //             imageUrl: dataURL,
-        //             publicId: fileName,
-        //             isPrimary: imageProcessed === 0
-        //         };
-
-        //         console.log(thumbnail + '\n');
-        //         imageProcessed++;
-        //         resolve(thumbnail);
-        //     };
-        //     img.onerror = function (error) {
-        //         reject(error);
-        //     };
-        // });
+    resizeImage(imageUrl: string, fileName: string, imageProcessed: number): Promise<IPhoto> {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = function () {
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext('2d');
+                const newWidth = 250;
+                const newHeight = 250;
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                if (ctx !== null) {
+                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                }
+                let quality = 0.6;
+                let dataURL = canvas.toDataURL('image/jpeg', quality);
+                const thumbnail: IPhoto = {
+                    imageUrl: dataURL,
+                    publicId: fileName,
+                    isPrimary: imageProcessed === 0
+                };
+                console.log(thumbnail + '\n');
+                resolve(thumbnail);
+            };
+            img.onerror = function (error) {
+                reject(error);
+            };
+            img.src = imageUrl;
+        });
     }
 
     async getDataURL(file: File): Promise<string> {

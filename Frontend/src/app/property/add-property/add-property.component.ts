@@ -14,6 +14,7 @@ import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
 import { Contact } from '../../model/Contact.interface';
+import { IPhoto } from '../../model/IPhoto';
 
 
 
@@ -34,8 +35,8 @@ export class AddPropertyComponent implements OnInit {
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
     cityList: any[];
-    //thumbnails: IPhoto[] | null;
-    //originalSizes: IPhoto[] | null;
+    thumbnails: IPhoto[];
+    originalSizes: IPhoto[];
     originalSizesString: string | null;
     thumbnailsString: string | null;
 
@@ -175,6 +176,8 @@ export class AddPropertyComponent implements OnInit {
 
         this.thumbnailsString = this.housingService.getThumbnails();
         this.originalSizesString = this.housingService.getOriginalSizePhotos();
+        this.thumbnails = JSON.parse(this.thumbnailsString as string);
+        this.originalSizes = JSON.parse(this.originalSizesString as string);
 
         console.log('THUMBNAILS : \n');
         console.log(this.thumbnailsString);
