@@ -15,7 +15,6 @@ import { IPhoto } from '../model/IPhoto';
 
 
 
-
 @Injectable({
     providedIn: 'root',
 })
@@ -73,89 +72,101 @@ export class HousingService {
 
     // }
 
-    photosSelected(event: any) {
-        if (event !== null) {
-            const files: FileList = event.target.files;
-            var originalSizes: IPhoto[] = [];
-            var thumbnails: IPhoto[] = [];
-            let fileProccessed = 0;
+    async photosSelected(event: any) {
 
+        const files: FileList = event.target.files;
+        var originalSizes: IPhoto[] = [];
+        var thumbnails: IPhoto[] = [];
 
-            const fileReaderLoad = (file: File) => (e: any) => {
-                const image: IPhoto = {
-                    imageUrl: e.target.result.toString(),
-                    publicId: file.name,
-                    isPrimary: files.length === 1 || fileProccessed === 0
-                };
-                originalSizes.push(image);
+        for (let i = 0; i < files.length; i++) {
+            const file: File = files[i];
+            const imageURL = await this.getDataURL(file); // imageURL is null
 
-                this.resizeImage(e.target.result.toString(), file.name, fileProccessed)
-                    .then((thumbnail) => {
-                        thumbnails.push(thumbnail as IPhoto);
-                        if (thumbnails.length === files.length) {
-                            localStorage.setItem('AppConfig/originalSizes', JSON.stringify(originalSizes));
-                            localStorage.setItem('AppConfig/thumbnails', JSON.stringify(thumbnails));
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Fail to resize image : ", error);
-                    });
-
-                fileProccessed++;
-
-
-            };
-
-            for (let i = 0; i < files.length; i++) {
-                const file: File = files[i];
-                const reader = new FileReader();
-
-                reader.onload = fileReaderLoad(file);
-                reader.readAsDataURL(file);
+            const image: IPhoto = {
+                imageUrl: imageURL,
+                publicId: file.name,
+                isPrimary: files.length === 1 || i === 0
             }
-            //var result = [ thumbnails, originalSizes ];
-            return [thumbnails, originalSizes];
+            originalSizes.push(image);
+
+            const thumbnail = this.resizeImage(image.imageUrl, image.publicId, i);
+            thumbnails.push(thumbnail);
         }
-        return [];
 
-
-
+        localStorage.setItem('AppConfig/originalSizes', JSON.stringify(originalSizes));
+        localStorage.setItem('AppConfig/thumbnails', JSON.stringify(thumbnails));
     }
-    resizeImage(imageUrl: string, fileName: string, imageProcessed: number) {
 
+    resizeImage(imageUrl: string, fileName: string, imageProcessed: number): IPhoto {
+
+        //const maxSizeInMB = 4;
+        //const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+        const img = new Image();
+        img.src = imageUrl;
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext('2d');
+        const newWidth = 250;
+        const newHeight = 250;
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        if (ctx !== null) {
+            ctx.drawImage(img, 0, 0, 250, 250);
+        }
+        let quality = 0.6;
+        let dataURL = canvas.toDataURL('image/jpeg', quality);
+        const thumbnail: IPhoto = {
+            imageUrl: dataURL,
+            publicId: fileName,
+            isPrimary: imageProcessed === 0
+        }
+        console.log(thumbnail + '\n');
+        return thumbnail;
+        // return new Promise((resolve, reject) => {
+        //     //const maxSizeInMB = 4;
+        //     //const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+        //     const img = new Image();
+        //     img.src = imageUrl;
+        //     img.onload = function () {
+        //         const canvas = document.createElement("canvas");
+        //         const ctx = canvas.getContext('2d');
+        //         // const width = img.width;
+        //         // const height = img.height;
+        //         //const aspectRatio = width / height;
+        //         const newWidth = 250;
+        //         const newHeight = 250;
+        //         canvas.width = newWidth;
+        //         canvas.height = newHeight;
+        //         if (ctx !== null) {
+        //             ctx.drawImage(img, 0, 0, 250, 250);
+        //         }
+        //         let quality = 0.6;
+        //         let dataURL = canvas.toDataURL('image/jpeg', quality);
+        //         const thumbnail: IPhoto = {
+        //             imageUrl: dataURL,
+        //             publicId: fileName,
+        //             isPrimary: imageProcessed === 0
+        //         };
+
+        //         console.log(thumbnail + '\n');
+        //         imageProcessed++;
+        //         resolve(thumbnail);
+        //     };
+        //     img.onerror = function (error) {
+        //         reject(error);
+        //     };
+        // });
+    }
+
+    async getDataURL(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
-            //const maxSizeInMB = 4;
-            //const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
-            const img = new Image();
-            img.src = imageUrl;
-            img.onload = function () {
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext('2d');
-                // const width = img.width;
-                // const height = img.height;
-                //const aspectRatio = width / height;
-                const newWidth = 250;
-                const newHeight = 250;
-                canvas.width = newWidth;
-                canvas.height = newHeight;
-                if (ctx !== null) {
-                    ctx.drawImage(img, 0, 0, 250, 250);
-                }
-                let quality = 0.6;
-                let dataURL = canvas.toDataURL('image/jpeg', quality);
-                const thumbnail: IPhoto = {
-                    imageUrl: dataURL,
-                    publicId: fileName,
-                    isPrimary: imageProcessed === 0
-                };
-
-                console.log(thumbnail + '\n');
-                imageProcessed++;
-                resolve(thumbnail);
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                resolve(event.target?.result as string);
             };
-            img.onerror = function (error) {
-                reject(error);
+            reader.onerror = (event) => {
+                reject(event.target?.error);
             };
+            reader.readAsDataURL(file);
         });
     }
 
@@ -164,14 +175,12 @@ export class HousingService {
         localStorage.removeItem('AppConfig/thumbnails');
     }
 
-    getOriginalSizePhotos(): IPhoto[] {
-        var originalPhotos = JSON.parse(localStorage.getItem('AppConfig/originalSizes') as string);
-        return originalPhotos;
+    getOriginalSizePhotos(): string | null {
+        return localStorage.getItem('AppConfig/originalSizes');
     }
 
-    getThumbnails(): IPhoto[] {
-        var thumbnails = JSON.parse(localStorage.getItem('AppConfig/thumbnails') as string);
-        return thumbnails;
+    getThumbnails(): string | null {
+        return localStorage.getItem('AppConfig/thumbnails');
     }
 
     newPropID() {

@@ -14,7 +14,7 @@ import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
 import { Contact } from '../../model/Contact.interface';
-import { IPhoto } from '../../model/IPhoto';
+
 
 
 @Component({
@@ -34,8 +34,10 @@ export class AddPropertyComponent implements OnInit {
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
     cityList: any[];
-    thumbnails: IPhoto[] = [];
-    originalSizes: IPhoto[] = [];
+    //thumbnails: IPhoto[] | null;
+    //originalSizes: IPhoto[] | null;
+    originalSizesString: string | null;
+    thumbnailsString: string | null;
 
     propertyView: IPropertyBase = {
         id: 0,
@@ -166,9 +168,19 @@ export class AddPropertyComponent implements OnInit {
     }
 
 
-    async onPhotoSelected(event: any): Promise<void> {
-        [this.thumbnails, this.originalSizes] = await this.housingService.photosSelected(event);
-        this.propertyView.photo = this.originalSizes.at(0)?.imageUrl.toString();
+    async onPhotoSelected(event: any) {
+        await this.housingService.photosSelected(event);
+
+
+
+        this.thumbnailsString = this.housingService.getThumbnails();
+        this.originalSizesString = this.housingService.getOriginalSizePhotos();
+
+        console.log('THUMBNAILS : \n');
+        console.log(this.thumbnailsString);
+        console.log('\n');
+        console.log('ORIGINAL SIZES : \n');
+        console.log(this.originalSizesString);
     }
 
     deletePhoto(_photoIndex: number) {
