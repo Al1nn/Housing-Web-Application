@@ -178,12 +178,8 @@ export class AddPropertyComponent implements OnInit {
         this.originalSizesString = this.housingService.getOriginalSizePhotos();
         this.thumbnails = JSON.parse(this.thumbnailsString as string);
         this.originalSizes = JSON.parse(this.originalSizesString as string);
+        this.propertyView.photo = this.originalSizes.at(0)?.imageUrl;
 
-        console.log('THUMBNAILS : \n');
-        console.log(this.thumbnailsString);
-        console.log('\n');
-        console.log('ORIGINAL SIZES : \n');
-        console.log(this.originalSizesString);
     }
 
     deletePhoto(_photoIndex: number) {

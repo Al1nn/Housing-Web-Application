@@ -277,8 +277,11 @@
               <tab heading="Photos">
                 <div class="form-group col-12 p-3">
                  
-                    <div class="col-12 mb-3" *ngFor="let originalPhoto of originalSizes; let i = index">
-                      <img src="{{originalPhoto.imageUrl}}" class="img-fluid">
+                    <div class="col-12 mb-3" style="max-height: 350px; overflow-y: auto;">
+                      <ng-container *ngFor="let originalPhoto of originalSizes; let i = index">
+                        <img src="{{originalPhoto.imageUrl}}" class="img-fluid mb-3">
+                      </ng-container>
+                      
                     
                     </div>
                   

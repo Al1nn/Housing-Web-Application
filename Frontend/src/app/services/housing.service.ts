@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { IKeyValuePair } from '../model/IKeyValuePair';
 import { IPropertyBase } from '../model/IPropertyBase.interface';
 import { IPhoto } from '../model/IPhoto';
+import { AlertifyService } from './alertify.service';
 
 
 
@@ -77,9 +78,16 @@ export class HousingService {
         const files: FileList = event.target.files;
         var originalSizes: IPhoto[] = [];
         var thumbnails: IPhoto[] = [];
+        var alertifyService = new AlertifyService();
 
         for (let i = 0; i < files.length; i++) {
             const file: File = files[i];
+
+            if (file.size > 2000000) {
+                alertifyService.error(`Image ${file.name} exceeds the size limit`);
+                continue;
+            }
+
             const imageURL = await this.getDataURL(file); // imageURL is null
 
             const image: IPhoto = {
@@ -129,7 +137,7 @@ export class HousingService {
         });
     }
 
-    async getDataURL(file: File): Promise<string> {
+    getDataURL(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = (event) => {
