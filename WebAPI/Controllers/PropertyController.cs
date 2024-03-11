@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Reflection.Metadata.Ecma335;
@@ -54,6 +55,15 @@ namespace WebAPI.Controllers
             return Ok(filteredPropertyList);
         }
 
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPropertyById(int id)
+        {
+            var property = await uow.PropertyRepository.GetPropertyByIdAsync(id);
+            var propertyDto = mapper.Map<PropertyDto>(property);
+            return Ok(propertyDto);
+        }
+
         //property/add
         [HttpGet("detail/{id}")]
         [AllowAnonymous]
@@ -103,7 +113,18 @@ namespace WebAPI.Controllers
                 return BadRequest(apiError);
             }
 
-            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
+            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId); 
+            //PROPERTY IS NULL ON ADD PROPERTY FORM , BUT NOT FROM THE UPLOAD FILE BECAUSE PROPERTY ALREADY EXISTS
+            //TELL ME A FIX
+
+            if (property == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "Property not found with the provided ID";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
             var photo = new Photo
             {
                 ImageUrl = result.SecureUrl.AbsoluteUri,
@@ -114,7 +135,10 @@ namespace WebAPI.Controllers
             {
                 photo.IsPrimary = true;
             }
+            
             property.Photos.Add(photo);
+
+
             if(await uow.SaveAsync()) return mapper.Map<PhotoDto>(photo);
 
             apiError.ErrorCode = BadRequest().StatusCode;

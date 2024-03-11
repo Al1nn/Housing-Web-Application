@@ -15,7 +15,6 @@ import { environment } from '../../../environments/environment';
 export class PhotoEditorComponent implements OnInit {
 
   @Input() property: Property;
-  @Input() fromAddProperty: boolean;
   @Output() mainPhotoChangedEvent = new EventEmitter<string>();
 
   uploader: FileUploader;
@@ -60,12 +59,7 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.fromAddProperty) {
-      this.initializeFileUploader();
-    } else {
-      this.initializeAddFileUploader();
-    }
-
+    this.initializeFileUploader();
   }
 
 

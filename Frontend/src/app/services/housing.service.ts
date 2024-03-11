@@ -50,6 +50,10 @@ export class HousingService {
     }
 
     getPropertyById(id: number) {
+        return this.http.get<Property>(this.baseUrl + '/property/' + id.toString());
+    }
+
+    getPropertyDetailById(id: number) {
         return this.http.get<Property>(this.baseUrl + '/property/detail/' + id.toString());
     }
 
@@ -59,21 +63,27 @@ export class HousingService {
             .pipe(map((properties) => properties.length as number));
     }
 
-    addProperty(property: Property) {
+    addProperty(property: Property): Observable<Property> {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.post(this.baseUrl + "/property/add", property, httpOptions);
+        return this.http.post<Property>(this.baseUrl + "/property/add", property, httpOptions);
     }
 
-    //De implementat
-    // addPropertyPhoto(id: number) {
 
-    // }
+    addPropertyPhoto(propertyId: number, formData: FormData) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
 
-    async photosSelected(event: any) {
+            })
+        };
+        return this.http.post(this.baseUrl + '/property/add/photo/' + propertyId, formData, httpOptions);
+    }
+
+    async photosSelected(event: any): Promise<FileList> {
 
         const files: FileList = event.target.files;
         var originalSizes: IPhoto[] = [];
@@ -84,7 +94,7 @@ export class HousingService {
             const file: File = files[i];
 
             if (file.size > 2000000) {
-                alertifyService.error(`Image ${file.name} exceeds the size limit`);
+                alertifyService.error(`Image ${file.name} exceeds the size limit of 2.0 mb`);
                 continue;
             }
 
@@ -105,6 +115,7 @@ export class HousingService {
 
         localStorage.setItem('AppConfig/originalSizes', JSON.stringify(originalSizes));
         localStorage.setItem('AppConfig/thumbnails', JSON.stringify(thumbnails));
+        return files;
     }
 
     resizeImage(imageUrl: string, fileName: string, imageProcessed: number): Promise<IPhoto> {

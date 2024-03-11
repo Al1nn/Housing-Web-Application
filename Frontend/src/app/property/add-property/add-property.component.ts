@@ -18,6 +18,8 @@ import { IPhoto } from '../../model/IPhoto';
 
 
 
+
+
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
@@ -39,6 +41,7 @@ export class AddPropertyComponent implements OnInit {
     originalSizes: IPhoto[];
     originalSizesString: string | null;
     thumbnailsString: string | null;
+    files: FileList;
 
     propertyView: IPropertyBase = {
         id: 0,
@@ -170,7 +173,7 @@ export class AddPropertyComponent implements OnInit {
 
 
     async onPhotoSelected(event: any) {
-        await this.housingService.photosSelected(event);
+        this.files = await this.housingService.photosSelected(event);
 
 
 
@@ -179,14 +182,6 @@ export class AddPropertyComponent implements OnInit {
         this.thumbnails = JSON.parse(this.thumbnailsString as string);
         this.originalSizes = JSON.parse(this.originalSizesString as string);
         this.propertyView.photo = this.originalSizes.at(0)?.imageUrl;
-
-    }
-
-    deletePhoto(_photoIndex: number) {
-
-    }
-
-    setPrimaryPhoto(_photoIndex: number) {
 
     }
 
@@ -265,6 +260,13 @@ export class AddPropertyComponent implements OnInit {
             this.mapProperty();
             this.housingService.addProperty(this.property).subscribe(
                 () => {
+                    // this.housingService.getPropertyById(this.property.id).subscribe(
+                    //     (data) => {
+                    //         console.log(data);
+                    //     }
+                    // );
+                    this.uploadPropertyPhotos(this.property.id);
+
                     this.alertifyService.success('Congrats, your property listed successfully on our website');
                     console.log(this.addPropertyForm);
 
@@ -275,11 +277,28 @@ export class AddPropertyComponent implements OnInit {
                     }
                 }
             );
-            //Call API Endpoint for the added photos
-
 
         } else {
             this.alertifyService.error('Please review the form and provide all valid entries');
+        }
+    }
+
+
+
+
+    uploadPropertyPhotos(propertyId: number) {
+        for (let i = 0; i < this.files.length; i++) {
+            const file = this.files[i];
+            var formData = new FormData();
+            formData.append('file', file);
+            this.housingService.addPropertyPhoto(propertyId, formData).subscribe(
+                response => {
+                    console.log(`Photo added successfully:`, response);
+                },
+                error => {
+                    console.error(`Error adding photo : `, error);
+                }
+            );
         }
     }
 
@@ -310,7 +329,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.mainEntrance = this.mainEntrance.value;
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.property.description = this.description.value;
-        this.property.photos = [];
+        this.property.photos = this.originalSizes;
 
 
 
