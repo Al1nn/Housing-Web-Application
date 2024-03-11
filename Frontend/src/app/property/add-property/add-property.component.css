@@ -1,2 +1,26 @@
+.file-input-container {
+    position: relative;
+  }
 
+.custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
+    background-color: #0069d9;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+  .custom-file-upload span {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .custom-file-upload:hover {
+    background-color: #0056b3;
+  }
+
+  .custom-file-upload:active {
+    background-color: #003d80;
+  }
 

@@ -82,6 +82,10 @@ export class AddPropertyComponent implements OnInit {
         return this.addPropertyForm.controls['OtherInfo'] as FormGroup;
     }
 
+    get PhotosInfo() {
+        return this.addPropertyForm.controls['PhotosInfo'] as FormControl;
+    }
+
     get sellRent() {
         return this.BasicInfo.controls['sellRent'] as FormControl;
     }
@@ -171,8 +175,8 @@ export class AddPropertyComponent implements OnInit {
         return this.OtherInfo.controls['description'] as FormControl;
     }
 
-
     async onPhotoSelected(event: any) {
+        //console.log("File upload touched " + this.fileUploadTouched);
         this.files = await this.housingService.photosSelected(event);
 
 
@@ -226,14 +230,14 @@ export class AddPropertyComponent implements OnInit {
             PriceInfo: this.fb.group({
                 price: [null, Validators.required],
                 builtArea: [null, Validators.required],
-                carpetArea: [null],
+                carpetArea: [null, Validators.required],
                 security: [0],
                 maintenance: [0],
             }),
             AddressInfo: this.fb.group({
                 floorNo: [null],
                 totalFloors: [null],
-                landMark: [null],
+                landMark: [null, Validators.required],
                 address: [null, Validators.required],
                 phoneNumber: [null, Validators.required],
             }),
@@ -242,11 +246,11 @@ export class AddPropertyComponent implements OnInit {
                 readyToMove: [null, Validators.required],
                 estPossessionOn: [null, Validators.required],
                 age: [null],
-                gated: [null],
-                mainEntrance: [null],
+                gated: [null, Validators.required],
+                mainEntrance: [null, Validators.required],
                 description: [null],
             }),
-
+            PhotosInfo: ['', [Validators.required]]
         });
     }
 
@@ -265,18 +269,19 @@ export class AddPropertyComponent implements OnInit {
                     //         console.log(data);
                     //     }
                     // );
-                    this.uploadPropertyPhotos(this.property.id);
 
-                    this.alertifyService.success('Congrats, your property listed successfully on our website');
-                    console.log(this.addPropertyForm);
-
-                    if (this.sellRent.value === '2') {
-                        this.router.navigate(['/rent-property']);
-                    } else {
-                        this.router.navigate(['/']);
-                    }
                 }
             );
+            this.uploadPropertyPhotos(this.property.id);
+
+            this.alertifyService.success('Congrats, your property listed successfully on our website');
+            console.log(this.addPropertyForm);
+
+            if (this.sellRent.value === '2') {
+                this.router.navigate(['/rent-property']);
+            } else {
+                this.router.navigate(['/']);
+            }
 
         } else {
             this.alertifyService.error('Please review the form and provide all valid entries');
@@ -329,13 +334,18 @@ export class AddPropertyComponent implements OnInit {
         this.property.mainEntrance = this.mainEntrance.value;
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.property.description = this.description.value;
-        this.property.photos = this.originalSizes;
+        this.property.photos = this.thumbnails;
 
 
 
         // Loop through the uploaded photos and add them to the property object
 
     }
+    // filesLength(_fc: AbstractControl): ValidationErrors | null {
+    //     return this.files.length === 0
+    //         ? null
+    //         : { notmatched: true };
+    // }
 
     allTabsValid(): boolean {
         if (this.BasicInfo.invalid) {
@@ -357,6 +367,12 @@ export class AddPropertyComponent implements OnInit {
             this.formTabs.tabs[3].active = true;
             return false;
         }
+        if (this.PhotosInfo.invalid) {
+            this.formTabs.tabs[4].active = true;
+            return false;
+        }
+
+
         return true;
     }
 

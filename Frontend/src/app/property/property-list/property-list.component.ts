@@ -54,7 +54,6 @@ export class PropertyListComponent implements OnInit {
         if (filterInput !== '') {
             this.housingService.getAllFilteredProperties(this.SellRent, filterInput).subscribe(
                 (data) => {
-                    console.log('Data = ' + data);
                     this.Properties = data;
 
                 }, (error) => {

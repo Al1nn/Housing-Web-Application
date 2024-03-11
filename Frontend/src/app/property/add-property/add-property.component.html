@@ -143,6 +143,9 @@
                 <div class="form-group col-12 mt-3">
                   <label>Carpet Area(in Sqr Feet)</label>
                   <input type="text" class="form-control m-2" formControlName="carpetArea">
+                  <div class="error-block" *ngIf="carpetArea.invalid && (nextClicked || carpetArea.touched)">
+                    Please enter Carpet Area
+                  </div>
                 </div>
 
                 <div class="form-group col-12 mt-3">
@@ -168,6 +171,9 @@
                 <div class="form-group col-12 mt-3">
                   <label>Landmark</label>
                   <input type="text" class="form-control m-2" formControlName="landMark">
+                  <div class="error-block" *ngIf="landMark.invalid && (nextClicked || landMark.touched)">
+                    Please insert a landmark
+                  </div>
                 </div>
 
                 
@@ -242,8 +248,12 @@
                   <div class="btn-group" btnRadioGroup formControlName="gated">
                     <label class="btn btn-outline-primary" btnRadio=true tabindex=0 role="button" name="gated">Yes</label>
                     <label class="btn btn-outline-primary mx-2" btnRadio=false tabindex=0 role="button"
-                      name="Gated">No</label>
+                      name="gated">No</label>
                   </div>
+                  <div class="error-block" *ngIf="gated.invalid && nextClicked">
+                    Please select gated
+                  </div>
+
                 </div>
 
                 <div class="form-group col-12 mt-3">
@@ -259,6 +269,10 @@
                     <label class="btn btn-outline-primary mx-2" btnRadio=4 tabindex=0 role="button"
                       name="Entrance">North</label>
                   </div>
+                  <div class="error-block" *ngIf="mainEntrance.invalid && nextClicked">
+                    Please select Main Entrance
+                  </div>
+
                 </div>
 
                 <div class="form-group col-12 mt-3">
@@ -293,8 +307,24 @@
                     </div>
                   </div>
                   
-                  <input id="fileInput" type="file" accept="image/jpeg" (change)="onPhotoSelected($event)" multiple>
-                
+                  <div class="file-input-container">
+                    <input id="fileInput" 
+                    type="file"   
+                    class="form-control"
+                    formControlName="PhotosInfo"
+                    accept="image/jpeg" (change)="onPhotoSelected($event)" multiple>
+                    
+          
+
+                    <div class="error-block" *ngIf="PhotosInfo.invalid && PhotosInfo.touched">
+                          Please insert a photo
+                    </div>
+                  </div>
+                  
+                  
+                  
+              
+                  
                 </div>
 
                 <div class="form-group col-12 mt-3 ">
