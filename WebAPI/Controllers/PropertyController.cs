@@ -114,8 +114,6 @@ namespace WebAPI.Controllers
             }
 
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId); 
-            //PROPERTY IS NULL ON ADD PROPERTY FORM , BUT NOT FROM THE UPLOAD FILE BECAUSE PROPERTY ALREADY EXISTS
-            //TELL ME A FIX
 
             if (property == null)
             {
@@ -157,6 +155,8 @@ namespace WebAPI.Controllers
             ApiError apiError = new ApiError();
 
             var userId = GetUserId();
+            var role = GetUserRole();
+
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
 
             if (property == null) {
@@ -166,10 +166,10 @@ namespace WebAPI.Controllers
                 return BadRequest(apiError); 
             }
 
-            if (property.PostedBy != userId) {
+            if (role == UserRole.UserReader) {
                 apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "You are not authorised to change the photo";
-                apiError.ErrorDetails = "You must log in to your account";
+                apiError.ErrorMessage = "You must have an admin role to change the photo";
+                apiError.ErrorDetails = "You must have the admin role";
                 return BadRequest(apiError); 
             }
 
@@ -209,10 +209,12 @@ namespace WebAPI.Controllers
         {
             ApiError apiError = new ApiError();
             var userId = GetUserId();
+            var role = GetUserRole();
+
 
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
 
-            if (property.PostedBy != userId)
+            if (role == UserRole.UserReader)
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
                 apiError.ErrorMessage = "You are not authorised to delete the photo";
@@ -221,7 +223,7 @@ namespace WebAPI.Controllers
             }
                 
 
-            if (property == null || property.PostedBy != userId)
+            if (property == null || role == UserRole.UserReader)
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "No such property or photo exists";

@@ -30,13 +30,13 @@ namespace WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginReqDto loginReq)
         {
-            var user = await uow.UserRepository.Authenticate(loginReq.Username,loginReq.Password);
+            var user = await uow.UserRepository.Authenticate(loginReq.Username, loginReq.Password, loginReq.Role);
             
             ApiError apiError = new ApiError();
             if (user == null)
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "Invalid user name or password";
+                apiError.ErrorMessage = "Invalid user name or password or role";
                 apiError.ErrorDetails = "This error appear when provided user id or password does not exists";
                 return Unauthorized(apiError);
             }
@@ -44,6 +44,7 @@ namespace WebAPI.Controllers
             var loginRes = new LoginResDto();
             loginRes.Username = loginReq.Username;
             loginRes.Token = CreateJWT(user);
+            loginRes.Role = loginReq.Role;           
 
             return Ok(loginRes);
         }
@@ -79,7 +80,8 @@ namespace WebAPI.Controllers
             var claims = new Claim[]
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);

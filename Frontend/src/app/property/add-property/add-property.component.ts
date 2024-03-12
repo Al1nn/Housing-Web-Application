@@ -334,7 +334,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.mainEntrance = this.mainEntrance.value;
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.property.description = this.description.value;
-        this.property.photos = this.thumbnails;
+        this.property.photos = this.originalSizes;
 
 
 

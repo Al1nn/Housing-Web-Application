@@ -16,17 +16,24 @@ namespace WebAPI.Data.Repo
             this.dc = dc;
         }
 
-        public async Task<User> Authenticate(string username, string passwordText)
+        public async Task<User> Authenticate(string username, string passwordText, UserRole role)
         {
 
 
             var user =  await dc.Users.FirstOrDefaultAsync( data => data.Username == username);
+           
+
             if (user == null || user.PasswordKey == null)
             {
                 return null;
             }
 
             if (!MatchPasswordHash(passwordText, user.Password, user.PasswordKey))
+            {
+                return null;
+            }
+
+            if(user.Role != role)
             {
                 return null;
             }
@@ -62,11 +69,23 @@ namespace WebAPI.Data.Repo
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
 
+            var count =  dc.Users.Count();
+            
             User user = new User();
             user.Username = username;
             user.Password = passwordHash;
             user.PasswordKey = passwordKey;
 
+            if(count == 0)
+            {
+                user.Role = UserRole.UserEditor;
+            }
+            else
+            {
+                user.Role = UserRole.UserReader;
+            }
+             
+           
             dc.Users.Add(user);
         }
 

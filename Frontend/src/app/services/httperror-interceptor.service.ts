@@ -56,7 +56,7 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
             errorMessage = error.error.message;
         } else {
             if (error.status === ErrorCode.unauthorised) {
-                return error.statusText;
+                return error.error.errorMessage;
             }
             if (error.error.errorMessage && error.status !== 0) {
                 errorMessage = error.error.errorMessage;
