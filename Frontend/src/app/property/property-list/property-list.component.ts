@@ -19,8 +19,8 @@ export class PropertyListComponent implements OnInit {
 
     min = 0;
     max = 0;
-    filterPriceAndAreaRange = [0, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000
-        , 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 100000, 150000, 200000, 500000];
+    filterPriceAndAreaRange = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 125
+        , 140, 150, 175, 180, 190, 200, 225, 235, 250, 275, 285, 300];
 
     filteredCities: string[];
 
@@ -31,22 +31,15 @@ export class PropertyListComponent implements OnInit {
 
     ngOnInit(): void {
         const urlSegments = this.route.snapshot.url;
-        if (urlSegments.length > 0 && urlSegments[0].path === 'rent-property') {
+        if (urlSegments.length > 0 && urlSegments[0].path.includes('rent-property')) {
             this.SellRent = 2; // Means we are on rent-property URL
         }
 
-        this.housingService.getAllProperties(this.SellRent).subscribe(
-            (data) => {
-                this.Properties = data;
-
-                console.log(data);
-            },
-            (error) => {
-                console.log('httperror:');
-                console.log(error);
-            }
+        this.route.data.subscribe((data) => {
+            this.Properties = this.SellRent === 2 ? data['propertyRent'] : data['propertySell'];
+        }
         );
-
+        this.housingService.clearPhotoStorage();
 
     }
 

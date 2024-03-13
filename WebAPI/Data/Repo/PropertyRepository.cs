@@ -18,9 +18,12 @@ namespace WebAPI.Data.Repo
           dc.Properties.Add(property);
         }
 
-        public async void DeleteProperty(int id)
+        public void DeleteProperty(int id)
         {
-            var property = await GetPropertyByIdAsync(id);
+            var property = dc.Properties
+                            .Include(p => p.Photos)
+                            .Where(p => p.Id == id)
+                            .FirstOrDefault();
             dc.Properties.Remove(property);
         }
 

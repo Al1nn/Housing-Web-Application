@@ -8,8 +8,23 @@ import { PropertyContactsComponent } from './property/property-contacts/property
 import { UserLoginComponent } from './user/user-login/user-login.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
 import { PropertyDetailResolverService } from './property/property-detail/property-detail-resolver.service';
+import { PropertyListResolverService } from './property/property-list/property-list-resolver.service';
+import { PropertyListRentResolverService } from './property/property-list/property-list-rent-resolver.service';
 const routes: Routes = [
-    { path: '', component: PropertyListComponent },
+    {
+        path: '',
+        component: PropertyListComponent,
+        resolve: {
+            propertySell: PropertyListResolverService,
+        }
+    },
+    {
+        path: 'rent-property',
+        component: PropertyListComponent,
+        resolve: {
+            propertyRent: PropertyListRentResolverService,
+        }
+    },
     { path: 'add-property', component: AddPropertyComponent },
     {
         path: 'property-detail/:id',
@@ -26,4 +41,4 @@ const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

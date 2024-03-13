@@ -197,7 +197,6 @@ export class AddPropertyComponent implements OnInit {
             this.CreateAddPropertyForm();
             this.housingService.getAllCities().subscribe((data) => {
                 this.cityList = data;
-                console.log(data);
             });
 
             this.housingService.getPropertyTypes().subscribe((data) => {
@@ -334,15 +333,8 @@ export class AddPropertyComponent implements OnInit {
         this.property.photos = this.originalSizes;
 
 
-
-        // Loop through the uploaded photos and add them to the property object
-
     }
-    // filesLength(_fc: AbstractControl): ValidationErrors | null {
-    //     return this.files.length === 0
-    //         ? null
-    //         : { notmatched: true };
-    // }
+
 
     allTabsValid(): boolean {
         if (this.BasicInfo.invalid) {

@@ -100,22 +100,25 @@ export class PropertyDetailComponent implements OnInit {
         this.housingService.deleteProperty(this.propertyId).subscribe(
             () => {
                 console.log("Deleted successfully");
+
+                if (this.property.sellRent === 2) {
+                    this.router.navigate(['/rent-property']);
+                    this.modalRef.hide();
+                } else if (this.property.sellRent === 1) {
+                    this.router.navigate(['/']);
+                    this.modalRef.hide();
+                }
+                this.alertifyService.success('Property Deleted !');
             },
             (error) => {
                 console.error(error);
             }
         );
 
-        if (this.property.sellRent === 2) {
-            this.router.navigate(['/rent-property']);
-            this.modalRef.hide();
-        } else if (this.property.sellRent === 1) {
-            this.router.navigate(['/']);
-            this.modalRef.hide();
-        }
 
 
 
-        this.alertifyService.success('Property Deleted !');
+
+
     }
 }

@@ -112,7 +112,7 @@ export class HousingService {
             const image: IPhoto = {
                 imageUrl: imageURL,
                 publicId: file.name,
-                isPrimary: files.length === 1 || i === 0
+                isPrimary: i === 0
             }
             originalSizes.push(image);
             //localStorage.setItem('AppConfig/originalSizes/' + image.publicId, JSON.stringify(image));
