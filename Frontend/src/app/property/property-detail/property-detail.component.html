@@ -35,6 +35,10 @@
 
       </div>
       <div class="card-footer">
+        <div class="btn-group d-flex mb-3" *ngIf="isAdmin">
+          <button class="btn btn-primary">Update</button>
+          <button class="btn btn-danger" (click)="openModal(deleteModal)">Delete</button>
+        </div>
         <div class="btn-group d-flex">
           <button class="btn btn-primary">Like</button>
           <button class="btn btn-success">Message</button>
@@ -134,3 +138,22 @@
     </div>
   </div>
 </div>
+
+<ng-template #deleteModal>
+  <div class="modal-header">
+     <h4 class="modal-title pull-left">Deleting Property</h4>
+     <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">
+        <i class="fa-solid fa-x" aria-hidden="true"></i>
+     </button>
+  </div>
+  <div class="modal-body">
+     Are you sure you want to delete this property ?
+  </div>
+  <div class="modal-footer">
+     <button type="button" class="btn btn-success" (click)="deleteProperty(propertyId)">Yes</button>
+     <button type="button" class="btn btn-danger" (click)="modalRef.hide()">No</button>
+  </div>
+</ng-template>
+
+
+

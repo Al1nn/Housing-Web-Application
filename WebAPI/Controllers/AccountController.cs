@@ -19,11 +19,38 @@ namespace WebAPI.Controllers
     {
         private readonly IUnitOfWork uow;
         private readonly IConfiguration configuration;
+        private readonly IMapper mapper;
 
-        public AccountController(IUnitOfWork uow, IConfiguration configuration)
+        public AccountController(IUnitOfWork uow, IConfiguration configuration, IMapper mapper)
         {
             this.uow = uow;
             this.configuration = configuration;
+            this.mapper = mapper;
+        }
+
+        //api/account/user/{username}
+        [HttpGet("user/{username}/{role}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> IsAdmin(string username, UserRole role)
+        {
+            ApiError apiError = new ApiError();
+
+            var user = await uow.UserRepository.GetUserByUsernameAndRole(username,role);
+
+            if (user == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "User not found";
+                apiError.ErrorDetails = "This error appear when provided user or role does not exist";
+                return NotFound(apiError);
+            }
+
+            if(user.Role == UserRole.UserEditor)
+            {
+                return Ok(true);
+            }
+
+            return Ok(false);
         }
 
         //api/account/login

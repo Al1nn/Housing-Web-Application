@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Property } from '../../model/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { HousingService } from '../../services/housing.service';
+import { AuthService } from '../../services/auth.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { AlertifyService } from '../../services/alertify.service';
+
 
 
 
@@ -12,11 +16,21 @@ import { HousingService } from '../../services/housing.service';
     styleUrls: ['./property-detail.component.css'],
 })
 export class PropertyDetailComponent implements OnInit {
+
     public propertyId: number;
     public mainPhotoUrl: string;
     property = new Property();
     galleryImages: GalleryItem[];
-    constructor(private housingService: HousingService, private route: ActivatedRoute) { }
+    modalRef: BsModalRef;
+
+    isAdmin: boolean = false;
+
+    constructor(private authService: AuthService
+        , private housingService: HousingService
+        , private route: ActivatedRoute
+        , private modalService: BsModalService
+        , private alertifyService: AlertifyService
+        , private router: Router) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -32,7 +46,21 @@ export class PropertyDetailComponent implements OnInit {
 
 
         this.galleryImages = this.getPropertyPhotos();
+
+        var username = localStorage.getItem('username') as string;
+        var roleString = localStorage.getItem('role') as string;
+        var role = +roleString;
+
+        if (username !== null || roleString !== null) {
+            this.authService.isAdmin(username, role).subscribe((data) => {
+                this.isAdmin = data;
+            });
+        }
+
     }
+
+
+
     changePrimaryPhoto(mainPhotoUrl: string) {
         this.mainPhotoUrl = mainPhotoUrl;
     }
@@ -59,5 +87,17 @@ export class PropertyDetailComponent implements OnInit {
         }
 
         return photoUrls;
+    }
+
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
+
+    deleteProperty(propId: number) {
+        console.log(propId);
+
+        this.router.navigate(['/']);
+        this.modalRef.hide();
+        this.alertifyService.success('Property Deleted !');
     }
 }

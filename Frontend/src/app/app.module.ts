@@ -39,7 +39,7 @@ import { DatePipe } from '@angular/common';
 import { CloudinaryModule } from '@cloudinary/ng';
 import { PhotoEditorComponent } from './property/photo-editor/photo-editor.component';
 import { FileUploadModule } from 'ng2-file-upload';
-
+import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 
 @NgModule({
     declarations: [
@@ -72,6 +72,7 @@ import { FileUploadModule } from 'ng2-file-upload';
         GalleryComponent,
         CloudinaryModule,
         FileUploadModule,
+        ModalModule,
     ],
     providers: [
         provideClientHydration(),
@@ -86,7 +87,8 @@ import { FileUploadModule } from 'ng2-file-upload';
             provide: HTTP_INTERCEPTORS,
             useClass: HttpErrorInterceptorService,
             multi: true
-        }
+        },
+        BsModalService
     ],
     bootstrap: [AppComponent],
 })
