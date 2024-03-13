@@ -16,12 +16,12 @@ namespace WebAPI.Data.Repo
         public void AddProperty(Property property)
         {
           dc.Properties.Add(property);
-            
         }
 
-        public void DeleteProperty(int id)
+        public async void DeleteProperty(int id)
         {
-            throw new NotImplementedException();
+            var property = await GetPropertyByIdAsync(id);
+            dc.Properties.Remove(property);
         }
 
         public async Task<IEnumerable<Property>> GetPropertiesAsync(int sellRent)
@@ -42,6 +42,7 @@ namespace WebAPI.Data.Repo
         {
             var properties = await dc.Properties
                             .Include(p => p.Photos)
+                            .Include(p => p.Contact)
                             .Where(p => p.Id == id)
                             .FirstOrDefaultAsync();
             return properties;

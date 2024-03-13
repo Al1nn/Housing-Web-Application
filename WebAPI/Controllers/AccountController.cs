@@ -29,13 +29,13 @@ namespace WebAPI.Controllers
         }
 
         //api/account/user/{username}
-        [HttpGet("user/{username}/{role}")]
+        [HttpGet("user/{username}")]
         [AllowAnonymous]
-        public async Task<IActionResult> IsAdmin(string username, UserRole role)
+        public async Task<IActionResult> IsAdmin(string username)
         {
             ApiError apiError = new ApiError();
 
-            var user = await uow.UserRepository.GetUserByUsernameAndRole(username,role);
+            var user = await uow.UserRepository.GetUserByName(username);
 
             if (user == null)
             {

@@ -4,6 +4,8 @@ import { IPhoto } from '../../model/IPhoto';
 import { HousingService } from '../../services/housing.service';
 import { FileUploader } from 'ng2-file-upload';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
+import { AlertifyService } from '../../services/alertify.service';
 
 
 
@@ -22,7 +24,9 @@ export class PhotoEditorComponent implements OnInit {
   maxAllowedFileSize = 10 * 1024 * 1024;
 
 
-  constructor(private housingService: HousingService) { }
+  constructor(private housingService: HousingService
+    , private alertifyService: AlertifyService
+    , private router: Router) { }
 
   mainPhotoChanged(url: string) {
     this.mainPhotoChangedEvent.emit(url);
@@ -64,6 +68,11 @@ export class PhotoEditorComponent implements OnInit {
 
 
   setPrimaryPhoto(propertyId: number, photo: IPhoto) {
+    if (!localStorage.getItem('username')) {
+      this.alertifyService.error("You must be logged in and an admin to modify photos");
+      this.router.navigate(['/user/login']);
+    }
+
     this.housingService.setPrimaryPhoto(propertyId, photo.publicId).subscribe(() => {
       this.mainPhotoChanged(photo.imageUrl);
       this.property.photos.forEach(p => {
@@ -74,6 +83,12 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   deletePhoto(propertyId: number, photo: IPhoto) {
+
+    if (!localStorage.getItem('username')) {
+      this.alertifyService.error("You must be logged in and an admin to delete photos");
+      this.router.navigate(['/user/login']);
+    }
+
     this.housingService.deletePhoto(propertyId, photo.publicId).subscribe(() => {
       this.property.photos = this.property.photos.filter(p => p.publicId !== photo.publicId)
     });

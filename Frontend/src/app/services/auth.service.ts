@@ -19,7 +19,7 @@ export class AuthService {
         return this.http.post<IUserForRegister>(this.baseUrl + '/account/register', user);
     }
 
-    isAdmin(username: string, role: number): Observable<boolean> {
-        return this.http.get<boolean>(this.baseUrl + '/account/user/' + username + '/' + role);
+    isAdmin(username: string): Observable<boolean> {
+        return this.http.get<boolean>(this.baseUrl + '/account/user/' + username);
     }
 }

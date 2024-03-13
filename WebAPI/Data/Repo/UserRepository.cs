@@ -94,9 +94,9 @@ namespace WebAPI.Data.Repo
             return await dc.Users.AnyAsync( data => data.Username == username );
         }
 
-        public async Task<User> GetUserByUsernameAndRole(string username ,UserRole role)
+        public async Task<User> GetUserByName(string username )
         {
-            return await dc.Users.FirstOrDefaultAsync(data => data.Username == username && data.Role == role );
+            return await dc.Users.FirstOrDefaultAsync(data => data.Username == username);
         }
     }
 }

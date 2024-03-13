@@ -10,6 +10,7 @@ import { AlertifyService } from '../../services/alertify.service';
 
 
 
+
 @Component({
     selector: 'app-property-detail',
     templateUrl: './property-detail.component.html',
@@ -48,11 +49,10 @@ export class PropertyDetailComponent implements OnInit {
         this.galleryImages = this.getPropertyPhotos();
 
         var username = localStorage.getItem('username') as string;
-        var roleString = localStorage.getItem('role') as string;
-        var role = +roleString;
 
-        if (username !== null || roleString !== null) {
-            this.authService.isAdmin(username, role).subscribe((data) => {
+
+        if (username !== null) {
+            this.authService.isAdmin(username).subscribe((data) => {
                 this.isAdmin = data;
             });
         }
@@ -96,8 +96,26 @@ export class PropertyDetailComponent implements OnInit {
     deleteProperty(propId: number) {
         console.log(propId);
 
-        this.router.navigate(['/']);
-        this.modalRef.hide();
+        //Call the API Endpoint
+        this.housingService.deleteProperty(this.propertyId).subscribe(
+            () => {
+                console.log("Deleted successfully");
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
+
+        if (this.property.sellRent === 2) {
+            this.router.navigate(['/rent-property']);
+            this.modalRef.hide();
+        } else if (this.property.sellRent === 1) {
+            this.router.navigate(['/']);
+            this.modalRef.hide();
+        }
+
+
+
         this.alertifyService.success('Property Deleted !');
     }
 }

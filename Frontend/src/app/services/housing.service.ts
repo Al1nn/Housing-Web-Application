@@ -72,6 +72,15 @@ export class HousingService {
         return this.http.post<Property>(this.baseUrl + "/property/add", property, httpOptions);
     }
 
+    deleteProperty(id: number): Observable<Property> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.delete<Property>(this.baseUrl + "/property/delete/" + id, httpOptions);
+    }
+
 
     addPropertyPhoto(propertyId: number, formData: FormData) {
         const httpOptions = {

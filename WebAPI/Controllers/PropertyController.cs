@@ -75,6 +75,27 @@ namespace WebAPI.Controllers
             return Ok(propertyDto);
         }
 
+        [HttpDelete("delete/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteProperty(int id)
+        {
+            var property = await uow.PropertyRepository.GetPropertyByIdAsync(id);
+            ApiError apiError = new ApiError();
+
+            if (property == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "Property not found for deleting";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
+            uow.PropertyRepository.DeleteProperty(id);
+            await uow.SaveAsync();
+
+            return StatusCode(200);
+        }
+
         [HttpPost("add")]
         [Authorize]
         public async Task<IActionResult> AddProperty(PropertyDto propertyDto)

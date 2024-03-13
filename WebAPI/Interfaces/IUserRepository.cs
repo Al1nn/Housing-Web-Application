@@ -6,7 +6,7 @@ namespace WebAPI.Interfaces
     {
          Task<User> Authenticate(string username, string password, UserRole role);
          
-         Task<User> GetUserByUsernameAndRole(string username, UserRole role);
+         Task<User> GetUserByName(string username);
 
          void Register(string username, string password);
 
