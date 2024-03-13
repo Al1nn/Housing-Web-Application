@@ -13,7 +13,6 @@ import { HousingService } from '../../services/housing.service';
 import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
-import { Contact } from '../../model/Contact.interface';
 import { IPhoto } from '../../model/IPhoto';
 
 
@@ -32,7 +31,6 @@ export class AddPropertyComponent implements OnInit {
     nextClicked: boolean;
     contactAdded = false;
     property = new Property();
-    contact = new Contact();
     // This later will come from the database
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
@@ -324,10 +322,9 @@ export class AddPropertyComponent implements OnInit {
         this.property.floorNo = this.floorNo.value;
         this.property.totalFloors = this.totalFloors.value;
         this.property.landMark = this.landMark.value;
-        this.contact.address = this.address.value;
-        this.contact.phoneNumber = this.phoneNumber.value;
 
-        this.property.contact = this.contact;
+        this.property.address = this.address.value;
+        this.property.phoneNumber = this.phoneNumber.value;
 
         this.property.readyToMove = this.readyToMove.value;
         this.property.gated = this.gated.value;

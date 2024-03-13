@@ -107,7 +107,6 @@ namespace WebAPI.Controllers
             // Set other properties
             property.PostedBy = userId;
             property.LastUpdatedBy = userId;
-            property.Contact.LastUpdatedBy = userId;
             // Add property to repository
             uow.PropertyRepository.AddProperty(property);
 

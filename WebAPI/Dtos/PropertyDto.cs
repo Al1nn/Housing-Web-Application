@@ -27,9 +27,9 @@ namespace WebAPI.Dtos
         
         public string LandMark { get; set; }
 
-        public int ContactId { get; set; }
+        public string Address { get; set; }
 
-        public Contact Contact { get; set; }
+        public string PhoneNumber { get; set; }
 
         public int FloorNo { get; set; }
 

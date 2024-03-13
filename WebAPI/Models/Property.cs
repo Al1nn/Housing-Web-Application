@@ -20,8 +20,8 @@ namespace WebAPI.Models
         public bool ReadyToMove { get; set; }
         public int CarpetArea { get; set; }
         public string LandMark {  get; set; }
-        public int ContactId { get; set; }
-        public Contact Contact { get; set; }
+        public string Address {  get; set; }
+        public string PhoneNumber { get; set; }
         public int FloorNo { get; set; }
         public int TotalFloors { get; set; }
         public string MainEntrance { get; set; }

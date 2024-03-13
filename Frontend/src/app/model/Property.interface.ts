@@ -1,4 +1,3 @@
-import { Contact } from './Contact.interface';
 import { IPropertyBase } from './IPropertyBase.interface';
 import { IPhoto } from './IPhoto';
 
@@ -15,8 +14,8 @@ export class Property implements IPropertyBase {
     builtArea: number;
     carpetArea: number;
     landMark: string;
-    contactId: number;
-    contact: Contact;
+    address: string;
+    phoneNumber: string;
     cityId: number;
     city: string;
     floorNo?: string;

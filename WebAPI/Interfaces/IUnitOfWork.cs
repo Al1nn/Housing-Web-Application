@@ -13,7 +13,6 @@
 
         IFurnishingTypeRepository FurnishingTypeRepository { get; }
 
-        IContactRepository ContactRepository { get; }
 
         public Task<bool> SaveAsync();
     }

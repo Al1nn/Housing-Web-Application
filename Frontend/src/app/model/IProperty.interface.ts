@@ -1,4 +1,3 @@
-import { IContact } from './IContacts.interface';
 import { IPropertyBase } from './IPropertyBase.interface';
 
 export interface IProperty extends IPropertyBase {
@@ -9,5 +8,7 @@ export interface IProperty extends IPropertyBase {
     totalFloors: number | null,
     Gated: number | null,
     MainEntrance: string | null,
-    Contacts: IContact[]
+    landMark: string | null;
+    address: string | null;
+    phoneNumber: string | null;
 }

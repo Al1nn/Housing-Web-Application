@@ -21,6 +21,6 @@ namespace WebAPI.Data
 
         public DbSet<FurnishingType> FurnishingTypes { get; set; }
 
-        public DbSet<Contact> Contacts { get; set; }
+       
     }
 }

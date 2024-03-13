@@ -30,7 +30,6 @@ namespace WebAPI.Data.Repo
                             .Include(p => p.PropertyType)
                             .Include(p => p.FurnishingType)
                             .Include(p=> p.City)
-                            .Include(p=> p.Contact)
                             .Include(p=> p.User)
                             .Include(p=> p.Photos)
                             .Where(p => p.SellRent == sellRent)
@@ -42,7 +41,6 @@ namespace WebAPI.Data.Repo
         {
             var properties = await dc.Properties
                             .Include(p => p.Photos)
-                            .Include(p => p.Contact)
                             .Where(p => p.Id == id)
                             .FirstOrDefaultAsync();
             return properties;
@@ -54,7 +52,6 @@ namespace WebAPI.Data.Repo
                             .Include(p => p.PropertyType)
                             .Include(p => p.FurnishingType)
                             .Include(p => p.City)
-                            .Include(p => p.Contact)
                             .Include(p => p.User)
                             .Include(p => p.Photos)
                             .Where(p => p.Id == id)
