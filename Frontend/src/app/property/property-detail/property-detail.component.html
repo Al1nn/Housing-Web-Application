@@ -143,11 +143,14 @@
   <div class="modal-header">
      <h4 class="modal-title pull-left">Deleting Property</h4>
      <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">
-        <i class="fa-solid fa-x" aria-hidden="true"></i>
+        <i class="fa-solid fa-x text-danger"></i>
      </button>
   </div>
   <div class="modal-body">
-     Are you sure you want to delete this property ?
+    Are you sure you want to delete this property ? <br>
+    <strong>
+      Cannot undo the change
+    </strong> 
   </div>
   <div class="modal-footer">
      <button type="button" class="btn btn-success" (click)="deleteProperty(propertyId)">Yes</button>

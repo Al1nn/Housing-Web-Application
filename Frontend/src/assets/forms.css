@@ -28,6 +28,18 @@ input[type = "text"]:focus , input[type = "password"]:focus{
   background-color: #007bff !important;
 }
 
+.modal-header > h1, .modal-header > h2, .modal-header > h3, .modal-header > h4{
+  color: white;
+}
+
+.modal-header > button{
+  background-color: white;
+}
+
+.modal-header{
+  background-color: #007bff !important;
+}
+
 .card-title{
   color: #0069d9;
 }
