@@ -9,6 +9,7 @@ import { AlertifyService } from '../../services/alertify.service';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -20,6 +21,7 @@ import { IKeyValuePair } from '../../model/IKeyValuePair';
     styleUrls: ['./property-detail.component.css'],
 })
 export class PropertyDetailComponent implements OnInit {
+    [x: string]: any;
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
     editPropertyForm: FormGroup;
 
@@ -31,9 +33,10 @@ export class PropertyDetailComponent implements OnInit {
     furnishTypes: IKeyValuePair[];
     cityList: any[];
 
+    estPossessionOnDate: Date;
     propertyTypeId: number = 0;
     furnishTypeId: number = 0;
-
+    estPossessionOnFormatted: string;
 
     galleryImages: GalleryItem[];
     modalRef: BsModalRef;
@@ -46,14 +49,108 @@ export class PropertyDetailComponent implements OnInit {
         , private route: ActivatedRoute
         , private modalService: BsModalService
         , private alertifyService: AlertifyService
+        , private datePipe: DatePipe
         , private fb: FormBuilder
         , private router: Router) { }
 
     get BasicInfo() {
         return this.editPropertyForm.controls['BasicInfo'] as FormGroup;
     }
+
+    get PriceInfo() {
+        return this.editPropertyForm.controls['PriceInfo'] as FormGroup;
+    }
+
+    get AddressInfo() {
+        return this.editPropertyForm.controls['AddressInfo'] as FormGroup;
+    }
+
+    get OtherInfo() {
+        return this.editPropertyForm.controls['OtherInfo'] as FormGroup;
+    }
+
     get name() {
         return this.BasicInfo.controls['name'] as FormControl;
+    }
+
+    get price() {
+        return this.PriceInfo.controls['price'] as FormControl;
+    }
+
+    get security() {
+        return this.PriceInfo.controls['security'] as FormControl;
+    }
+
+    get maintenance() {
+        return this.PriceInfo.controls['maintenance'] as FormControl;
+    }
+
+    get builtArea() {
+        return this.PriceInfo.controls['builtArea'] as FormControl;
+    }
+
+    get carpetArea() {
+        return this.PriceInfo.controls['carpetArea'] as FormControl;
+    }
+
+    get floorNo() {
+        return this.AddressInfo.controls['floorNo'] as FormControl;
+    }
+
+    get totalFloors() {
+        return this.AddressInfo.controls['totalFloors'] as FormControl;
+    }
+
+    get landMark() {
+        return this.AddressInfo.controls['landMark'] as FormControl;
+    }
+
+    get address() {
+        return this.AddressInfo.controls['address'] as FormControl;
+    }
+
+    get phoneNumber() {
+        return this.AddressInfo.controls['phoneNumber'] as FormControl;
+    }
+
+    get readyToMove() {
+        return this.OtherInfo.controls['readyToMove'] as FormControl;
+    }
+
+    get estPossessionOn() {
+        return this.OtherInfo.controls['estPossessionOn'] as FormControl;
+    }
+
+    get gated() {
+        return this.OtherInfo.controls['gated'] as FormControl;
+    }
+
+    get mainEntrance() {
+        return this.OtherInfo.controls['mainEntrance'] as FormControl;
+    }
+
+    get description() {
+        return this.OtherInfo.controls['description'] as FormControl;
+    }
+
+    priceIsNaN() {
+        return isNaN(this.property.price);
+    }
+
+    securityIsNaN() {
+        return isNaN(this.property.security as number);
+    }
+
+    maintenanceIsNaN() {
+        return isNaN(this.property.maintenance as number);
+    }
+
+    builtAreaIsNaN() {
+        return isNaN(this.property.builtArea);
+    }
+
+    carpetAreaIsNaN() {
+        return isNaN(this.property.carpetArea);
     }
 
 
@@ -128,7 +225,10 @@ export class PropertyDetailComponent implements OnInit {
                 break;
         }
 
-        console.log(this.cityList);
+
+
+        this.estPossessionOnDate = new Date(this.property.estPossessionOn);
+
     }
     CreateEditForm() {
         //Handle the different components data.
@@ -143,9 +243,31 @@ export class PropertyDetailComponent implements OnInit {
                 furnishingType: [this.furnishTypeId],
                 name: [this.property.name, Validators.required],
                 city: [this.property.cityId]
+            }),
+            PriceInfo: this.fb.group({
+                price: [this.property.price, Validators.required],
+                security: [this.property.security, Validators.required],
+                maintenance: [this.property.maintenance, Validators.required],
+                builtArea: [this.property.builtArea, Validators.required],
+                carpetArea: [this.property.carpetArea, Validators.required]
+            }),
+            AddressInfo: this.fb.group({
+                floorNo: [this.property.floorNo, Validators.required],
+                totalFloors: [this.property.totalFloors, Validators.required],
+                landMark: [this.property.landMark, Validators.required],
+                address: [this.property.address, Validators.required],
+                phoneNumber: [this.property.phoneNumber, Validators.required]
+            }),
+            OtherInfo: this.fb.group({
+                readyToMove: [this.property.readyToMove ? "true" : "false"],
+                estPossessionOn: [this.estPossessionOnDate],
+                gated: [this.property.gated ? "true" : "false"],
+                mainEntrance: [this.property.mainEntrance],
+                description: [this.property.description, Validators.required]
             })
-
         });
+
+
     }
 
 
@@ -217,10 +339,14 @@ export class PropertyDetailComponent implements OnInit {
 
     }
 
+    mapProperty(): void {
+        this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
+    }
 
 
     onSubmit() {
         if (this.editPropertyForm.valid) {
+            this.mapProperty();
             console.log(this.property);
             this.modalRef.hide();
         }

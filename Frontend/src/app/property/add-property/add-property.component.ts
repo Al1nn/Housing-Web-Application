@@ -232,8 +232,8 @@ export class AddPropertyComponent implements OnInit {
                 maintenance: [0],
             }),
             AddressInfo: this.fb.group({
-                floorNo: [null],
-                totalFloors: [null],
+                floorNo: [null, Validators.required],
+                totalFloors: [null, Validators.required],
                 landMark: [null, Validators.required],
                 address: [null, Validators.required],
                 phoneNumber: [null, Validators.required],

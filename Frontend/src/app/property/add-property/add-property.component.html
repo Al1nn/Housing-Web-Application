@@ -161,11 +161,17 @@
                 <div class="form-group col-12 mt-3">
                   <label>Floor</label>
                   <input type="text" class="form-control m-2" formControlName="floorNo">
+                  <div class="error-block" *ngIf="floorNo.invalid && (nextClicked || floorNo.touched)">
+                    Please insert a Floor
+                  </div>
                 </div>
 
                 <div class="form-group col-12">
                   <label>Total Floor</label>
                   <input type="text" class="form-control m-2" formControlName="totalFloors">
+                  <div class="error-block" *ngIf="totalFloors.invalid && (nextClicked || totalFloors.touched)">
+                    Please insert Total Floors
+                  </div>
                 </div>
 
                 <div class="form-group col-12 mt-3">

@@ -1,3 +1,13 @@
+<div class="card-body" *ngIf="isAdmin">
+  <div class="btn-group d-flex mb-3" style="position: relative; margin-left: 75%;" >
+    <button class="btn btn-primary" (click)="openModal('editModal',editModal)">
+      <i class="fa-solid fa-pen-nib"></i> Update
+    </button>
+    <button class="btn btn-danger" (click)="openModal('deleteModal',deleteModal)">
+      <i class="fa-solid fa-trash"></i> Delete
+    </button>
+  </div>
+</div>
 <div class="row shadow">
   <div class="col-sm-4 p-0">
     <div class="card">
@@ -35,18 +45,16 @@
 
       </div>
       <div class="card-footer">
-        <div class="btn-group d-flex mb-3" *ngIf="isAdmin">
-          <button class="btn btn-primary" (click)="openModal('editModal',editModal)">Update</button>
-          <button class="btn btn-danger" (click)="openModal('deleteModal',deleteModal)">Delete</button>
-        </div>
+        
         <div class="btn-group d-flex">
           <button class="btn btn-primary">Like</button>
           <button class="btn btn-success">Message</button>
         </div>
 
       </div>
+      
     </div>
-
+    
   </div>
   <div class="col-sm-8 p-0">
     <div class="tab-panel p-3">
@@ -239,6 +247,188 @@
           </div>
 
           
+
+        </tab>
+        <tab heading="Pricing and Area" formGroupName="PriceInfo">
+
+          <div class="form-group col-12 mt-3">
+            <label *ngIf="this.property.sellRent === 1">Price (in USD)</label>
+            <label *ngIf="this.property.sellRent === 2">Rent (in USD)</label>
+            <input type="text" class="form-control m-2" formControlName="price" #propPrice
+              (keyup)="this.property.price= +propPrice.value">
+            <div class="error-block" *ngIf="price.invalid && price.touched">
+              You cannot leave Price empty
+            </div>      
+            <div class="error-block" *ngIf="priceIsNaN() && !price.invalid">
+              Price not a number
+            </div>
+          </div>
+
+          <div *ngIf="property.sellRent === 2">
+            <div class="form-group col-12 mt-3">
+              <label>Security (in USD)</label>
+              <input type="text" class="form-control m-2" formControlName="security" #propSecurity
+              (keyup)="this.property.security= +propSecurity.value">
+              <div class="error-block" *ngIf="security.invalid && security.touched">
+                You cannot leave Security empty
+              </div>
+              <div class="error-block" *ngIf="securityIsNaN() && !security.invalid">
+                Security not a number
+              </div> 
+            </div>
+
+            <div class="form-group col-12 mt-3">
+              <label>Maintenance (in USD)</label>
+              <input type="text" class="form-control m-2" formControlName="maintenance" #propMaintenance
+              (keyup)="this.property.maintenance = +propMaintenance.value">
+              <div class="error-block" *ngIf="maintenance.invalid && maintenance.touched">
+                You cannot leave Maintenance empty
+              </div>
+              <div class="error-block" *ngIf="maintenanceIsNaN() && !maintenance.invalid">
+                Maintenance not a number
+              </div>
+            </div>
+          </div>
+            
+          <div class="form-group col-12 mt-3">
+            <label>Built Area (in Sqr Feet)</label>
+            <input type="text" class="form-control m-2" formControlName="builtArea" #propBuiltArea
+                  (keyup)="this.property.builtArea= +propBuiltArea.value"
+            >
+            <div class="error-block" *ngIf="builtArea.invalid && builtArea.touched">
+              You cannot leave Built Area empty
+            </div>
+            <div class="error-block" *ngIf="builtAreaIsNaN() && !builtArea.invalid">
+              Built Area not a number
+            </div>
+          </div>
+
+
+          <div class="form-group col-12 mt-3">
+            <label>Carpet Area(in Sqr Feet)</label>
+            <input type="text" class="form-control m-2" formControlName="carpetArea" #propCarpetArea
+                  (keyup)="this.property.carpetArea = +propCarpetArea.value">
+            <div class="error-block" *ngIf="carpetArea.invalid && carpetArea.touched">
+              You cannot leave Carpet Area empty
+            </div>
+            <div class="error-block" *ngIf="carpetAreaIsNaN() && !carpetArea.invalid">
+              Carpet Area not a number
+            </div>                    
+          </div>
+
+
+        </tab>
+
+        <tab heading="Address" formGroupName="AddressInfo">
+          <div class="form-group col-12 mt-3">
+            <label>Floor</label>
+            <input type="text" class="form-control m-2" formControlName="floorNo" #propFloor
+            (keyup)="this.property.floorNo = propFloor.value">
+            <div class="error-block" *ngIf="floorNo.invalid && floorNo.touched">
+              You cannot leave Floor empty
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <label>Total Floor</label>
+            <input type="text" class="form-control m-2" formControlName="totalFloors" #propTotalFloor
+            (keyup)="this.property.totalFloors = propTotalFloor.value">
+            <div class="error-block" *ngIf="totalFloors.invalid &&  totalFloors.touched">
+              You cannot leave Total Floors empty
+            </div>
+          </div>
+
+          <div class="form-group col-12 mt-3">
+            <label>Landmark</label>
+            <input type="text" class="form-control m-2" formControlName="landMark" #propLandMark
+            (keyup)="this.property.landMark = propLandMark.value">
+            <div class="error-block" *ngIf="landMark.invalid &&  landMark.touched">
+              You cannot leave landmark empty
+            </div>
+          </div>
+
+          <div class="form-group col-12 mt-3">
+            <label>Address</label>
+            <input type="text" class="form-control m-2" formControlName="address" #propAddress
+            (keyup)="this.property.address = propAddress.value">
+            <div class="error-block" *ngIf="address.invalid &&  address.touched">
+              You cannot leave address empty
+            </div>
+          </div>
+
+          <div class="form-group col-12 mt-3">
+            <label>Phone Number</label>
+            <input type="text" class="form-control m-2" formControlName="phoneNumber" #propPhoneNumber
+            (keyup)="this.property.phoneNumber = propPhoneNumber.value">
+            <div class="error-block" *ngIf="phoneNumber.invalid &&  phoneNumber.touched">
+              Please insert a phone number
+            </div>
+          </div>
+
+        </tab>
+
+        <tab heading="Other Details" formGroupName="OtherInfo">
+
+          <div class="form-group col-12 mt-3">
+            <p class="mt-3">Ready To Move</p>
+              <div class="btn-group" btnRadioGroup formControlName="readyToMove">
+                <label class="btn btn-outline-primary mx-2" btnRadio="false" tabindex=0 role="button" 
+                (click)="this.property.readyToMove= false;" 
+                name="readyToMove">No</label>
+
+                <label class="btn btn-outline-primary" btnRadio="true" tabindex=0 role="button"
+                (click)="this.property.readyToMove= true;" 
+                name="readyToMove" >Yes</label>
+
+              </div>
+          </div>
+
+          <div class="form-group col-12 mt-3">
+            <label *ngIf="this.property.readyToMove">Enstablishment Date :</label>
+            <label *ngIf="!this.property.readyToMove">Possesion Date : </label>
+            <input type="text" placeholder="Datepicker" class="form-control" formControlName="estPossessionOn" 
+              #PossessionOn
+                  (ngModelChange)="this.property.estPossessionOn= PossessionOn.value"
+                  bsDatepicker
+                    [bsConfig]="{containerClass : 'theme-dark-blue', dateInputFormat : 'MMM DD, YYYY' }">
+          </div>
+
+
+          <div class="form-group col-12 mt-3">
+            <p class="mt-3">Gated Community</p>
+
+            <div class="btn-group" btnRadioGroup formControlName="gated">
+              <label class="btn btn-outline-primary" btnRadio="true" tabindex=0 role="button" name="gated"
+              (click)="this.property.gated = true">Yes</label>
+              <label class="btn btn-outline-primary mx-2" btnRadio="false" tabindex=0 role="button"
+                name="gated" (click)="this.property.gated = false">No</label>
+            </div>
+          </div>
+
+          <div class="form-group col-12 mt-3">
+            <p class="mt-3">Main Entrance</p>
+
+            <div class="btn-group" btnRadioGroup formControlName="mainEntrance">
+              <label class="btn btn-outline-primary" btnRadio=1 tabindex=0 role="button" (click)="this.property.mainEntrance = 1;"
+                name="Entrance">East</label>
+              <label class="btn btn-outline-primary mx-2" btnRadio=2 tabindex=0 role="button"  (click)="this.property.mainEntrance = 2;"
+                name="Entrance">West</label>
+              <label class="btn btn-outline-primary" btnRadio=3 tabindex=0 role="button"  (click)="this.property.mainEntrance = 3;"
+                name="Entrance">South</label>
+              <label class="btn btn-outline-primary mx-2" btnRadio=4 tabindex=0 role="button"  (click)="this.property.mainEntrance = 4;"
+                name="Entrance">North</label>
+            </div>
+          </div>
+
+          <div class="form-group col-12 mt-3">
+            <label>Description</label>
+            <textarea type="text" class="form-control m-2" formControlName="description" rows="6" #propDescription
+            (keyup)="this.property.description = propDescription.value"
+            ></textarea>
+            <div class="error-block" *ngIf="description.invalid && description.touched">
+              You cannot leave description empty
+            </div>
+          </div>
 
         </tab>
 
