@@ -10,6 +10,7 @@
         public int Price { get; set; }
         public int BHK { get; set; }
         public int BuiltArea { get; set; }
+        public string CityId { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
         public bool ReadyToMove { get; set; }
