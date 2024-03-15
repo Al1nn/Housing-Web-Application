@@ -14,6 +14,6 @@ namespace WebAPI.Interfaces
 
         void DeleteProperty(int id);
 
-
+        void UpdateProperty(Property property);
     }
 }

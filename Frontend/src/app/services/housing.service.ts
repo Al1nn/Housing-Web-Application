@@ -72,6 +72,15 @@ export class HousingService {
         return this.http.post<Property>(this.baseUrl + "/property/add", property, httpOptions);
     }
 
+    updateProperty(id: number, property: Property): Observable<Property> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.put<Property>(this.baseUrl + "/property/update/" + id, property, httpOptions);
+    }
+
     deleteProperty(id: number): Observable<Property> {
         const httpOptions = {
             headers: new HttpHeaders({

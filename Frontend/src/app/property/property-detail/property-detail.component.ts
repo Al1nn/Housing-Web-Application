@@ -28,6 +28,7 @@ export class PropertyDetailComponent implements OnInit {
     public propertyId: number;
     public mainPhotoUrl: string;
     property = new Property();
+    propertyDetail = new Property();
 
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
@@ -69,8 +70,27 @@ export class PropertyDetailComponent implements OnInit {
         return this.editPropertyForm.controls['OtherInfo'] as FormGroup;
     }
 
+    get sellRent() {
+        return this.BasicInfo.controls['sellRent'] as FormControl;
+    }
+    get bhk() {
+        return this.BasicInfo.controls['bhk'] as FormControl;
+    }
+
+    get propertyType() {
+        return this.BasicInfo.controls['propertyType'] as FormControl;
+    }
+
+    get furnishingType() {
+        return this.BasicInfo.controls['furnishingType'] as FormControl;
+    }
+
     get name() {
         return this.BasicInfo.controls['name'] as FormControl;
+    }
+
+    get city() {
+        return this.BasicInfo.controls['city'] as FormControl;
     }
 
     get price() {
@@ -159,8 +179,13 @@ export class PropertyDetailComponent implements OnInit {
 
         this.route.data.subscribe((data) => {
             this.property = data['property'];
-            console.log(this.property.photos);
         });
+
+        this.housingService.getPropertyById(this.propertyId).subscribe(
+            (data) => {
+                this.propertyDetail = data;
+            }
+        );
 
         this.housingService.getPropertyTypes().subscribe((data) => {
             this.propertyTypes = data;
@@ -340,15 +365,75 @@ export class PropertyDetailComponent implements OnInit {
     }
 
     mapProperty(): void {
+        /*
+                {
+                "sellRent": 2,
+                "name": "Razboieni Apartment",
+                "propertyTypeId": 2,
+                "furnishingTypeId": 2,
+                "price": 700,
+                "bhk": 3,
+                "builtArea": 50,
+                "cityId": 3,
+                "readyToMove": false,
+                "carpetArea": 10,
+                "landMark": "Str. Tineret",
+                "address": "Str. Uscatu",
+                "phoneNumber": "06734524",
+                "floorNo": 1,
+                "totalFloors": 2,
+                "mainEntrance": "1",
+                "security": 10,
+                "gated": true,
+                "maintenance": 100,
+                "estPossessionOn": "2024-06-06T00:00:00",
+                "age": 0,
+                "description": "Apartament in Razboieni cu de toate"
+                } 
+        */
+
+
+        // this.property.sellRent = +this.sellRent.value;
+        // this.property.bhk = this.bhk.value;
+        // this.property.propertyTypeId = this.propertyType.value;
+        // this.property.name = this.name.value;
+        // this.property.cityId = this.city.value;
+
+        // this.property.furnishingTypeId = this.furnishingType.value;
+        // this.property.price = this.price.value;
+        // this.property.security = this.security.value;
+        // this.property.maintenance = this.maintenance.value;
+        // this.property.builtArea = this.builtArea.value;
+        // this.property.carpetArea = +this.carpetArea.value;
+        // this.property.floorNo = this.floorNo.value;
+        // this.property.totalFloors = this.totalFloors.value;
+        // this.property.landMark = this.landMark.value;
+
+        // this.property.address = this.address.value;
+        // this.property.phoneNumber = this.phoneNumber.value;
+
+        // this.property.readyToMove = this.readyToMove.value;
+        // this.property.gated = this.gated.value;
+        // this.property.mainEntrance = this.mainEntrance.value;
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
+        this.propertyDetail.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
     }
+
 
 
     onSubmit() {
         if (this.editPropertyForm.valid) {
             this.mapProperty();
-            console.log(this.property);
-            this.modalRef.hide();
+            this.housingService.updateProperty(this.propertyId, this.propertyDetail).subscribe(
+                () => {
+                    console.log(this.propertyDetail);
+                    this.modalRef.hide();
+                    this.alertifyService.success("Property Updated Successfully");
+                }
+            );
+
+
+
         }
 
     }

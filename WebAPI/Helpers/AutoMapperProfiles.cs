@@ -12,6 +12,7 @@ namespace WebAPI.Helpers
             CreateMap<City, CityUpdateDto>().ReverseMap();
 
             CreateMap<Property,PropertyDto>().ReverseMap();
+            CreateMap<Property, PropertyDetailDto>().ReverseMap();
             CreateMap<Photo, PhotoDto>().ReverseMap();
 
             //Add methods to map Model to Dto

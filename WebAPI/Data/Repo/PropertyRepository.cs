@@ -61,5 +61,10 @@ namespace WebAPI.Data.Repo
                             .FirstAsync();
             return properties;
         }
+
+        public void UpdateProperty(Property property)
+        {
+            dc.Properties.Update(property);
+        }
     }
 }

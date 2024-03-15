@@ -332,7 +332,6 @@ export class AddPropertyComponent implements OnInit {
         this.property.description = this.description.value;
         this.property.photos = this.originalSizes;
 
-
     }
 
 

@@ -15,6 +15,7 @@ export class PropertyDetailResolverService implements Resolve<Property> {
         return this.housingService.getPropertyDetailById(+propId).pipe(
             catchError((error) => {
                 console.log(error);
+
                 this.router.navigate(['/']);
                 return EMPTY;
             })

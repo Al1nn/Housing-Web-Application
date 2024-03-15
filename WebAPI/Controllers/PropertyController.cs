@@ -117,6 +117,75 @@ namespace WebAPI.Controllers
             return StatusCode(201);
         }
 
+        [HttpPut("update/{propId}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProperty(int propId,PropertyDto propertyDto)
+        {
+            ApiError apiError = new ApiError();
+            var userRole = GetUserRole();
+            var userId = GetUserId();
+            if (userRole != UserRole.UserEditor)
+            {
+                apiError.ErrorCode = Unauthorized().StatusCode;
+                apiError.ErrorMessage = "You must be admin to update";
+                apiError.ErrorDetails = "";
+                return Unauthorized(apiError);
+            }
+            var newProperty = mapper.Map<Property>(propertyDto);
+            if (newProperty == null)
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "Property sent from client is null";
+                apiError.ErrorDetails = "";
+                return BadRequest(apiError);
+            }
+            newProperty.PostedBy = userId;
+            newProperty.LastUpdatedBy = userId;
+
+
+            var existingProperty = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
+            
+            if(existingProperty == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "Property to update is not found";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
+            existingProperty.SellRent = newProperty.SellRent;
+            existingProperty.Name = newProperty.Name;
+            existingProperty.PropertyTypeId = newProperty.PropertyTypeId;
+            existingProperty.PropertyType = newProperty.PropertyType;
+            existingProperty.FurnishingTypeId = newProperty.FurnishingTypeId;
+            existingProperty.FurnishingType = newProperty.FurnishingType;
+            existingProperty.Price = newProperty.Price;
+            existingProperty.BHK = newProperty.BHK;
+            existingProperty.BuiltArea = newProperty.BuiltArea;
+            existingProperty.CityId = newProperty.CityId;
+            existingProperty.City = newProperty.City;
+            existingProperty.ReadyToMove = newProperty.ReadyToMove;
+            existingProperty.CarpetArea = newProperty.CarpetArea;
+            existingProperty.FloorNo = newProperty.FloorNo;
+            existingProperty.TotalFloors = newProperty.TotalFloors;
+            existingProperty.MainEntrance = newProperty.MainEntrance;
+            existingProperty.Security = newProperty.Security;
+            existingProperty.Gated = newProperty.Gated;
+            existingProperty.Maintenance = newProperty.Maintenance;
+            existingProperty.EstPossessionOn = newProperty.EstPossessionOn;
+   
+            existingProperty.Description = newProperty.Description;
+            existingProperty.LandMark = newProperty.LandMark;
+            existingProperty.Address = newProperty.Address;
+            existingProperty.PhoneNumber = newProperty.PhoneNumber;
+            existingProperty.LastUpdatedOn = DateTime.Now;
+            existingProperty.LastUpdatedBy = userId;
+            uow.PropertyRepository.UpdateProperty(existingProperty);
+
+            await uow.SaveAsync();
+            return StatusCode(200);
+        }
+
         //property/add/photo/1
         [HttpPost("add/photo/{propId}")]
         [Authorize]
