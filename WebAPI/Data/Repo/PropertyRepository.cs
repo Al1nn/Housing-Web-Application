@@ -27,6 +27,19 @@ namespace WebAPI.Data.Repo
             dc.Properties.Remove(property);
         }
 
+        public async Task<IEnumerable<Property>> GetUserPropertiesAsync(int userId)
+        {
+            var properties = await dc.Properties
+                            .Include(p => p.PropertyType)
+                            .Include(p => p.FurnishingType)
+                            .Include(p => p.City)
+                            .Include(p => p.User)
+                            .Include(p => p.Photos)
+                            .Where(p => p.PostedBy ==  userId)
+                            .ToListAsync();
+            return properties;
+        }
+
         public async Task<IEnumerable<Property>> GetPropertiesAsync(int sellRent)
         {
             var properties = await dc.Properties
@@ -39,6 +52,8 @@ namespace WebAPI.Data.Repo
                             .ToListAsync();
             return properties;
         }
+
+        
 
         public async Task<Property> GetPropertyByIdAsync(int id)
         {
@@ -61,6 +76,8 @@ namespace WebAPI.Data.Repo
                             .FirstAsync();
             return properties;
         }
+
+        
 
         public void UpdateProperty(Property property)
         {

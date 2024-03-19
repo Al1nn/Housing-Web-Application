@@ -37,6 +37,18 @@ namespace WebAPI.Controllers
             return Ok(propertyListDto);
         }
 
+
+        [HttpGet("dashboard")]
+        [Authorize]
+        public async Task<IActionResult> GetUserProperties()
+        {
+            int userId = GetUserId();
+
+            var properties = await uow.PropertyRepository.GetUserPropertiesAsync(userId);
+            var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
+            return Ok(propertyListDto);
+        }
+
         [HttpGet("filter/{sellRent}/{filterWord}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetPropertiesFiltered(int sellRent, string filterWord)
@@ -185,6 +197,8 @@ namespace WebAPI.Controllers
             await uow.SaveAsync();
             return StatusCode(200);
         }
+
+       
 
         //property/add/photo/1
         [HttpPost("add/photo/{propId}")]
