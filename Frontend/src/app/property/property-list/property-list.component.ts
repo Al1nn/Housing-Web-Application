@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
 import { IPropertyBase } from '../../model/IPropertyBase.interface';
@@ -10,10 +10,10 @@ import { IPropertyBase } from '../../model/IPropertyBase.interface';
 })
 export class PropertyListComponent implements OnInit {
     SellRent = 1;
-    Properties: IPropertyBase[];
+    @Input() Properties: IPropertyBase[];
     Today = new Date();
     filterInput = '';
-
+    urlSegments = this.route.snapshot.url;
     SortbyParam = '';
     SortDirection = 'asc';
 
@@ -30,8 +30,16 @@ export class PropertyListComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        const urlSegments = this.route.snapshot.url;
-        if (urlSegments.length > 0 && urlSegments[0].path.includes('rent-property')) {
+
+
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+            this.housingService.getUserProperties().subscribe((data) => {
+                this.Properties = data;
+            });
+            return;
+        }
+
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('rent-property')) {
             this.SellRent = 2; // Means we are on rent-property URL
         }
 
@@ -39,12 +47,21 @@ export class PropertyListComponent implements OnInit {
             this.Properties = this.SellRent === 2 ? data['propertyRent'] : data['propertySell'];
         }
         );
-        this.housingService.clearPhotoStorage();
+        //this.housingService.clearPhotoStorage();
 
     }
 
     onFilterCityAPI(filterInput: string) {
+
+
         if (filterInput !== '') {
+            if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+                this.housingService.getAllFilteredUserProperties(filterInput).subscribe((data) => {
+                    this.Properties = data;
+                });
+                return;
+            }
+
             this.housingService.getAllFilteredProperties(this.SellRent, filterInput).subscribe(
                 (data) => {
                     this.Properties = data;
@@ -56,6 +73,13 @@ export class PropertyListComponent implements OnInit {
             );
         } else {
             console.log('Filter Input empty');
+            if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+                this.housingService.getUserProperties().subscribe((data) => {
+                    this.Properties = data;
+                });
+                return;
+            }
+
             this.housingService.getAllProperties(this.SellRent).subscribe(
                 (data) => {
                     this.Properties = data;

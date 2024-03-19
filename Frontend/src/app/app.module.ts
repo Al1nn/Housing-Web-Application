@@ -40,6 +40,7 @@ import { CloudinaryModule } from '@cloudinary/ng';
 import { PhotoEditorComponent } from './property/photo-editor/photo-editor.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
+import { PropertyDashboardComponent } from './property/property-dashboard/property-dashboard.component';
 
 @NgModule({
     declarations: [
@@ -56,7 +57,7 @@ import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
         SortPipe,
         PriceAreaFilterPipe,
         PhotoEditorComponent,
-
+        PropertyDashboardComponent
     ],
     imports: [
         BrowserModule,

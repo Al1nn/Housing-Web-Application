@@ -45,8 +45,26 @@ export class HousingService {
         return this.http.get<IPropertyBase[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord);
     }
 
+    getAllFilteredUserProperties(filterWord: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.get<IPropertyBase[]>(this.baseUrl + '/property/filter/dashboard/' + filterWord, httpOptions);
+    }
+
     getAllProperties(SellRent?: number): Observable<Property[]> {
         return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString());
+    }
+
+    getUserProperties(): Observable<IPropertyBase[]> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.get<IPropertyBase[]>(this.baseUrl + '/property/dashboard', httpOptions);
     }
 
     getPropertyById(id: number) {

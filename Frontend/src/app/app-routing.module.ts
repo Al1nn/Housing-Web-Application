@@ -10,6 +10,7 @@ import { UserRegisterComponent } from './user/user-register/user-register.compon
 import { PropertyDetailResolverService } from './property/property-detail/property-detail-resolver.service';
 import { PropertyListResolverService } from './property/property-list/property-list-resolver.service';
 import { PropertyListRentResolverService } from './property/property-list/property-list-rent-resolver.service';
+import { PropertyDashboardComponent } from './property/property-dashboard/property-dashboard.component';
 const routes: Routes = [
     {
         path: '',
@@ -18,6 +19,7 @@ const routes: Routes = [
             propertySell: PropertyListResolverService,
         }
     },
+    { path: 'property-dashboard', component: PropertyDashboardComponent },
     {
         path: 'rent-property',
         component: PropertyListComponent,
@@ -35,6 +37,7 @@ const routes: Routes = [
     { path: 'user/login', component: UserLoginComponent },
     { path: 'user/register', component: UserRegisterComponent },
     { path: '**', component: PropertyListComponent },
+
 ];
 
 @NgModule({

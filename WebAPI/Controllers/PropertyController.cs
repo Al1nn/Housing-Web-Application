@@ -49,6 +49,24 @@ namespace WebAPI.Controllers
             return Ok(propertyListDto);
         }
 
+        [HttpGet("filter/dashboard/{filterWord}")]
+        [Authorize]
+        public async Task<IActionResult> GetUserPropertiesFiltered(string filterWord)
+        {
+            int userId = GetUserId();
+            var properties = await uow.PropertyRepository.GetUserPropertiesAsync(userId);
+            var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
+
+
+            var filteredPropertyList = from property in propertyListDto
+                                       where property.Name.ToLower().Contains(filterWord.ToLower())
+                                            || property.PropertyType.ToLower().Contains(filterWord.ToLower())
+                                            || property.City.ToLower().Contains(filterWord.ToLower())
+
+                                       select property;
+            return Ok(filteredPropertyList);
+        }
+
         [HttpGet("filter/{sellRent}/{filterWord}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetPropertiesFiltered(int sellRent, string filterWord)
