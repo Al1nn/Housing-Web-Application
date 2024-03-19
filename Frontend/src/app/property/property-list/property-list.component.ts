@@ -33,9 +33,9 @@ export class PropertyListComponent implements OnInit {
 
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            this.housingService.getUserProperties().subscribe((data) => {
-                this.Properties = data;
-            });
+            // this.housingService.getUserProperties().subscribe((data) => {
+            //     this.Properties = data;
+            // });
             return;
         }
 

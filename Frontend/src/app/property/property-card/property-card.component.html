@@ -7,7 +7,10 @@
         <button class="btn btn-primary" routerLink="/property-detail/{{property_index.id}}"><i class="far fa-edit"></i></button>
       </li>
       <li class="list-inline-item">
-        <button class="btn btn-primary" routerLink="/property-contacts/{{property_index.id}}"><i class="far fa-address-book"></i></button>
+        <button class="btn btn-primary"
+          [routerLink]="loggedIn() ? ['/property-contacts', property_index.id] : ['']"
+           (click)="contactsClicked()"
+           ><i class="far fa-address-book"></i></button>
       </li>
     </ul>
 

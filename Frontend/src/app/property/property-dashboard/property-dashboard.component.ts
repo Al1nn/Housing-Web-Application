@@ -18,6 +18,8 @@ export class PropertyDashboardComponent implements OnInit {
       this.Properties = data;
     });
 
+
+
   }
 
 }
