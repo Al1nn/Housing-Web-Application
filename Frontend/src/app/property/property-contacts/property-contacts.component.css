@@ -1,16 +1,21 @@
 .card-img-wrapper {
-    overflow: hidden;
-    position: relative;
-    display: flex;
-  }
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
 
-  .card-img-wrapper img {
-    width: 50%;
-    height: 370px;
-    object-fit: cover;
-  }
+.card-img-wrapper img {
+  height: 370px;
+  object-fit: cover;
+}
 
-  .card {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-height: 600px;
+  height: 250px;
+}
+
+.card img{
+  padding: 10px;
+}
 

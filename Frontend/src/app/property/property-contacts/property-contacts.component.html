@@ -1,1 +1,70 @@
-<p>property-contacts works!</p>
+<div class="row shadow">
+    <div class="col-sm-4 p-0">
+        <div class="card">
+          <div class="card-img-wrapper">
+            <img class="card-img-top" *ngIf="mainPhotoUrl" src="{{mainPhotoUrl}}">
+            <img class="card-img-top" *ngIf="!mainPhotoUrl" src="assets/images/house_default.jpg">
+          </div>
+          <div class="card-body" *ngIf="property">
+            <h1 class="card-title">{{property.name}}</h1>
+            <div>
+              <strong>{{property.bhk}} BHK {{property.propertyType}} &#64; ${{property.price}}</strong>
+            </div>
+            <div>
+              <strong> in {{property.city}}</strong>
+            </div>
+            <hr>
+            
+            <div>
+              <strong>Build Area : </strong>
+              {{property.builtArea}} Sqft
+            </div>
+            <div>
+              <strong>Carpet Area : </strong>
+              {{property.carpetArea}} Sqft
+            </div>
+            <div>
+              <strong>Furnishing Type : </strong>
+              {{property.furnishingType}}
+            </div>
+            <div>
+              <strong>Available for : </strong>
+              <span *ngIf="property.sellRent === 1">Purchase</span>
+              <span *ngIf="property.sellRent === 2">Rent</span>  
+            </div>
+    
+          </div>
+          <div class="card-footer">
+            
+            <div class="btn-group d-flex">
+              <button class="btn btn-primary"><i class="fa-regular fa-heart"></i> Like</button>
+              <button class="btn btn-success"><i class="fa-regular fa-message"></i> Message</button>
+            </div>
+    
+          </div>
+          
+        </div>
+        
+      </div>
+
+      <div class="col-sm-8 p-0">
+        <div class="tab-panel p-3">
+          <tabset class="member-tabset">
+            <tab heading="Contacts">
+                <strong>
+
+                    <i class="fa-regular fa-address-book fa-3x"></i> <h2>Address</h2> 
+                     
+                    {{property.address}}
+                </strong><br>
+                <strong>
+                    <i class="fa-solid fa-phone fa-3x mt-5"></i>  
+                    <h2>{{property.phoneNumber}}</h2>
+                </strong>
+              
+                
+            </tab>
+          </tabset>
+        </div>
+      </div>
+</div>

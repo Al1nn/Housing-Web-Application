@@ -21,7 +21,6 @@ import { DatePipe } from '@angular/common';
     styleUrls: ['./property-detail.component.css'],
 })
 export class PropertyDetailComponent implements OnInit {
-    [x: string]: any;
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
     editPropertyForm: FormGroup;
 

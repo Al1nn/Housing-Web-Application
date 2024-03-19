@@ -11,6 +11,7 @@ import { PropertyDetailResolverService } from './property/property-detail/proper
 import { PropertyListResolverService } from './property/property-list/property-list-resolver.service';
 import { PropertyListRentResolverService } from './property/property-list/property-list-rent-resolver.service';
 import { PropertyDashboardComponent } from './property/property-dashboard/property-dashboard.component';
+import { PropertyContactsResolverService } from './property/property-contacts/property-contacts-resolver.service';
 const routes: Routes = [
     {
         path: '',
@@ -33,7 +34,11 @@ const routes: Routes = [
         component: PropertyDetailComponent,
         resolve: { property: PropertyDetailResolverService },
     },
-    { path: 'property-contacts/:id', component: PropertyContactsComponent },
+    {
+        path: 'property-contacts/:id',
+        component: PropertyContactsComponent,
+        resolve: { property: PropertyContactsResolverService },
+    },
     { path: 'user/login', component: UserLoginComponent },
     { path: 'user/register', component: UserRegisterComponent },
     { path: '**', component: PropertyListComponent },
