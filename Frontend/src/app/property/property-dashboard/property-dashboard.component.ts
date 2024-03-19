@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HousingService } from '../../services/housing.service';
 import { IPropertyBase } from '../../model/IPropertyBase.interface';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-property-dashboard',
@@ -11,14 +11,16 @@ export class PropertyDashboardComponent implements OnInit {
 
   Properties: IPropertyBase[];
 
-  constructor(private housingService: HousingService) { }
+  constructor(
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.housingService.getUserProperties().subscribe((data) => {
-      this.Properties = data;
-    });
 
 
+    this.route.data.subscribe((data) => {
+      this.Properties = data['property'];
+    }
+    );
 
   }
 
