@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IPropertyBase } from '../../model/IPropertyBase.interface';
 import { ActivatedRoute } from '@angular/router';
+import { Property } from '../../model/Property.interface';
 
 @Component({
   selector: 'app-property-dashboard',
@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PropertyDashboardComponent implements OnInit {
 
-  Properties: IPropertyBase[];
+  Properties: Property[];
 
   constructor(
     private route: ActivatedRoute) { }

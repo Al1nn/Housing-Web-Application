@@ -8,8 +8,6 @@ import { PropertyContactsComponent } from './property/property-contacts/property
 import { UserLoginComponent } from './user/user-login/user-login.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
 import { PropertyDetailResolverService } from './property/property-detail/property-detail-resolver.service';
-import { PropertyListResolverService } from './property/property-list/property-list-resolver.service';
-import { PropertyListRentResolverService } from './property/property-list/property-list-rent-resolver.service';
 import { PropertyDashboardComponent } from './property/property-dashboard/property-dashboard.component';
 import { PropertyContactsResolverService } from './property/property-contacts/property-contacts-resolver.service';
 import { PropertyDashboardResolverService } from './property/property-dashboard/property-dashboard-resolver.service';
@@ -17,9 +15,7 @@ const routes: Routes = [
     {
         path: '',
         component: PropertyListComponent,
-        resolve: {
-            propertySell: PropertyListResolverService,
-        }
+
     },
     {
         path: 'property-dashboard',
@@ -31,9 +27,7 @@ const routes: Routes = [
     {
         path: 'rent-property',
         component: PropertyListComponent,
-        resolve: {
-            propertyRent: PropertyListRentResolverService,
-        }
+
     },
     { path: 'add-property', component: AddPropertyComponent },
     {

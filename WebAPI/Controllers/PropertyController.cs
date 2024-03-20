@@ -216,6 +216,71 @@ namespace WebAPI.Controllers
             return StatusCode(200);
         }
 
+        //property/add/images/2
+        [HttpPost("add/images/{propId}")]
+        [Authorize]
+        public async Task<ActionResult<List<PhotoDto>>> AddPropertyPhotos(List<IFormFile> files, int propId)
+        {
+            ApiError apiError = new ApiError();
+            if(files == null || files.Count == 0)
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "The file from the client does not exists";
+                apiError.ErrorDetails = "";
+                return BadRequest(apiError);
+            }
+
+            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
+
+            if (property == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "Property not found with the provided ID";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
+            var photos = new List<PhotoDto> {};
+
+            foreach (IFormFile file in files)
+            {
+                //Console.WriteLine(file.FileName);
+
+                var result = await photoService.UploadPhotoAsync(file);
+
+                if (result.Error != null)
+                {
+                    apiError.ErrorCode = 400;
+                    apiError.ErrorMessage = result.Error.Message;
+                    apiError.ErrorDetails = "";
+                    return BadRequest(apiError);
+                }
+
+                var photo = new Photo
+                {
+                    ImageUrl = result.SecureUrl.AbsoluteUri,
+                    PublicId = result.PublicId
+                };
+
+                if (property.Photos.Count == 0)
+                {
+                    photo.IsPrimary = true;
+                }
+
+                property.Photos.Add(photo);
+
+                var photoDto = mapper.Map<PhotoDto>(photo);
+                photos.Add(photoDto);
+
+            }
+
+            if (await uow.SaveAsync()) return photos;
+
+            apiError.ErrorCode = BadRequest().StatusCode;
+            apiError.ErrorMessage = "Some error occurred in uploading the photos, please retry";
+            apiError.ErrorDetails = "Unknown error";
+            return BadRequest(apiError);
+        }
        
 
         //property/add/photo/1
@@ -225,6 +290,15 @@ namespace WebAPI.Controllers
         {
 
             ApiError apiError = new ApiError();
+
+            if(file == null)
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No files exists";
+                apiError.ErrorDetails = "";
+                return BadRequest(apiError);
+            } 
+
             var result = await photoService.UploadPhotoAsync(file);
             if(result.Error != null)
             {

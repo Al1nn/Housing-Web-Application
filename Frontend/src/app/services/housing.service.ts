@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 import { Property } from '../model/Property.interface';
 import { environment } from '../../environments/environment';
 import { IKeyValuePair } from '../model/IKeyValuePair';
-import { IPropertyBase } from '../model/IPropertyBase.interface';
 import { IPhoto } from '../model/IPhoto';
 import { AlertifyService } from './alertify.service';
 
@@ -41,30 +40,30 @@ export class HousingService {
 
     // Get method cu filtrare
 
-    getAllFilteredProperties(sellRent: number, filterWord: string) {
-        return this.http.get<IPropertyBase[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord);
+    getAllFilteredProperties(sellRent: number, filterWord: string): Observable<Property[]> {
+        return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord);
     }
 
-    getAllFilteredUserProperties(filterWord: string) {
+    getAllFilteredUserProperties(filterWord: string): Observable<Property[]> {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.get<IPropertyBase[]>(this.baseUrl + '/property/filter/dashboard/' + filterWord, httpOptions);
+        return this.http.get<Property[]>(this.baseUrl + '/property/filter/dashboard/' + filterWord, httpOptions);
     }
 
     getAllProperties(SellRent?: number): Observable<Property[]> {
         return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString());
     }
 
-    getUserProperties(): Observable<IPropertyBase[]> {
+    getUserProperties(): Observable<Property[]> {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.get<IPropertyBase[]>(this.baseUrl + '/property/dashboard', httpOptions);
+        return this.http.get<Property[]>(this.baseUrl + '/property/dashboard', httpOptions);
     }
 
     getPropertyById(id: number) {
@@ -109,15 +108,16 @@ export class HousingService {
     }
 
 
-    addPropertyPhoto(propertyId: number, formData: FormData) {
+    addPropertyPhotos(propertyId: number, formData: FormData) {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token')
 
             })
         };
-        return this.http.post(this.baseUrl + '/property/add/photo/' + propertyId, formData, httpOptions);
+        return this.http.post(this.baseUrl + '/property/add/images/' + propertyId, formData, httpOptions);
     }
+
 
     async photosSelected(event: any): Promise<FileList> {
 

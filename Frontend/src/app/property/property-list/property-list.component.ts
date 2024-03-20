@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
-import { IPropertyBase } from '../../model/IPropertyBase.interface';
+//import { IPropertyBase } from '../../model/IPropertyBase.interface';
+import { Property } from '../../model/Property.interface';
 
 @Component({
     selector: 'app-property-list',
@@ -10,7 +11,7 @@ import { IPropertyBase } from '../../model/IPropertyBase.interface';
 })
 export class PropertyListComponent implements OnInit {
     SellRent = 1;
-    @Input() Properties: IPropertyBase[];
+    @Input() Properties: Property[];
     Today = new Date();
     filterInput = '';
     urlSegments = this.route.snapshot.url;
@@ -43,10 +44,15 @@ export class PropertyListComponent implements OnInit {
             this.SellRent = 2; // Means we are on rent-property URL
         }
 
-        this.route.data.subscribe((data) => {
-            this.Properties = this.SellRent === 2 ? data['propertyRent'] : data['propertySell'];
-        }
-        );
+        // this.route.data.subscribe((data) => {
+        //     this.Properties = this.SellRent === 2 ? data['propertyRent'] : data['propertySell'];
+        // }
+        // );
+
+        this.housingService.getAllProperties(this.SellRent).subscribe((data) => {
+            this.Properties = data;
+        });
+        console.log(this.Properties);
         //this.housingService.clearPhotoStorage();
 
     }

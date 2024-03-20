@@ -183,7 +183,7 @@ export class AddPropertyComponent implements OnInit {
         this.originalSizesString = this.housingService.getOriginalSizePhotos();
         this.thumbnails = JSON.parse(this.thumbnailsString as string);
         this.originalSizes = JSON.parse(this.originalSizesString as string);
-        this.propertyView.photo = this.originalSizes.at(0)?.imageUrl;
+        this.propertyView.photo = this.originalSizes.at(0)?.imageUrl as string;
 
     }
 
@@ -266,19 +266,13 @@ export class AddPropertyComponent implements OnInit {
                     //         console.log(data);
                     //     }
                     // );
+                    this.uploadPropertyPhotos(this.property.id);
 
                 }
             );
-            this.uploadPropertyPhotos(this.property.id);
 
-            this.alertifyService.success('Congrats, your property listed successfully on our website');
-            console.log(this.addPropertyForm);
 
-            if (this.sellRent.value === '2') {
-                this.router.navigate(['/rent-property']);
-            } else {
-                this.router.navigate(['/']);
-            }
+
 
         } else {
             this.alertifyService.error('Please review the form and provide all valid entries');
@@ -289,19 +283,28 @@ export class AddPropertyComponent implements OnInit {
 
 
     uploadPropertyPhotos(propertyId: number) {
+
+        const formData = new FormData();
         for (let i = 0; i < this.files.length; i++) {
             const file = this.files[i];
-            var formData = new FormData();
-            formData.append('file', file);
-            this.housingService.addPropertyPhoto(propertyId, formData).subscribe(
-                response => {
-                    console.log(`Photo added successfully:`, response);
-                },
-                error => {
-                    console.error(`Error adding photo : `, error);
-                }
-            );
+            formData.append(`files`, file);
         }
+        this.housingService.addPropertyPhotos(propertyId, formData).subscribe(
+            response => {
+                console.log(`Photos added successfully:`, response);
+                this.alertifyService.success('Congrats, your property listed successfully on our website');
+                console.log(this.addPropertyForm);
+
+                if (this.sellRent.value === '2') {
+                    this.router.navigate(['/rent-property']);
+                } else {
+                    this.router.navigate(['/']);
+                }
+            },
+            error => {
+                console.error(`Error adding photo : `, error);
+            }
+        );
     }
 
     mapProperty(): void {
@@ -331,7 +334,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.property.description = this.description.value;
         this.property.photos = this.originalSizes;
-
+        this.property.photo = this.originalSizes[0].imageUrl;
     }
 
 

@@ -42,6 +42,7 @@ namespace WebAPI.Services
                 };
                 uploadResult = await cloudinary.UploadAsync(uploadParams);
             }
+            Console.WriteLine(uploadResult.JsonObj.ToString());
             return uploadResult;
         }
 
