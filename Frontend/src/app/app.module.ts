@@ -41,6 +41,9 @@ import { PhotoEditorComponent } from './property/photo-editor/photo-editor.compo
 import { FileUploadModule } from 'ng2-file-upload';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { PropertyDashboardComponent } from './property/property-dashboard/property-dashboard.component';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
     declarations: [
@@ -74,6 +77,10 @@ import { PropertyDashboardComponent } from './property/property-dashboard/proper
         CloudinaryModule,
         FileUploadModule,
         ModalModule,
+        LoadingBarHttpClientModule,
+        LoadingBarModule,
+        ImageCropperModule,
+
     ],
     providers: [
         provideClientHydration(),

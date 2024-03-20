@@ -292,7 +292,7 @@ export class AddPropertyComponent implements OnInit {
         this.housingService.addPropertyPhotos(propertyId, formData).subscribe(
             response => {
                 console.log(`Photos added successfully:`, response);
-                this.alertifyService.success('Congrats, your property listed successfully on our website');
+
                 console.log(this.addPropertyForm);
 
                 if (this.sellRent.value === '2') {
@@ -300,6 +300,8 @@ export class AddPropertyComponent implements OnInit {
                 } else {
                     this.router.navigate(['/']);
                 }
+
+                this.alertifyService.success('Congrats, your property listed successfully on our website');
             },
             error => {
                 console.error(`Error adding photo : `, error);
