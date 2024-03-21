@@ -3,6 +3,7 @@ export interface IUserForRegister {
     email: string;
     password: string;
     phoneNumber: number;
+    imageUrl?: string;
 }
 
 export interface IUserForLogin {
@@ -11,4 +12,5 @@ export interface IUserForLogin {
     role: number;
     token: string;
 }
+
 

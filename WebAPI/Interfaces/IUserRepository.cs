@@ -1,4 +1,5 @@
-﻿using WebAPI.Models;
+﻿using System.Runtime.InteropServices;
+using WebAPI.Models;
 
 namespace WebAPI.Interfaces
 {
@@ -8,7 +9,8 @@ namespace WebAPI.Interfaces
          
          Task<User> GetUserByName(string username);
 
-         void Register(string username, string password, string email, string phoneNumber);
+         void Register(string username, string password, string email, string phoneNumber, [Optional] string imageUrl);
+
 
         Task<bool> UserAlreadyExists(string username);
     }

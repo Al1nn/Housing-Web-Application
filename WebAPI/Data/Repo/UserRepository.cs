@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using WebAPI.Interfaces;
@@ -59,7 +61,9 @@ namespace WebAPI.Data.Repo
 
         }
 
-        public void Register(string username, string password, string email, string phoneNumber)
+ 
+
+        public void Register(string username, string password, string email, string phoneNumber, [Optional] string imageUrl )
         {
             byte[] passwordHash, passwordKey;
 
@@ -89,6 +93,19 @@ namespace WebAPI.Data.Repo
              
            
             dc.Users.Add(user);
+
+            if(!imageUrl.IsNullOrEmpty())
+            {
+                ProfileImage profileImage = new ProfileImage();
+                
+                profileImage.ImageUrl = imageUrl;
+                profileImage.LastUpdatedBy = user.LastUpdatedBy;
+                dc.ProfileImages.Add(profileImage);
+
+
+                UserProfileImage userProfileImage = new UserProfileImage { User = user, ProfileImage = profileImage};
+                dc.UserProfiles.Add(userProfileImage);
+            }
         }
 
         public async Task<bool> UserAlreadyExists(string username)
@@ -100,5 +117,7 @@ namespace WebAPI.Data.Repo
         {
             return await dc.Users.FirstOrDefaultAsync(data => data.Username == username);
         }
+
+        
     }
 }

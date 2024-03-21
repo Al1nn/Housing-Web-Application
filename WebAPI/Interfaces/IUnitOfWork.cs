@@ -13,6 +13,7 @@
 
         IFurnishingTypeRepository FurnishingTypeRepository { get; }
 
+       
 
         public Task<bool> SaveAsync();
     }

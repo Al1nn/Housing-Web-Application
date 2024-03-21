@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
 using WebAPI.Dtos;
@@ -53,6 +54,8 @@ namespace WebAPI.Controllers
             return Ok(false);
         }
 
+
+
         //api/account/login
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginReqDto loginReq)
@@ -77,24 +80,27 @@ namespace WebAPI.Controllers
             return Ok(loginRes);
         }
 
+       
+
+        //api/account/register
         [HttpPost("register")]
         public async Task<IActionResult> Register(LoginReqDto loginReq)
         {
             ApiError apiError = new ApiError();
-            if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty())
+            if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsEmpty() || loginReq.PhoneNumber.IsEmpty() )
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "User name or password can not be blank";
                 return BadRequest(apiError);
             }
-
+            
             if (await uow.UserRepository.UserAlreadyExists(loginReq.Username))
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "User already exists, please try different user name";
                 return BadRequest(apiError);
             }
-            uow.UserRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber);
+            uow.UserRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, loginReq.ImageUrl);
 
             await uow.SaveAsync();
 

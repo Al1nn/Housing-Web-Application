@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 
+
 @Component({
     selector: 'app-user-register',
     templateUrl: './user-register.component.html',
@@ -21,20 +22,23 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 export class UserRegisterComponent implements OnInit {
     registerationForm: FormGroup;
     user: IUserForRegister;
+
     userSubmitted: boolean;
 
 
     modalRef: BsModalRef;
+
     cropImagePreview: any = '';
     cropURL: string;
     imageChangedEvent: any = '';
-    private cdr: ChangeDetectorRef;
+
 
     constructor(
         private fb: FormBuilder,
         private authService: AuthService,
         private modalService: BsModalService,
-        private alertifyService: AlertifyService
+        private alertifyService: AlertifyService,
+        private cdr: ChangeDetectorRef
     ) { }
 
     get username() {
@@ -74,8 +78,6 @@ export class UserRegisterComponent implements OnInit {
 
     imageCropped(event: ImageCroppedEvent) {
         this.cropImagePreview = event.objectUrl;
-
-
     }
 
     loadImageFailed() {
@@ -90,9 +92,11 @@ export class UserRegisterComponent implements OnInit {
 
 
     submitProfilePicture() {
-        console.log(this.cropImagePreview);
+
         this.modalRef.hide();
         this.cdr.detectChanges();
+
+
     }
 
     ngOnInit() {
@@ -124,6 +128,7 @@ export class UserRegisterComponent implements OnInit {
             email: this.email.value,
             password: this.password.value,
             phoneNumber: this.mobile.value,
+            imageUrl: !this.cropImagePreview ? "" : this.cropImagePreview,
         });
     }
 
@@ -137,9 +142,8 @@ export class UserRegisterComponent implements OnInit {
             this.authService.registerUser(this.userData()).subscribe(() => {
                 this.onReset();
                 console.log(typeof (this.cropImagePreview));
-                if (this.cropImagePreview !== '') {
-                    localStorage.setItem('ProfilePicture', this.cropImagePreview);
-                }
+
+
                 this.alertifyService.success('Congrats, you are now registered');
             }
             );
