@@ -15,6 +15,18 @@ namespace WebAPI.Helpers
             CreateMap<Property, PropertyDetailDto>().ReverseMap();
             CreateMap<Photo, PhotoDto>().ReverseMap();
 
+            CreateMap<UserProfileImage, UserProfileImageDto>()
+                .ForMember(d => d.Username, opt => opt.MapFrom(src => src.User.Username))
+                .ForMember(d => d.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(d => d.Role, opt => opt.MapFrom(src => src.User.Role))
+                .ForMember(d => d.ImageUrl, opt => opt.MapFrom(src => src.ProfileImage.ImageUrl))
+                ;
+                
+                
+                
+                
+
             //Add methods to map Model to Dto
             CreateMap<Property, PropertyListDto>()
                 .ForMember(d => d.City, opt => opt.MapFrom(src => src.City.Name))

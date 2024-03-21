@@ -33,7 +33,7 @@ export class UserLoginComponent implements OnInit {
             (response: IUserForLogin) => {
                 const user = response;
                 localStorage.setItem('token', user.token);
-                console.log(typeof (user.username));
+
                 localStorage.setItem('username', user.username);
 
 

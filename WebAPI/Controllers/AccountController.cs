@@ -53,8 +53,62 @@ namespace WebAPI.Controllers
 
             return Ok(false);
         }
+        //api/account/userProfileCard/{userId}
+        [HttpGet("userProfileCard/{userId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserProfileCard(int userId)
+        {
+            ApiError apiError = new ApiError();
+            
+
+            var userProfileImage = await uow.UserProfileImageRepository.GetUserProfileImageById(userId);
+           
+            if (userProfileImage == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "User profile card not found";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
+            var userProfileImageDto = mapper.Map<UserProfileImageDto>(userProfileImage);
+            return Ok(userProfileImageDto);
+        }
 
 
+        //api/account/userProfileCards
+        [HttpGet("userProfileCards")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserProfileCards()
+        {
+
+            var userProfileImages = await uow.UserProfileImageRepository.GetUserProfileImages();
+            var userProfileImagesDto = mapper.Map<IEnumerable<UserProfileImageDto>>(userProfileImages);
+
+            return Ok(userProfileImagesDto);
+        }
+
+
+        //api/account/userProfileImage
+        [HttpGet("userProfileImage")]
+        [Authorize]
+        public async Task<IActionResult> GetProfileImage()
+        {
+            ApiError apiError = new ApiError();
+            int userId = GetUserId();
+            var userProfileImage = await uow.UserProfileImageRepository.GetUserProfileImageById(userId);
+
+            if (userProfileImage == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "User profile image not found";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
+            var userProfileImageDto = mapper.Map<UserProfileImageDto>(userProfileImage);
+            return Ok (userProfileImageDto);
+        }
 
         //api/account/login
         [HttpPost("login")]

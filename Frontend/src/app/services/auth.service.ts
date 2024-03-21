@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IUserForLogin, IUserForRegister } from '../model/IUser.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
@@ -21,5 +21,14 @@ export class AuthService {
 
     isAdmin(username: string): Observable<boolean> {
         return this.http.get<boolean>(this.baseUrl + '/account/user/' + username);
+    }
+
+    getProfileImage() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.get(this.baseUrl + '/account/userProfileImage', httpOptions);
     }
 }

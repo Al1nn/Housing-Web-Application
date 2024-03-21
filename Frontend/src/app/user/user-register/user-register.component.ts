@@ -153,6 +153,7 @@ export class UserRegisterComponent implements OnInit {
 
     onReset() {
         this.userSubmitted = false;
+        this.cropImagePreview = "";
         this.registerationForm.reset();
     }
 }
