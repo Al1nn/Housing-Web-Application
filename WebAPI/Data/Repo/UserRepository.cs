@@ -59,7 +59,7 @@ namespace WebAPI.Data.Repo
 
         }
 
-        public void Register(string username, string password)
+        public void Register(string username, string password, string email, string phoneNumber)
         {
             byte[] passwordHash, passwordKey;
 
@@ -75,6 +75,8 @@ namespace WebAPI.Data.Repo
             user.Username = username;
             user.Password = passwordHash;
             user.PasswordKey = passwordKey;
+            user.Email = email;
+            user.PhoneNumber = phoneNumber; 
 
             if(count == 0)
             {

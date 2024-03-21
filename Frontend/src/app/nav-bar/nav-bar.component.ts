@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
     loggedInUser: string;
+    profilePicture: string;
     constructor(private alertifyService: AlertifyService) { }
 
     loggedIn() {
@@ -18,9 +19,18 @@ export class NavBarComponent implements OnInit {
         return this.loggedInUser;
     }
 
+    hasImage() {
+        this.profilePicture =
+            typeof localStorage !== 'undefined'
+                ? (localStorage.getItem('ProfilePicture') as string)
+                : '';
+        return this.profilePicture;
+    }
+
     onLogout() {
         localStorage.removeItem('token');
         localStorage.removeItem('username');
+        localStorage.removeItem('ProfilePicture');
         this.alertifyService.success('You are logged out !');
     }
 

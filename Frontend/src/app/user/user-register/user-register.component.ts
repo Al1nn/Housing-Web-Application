@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef } from '@angular/core';
 import {
     AbstractControl,
     FormControl,
@@ -10,6 +10,8 @@ import {
 import { IUserForRegister } from '../../model/IUser.interface';
 import { AlertifyService } from '../../services/alertify.service';
 import { AuthService } from '../../services/auth.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
     selector: 'app-user-register',
@@ -21,9 +23,17 @@ export class UserRegisterComponent implements OnInit {
     user: IUserForRegister;
     userSubmitted: boolean;
 
+
+    modalRef: BsModalRef;
+    cropImagePreview: any = '';
+    cropURL: string;
+    imageChangedEvent: any = '';
+    private cdr: ChangeDetectorRef;
+
     constructor(
         private fb: FormBuilder,
         private authService: AuthService,
+        private modalService: BsModalService,
         private alertifyService: AlertifyService
     ) { }
 
@@ -45,6 +55,44 @@ export class UserRegisterComponent implements OnInit {
 
     get mobile() {
         return this.registerationForm.get('mobile') as FormControl;
+    }
+
+    onFileChange(event: any) {
+        this.imageChangedEvent = event;
+    }
+
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
+
+    resetInput() {
+        const input = document.getElementById('avatar-input-file') as HTMLInputElement;
+        if (input) {
+            input.value = "";
+        }
+    }
+
+    imageCropped(event: ImageCroppedEvent) {
+        this.cropImagePreview = event.objectUrl;
+
+
+    }
+
+    loadImageFailed() {
+        // show message
+    }
+    cropperReady() {
+        // cropper ready
+    }
+    imageLoaded() {
+        // show cropper
+    }
+
+
+    submitProfilePicture() {
+        console.log(this.cropImagePreview);
+        this.modalRef.hide();
+        this.cdr.detectChanges();
     }
 
     ngOnInit() {
@@ -75,7 +123,7 @@ export class UserRegisterComponent implements OnInit {
             username: this.username.value,
             email: this.email.value,
             password: this.password.value,
-            mobile: this.mobile.value,
+            phoneNumber: this.mobile.value,
         });
     }
 
@@ -88,6 +136,10 @@ export class UserRegisterComponent implements OnInit {
         if (this.registerationForm.valid) {
             this.authService.registerUser(this.userData()).subscribe(() => {
                 this.onReset();
+                console.log(typeof (this.cropImagePreview));
+                if (this.cropImagePreview !== '') {
+                    localStorage.setItem('ProfilePicture', this.cropImagePreview);
+                }
                 this.alertifyService.success('Congrats, you are now registered');
             }
             );

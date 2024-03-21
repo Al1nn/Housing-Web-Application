@@ -57,6 +57,7 @@ namespace WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginReqDto loginReq)
         {
+            
             var user = await uow.UserRepository.Authenticate(loginReq.Username, loginReq.Password, loginReq.Role);
             
             ApiError apiError = new ApiError();
@@ -93,7 +94,7 @@ namespace WebAPI.Controllers
                 apiError.ErrorMessage = "User already exists, please try different user name";
                 return BadRequest(apiError);
             }
-            uow.UserRepository.Register(loginReq.Username, loginReq.Password);
+            uow.UserRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber);
 
             await uow.SaveAsync();
 

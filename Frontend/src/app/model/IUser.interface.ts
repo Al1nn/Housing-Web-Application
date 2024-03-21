@@ -1,8 +1,8 @@
 export interface IUserForRegister {
     username: string;
-    email?: string;
+    email: string;
     password: string;
-    mobile?: number;
+    phoneNumber: number;
 }
 
 export interface IUserForLogin {
