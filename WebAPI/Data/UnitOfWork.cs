@@ -27,7 +27,6 @@ namespace WebAPI.Data
 
         public IFurnishingTypeRepository FurnishingTypeRepository => new FurnishingTypeRepository(dc);
      
-        public IUserProfileImageRepository UserProfileImageRepository => new UserProfileImageRepository(dc);
 
         // Add more repos
 

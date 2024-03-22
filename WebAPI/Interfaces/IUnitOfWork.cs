@@ -13,7 +13,7 @@
 
         IFurnishingTypeRepository FurnishingTypeRepository { get; }
 
-       IUserProfileImageRepository UserProfileImageRepository { get; }
+     
 
         public Task<bool> SaveAsync();
     }

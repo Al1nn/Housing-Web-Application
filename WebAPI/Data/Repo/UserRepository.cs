@@ -94,18 +94,7 @@ namespace WebAPI.Data.Repo
            
             dc.Users.Add(user);
 
-            if(!imageUrl.IsNullOrEmpty())
-            {
-                ProfileImage profileImage = new ProfileImage();
-                
-                profileImage.ImageUrl = imageUrl;
-                profileImage.LastUpdatedBy = user.LastUpdatedBy;
-                dc.ProfileImages.Add(profileImage);
-
-
-                UserProfileImage userProfileImage = new UserProfileImage { User = user, ProfileImage = profileImage};
-                dc.UserProfiles.Add(userProfileImage);
-            }
+            
         }
 
         public async Task<bool> UserAlreadyExists(string username)

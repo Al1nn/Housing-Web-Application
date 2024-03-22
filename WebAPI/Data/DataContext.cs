@@ -15,9 +15,6 @@ namespace WebAPI.Data
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<ProfileImage> ProfileImages { get; set; }
-
-        public DbSet<UserProfileImage> UserProfiles { get; set; }
 
         public DbSet<Property> Properties { get; set; }
 
@@ -27,18 +24,18 @@ namespace WebAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserProfileImage>()
-                 .HasKey(c => new { c.UserId, c.ProfileImageId });
+            //modelBuilder.Entity<UserProfileImage>()
+            //     .HasKey(c => new { c.UserId, c.ProfileImageId });
 
-            modelBuilder.Entity<UserProfileImage>()
-                .HasOne<User>(c => c.User)
-                .WithMany(s => s.UserProfileImages)
-                .HasForeignKey(c => c.UserId);
+            //modelBuilder.Entity<UserProfileImage>()
+            //    .HasOne<User>(c => c.User)
+            //    .WithMany(s => s.UserProfileImages)
+            //    .HasForeignKey(c => c.UserId);
 
-            modelBuilder.Entity<UserProfileImage>()
-            .HasOne<ProfileImage>(c => c.ProfileImage)
-            .WithMany(s => s.UserProfileImages)
-            .HasForeignKey(c => c.ProfileImageId);
+            //modelBuilder.Entity<UserProfileImage>()
+            //.HasOne<ProfileImage>(c => c.ProfileImage)
+            //.WithMany(s => s.UserProfileImages)
+            //.HasForeignKey(c => c.ProfileImageId);
         }
     }
 }
