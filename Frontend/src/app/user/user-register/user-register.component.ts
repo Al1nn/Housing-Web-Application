@@ -14,6 +14,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 
+
 @Component({
     selector: 'app-user-register',
     templateUrl: './user-register.component.html',
@@ -28,17 +29,19 @@ export class UserRegisterComponent implements OnInit {
 
     modalRef: BsModalRef;
 
-    cropImagePreview: any = '';
-    cropURL: string;
+    croppedImage: any = '';
+    croppedImageFile: File;
     imageChangedEvent: any = '';
 
+    formData = new FormData();
 
     constructor(
         private fb: FormBuilder,
         private authService: AuthService,
         private modalService: BsModalService,
         private alertifyService: AlertifyService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+
     ) { }
 
     get username() {
@@ -77,7 +80,8 @@ export class UserRegisterComponent implements OnInit {
     }
 
     imageCropped(event: ImageCroppedEvent) {
-        this.cropImagePreview = event.objectUrl;
+        this.croppedImage = event.base64;
+
     }
 
     loadImageFailed() {
@@ -92,11 +96,35 @@ export class UserRegisterComponent implements OnInit {
 
 
     submitProfilePicture() {
+        if (!this.croppedImage) {
+            console.log("Please crop an image before submitting.");
+            return;
+        }
+
+        this.croppedImageFile = this.base64ToFile(
+            this.croppedImage
+            , this.imageChangedEvent.target.files[0].name
+        )
+
+        console.log(this.croppedImageFile);
 
         this.modalRef.hide();
         this.cdr.detectChanges();
+    }
 
+    base64ToFile(data: any, filename: any) {
 
+        const arr = data.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        let u8arr = new Uint8Array(n);
+
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        return new File([u8arr], filename, { type: mime });
     }
 
     ngOnInit() {
@@ -122,14 +150,13 @@ export class UserRegisterComponent implements OnInit {
             : { notmatched: true };
     }
 
-    userData(): IUserForRegister {
-        return (this.user = {
-            username: this.username.value,
-            email: this.email.value,
-            password: this.password.value,
-            phoneNumber: this.mobile.value,
-            imageUrl: !this.cropImagePreview ? "" : this.cropImagePreview,
-        });
+    userData(): FormData {
+        this.formData.append('file', this.croppedImageFile);
+        this.formData.append('username', this.username.value);
+        this.formData.append('password', this.password.value);
+        this.formData.append('email', this.email.value);
+        this.formData.append('phoneNumber', this.mobile.value);
+        return this.formData;
     }
 
     // Getter methods from all controls
@@ -139,21 +166,24 @@ export class UserRegisterComponent implements OnInit {
         console.log(this.registerationForm);
         this.userSubmitted = true;
         if (this.registerationForm.valid) {
+
+
+
             this.authService.registerUser(this.userData()).subscribe(() => {
                 this.onReset();
-                console.log(typeof (this.cropImagePreview));
+
 
 
                 this.alertifyService.success('Congrats, you are now registered');
-            }
-            );
+            });
+
 
         }
     }
 
     onReset() {
         this.userSubmitted = false;
-        this.cropImagePreview = "";
+        this.croppedImage = "";
         this.registerationForm.reset();
     }
 }

@@ -7,10 +7,10 @@
     <div class="card-body">
       <div class="avatar-container">
         <div class="image-container"
-        [ngClass]="{'box-shadow-avatar': !!cropImagePreview}"
+        [ngClass]="{'box-shadow-avatar': !!croppedImage}"
         >
-          <img *ngIf="!cropImagePreview" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
-          <img *ngIf="cropImagePreview" src="{{cropImagePreview}}" class="img-fluid rounded-circle">
+          <img *ngIf="!croppedImage" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
+          <img *ngIf="croppedImage"[src]="croppedImage" class="img-fluid rounded-circle">
         
         </div> 
         <div class="icon-wrapper">
@@ -105,12 +105,14 @@
     <image-cropper 
       [imageChangedEvent]="imageChangedEvent"
       [maintainAspectRatio]="true"
+      [aspectRatio]="4 / 3"
       format="jpeg"
       (imageCropped)="imageCropped($event)"
       (imageLoaded)="imageLoaded()"
       (cropperReady)="cropperReady()"
       (loadImageFailed)="loadImageFailed()"
       [roundCropper]="true"
+      [output]="'base64'"
       style="width: 100%; height: 400px;">
     </image-cropper>
       

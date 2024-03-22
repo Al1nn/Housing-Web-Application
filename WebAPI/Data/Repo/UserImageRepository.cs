@@ -9,11 +9,11 @@ using WebAPI.Models;
 
 namespace WebAPI.Data.Repo
 {
-    public class UserRepository : IUserRepository
+    public class UserImageRepository : IUserImageRepository
     {
         private readonly DataContext dc;
 
-        public UserRepository(DataContext dc)
+        public UserImageRepository(DataContext dc)
         {
             this.dc = dc;
         }
@@ -63,7 +63,7 @@ namespace WebAPI.Data.Repo
 
  
 
-        public void Register(string username, string password, string email, string phoneNumber, [Optional] string imageUrl )
+        public void Register(string username, string password, string email, string phoneNumber,[Optional] IFormFile file)
         {
             byte[] passwordHash, passwordKey;
 
@@ -90,10 +90,38 @@ namespace WebAPI.Data.Repo
             {
                 user.Role = UserRole.UserReader;
             }
-             
-           
-            dc.Users.Add(user);
 
+            Image image = new Image();
+
+            if (file != null)
+            {
+                image.Name = file.FileName;
+
+                using (var ms = new MemoryStream())
+                {
+                    file.CopyTo(ms);
+                    var imageFileBytes = ms.ToArray();
+                    image.Url = imageFileBytes;
+                }
+            }
+            else
+            {
+                image.Name = "";
+                image.Url = [];
+            }
+
+            
+                
+           
+
+            UserImage userImage = new UserImage
+            {
+                User = user,
+                Image = image,
+            };
+
+
+            dc.UserImages.Add(userImage);
             
         }
 
@@ -107,6 +135,21 @@ namespace WebAPI.Data.Repo
             return await dc.Users.FirstOrDefaultAsync(data => data.Username == username);
         }
 
-        
+        public async Task<IEnumerable<UserImage>> GetUserImagesAsync()
+        {
+            return await dc.UserImages.ToListAsync();
+        }
+
+        public async Task<UserImage> GetUserImageById(int id)
+        {
+            var userImage = await dc.UserImages
+                            .Include(x => x.User)
+                            .Include(x => x.Image)
+                            .Where(x => x.UserId == id)
+                            .FirstOrDefaultAsync()
+                            ;
+                            
+            return userImage;
+        }
     }
 }

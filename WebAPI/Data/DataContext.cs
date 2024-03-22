@@ -15,6 +15,9 @@ namespace WebAPI.Data
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<UserImage> UserImages { get; set; }
 
         public DbSet<Property> Properties { get; set; }
 
@@ -24,18 +27,25 @@ namespace WebAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<UserProfileImage>()
-            //     .HasKey(c => new { c.UserId, c.ProfileImageId });
+            base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<UserProfileImage>()
-            //    .HasOne<User>(c => c.User)
-            //    .WithMany(s => s.UserProfileImages)
-            //    .HasForeignKey(c => c.UserId);
+            modelBuilder.Entity<UserImage>().HasKey(i => new { i.UserId, i.ImageId});
 
-            //modelBuilder.Entity<UserProfileImage>()
-            //.HasOne<ProfileImage>(c => c.ProfileImage)
-            //.WithMany(s => s.UserProfileImages)
-            //.HasForeignKey(c => c.ProfileImageId);
+
+            modelBuilder.Entity<UserImage>()
+                .HasOne(ui => ui.User)
+                .WithMany(u => u.Images)
+                .HasForeignKey(ui => ui.UserId)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            modelBuilder.Entity<UserImage>()
+                        .HasOne(ui => ui.Image)
+                        .WithMany(i => i.Users)
+                        .HasForeignKey(ui => ui.ImageId)
+                        .OnDelete(DeleteBehavior.Cascade); 
+
+         
+         
         }
     }
 }

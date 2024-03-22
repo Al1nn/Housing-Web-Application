@@ -7,7 +7,7 @@ namespace WebAPI.Data
     {
         private readonly DataContext dc;
         private ICityRepository _cityRepository;
-        private IUserRepository _userRepository;
+        private IUserImageRepository _userRepository;
         private IPropertyRepository _propertyRepository;
 
         public UnitOfWork(DataContext dc)
@@ -17,7 +17,7 @@ namespace WebAPI.Data
 
         public ICityRepository CityRepository => new CityRepository(dc);
 
-        public IUserRepository UserRepository => new UserRepository(dc);
+        public IUserImageRepository UserImageRepository => new UserImageRepository(dc);
         
 
         public IPropertyRepository PropertyRepository => new PropertyRepository(dc);

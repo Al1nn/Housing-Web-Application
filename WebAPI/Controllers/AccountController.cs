@@ -36,7 +36,7 @@ namespace WebAPI.Controllers
         {
             ApiError apiError = new ApiError();
 
-            var user = await uow.UserRepository.GetUserByName(username);
+            var user = await uow.UserImageRepository.GetUserByName(username);
 
             if (user == null)
             {
@@ -60,7 +60,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Login(LoginReqDto loginReq)
         {
             
-            var user = await uow.UserRepository.Authenticate(loginReq.Username, loginReq.Password, loginReq.Role);
+            var user = await uow.UserImageRepository.Authenticate(loginReq.Username, loginReq.Password, loginReq.Role);
             
             ApiError apiError = new ApiError();
             if (user == null)
@@ -79,11 +79,11 @@ namespace WebAPI.Controllers
             return Ok(loginRes);
         }
 
-       
+
 
         //api/account/register
         [HttpPost("register")]
-        public async Task<IActionResult> Register(LoginReqDto loginReq)
+        public async Task<IActionResult> Register([FromForm] IFormFile? file,[FromForm] LoginReqDto loginReq)
         {
             ApiError apiError = new ApiError();
             if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsEmpty() || loginReq.PhoneNumber.IsEmpty() )
@@ -92,14 +92,19 @@ namespace WebAPI.Controllers
                 apiError.ErrorMessage = "User name or password can not be blank";
                 return BadRequest(apiError);
             }
+
+           
             
-            if (await uow.UserRepository.UserAlreadyExists(loginReq.Username))
+            if (await uow.UserImageRepository.UserAlreadyExists(loginReq.Username))
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "User already exists, please try different user name";
                 return BadRequest(apiError);
             }
-            uow.UserRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, loginReq.ImageUrl);
+
+            
+
+            uow.UserImageRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, file);
 
             await uow.SaveAsync();
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI.Data;
 
@@ -11,9 +12,11 @@ using WebAPI.Data;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240322190101_DeleteFromBothTables")]
+    partial class DeleteFromBothTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -312,9 +315,19 @@ namespace WebAPI.Migrations
                     b.Property<int>("ImageId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ImageId1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("int");
+
                     b.HasKey("UserId", "ImageId");
 
                     b.HasIndex("ImageId");
+
+                    b.HasIndex("ImageId1");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("UserImages");
                 });
@@ -368,16 +381,24 @@ namespace WebAPI.Migrations
             modelBuilder.Entity("WebAPI.Models.UserImage", b =>
                 {
                     b.HasOne("WebAPI.Models.Image", "Image")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WebAPI.Models.Image", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ImageId1");
+
                     b.HasOne("WebAPI.Models.User", "User")
-                        .WithMany("Images")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("WebAPI.Models.User", null)
+                        .WithMany("Images")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Image");
 

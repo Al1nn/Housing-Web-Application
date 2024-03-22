@@ -134,7 +134,7 @@ export class HousingService {
                 continue;
             }
 
-            const imageURL = await this.getDataURL(file); // imageURL is null
+            const imageURL = await this.getDataURL(file);
 
             const image: IPhoto = {
                 imageUrl: imageURL,
