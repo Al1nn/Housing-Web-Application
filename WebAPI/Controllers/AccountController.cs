@@ -28,6 +28,21 @@ namespace WebAPI.Controllers
             this.configuration = configuration;
             this.mapper = mapper;
         }
+        //api/account/image}
+        [HttpGet("image")]
+        [Authorize]
+        public async Task<IActionResult> GetUserImage()
+        {
+            int userId = GetUserId();
+
+            var userImage = await  uow.UserImageRepository.GetImageById(userId);
+           
+           
+
+            var imageDto = mapper.Map<ImageDto>(userImage);
+
+            return Ok(imageDto);
+        }
 
         //api/account/user/{username}
         [HttpGet("user/{username}")]
@@ -83,7 +98,7 @@ namespace WebAPI.Controllers
 
         //api/account/register
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] IFormFile? file,[FromForm] LoginReqDto loginReq)
+        public async Task<IActionResult> Register(LoginReqDto loginReq)
         {
             ApiError apiError = new ApiError();
             if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsEmpty() || loginReq.PhoneNumber.IsEmpty() )
@@ -104,12 +119,14 @@ namespace WebAPI.Controllers
 
             
 
-            uow.UserImageRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, file);
+            uow.UserImageRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, loginReq.imageUrl);
 
             await uow.SaveAsync();
 
             return StatusCode(201);
         }
+
+     
 
         private string CreateJWT(User  user)
         {

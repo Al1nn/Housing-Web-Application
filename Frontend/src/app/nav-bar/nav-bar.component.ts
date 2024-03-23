@@ -1,18 +1,25 @@
 
 import { AlertifyService } from './../services/alertify.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-nav-bar',
     templateUrl: './nav-bar.component.html',
     styleUrls: ['./nav-bar.component.css'],
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent {
     loggedInUser: string;
     profilePicture: string;
-    constructor(
 
-        private alertifyService: AlertifyService) { }
+
+    constructor(
+        private alertifyService: AlertifyService
+    ) {
+
+    }
+
+
+
 
     loggedIn() {
         this.loggedInUser =
@@ -23,20 +30,20 @@ export class NavBarComponent implements OnInit {
         return this.loggedInUser;
     }
 
-
+    hasImage() {
+        this.profilePicture =
+            typeof localStorage !== 'undefined'
+                ? (localStorage.getItem('image') as string)
+                : '';
+        return this.profilePicture;
+    }
 
     onLogout() {
         localStorage.removeItem('token');
         localStorage.removeItem('username');
+        localStorage.removeItem('image');
         this.alertifyService.success('You are logged out !');
     }
 
-    ngOnInit() {
-        // if (this.loggedIn()) {
-        //     this.authService.getProfileImage().subscribe((data: any) => {
-        //         console.log(data);
-        //         this.profilePicture = data.imageUrl;
-        //     })
-        // }
-    }
+
 }

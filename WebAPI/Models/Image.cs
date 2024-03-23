@@ -6,7 +6,7 @@ namespace WebAPI.Models
     {
         public string Name { get; set; }
 
-        public byte[] Url { get; set; }
+        public string Url { get; set; }
 
 
         public ICollection<UserImage> Users { get; set; }

@@ -1,4 +1,5 @@
-﻿using WebAPI.Models;
+﻿using System.Runtime.InteropServices;
+using WebAPI.Models;
 
 namespace WebAPI.Dtos
 {
@@ -15,5 +16,6 @@ namespace WebAPI.Dtos
 
         public string PhoneNumber { get; set; }
 
+        public string imageUrl { get; set; } = null!;
     }
 }

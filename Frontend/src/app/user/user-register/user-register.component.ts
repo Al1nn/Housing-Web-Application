@@ -30,10 +30,8 @@ export class UserRegisterComponent implements OnInit {
     modalRef: BsModalRef;
 
     croppedImage: any = '';
-    croppedImageFile: File;
     imageChangedEvent: any = '';
 
-    formData = new FormData();
 
     constructor(
         private fb: FormBuilder,
@@ -96,18 +94,6 @@ export class UserRegisterComponent implements OnInit {
 
 
     submitProfilePicture() {
-        if (!this.croppedImage) {
-            console.log("Please crop an image before submitting.");
-            return;
-        }
-
-        this.croppedImageFile = this.base64ToFile(
-            this.croppedImage
-            , this.imageChangedEvent.target.files[0].name
-        )
-
-        console.log(this.croppedImageFile);
-
         this.modalRef.hide();
         this.cdr.detectChanges();
     }
@@ -150,13 +136,14 @@ export class UserRegisterComponent implements OnInit {
             : { notmatched: true };
     }
 
-    userData(): FormData {
-        this.formData.append('file', this.croppedImageFile);
-        this.formData.append('username', this.username.value);
-        this.formData.append('password', this.password.value);
-        this.formData.append('email', this.email.value);
-        this.formData.append('phoneNumber', this.mobile.value);
-        return this.formData;
+    userData(): IUserForRegister {
+        return (this.user = {
+            username: this.username.value,
+            email: this.email.value,
+            password: this.password.value,
+            phoneNumber: this.mobile.value,
+            imageUrl: !this.croppedImage ? "" : this.croppedImage
+        });
     }
 
     // Getter methods from all controls

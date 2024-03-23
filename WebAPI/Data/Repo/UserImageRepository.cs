@@ -63,7 +63,7 @@ namespace WebAPI.Data.Repo
 
  
 
-        public void Register(string username, string password, string email, string phoneNumber,[Optional] IFormFile file)
+        public void Register(string username, string password, string email, string phoneNumber,string? imageUrl)
         {
             byte[] passwordHash, passwordKey;
 
@@ -91,38 +91,27 @@ namespace WebAPI.Data.Repo
                 user.Role = UserRole.UserReader;
             }
 
-            Image image = new Image();
-
-            if (file != null)
+            
+            
+            if (!imageUrl.IsNullOrEmpty())
             {
-                image.Name = file.FileName;
+                Image image = new Image();
+                image.Name = user.Username + '-' + user.Id.ToString() + ".jpg";
+                image.Url = imageUrl;
 
-                using (var ms = new MemoryStream())
+                UserImage userImage = new UserImage
                 {
-                    file.CopyTo(ms);
-                    var imageFileBytes = ms.ToArray();
-                    image.Url = imageFileBytes;
-                }
+                    User = user,
+                    Image = image,
+                };
+
+                dc.UserImages.Add(userImage);
             }
             else
             {
-                image.Name = "";
-                image.Url = [];
+                dc.Users.Add(user);
             }
-
-            
-                
            
-
-            UserImage userImage = new UserImage
-            {
-                User = user,
-                Image = image,
-            };
-
-
-            dc.UserImages.Add(userImage);
-            
         }
 
         public async Task<bool> UserAlreadyExists(string username)
@@ -150,6 +139,15 @@ namespace WebAPI.Data.Repo
                             ;
                             
             return userImage;
+        }
+
+        public async Task<UserImage> GetImageById(int id)
+        {
+            var image = await dc.UserImages
+                        .Include(x => x.Image)
+                        .Where(x => x.UserId == id)
+                        .FirstOrDefaultAsync() ;
+            return image;
         }
     }
 }

@@ -9,9 +9,11 @@ namespace WebAPI.Interfaces
          
          Task<User> GetUserByName(string username);
 
-         void Register(string username, string password, string email, string phoneNumber,[Optional] IFormFile imageFile);
+         void Register(string username, string password, string email, string phoneNumber,string? imageUrl);
 
         Task<bool> UserAlreadyExists(string username);
+
+        Task<UserImage> GetImageById(int id);
 
         Task<IEnumerable<UserImage>> GetUserImagesAsync();
 

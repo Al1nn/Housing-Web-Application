@@ -34,8 +34,8 @@
         </li>
 
         <div *ngIf="loggedIn()" class="dropdown" style="margin-right: 65px;" dropdown>
-          <!-- <img class="img-fluid rounded-circle user-image" *ngIf="!profilePicture" src="/assets/user_images/user_default.jpg">
-          <img class="img-fluid rounded-circle user-image" *ngIf="profilePicture" src="{{profilePicture}}"> -->
+          <img class="img-fluid rounded-circle user-image" *ngIf="!hasImage()" src="/assets/user_images/user_default.jpg">
+          <img class="img-fluid rounded-circle user-image" *ngIf="hasImage()" [src]="profilePicture">
           <a href="#" class="dropdown-toggle text-light" dropdownToggle (click)="false">
             Welcome {{loggedInUser}}
           </a>

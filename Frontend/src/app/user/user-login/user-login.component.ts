@@ -4,6 +4,7 @@ import { AlertifyService } from '../../services/alertify.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { IUserForLogin } from '../../model/IUser.interface';
+import { IImage } from '../../model/IImage.interface';
 
 
 //import { ImageCroppedEvent } from 'ngx-image-cropper';
@@ -29,6 +30,7 @@ export class UserLoginComponent implements OnInit {
 
     onLogin(loginForm: NgForm) {
         console.log(loginForm.value);
+
         this.authService.authUser(loginForm.value).subscribe(
             (response: IUserForLogin) => {
                 const user = response;
@@ -36,6 +38,13 @@ export class UserLoginComponent implements OnInit {
 
                 localStorage.setItem('username', user.username);
 
+                this.authService.getProfileImage().subscribe((data: IImage) => {
+                    if (data !== null) {
+                        localStorage.setItem('image', data.url as string);
+                    } else {
+                        localStorage.setItem('image', "");
+                    }
+                })
 
                 this.alertifyService.success("Login successful");
                 this.router.navigate(['/']);

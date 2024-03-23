@@ -17,6 +17,7 @@ const routes: Routes = [
         component: PropertyListComponent,
 
     },
+
     {
         path: 'property-dashboard',
         component: PropertyDashboardComponent,
