@@ -15,8 +15,8 @@ namespace WebAPI.Interfaces
 
         Task<UserImage> GetImageById(int id);
 
-        Task<IEnumerable<UserImage>> GetUserImagesAsync();
+        Task<IEnumerable<UserImage>> GetUserCardsAsync();
 
-        Task<UserImage> GetUserImageById(int id);
+        Task<UserImage> GetUserCardById(int id);
     }
 }

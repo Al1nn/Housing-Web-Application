@@ -11,7 +11,9 @@ namespace WebAPI.Models
 
         public ICollection<UserImage> Users { get; set; }
 
-        
-        
+        public static implicit operator Image(UserImage v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

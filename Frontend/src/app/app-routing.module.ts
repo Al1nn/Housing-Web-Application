@@ -11,6 +11,8 @@ import { PropertyDetailResolverService } from './property/property-detail/proper
 import { PropertyDashboardComponent } from './property/property-dashboard/property-dashboard.component';
 import { PropertyContactsResolverService } from './property/property-contacts/property-contacts-resolver.service';
 import { PropertyDashboardResolverService } from './property/property-dashboard/property-dashboard-resolver.service';
+import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import { UserSettingsComponent } from './user/user-settings/user-settings.component';
 const routes: Routes = [
     {
         path: '',
@@ -43,6 +45,8 @@ const routes: Routes = [
     },
     { path: 'user/login', component: UserLoginComponent },
     { path: 'user/register', component: UserRegisterComponent },
+    { path: 'user/profile', component: UserProfileComponent },
+    { path: 'user/settings', component: UserSettingsComponent },
     { path: '**', component: PropertyListComponent },
 
 ];

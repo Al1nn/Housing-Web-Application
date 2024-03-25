@@ -44,6 +44,28 @@ namespace WebAPI.Controllers
             return Ok(imageDto);
         }
 
+        [HttpGet("cards")]
+        [Authorize]
+        public async Task<IActionResult> GetUserCards()
+        {
+            var cards = await uow.UserImageRepository.GetUserCardsAsync();
+
+            var cardsDto = mapper.Map<IEnumerable<UserImageDto>>(cards);
+            return Ok(cardsDto);
+        }
+
+        [HttpGet("card")]
+        [Authorize]
+        public async Task<IActionResult> GetUserCard()
+        {
+            int userId = GetUserId();
+            var card = await uow.UserImageRepository.GetUserCardById(userId);
+
+            var cardDto = mapper.Map<UserImageDto>(card);
+
+            return Ok(cardDto); 
+        }
+
         //api/account/user/{username}
         [HttpGet("user/{username}")]
         [AllowAnonymous]

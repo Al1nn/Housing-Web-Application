@@ -41,8 +41,6 @@ export class UserLoginComponent implements OnInit {
                 this.authService.getProfileImage().subscribe((data: IImage) => {
                     if (data !== null) {
                         localStorage.setItem('image', data.url as string);
-                    } else {
-                        localStorage.setItem('image', "");
                     }
                 })
 

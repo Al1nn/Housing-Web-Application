@@ -17,12 +17,20 @@ namespace WebAPI.Helpers
 
             CreateMap<UserImage, ImageDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Image.Id))
-                .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Image.Name))
                 .ForMember(d => d.Url, opt => opt.MapFrom(src => src.Image.Url));
-                
-                
-                
-                
+
+
+            CreateMap<UserImage, UserImageDto>()
+                .ForMember(d => d.UserId, opt => opt.MapFrom(src => src.User.Id))
+                .ForMember(d => d.Username, opt => opt.MapFrom(src => src.User.Username))
+                .ForMember(d => d.Email, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
+                .ForMember(d => d.Role, opt => opt.MapFrom(src => src.User.Role))
+                .ForMember(d => d.ImageId, opt => opt.MapFrom(src => src.Image.Id))
+                .ForMember(d => d.Url, opt => opt.MapFrom(src => src.Image.Url));
+
+
+
 
             //Add methods to map Model to Dto
             CreateMap<Property, PropertyListDto>()

@@ -124,20 +124,38 @@ namespace WebAPI.Data.Repo
             return await dc.Users.FirstOrDefaultAsync(data => data.Username == username);
         }
 
-        public async Task<IEnumerable<UserImage>> GetUserImagesAsync()
+        public async Task<IEnumerable<UserImage>> GetUserCardsAsync()
         {
-            return await dc.UserImages.ToListAsync();
+            return await dc.Users
+                    .GroupJoin(
+                        dc.UserImages,
+                        user => user.Id,
+                        userImage => userImage.UserId,
+                        (user, userImages) => new { User = user, UserImages = userImages }
+                    )
+                    .SelectMany(
+                        x => x.UserImages.DefaultIfEmpty(),
+                        (x, userImage) => new UserImage { User = x.User, Image = userImage != null ? userImage.Image : null }
+                    )
+                    .ToListAsync();
         }
 
-        public async Task<UserImage> GetUserImageById(int id)
+        public async Task<UserImage> GetUserCardById(int id)
         {
-            var userImage = await dc.UserImages
-                            .Include(x => x.User)
-                            .Include(x => x.Image)
-                            .Where(x => x.UserId == id)
-                            .FirstOrDefaultAsync()
-                            ;
-                            
+            var userImage = await dc.Users
+                    .Where(u => u.Id == id)
+                    .GroupJoin(
+                        dc.UserImages,
+                        user => user.Id,
+                        userImage => userImage.UserId,
+                        (user, userImages) => new { User = user, UserImages = userImages }
+                    )
+                    .SelectMany(
+                        x => x.UserImages.DefaultIfEmpty(),
+                        (x, userImage) => new UserImage { User = x.User, Image = userImage != null ? userImage.Image : null }
+                    )
+                    .FirstOrDefaultAsync();
+
             return userImage;
         }
 
@@ -149,5 +167,7 @@ namespace WebAPI.Data.Repo
                         .FirstOrDefaultAsync() ;
             return image;
         }
+
+     
     }
 }
