@@ -10,7 +10,7 @@ namespace WebAPI.Dtos
         public string PhoneNumber { get; set; }
         public UserRole Role { get; set; }
 
-        public string ImageId { get; set; }
+        public int ImageId { get; set; }
 
         public string Url { get; set; }
     }

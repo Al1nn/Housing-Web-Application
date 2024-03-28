@@ -1,3 +1,78 @@
-<p>
-  user-profile works!
-</p>
+<div class="row shadow">
+  <div class="col-sm-4 p-0">
+    <div class="card">
+      <div class="card-header"><h3>User Profile</h3></div>
+      <div class="shadow-lg bg-white">
+        <div class="card-body">
+          <div class="avatar-container">
+            <div class="image-container">
+              <img *ngIf="!hasImage" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
+              <img *ngIf="hasImage"[src]="userCard.url" class="img-fluid rounded-circle">
+            </div> 
+          </div>
+  
+          <h1 class="card-title">{{userCard.username}}</h1>
+  
+          <div>
+            <i class="fa-regular fa-envelope"></i>
+            <strong> Email : {{userCard.email}}</strong>
+          </div>
+          <div>
+            <i class="fa-solid fa-phone"></i>
+            <strong> Phone Number : {{userCard.phoneNumber}}</strong>
+          </div>
+          <div>
+            <i class="fa-regular fa-user"></i>
+            <strong *ngIf="userCard.role === 1"> Role : Editor </strong>
+            <strong *ngIf="userCard.role === 0"> Role : Reader </strong>
+          </div>
+          <div>
+            <i class="fa-solid fa-house"></i>
+            <strong *ngIf="propertiesListed === 0"> No Properties Listed</strong>
+            <strong *ngIf="propertiesListed > 0"> Properties Listed : {{propertiesListed}} </strong>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+  <div class="col-sm-8 card p-0">
+    <div class="card-header"><h3>Other Users</h3></div>
+    <div class="card-body">
+      <div class="row">
+          <div class="col-2 mb-3" *ngFor="let userCard of userCards">
+            <div class="text-center">
+              <img *ngIf="!userCard.url" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
+              <img *ngIf="userCard.url"[src]="userCard.url" class="img-fluid rounded-circle">
+              <strong>{{userCard.username}}</strong>
+            </div>
+            
+            
+          </div>
+        </div>
+    </div>
+  </div>
+  
+</div>
+<!-- <div class="col-sm-8 p-0">
+    <div class="container text-center">
+      <div class="row align-items-start">
+        <div class="col">
+          <div class="card-header"><h3>Other Users</h3></div>
+        </div>
+        <div class="row">
+          <div class="col-2 mb-3" *ngFor="let userCard of userCards">
+            <div class="text-center">
+              <img *ngIf="!userCard.url" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
+              <img *ngIf="userCard.url"[src]="userCard.url" class="img-fluid rounded-circle">
+              {{userCard.username}}
+            </div>
+            
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div> -->

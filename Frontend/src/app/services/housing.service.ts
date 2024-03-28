@@ -7,7 +7,7 @@ import { Property } from '../model/Property.interface';
 import { environment } from '../../environments/environment';
 import { IKeyValuePair } from '../model/IKeyValuePair';
 import { IPhoto } from '../model/IPhoto';
-import { AlertifyService } from './alertify.service';
+
 
 
 
@@ -80,6 +80,15 @@ export class HousingService {
             .pipe(map((properties) => properties.length as number));
     }
 
+    getPropertyCountByUser(): Observable<number> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.get<number>(this.baseUrl + '/property/count', httpOptions);
+    }
+
     addProperty(property: Property): Observable<Property> {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -115,100 +124,15 @@ export class HousingService {
 
             })
         };
-        return this.http.post(this.baseUrl + '/property/add/images/' + propertyId, formData, httpOptions);
+        return this.http.post(this.baseUrl + '/property/add/photos/' + propertyId, formData, httpOptions);
     }
 
 
-    async photosSelected(event: any): Promise<FileList> {
-
-        const files: FileList = event.target.files;
-        var originalSizes: IPhoto[] = [];
-        var thumbnails: IPhoto[] = [];
-        var alertifyService = new AlertifyService();
-
-        for (let i = 0; i < files.length; i++) {
-            const file: File = files[i];
-
-            if (file.size > 2000000) {
-                alertifyService.error(`Image ${file.name} exceeds the size limit of 2.0 mb`);
-                continue;
-            }
-
-            const imageURL = await this.getDataURL(file);
-
-            const image: IPhoto = {
-                imageUrl: imageURL,
-                publicId: file.name,
-                isPrimary: i === 0
-            }
-            originalSizes.push(image);
-            //localStorage.setItem('AppConfig/originalSizes/' + image.publicId, JSON.stringify(image));
-
-            const thumbnail = await this.resizeImage(imageURL, image.publicId, i);
-            thumbnails.push(thumbnail);
-            //localStorage.setItem('AppConfig/thumbnails/' + thumbnail.publicId, JSON.stringify(thumbnail))
-        }
-
-        localStorage.setItem('AppConfig/originalSizes', JSON.stringify(originalSizes));
-        localStorage.setItem('AppConfig/thumbnails', JSON.stringify(thumbnails));
-        return files;
+    getPropertyPhotosNames(propertyId: number): Observable<IPhoto[]> {
+        return this.http.get<IPhoto[]>(this.baseUrl + '/property/get/photos/' + propertyId);
     }
 
-    resizeImage(imageUrl: string, fileName: string, imageProcessed: number): Promise<IPhoto> {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = function () {
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext('2d');
-                const newWidth = 250;
-                const newHeight = 250;
-                canvas.width = newWidth;
-                canvas.height = newHeight;
-                if (ctx !== null) {
-                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                }
-                let quality = 0.6;
-                let dataURL = canvas.toDataURL('image/jpeg', quality);
-                const thumbnail: IPhoto = {
-                    imageUrl: dataURL,
-                    publicId: fileName,
-                    isPrimary: imageProcessed === 0
-                };
-                console.log(thumbnail + '\n');
-                resolve(thumbnail);
-            };
-            img.onerror = function (error) {
-                reject(error);
-            };
-            img.src = imageUrl;
-        });
-    }
 
-    getDataURL(file: File): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                resolve(event.target?.result as string);
-            };
-            reader.onerror = (event) => {
-                reject(event.target?.error);
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-
-    clearPhotoStorage() {
-        localStorage.removeItem('AppConfig/originalSizes');
-        localStorage.removeItem('AppConfig/thumbnails');
-    }
-
-    getOriginalSizePhotos(): string | null {
-        return localStorage.getItem('AppConfig/originalSizes');
-    }
-
-    getThumbnails(): string | null {
-        return localStorage.getItem('AppConfig/thumbnails');
-    }
 
     newPropID() {
         if (typeof localStorage !== 'undefined') {

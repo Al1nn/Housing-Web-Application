@@ -299,28 +299,14 @@
 
                   <ngx-loading-bar color="#007bff" height="4px"></ngx-loading-bar>
                  
-                    <div class="col-12 mb-3" style="max-height: 350px; overflow-y: auto;">
-                      <ng-container *ngFor="let originalPhoto of originalSizes; let i = index">
-                        <img src="{{originalPhoto.imageUrl}}" class="img-fluid mb-3">
-                      </ng-container>
-                      
                     
-                    </div>
-                  
-                  
-                  <div class="row">  
-                    <div class="col-2 mb-3" *ngFor="let thumbnail of thumbnails; let i = index">
-                      <img src="{{thumbnail.imageUrl}}" class="img-thumbnail p-1">
-                    
-                    </div>
-                  </div>
                   
                   <div class="file-input-container">
                     <input id="fileInput" 
                     type="file"   
                     class="form-control"
                     formControlName="PhotosInfo"
-                    accept="image/jpeg" (change)="onPhotoSelected($event)" multiple>
+                    accept="image/jpeg" (change)="onPhotoSelected($event)" multiple #inputFile>
                     
           
 
@@ -360,7 +346,34 @@
       <h3>Your Property Preview</h3>
     </div>
     <div class="shadow-lg p-3 bg-white">
-      <app-property-card [property_index]="propertyView" [hideIcons]="true"></app-property-card>
+      <div class="card">
+        <div class="card-img-wrapper">
+          <img *ngIf="!propertyView.photo"  class="card-img-top" src="../../../assets/images/house_default.jpg">
+          <img *ngIf="propertyView.photo" class="card-img-top" src="{{propertyView.photo}}">
+          
+      
+        </div>
+        <div class="card-body p-1">
+          <h1 class="mb-0"> {{propertyView.bhk}} BHK {{propertyView.propertyType}} </h1>
+      
+          in {{propertyView.name}}
+          <span *ngIf="propertyView.name">,</span>
+          {{propertyView.city}}
+        
+          <h6  class="mt-2">{{propertyView.furnishingType}}
+          <span *ngIf="propertyView.furnishingType !== 'Unfurnished'">Furnished</span>
+      
+           <span *ngIf="propertyView.readyToMove"> | Ready To Move</span>
+          <span *ngIf="!propertyView.readyToMove"> | Possesion : {{propertyView.estPossessionOn | date}}</span>
+         
+          </h6>
+          
+          <hr class="mt-0 mb-2">
+      
+          <h6 class="mb-0" >Price: <span class="font-highlight">{{propertyView.price}} USD.</span> |
+            Area:  <span class="font-highlight">{{propertyView.builtArea}} Sq Ft </span> </h6>
+        </div>
+      </div>
     </div>
 
   </div>

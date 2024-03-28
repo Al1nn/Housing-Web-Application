@@ -35,15 +35,16 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { PriceAreaFilterPipe } from './pipes/price-filter.pipe';
 import { HttpErrorInterceptorService } from './services/httperror-interceptor.service';
-import { DatePipe } from '@angular/common';
-import { CloudinaryModule } from '@cloudinary/ng';
-import { PhotoEditorComponent } from './property/photo-editor/photo-editor.component';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FileUploadModule } from 'ng2-file-upload';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { PropertyDashboardComponent } from './property/property-dashboard/property-dashboard.component';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import { UserSettingsComponent } from './user/user-settings/user-settings.component';
+import { UserProfileResolverService } from './user/user-profile/user-profile-resolver.service';
 
 @NgModule({
     declarations: [
@@ -56,16 +57,18 @@ import { ImageCropperModule } from 'ngx-image-cropper';
         PropertyContactsComponent,
         UserLoginComponent,
         UserRegisterComponent,
+        UserProfileComponent,
+        UserSettingsComponent,
         FilterPipe,
         SortPipe,
         PriceAreaFilterPipe,
-        PhotoEditorComponent,
         PropertyDashboardComponent
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         FormsModule,
+        CommonModule,
         ReactiveFormsModule,
         HttpClientModule,
         BsDropdownModule.forRoot(),
@@ -74,7 +77,6 @@ import { ImageCropperModule } from 'ngx-image-cropper';
         CarouselModule.forRoot(),
         BsDatepickerModule.forRoot(),
         GalleryComponent,
-        CloudinaryModule,
         FileUploadModule,
         ModalModule,
         LoadingBarHttpClientModule,
@@ -96,6 +98,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
             useClass: HttpErrorInterceptorService,
             multi: true
         },
+        UserProfileResolverService,
         BsModalService
     ],
     bootstrap: [AppComponent],

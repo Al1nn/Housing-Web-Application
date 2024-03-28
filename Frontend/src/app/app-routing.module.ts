@@ -13,6 +13,8 @@ import { PropertyContactsResolverService } from './property/property-contacts/pr
 import { PropertyDashboardResolverService } from './property/property-dashboard/property-dashboard-resolver.service';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
+import { UserProfileResolverService } from './user/user-profile/user-profile-resolver.service';
+import { UserSettingsResolverService } from './user/user-settings/user-settings-resolver.service';
 const routes: Routes = [
     {
         path: '',
@@ -45,8 +47,16 @@ const routes: Routes = [
     },
     { path: 'user/login', component: UserLoginComponent },
     { path: 'user/register', component: UserRegisterComponent },
-    { path: 'user/profile', component: UserProfileComponent },
-    { path: 'user/settings', component: UserSettingsComponent },
+    {
+        path: 'user/profile',
+        component: UserProfileComponent,
+        resolve: { usercard: UserProfileResolverService }
+    },
+    {
+        path: 'user/settings',
+        component: UserSettingsComponent,
+        resolve: { usercard: UserSettingsResolverService }
+    },
     { path: '**', component: PropertyListComponent },
 
 ];

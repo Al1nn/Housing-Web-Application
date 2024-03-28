@@ -11,6 +11,8 @@ namespace WebAPI.Interfaces
         Task<Property> GetPropertyDetailAsync(int id);
 
         Task<Property> GetPropertyByIdAsync(int id);
+
+        Task<int> GetPropertyCountByUserAsync(int userId);
         
         void AddProperty(Property property);
 

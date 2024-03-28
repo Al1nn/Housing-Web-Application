@@ -10,6 +10,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -25,6 +26,7 @@ export class PropertyDetailComponent implements OnInit {
     editPropertyForm: FormGroup;
 
     public propertyId: number;
+
     public mainPhotoUrl: string;
     property = new Property();
     propertyDetail = new Property();
@@ -42,7 +44,8 @@ export class PropertyDetailComponent implements OnInit {
     modalRef: BsModalRef;
 
     isAdmin: boolean = false;
-
+    originalFolder: string = environment.originalPictureFolder;
+    thumbnailFolder: string = environment.thumbnailFolder;
 
     constructor(private authService: AuthService
         , private housingService: HousingService
@@ -296,30 +299,22 @@ export class PropertyDetailComponent implements OnInit {
 
 
 
-    changePrimaryPhoto(mainPhotoUrl: string) {
-        this.mainPhotoUrl = mainPhotoUrl;
-    }
 
-    updateGalleryImages() {
-        this.galleryImages = this.getPropertyPhotos();
-    }
-
-    getPhotosCount(): number {
-        return this.property.photos.filter(photo => !photo.isPrimary).length;
-    }
 
 
     getPropertyPhotos(): GalleryItem[] {
         const photoUrls: GalleryItem[] = [];
-        for (const photo of this.property.photos) {
-            if (photo.isPrimary) this.mainPhotoUrl = photo.imageUrl;
-            else {
+        if (this.property.photos !== undefined) {
+            for (let i = 0; i < this.property.photos.length; i++) {
+                if (i == 0) continue;
+                const photo = this.property.photos[i];
                 photoUrls.push({
-                    src: photo.imageUrl,
-                    thumbSrc: photo.imageUrl
-                })
+                    src: this.thumbnailFolder + photo.fileName,
+                    thumbSrc: this.thumbnailFolder + photo.fileName
+                });
             }
         }
+
 
         return photoUrls;
     }

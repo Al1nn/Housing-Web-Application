@@ -20,9 +20,6 @@ export class PropertyContactsComponent implements OnInit {
             this.property = data['property'];
         });
 
-        this.property.photos.forEach((photo) => {
-            if (photo.isPrimary === true)
-                this.mainPhotoUrl = photo.imageUrl;
-        })
+
     }
 }

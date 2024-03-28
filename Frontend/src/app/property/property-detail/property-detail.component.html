@@ -1,4 +1,4 @@
-<div class="card-body" *ngIf="isAdmin">
+<div class="card-body">
   <div class="btn-group d-flex mb-3" style="position: relative; margin-left: 75%;" >
     <button class="btn btn-primary" (click)="openModal('editModal',editModal)">
       <i class="fa-solid fa-pen-nib"></i> Update
@@ -12,8 +12,8 @@
   <div class="col-sm-4 p-0">
     <div class="card">
       <div class="card-img-wrapper">
-        <img class="card-img-top" *ngIf="mainPhotoUrl" src="{{mainPhotoUrl}}">
-        <img class="card-img-top" *ngIf="!mainPhotoUrl" src="assets/images/house_default.jpg">
+        <img class="card-img-top" *ngIf="property.photo" src="{{originalFolder + property.photo}}">
+        <img class="card-img-top" *ngIf="!property.photo" src="assets/images/house_default.jpg">
       </div>
       <div class="card-body" *ngIf="property">
         <h1 class="card-title">{{property.name}}</h1>
@@ -132,11 +132,11 @@
             </div>
           </div>
         </tab>
-        <tab heading="Photos / {{getPhotosCount()}}" (selectTab)="updateGalleryImages()">
+        <tab heading="Photos">
           <gallery [items]="galleryImages" class="gallery-container"></gallery>
         </tab>
         <tab heading="Upload/Edit Photos">
-          <app-photo-editor [property]="property" (mainPhotoChangedEvent)="changePrimaryPhoto($event)" ></app-photo-editor>
+          
         </tab>
       </tabset>
     </div>

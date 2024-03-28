@@ -83,5 +83,13 @@ namespace WebAPI.Data.Repo
         {
             dc.Properties.Update(property);
         }
+
+        public async Task<int> GetPropertyCountByUserAsync(int userId)
+        {
+            int propertyCount = await dc.Properties
+                                .Where(p => p.PostedBy == userId)   
+                                .CountAsync();
+            return propertyCount;
+        }
     }
 }

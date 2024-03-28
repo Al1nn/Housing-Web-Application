@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
 using System.Net;
 using System.Reflection.Metadata.Ecma335;
 using WebAPI.Dtos;
@@ -19,13 +20,11 @@ namespace WebAPI.Controllers
     {
         private readonly IUnitOfWork uow;
         private readonly IMapper mapper;
-        private readonly IPhotoService photoService;
 
-        public PropertyController(IUnitOfWork uow, IMapper mapper, IPhotoService photoService)
+        public PropertyController(IUnitOfWork uow, IMapper mapper)
         {
             this.uow = uow;
             this.mapper = mapper;
-            this.photoService = photoService;
         }
         //property/list/1
         [HttpGet("list/{sellRent}")]
@@ -35,6 +34,16 @@ namespace WebAPI.Controllers
             var properties = await uow.PropertyRepository.GetPropertiesAsync(sellRent);
             var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
             return Ok(propertyListDto);
+        }
+
+        [HttpGet("count")]
+        [Authorize]
+        public async Task<IActionResult> GetPropertyCountByUser()
+        {
+            int userId = GetUserId();
+            int propertyCount = await uow.PropertyRepository.GetPropertyCountByUserAsync(userId);
+
+            return Ok(propertyCount);
         }
 
 
@@ -216,256 +225,125 @@ namespace WebAPI.Controllers
             return StatusCode(200);
         }
 
-        //property/add/images/2
-        [HttpPost("add/images/{propId}")]
-        [Authorize]
-        public async Task<ActionResult<List<PhotoDto>>> AddPropertyPhotos(List<IFormFile> files, int propId)
+
+        [HttpGet("get/photos/{propId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPropertyPhotos(int propId)
         {
             ApiError apiError = new ApiError();
-            if(files == null || files.Count == 0)
-            {
-                apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "The file from the client does not exists";
-                apiError.ErrorDetails = "";
-                return BadRequest(apiError);
-            }
-
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
 
-            if (property == null)
+            if(property == null)
             {
                 apiError.ErrorCode = NotFound().StatusCode;
-                apiError.ErrorMessage = "Property not found with the provided ID";
-                apiError.ErrorDetails = "";
+                apiError.ErrorMessage = "Property Not Found";
+                apiError.ErrorDetails = "Invalid propId";
                 return NotFound(apiError);
             }
 
-            var photos = new List<PhotoDto> {};
+            var photosDto = mapper.Map<IEnumerable<PhotoDto>>(property.Photos.Where(p => p.PropertyId == propId));
 
-            foreach (IFormFile file in files)
-            {
-                //Console.WriteLine(file.FileName);
 
-                var result = await photoService.UploadPhotoAsync(file);
-
-                if (result.Error != null)
-                {
-                    apiError.ErrorCode = 400;
-                    apiError.ErrorMessage = result.Error.Message;
-                    apiError.ErrorDetails = "";
-                    return BadRequest(apiError);
-                }
-
-                var photo = new Photo
-                {
-                    ImageUrl = result.SecureUrl.AbsoluteUri,
-                    PublicId = result.PublicId
-                };
-
-                if (property.Photos.Count == 0)
-                {
-                    photo.IsPrimary = true;
-                }
-
-                property.Photos.Add(photo);
-
-                var photoDto = mapper.Map<PhotoDto>(photo);
-                photos.Add(photoDto);
-
-            }
-
-            if (await uow.SaveAsync()) return photos;
-
-            apiError.ErrorCode = BadRequest().StatusCode;
-            apiError.ErrorMessage = "Some error occurred in uploading the photos, please retry";
-            apiError.ErrorDetails = "Unknown error";
-            return BadRequest(apiError);
+            return Ok(photosDto);
         }
-       
+
 
         //property/add/photo/1
-        [HttpPost("add/photo/{propId}")]
+        [HttpPost("add/photos/{propId}")]
         [Authorize]
-        public async Task<ActionResult<PhotoDto>> AddPropertyPhoto(IFormFile file, int propId)
+        public async Task<IActionResult> AddPropertyPhoto([FromForm] List<IFormFile> originalFiles, [FromForm] List<IFormFile> thumbnailFiles, int propId)
         {
-
             ApiError apiError = new ApiError();
 
-            if(file == null)
-            {
-                apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "No files exists";
-                apiError.ErrorDetails = "";
-                return BadRequest(apiError);
-            } 
 
-            var result = await photoService.UploadPhotoAsync(file);
-            if(result.Error != null)
-            {
-                apiError.ErrorCode = 400;
-                apiError.ErrorMessage = result.Error.Message;
-                apiError.ErrorDetails = "";
-                return BadRequest(apiError);
-            }
-
-            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId); 
+            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
+            int userId = GetUserId();
 
             if (property == null)
             {
                 apiError.ErrorCode = NotFound().StatusCode;
-                apiError.ErrorMessage = "Property not found with the provided ID";
-                apiError.ErrorDetails = "";
+                apiError.ErrorMessage = "Fresh Added Property Not Found";
+                apiError.ErrorDetails = "Possibly invalid ID";
                 return NotFound(apiError);
             }
 
-            var photo = new Photo
+            if (originalFiles.Count == 0)
             {
-                ImageUrl = result.SecureUrl.AbsoluteUri,
-                PublicId = result.PublicId
-            };
+                return NoContent();
+            }
 
-            if(property.Photos.Count == 0)
+            foreach (IFormFile file in originalFiles)
             {
-                photo.IsPrimary = true;
+                string uniqueId = Guid.NewGuid().ToString();
+                var fileName = uniqueId + '-' + file.FileName;
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","UPLOADS" , "originalSizes", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var original = new Photo { 
+                    FileName = fileName,
+                    PropertyId = propId,
+                    LastUpdatedOn = DateTime.Now,
+                    LastUpdatedBy = userId
+                };
+
+                property.Photos.Add(original);
+
+                Console.WriteLine($"Original file saved : {file.FileName} in {filePath}");
             }
-            
-            property.Photos.Add(photo);
-
-
-            if(await uow.SaveAsync()) return mapper.Map<PhotoDto>(photo);
-
-            apiError.ErrorCode = BadRequest().StatusCode;
-            apiError.ErrorMessage = "Some error occured in uploading the photo please retry";
-            apiError.ErrorDetails = "Unknown error"; 
-            return BadRequest(apiError);
-        }
-
-     
-
-        //property/set-primary-photo/1/safasfsagsd
-        [HttpPost("set-primary-photo/{propId}/{photoPublicId}")]
-        [Authorize]
-        public async Task<IActionResult> SetPrimaryPhoto(int propId, string photoPublicId)
-        {
-            ApiError apiError = new ApiError();
-
-            var userId = GetUserId();
-            var role = GetUserRole();
-
-            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
-
-            if (property == null) {
-                apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "No such property or photo exists";
-                apiError.ErrorDetails = "When you set a property photo that doesnt exist";
-                return BadRequest(apiError); 
-            }
-
-            if (role == UserRole.UserReader) {
-                apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "You must have an admin role to change the photo";
-                apiError.ErrorDetails = "You must have the admin role";
-                return BadRequest(apiError); 
-            }
-
-            var photo = property.Photos.FirstOrDefault(p => p.PublicId == photoPublicId);
-
-            if (photo == null) {
-                apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "No such property or photo exists";
-                apiError.ErrorDetails = "This error persist when you set no photo of property";
-                return BadRequest(apiError); 
-            }
-
-            if (photo.IsPrimary) {
-                apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "This is already a primary photo";
-                apiError.ErrorDetails = "This error is when you click on already set primary photo";
-                return BadRequest(apiError); 
-            }
-
-            var currentPrimary = property.Photos.FirstOrDefault(p => p.IsPrimary);
-            if (currentPrimary != null) currentPrimary.IsPrimary = false;
-
-            photo.IsPrimary = true;
-
-            if (await uow.SaveAsync()) return NoContent();
-
-            apiError.ErrorCode = BadRequest().StatusCode;
-            apiError.ErrorMessage = "Some error has occured, failed to set primary photo";
-            apiError.ErrorDetails = "This error occurs when no primary photo is set";
-            return BadRequest(apiError);
-        }
-
-
-        [HttpDelete("delete-photo/{propId}/{photoPublicId}")]
-        [Authorize]
-        public async Task<IActionResult> DeletePhoto(int propId, string photoPublicId)
-        {
-            ApiError apiError = new ApiError();
-            var userId = GetUserId();
-            var role = GetUserRole();
-
-
-            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
-
-            if (role == UserRole.UserReader)
+            //Continuare
+            foreach (IFormFile file in thumbnailFiles)
             {
-                apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "You are not authorised to delete the photo";
-                apiError.ErrorDetails = "You must log in to your account";
-                return BadRequest(apiError);
+                string uniqueId = Guid.NewGuid().ToString();
+                var fileName = uniqueId + '-'+ file.FileName;
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot", "UPLOADS", "thumbnails", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var thumbnail = new Photo
+                {
+                    FileName = fileName,
+                    PropertyId = propId,
+                    LastUpdatedOn = DateTime.Now,
+                    LastUpdatedBy = userId
+                };
+
+                property.Photos.Add(thumbnail);
+                Console.WriteLine($"Thumbnail file saved : {file.FileName} in {filePath}");
             }
-                
-
-            if (property == null || role == UserRole.UserReader)
-            {
-                apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "No such property or photo exists";
-                apiError.ErrorDetails = "You delete a non-existent photo or property";
-                return BadRequest(apiError);
-            }
-                
-
-            var photo = property.Photos.FirstOrDefault(p => p.PublicId == photoPublicId);
-
-            if (photo == null)
-            {
-                apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "No such property or photo exists";
-                apiError.ErrorDetails = "You delete a non-existent photo or property";
-                return BadRequest(apiError);
-            }
-                
-
-            if (photo.IsPrimary)
-            {
-                apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "You can not delete a primary photo";
-                apiError.ErrorDetails = "You tried to delete a primary photo";
-                return BadRequest(apiError);
-            }
-                
-
-            if (photo.PublicId != null)
-            {
-                var result = await photoService.DeletePhotoAsync(photo.PublicId);
-                if (result.Error != null) {
-                    apiError.ErrorCode = BadRequest().StatusCode;
-                    apiError.ErrorMessage = result.Error.Message;
-                    apiError.ErrorDetails = "You deleted a non-existent public id photo";
-                    return BadRequest(apiError);
-                } 
-            }
-
-            property.Photos.Remove(photo);
 
             if (await uow.SaveAsync()) return Ok();
 
             apiError.ErrorCode = BadRequest().StatusCode;
-            apiError.ErrorMessage = "Failed to delete photo";
-            apiError.ErrorDetails = "An unknown error occured";
+            apiError.ErrorMessage = "Unknown Error Occured";
+            apiError.ErrorDetails = "";
             return BadRequest(apiError);
+        }
+
+
+
+        //property/set-primary-photo/1/safasfsagsd
+        [HttpPost("set-primary-photo/{propId}/{fileName}")]
+        [Authorize]
+        public async Task<IActionResult> SetPrimaryPhoto(int propId, string fileName)
+        {
+
+
+            return Ok();
+        }
+
+
+        [HttpDelete("delete-photo/{propId}/{fileName}")]
+        [Authorize]
+        public async Task<IActionResult> DeletePhoto(int propId, string fileName)
+        {
+            ApiError apiError = new ApiError();
+            
+            return Ok();
         }
     }
 }

@@ -107,12 +107,9 @@ namespace WebAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ImageUrl")
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsPrimary")
-                        .HasColumnType("bit");
 
                     b.Property<int>("LastUpdatedBy")
                         .HasColumnType("int");
@@ -122,10 +119,6 @@ namespace WebAPI.Migrations
 
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
-
-                    b.Property<string>("PublicId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

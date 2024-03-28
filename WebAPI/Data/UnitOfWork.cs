@@ -9,7 +9,7 @@ namespace WebAPI.Data
         private ICityRepository _cityRepository;
         private IUserImageRepository _userRepository;
         private IPropertyRepository _propertyRepository;
-
+   
         public UnitOfWork(DataContext dc)
         {
             this.dc = dc;
@@ -27,7 +27,6 @@ namespace WebAPI.Data
 
         public IFurnishingTypeRepository FurnishingTypeRepository => new FurnishingTypeRepository(dc);
      
-
         // Add more repos
 
 

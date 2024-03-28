@@ -19,6 +19,7 @@ import { IPhoto } from '../../model/IPhoto';
 
 
 
+
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
@@ -39,7 +40,9 @@ export class AddPropertyComponent implements OnInit {
     originalSizes: IPhoto[];
     originalSizesString: string | null;
     thumbnailsString: string | null;
-    files: FileList;
+    imagesData = new FormData();
+
+    firstImageView: string | ArrayBuffer;
 
     propertyView: IPropertyBase = {
         id: 0,
@@ -173,20 +176,6 @@ export class AddPropertyComponent implements OnInit {
         return this.OtherInfo.controls['description'] as FormControl;
     }
 
-    async onPhotoSelected(event: any) {
-        //console.log("File upload touched " + this.fileUploadTouched);
-        this.files = await this.housingService.photosSelected(event);
-
-
-
-        this.thumbnailsString = this.housingService.getThumbnails();
-        this.originalSizesString = this.housingService.getOriginalSizePhotos();
-        this.thumbnails = JSON.parse(this.thumbnailsString as string);
-        this.originalSizes = JSON.parse(this.originalSizesString as string);
-        this.propertyView.photo = this.originalSizes.at(0)?.imageUrl as string;
-
-    }
-
 
     ngOnInit() {
         if (localStorage !== undefined) {
@@ -207,9 +196,6 @@ export class AddPropertyComponent implements OnInit {
                 this.furnishTypes = data;
             });
 
-            if (localStorage.getItem('AppConfig/originalSizes') || localStorage.getItem('AppConfig/thumbnails')) {
-                this.housingService.clearPhotoStorage();
-            }
         }
 
     }
@@ -255,18 +241,14 @@ export class AddPropertyComponent implements OnInit {
         this.router.navigate(['/']);
     }
 
-    onSubmit() {
+    onSubmit() { //Aici se apeleaza dupa ce apas pe save 
         this.nextClicked = true;
         if (this.allTabsValid()) {
             this.mapProperty();
             this.housingService.addProperty(this.property).subscribe(
                 () => {
-                    // this.housingService.getPropertyById(this.property.id).subscribe(
-                    //     (data) => {
-                    //         console.log(data);
-                    //     }
-                    // );
-                    this.uploadPropertyPhotos(this.property.id);
+                    this.uploadPropertyPhotos(this.property.id, this.imagesData);
+
 
                 }
             );
@@ -277,36 +259,6 @@ export class AddPropertyComponent implements OnInit {
         } else {
             this.alertifyService.error('Please review the form and provide all valid entries');
         }
-    }
-
-
-
-
-    uploadPropertyPhotos(propertyId: number) {
-
-        const formData = new FormData();
-        for (let i = 0; i < this.files.length; i++) {
-            const file = this.files[i];
-            formData.append(`files`, file);
-        }
-        this.housingService.addPropertyPhotos(propertyId, formData).subscribe(
-            response => {
-                console.log(`Photos added successfully:`, response);
-
-                console.log(this.addPropertyForm);
-
-                if (this.sellRent.value === '2') {
-                    this.router.navigate(['/rent-property']);
-                } else {
-                    this.router.navigate(['/']);
-                }
-
-                this.alertifyService.success('Congrats, your property listed successfully on our website');
-            },
-            error => {
-                console.error(`Error adding photo : `, error);
-            }
-        );
     }
 
     mapProperty(): void {
@@ -335,8 +287,9 @@ export class AddPropertyComponent implements OnInit {
         this.property.mainEntrance = this.mainEntrance.value;
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.property.description = this.description.value;
-        this.property.photos = this.originalSizes;
-        this.property.photo = this.originalSizes[0].imageUrl;
+
+
+
     }
 
 
@@ -376,22 +329,97 @@ export class AddPropertyComponent implements OnInit {
         }
     }
 
+    async onPhotoSelected(event: any) { //Se apeleaza de la input type file 
+
+        const files: FileList = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const originalUrl = await this.getDataURL(file);
+            if (i == 0) {
+                this.propertyView.photo = originalUrl;
+            }
+            const thumbnail = await this.rescaleImage(originalUrl, file.name);
+            this.imagesData.append("originalFiles", file);
+            this.imagesData.append("thumbnailFiles", thumbnail);
+        }
+
+    }
+
+    uploadPropertyPhotos(propertyId: number, formData: FormData) { // Transmite datele
+        this.housingService.addPropertyPhotos(propertyId, formData).subscribe(
+            response => {
+                console.log(`Photos added successfully:`, response);
+
+                console.log(this.addPropertyForm);
+
+                if (this.sellRent.value === '2') {
+                    this.router.navigate(['/rent-property']);
+                } else {
+                    this.router.navigate(['/']);
+                }
+
+                this.alertifyService.success('Congrats, your property listed successfully on our website');
+            }, error => {
+                console.log("Error adding photo", error);
+            }
+        );
+    }
 
 
+    rescaleImage(imageUrl: string, fileName: string): Promise<File> { //Rescalare de imagine, vine in thumbnail
+        return new Promise((resolve, reject) => {
+            const maxSizeInMB = 4;
+            const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = imageUrl;
+            img.onload = function () {
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext('2d');
+                const width = img.width;
+                const height = img.height;
+                const aspectRatio = width >= height ? width / height : height / width;
+                const newWidth = Math.sqrt(maxSizeInBytes * aspectRatio);
+                const newHeight = Math.sqrt(maxSizeInBytes / aspectRatio);
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                if (ctx !== null) {
+                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                }
+                canvas.toBlob(
+                    (blob) => {
+                        if (blob !== null) {
+                            const thumbnailFileName = fileName.replace(/\.[^/.]+$/, '') + '_thumbnail.jpg';
+                            const file = new File([blob], thumbnailFileName, { type: blob.type });
+                            resolve(file);
+                        } else {
+                            reject("Failed to create blob from canvas");
+                        }
+                    }
+                    , 'image/jpeg'
+                    , 0.8
+                );
+
+            };
+            img.onerror = function (error) {
+                reject(error);
+            };
+        });
+    }
+
+    getDataURL(file: File): Promise<string> { // Am luat URL-ul de la originalSize
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+
+                resolve(event.target?.result as string);
+            };
+            reader.onerror = (event) => {
+                reject(event.target?.error);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
 
 
-    // #region <Getter Methods>
-    // #region <FormGroups>
-
-
-    // #endregion
-
-    // #region <Form Controls>
-
-
-
-
-
-    // #endregion
-    // #endregion
 }

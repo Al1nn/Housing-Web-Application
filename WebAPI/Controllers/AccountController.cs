@@ -66,13 +66,15 @@ namespace WebAPI.Controllers
             return Ok(cardDto); 
         }
 
+        
+
         //api/account/user/{username}
         [HttpGet("user/{username}")]
         [AllowAnonymous]
         public async Task<IActionResult> IsAdmin(string username)
         {
             ApiError apiError = new ApiError();
-
+          
             var user = await uow.UserImageRepository.GetUserByName(username);
 
             if (user == null)
