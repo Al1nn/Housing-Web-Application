@@ -133,10 +133,14 @@
           </div>
         </tab>
         <tab heading="Photos">
-          <gallery [items]="galleryImages" class="gallery-container"></gallery>
+          <div class="text-center" *ngIf="galleryImages.length === 0">
+              <strong>No Photos to Show</strong>
+          </div>
+          <gallery *ngIf="galleryImages.length > 0" [items]="galleryImages" class="gallery-container"></gallery>
+
         </tab>
         <tab heading="Upload/Edit Photos">
-          <app-photo-editor [property]="property"></app-photo-editor>
+          <app-photo-editor  [property]="property"></app-photo-editor>
         </tab>
       </tabset>
     </div>
