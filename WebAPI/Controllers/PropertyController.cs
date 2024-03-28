@@ -11,6 +11,7 @@ using WebAPI.Dtos;
 using WebAPI.Errors;
 using WebAPI.Interfaces;
 using WebAPI.Models;
+using System.Text.RegularExpressions;
 
 namespace WebAPI.Controllers
 {
@@ -337,13 +338,95 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpDelete("delete-photo/{propId}/{fileName}")]
+        [HttpDelete("delete/photo/{propId}/{fileName}")]
         [Authorize]
         public async Task<IActionResult> DeletePhoto(int propId, string fileName)
         {
             ApiError apiError = new ApiError();
+            int userId = GetUserId();
             
-            return Ok();
+            var property = await  uow.PropertyRepository.GetPropertyByIdAsync(propId);
+
+            if(property == null)
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such property or photo exists";
+                apiError.ErrorDetails = "You delete a non-existent property";
+                return BadRequest(apiError);
+            }
+
+            if(property.PostedBy != userId)
+            {
+                apiError.ErrorCode = Unauthorized().StatusCode;
+                apiError.ErrorMessage = "You are not authorised to delete the photo";
+                apiError.ErrorDetails = "You must log in to owner account";
+                return Unauthorized(apiError);
+            }
+
+            var thumbnail = property.Photos.FirstOrDefault(p => p.FileName == fileName && p.PropertyId == property.Id);
+        
+
+            string originalFileName = getOriginalName(fileName);
+          
+            var original = property.Photos.FirstOrDefault(p => p.FileName.Contains(originalFileName) && !p.FileName.Contains("_thumbnail") && p.PropertyId == property.Id);
+           
+
+            if(thumbnail == null )
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such property or photo exists";
+                apiError.ErrorDetails = "You delete a non-existent photo";
+                return BadRequest(apiError);
+            }
+
+            if(thumbnail.FileName != null && original.FileName != null)
+            {
+                var thumbnailsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails", thumbnail.FileName);
+                var originalsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes", original.FileName);
+                if(System.IO.File.Exists(thumbnailsPath)) { 
+                    System.IO.File.Delete(thumbnailsPath);
+                }
+                if (System.IO.File.Exists(originalsPath))
+                {
+                    System.IO.File.Delete(originalsPath);
+                }
+
+                property.Photos.Remove(thumbnail);
+                property.Photos.Remove(original);
+            }
+
+
+
+            if (await uow.SaveAsync()) return Ok();
+
+            apiError.ErrorCode= BadRequest().StatusCode;
+            apiError.ErrorMessage = "Unknown Error Occured";
+            apiError.ErrorDetails = "I dont know";
+            return Ok(apiError);
+            
+        }
+
+        private string getOriginalName(string fileName)
+        {
+            string pattern = @"(?:[a-f0-9]+(?:-[a-f0-9]+)*)-(.*?)_thumbnail\.jpg$"; // SEARCH ONLY FOR fileName, fileName can have '-' OR '_'  8f04909d-094e-4848-bccf-edb0f0bb5b3a-fileName_thumbnail.jpg
+
+
+            Match match = Regex.Match(fileName, pattern);
+
+           
+            if (match.Success)
+            {
+                string capturedSubstring = match.Groups[1].Value;
+
+                
+
+                return capturedSubstring;
+            }
+            else
+            {
+                
+                return string.Empty;
+            }
         }
     }
 }

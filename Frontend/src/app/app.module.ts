@@ -45,6 +45,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
 import { UserProfileResolverService } from './user/user-profile/user-profile-resolver.service';
+import { PhotoEditorComponent } from './property/photo-editor/photo-editor.component';
 
 @NgModule({
     declarations: [
@@ -62,7 +63,8 @@ import { UserProfileResolverService } from './user/user-profile/user-profile-res
         FilterPipe,
         SortPipe,
         PriceAreaFilterPipe,
-        PropertyDashboardComponent
+        PropertyDashboardComponent,
+        PhotoEditorComponent
     ],
     imports: [
         BrowserModule,

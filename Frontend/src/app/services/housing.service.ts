@@ -128,7 +128,9 @@ export class HousingService {
     }
 
 
-    getPropertyPhotosNames(propertyId: number): Observable<IPhoto[]> {
+
+
+    getPropertyPhotos(propertyId: number): Observable<IPhoto[]> {
         return this.http.get<IPhoto[]>(this.baseUrl + '/property/get/photos/' + propertyId);
     }
 
@@ -192,13 +194,13 @@ export class HousingService {
             + '/' + propertyPhotoId, {}, httpOptions);
     }
 
-    deletePhoto(propertyId: number, propertyPhotoId: string) {
+    deletePhoto(propertyId: number, fileName: string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.delete(this.baseUrl + '/property/delete-photo/' + propertyId
-            + '/' + propertyPhotoId, httpOptions);
+        return this.http.delete(this.baseUrl + '/property/delete/photo/' + propertyId
+            + '/' + fileName, httpOptions);
     }
 }
