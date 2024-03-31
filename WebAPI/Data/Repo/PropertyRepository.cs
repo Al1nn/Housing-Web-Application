@@ -53,6 +53,7 @@ namespace WebAPI.Data.Repo
             return properties;
         }
 
+
         
 
         public async Task<Property> GetPropertyByIdAsync(int id)

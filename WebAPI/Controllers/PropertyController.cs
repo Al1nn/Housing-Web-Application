@@ -248,6 +248,7 @@ namespace WebAPI.Controllers
             return Ok(photosDto);
         }
 
+ 
 
         //property/add/photo/1
         [HttpPost("add/photos/{propId}")]
@@ -273,11 +274,24 @@ namespace WebAPI.Controllers
                 return NoContent();
             }
 
+            string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","UPLOADS","originalSizes");
+            string thumbnailsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails");
+
+            if (!Directory.Exists(originalSizesDirectory))
+            {
+                Directory.CreateDirectory(originalSizesDirectory);
+            }
+
+            if(!Directory.Exists(thumbnailsDirectory))
+            {
+                Directory.CreateDirectory(thumbnailsDirectory);
+            }
+
             foreach (IFormFile file in originalFiles)
             {
                 string uniqueId = Guid.NewGuid().ToString();
                 var fileName = uniqueId + '-' + file.FileName;
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","UPLOADS" , "originalSizes", fileName);
+                var filePath = Path.Combine(originalSizesDirectory, fileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
@@ -299,7 +313,7 @@ namespace WebAPI.Controllers
             {
                 string uniqueId = Guid.NewGuid().ToString();
                 var fileName = uniqueId + '-'+ file.FileName;
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot", "UPLOADS", "thumbnails", fileName);
+                var filePath = Path.Combine(thumbnailsDirectory, fileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
