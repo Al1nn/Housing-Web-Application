@@ -5,11 +5,11 @@ namespace WebAPI.Interfaces
 {
     public interface IUserImageRepository
     {
-         Task<User> Authenticate(string username, string password, UserRole role);
-         
-         Task<User> GetUserByName(string username);
+         Task<User> Authenticate(string username, string password, List<string> roles);
 
-         void Register(string username, string password, string email, string phoneNumber,string? imageUrl);
+        Task<User> GetUserByName(string username);
+
+         void Register(string username, string password, string email, string phoneNumber, List<string> roles,string? imageUrl);
 
         Task<bool> UserAlreadyExists(string username);
 

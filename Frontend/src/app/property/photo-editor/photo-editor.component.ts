@@ -26,7 +26,7 @@ export class PhotoEditorComponent implements OnInit {
   deletePhoto(propertyId: number, photoFileName: string) {
     this.housingService.deletePhoto(propertyId, photoFileName).subscribe(() => {
       this.housingService.getPropertyPhotos(propertyId).subscribe(data => {
-        this.property.photos = data.filter(photo => photo.fileName.includes("_thumbnail"));
+        this.property.photos = data;
       });
     });
 

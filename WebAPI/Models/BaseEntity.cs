@@ -6,7 +6,7 @@
 
         public DateTime LastUpdatedOn { get; set; } = DateTime.Now;
 
-        public int LastUpdatedBy { get; set; }
+        public int LastUpdatedBy { get; set; } 
 
     }
 

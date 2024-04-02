@@ -67,31 +67,6 @@ namespace WebAPI.Controllers
         }
 
         
-
-        //api/account/user/{username}
-        [HttpGet("user/{username}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> IsAdmin(string username)
-        {
-            ApiError apiError = new ApiError();
-          
-            var user = await uow.UserImageRepository.GetUserByName(username);
-
-            if (user == null)
-            {
-                apiError.ErrorCode = NotFound().StatusCode;
-                apiError.ErrorMessage = "User not found";
-                apiError.ErrorDetails = "This error appear when provided user or role does not exist";
-                return NotFound(apiError);
-            }
-
-            if(user.Role == UserRole.UserEditor)
-            {
-                return Ok(true);
-            }
-
-            return Ok(false);
-        }
        
 
         //api/account/login
@@ -99,21 +74,22 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Login(LoginReqDto loginReq)
         {
             
-            var user = await uow.UserImageRepository.Authenticate(loginReq.Username, loginReq.Password, loginReq.Role);
-            
+            var user = await uow.UserImageRepository.Authenticate(loginReq.Username, loginReq.Password, loginReq.Roles);
+       
+
             ApiError apiError = new ApiError();
             if (user == null)
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "Invalid user name or password or role";
+                apiError.ErrorMessage = "Invalid user name or password or selected roles";
                 apiError.ErrorDetails = "This error appear when provided user id or password does not exists";
                 return Unauthorized(apiError);
             }
 
+
             var loginRes = new LoginResDto();
             loginRes.Username = loginReq.Username;
-            loginRes.Token = CreateJWT(user);
-            loginRes.Role = loginReq.Role;           
+            loginRes.Token = CreateJWT(user);         
 
             return Ok(loginRes);
         }
@@ -125,10 +101,10 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Register(LoginReqDto loginReq)
         {
             ApiError apiError = new ApiError();
-            if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsEmpty() || loginReq.PhoneNumber.IsEmpty() )
+            if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsEmpty() || loginReq.PhoneNumber.IsEmpty() || loginReq.Roles.Count == 0 || loginReq.Roles.IsNullOrEmpty())
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "User name or password can not be blank";
+                apiError.ErrorMessage = "User credentials cannot be blank or unselected";
                 return BadRequest(apiError);
             }
 
@@ -141,9 +117,9 @@ namespace WebAPI.Controllers
                 return BadRequest(apiError);
             }
 
-            
+           
 
-            uow.UserImageRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, loginReq.imageUrl);
+            uow.UserImageRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, loginReq.Roles, loginReq.imageUrl);
 
             await uow.SaveAsync();
 
@@ -156,13 +132,21 @@ namespace WebAPI.Controllers
         {
             var secretKey = configuration.GetSection("AppSettings:Key").Value;
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var claims = new Claim[]
+
+            
+
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
+                //I need to put user.Roles in claims .
             };
 
+            foreach (Role role in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.Name));
+            }
+          
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor { 

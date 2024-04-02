@@ -25,11 +25,10 @@ namespace WebAPI.Helpers
                 .ForMember(d => d.Username, opt => opt.MapFrom(src => src.User.Username))
                 .ForMember(d => d.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
-                .ForMember(d => d.Role, opt => opt.MapFrom(src => src.User.Role))
                 .ForMember(d => d.ImageId, opt => opt.MapFrom(src => src.Image.Id))
                 .ForMember(d => d.Url, opt => opt.MapFrom(src => src.Image.Url));
 
-
+            
 
 
             //Add methods to map Model to Dto
@@ -38,14 +37,14 @@ namespace WebAPI.Helpers
                 .ForMember(d => d.Country, opt => opt.MapFrom(src => src.City.Country))
                 .ForMember(d => d.PropertyType, opt => opt.MapFrom(src => src.PropertyType.Name))
                 .ForMember(d => d.FurnishingType, opt => opt.MapFrom(src => src.FurnishingType.Name))
-                .ForMember(d=> d.Photo , opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.PropertyId == p.Property.Id && p.FileName.Contains("_thumbnail")).FileName));
+                .ForMember(d=> d.Photo , opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.PropertyId == p.Property.Id).FileName));
 
             CreateMap<Property, PropertyDetailDto>()
                 .ForMember(d => d.City, opt => opt.MapFrom(src => src.City.Name))
                 .ForMember(d => d.Country, opt => opt.MapFrom(src => src.City.Country))
                 .ForMember(d => d.PropertyType, opt => opt.MapFrom(src => src.PropertyType.Name))
                 .ForMember(d => d.FurnishingType, opt => opt.MapFrom(src => src.FurnishingType.Name))
-                .ForMember(d => d.Photos, opt => opt.MapFrom(src => src.Photos.Where( p =>  p.PropertyId == p.Property.Id && p.FileName.Contains("_thumbnail"))))
+                .ForMember(d => d.Photos, opt => opt.MapFrom(src => src.Photos.Where( p =>  p.PropertyId == p.Property.Id )))
                 .ForMember(d => d.Photo, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.PropertyId == p.Property.Id).FileName));
 
             CreateMap<PropertyType, KeyValuePairDto>();

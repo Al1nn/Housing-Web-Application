@@ -15,12 +15,15 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 
 
+
+
 @Component({
     selector: 'app-user-register',
     templateUrl: './user-register.component.html',
     styleUrls: ['./user-register.component.css'],
 })
 export class UserRegisterComponent implements OnInit {
+
     registerationForm: FormGroup;
     user: IUserForRegister;
 
@@ -32,6 +35,9 @@ export class UserRegisterComponent implements OnInit {
     croppedImage: any = '';
     imageChangedEvent: any = '';
 
+    rolesItems = ["Admin", "Reader", "Owner"];
+
+    checkedRoles: string[] = [];
 
     constructor(
         private fb: FormBuilder,
@@ -60,6 +66,18 @@ export class UserRegisterComponent implements OnInit {
 
     get mobile() {
         return this.registerationForm.get('mobile') as FormControl;
+    }
+
+    get admin() {
+        return this.registerationForm.get('admin') as FormControl;
+    }
+
+    get reader() {
+        return this.registerationForm.get('reader') as FormControl;
+    }
+
+    get owner() {
+        return this.registerationForm.get('owner') as FormControl;
     }
 
     onFileChange(event: any) {
@@ -111,10 +129,17 @@ export class UserRegisterComponent implements OnInit {
                 password: [null, [Validators.required, Validators.minLength(8)]],
                 confirmPassword: [null, Validators.required],
                 mobile: [null, [Validators.required, Validators.maxLength(10)]],
+                admin: [false],
+                reader: [false],
+                owner: [false],
             },
-            { validators: this.passwordMatchingValidator }
+            {
+                validators: this.passwordMatchingValidator
+            }
         );
+
     }
+
 
     passwordMatchingValidator(fc: AbstractControl): ValidationErrors | null {
         return fc.get('password')?.value === fc.get('confirmPassword')?.value
@@ -122,14 +147,29 @@ export class UserRegisterComponent implements OnInit {
             : { notmatched: true };
     }
 
+
+
     userData(): IUserForRegister {
+        if (this.admin.value) {
+            this.checkedRoles.push("Admin");
+        }
+        if (this.owner.value) {
+            this.checkedRoles.push("Owner")
+        }
+        if (this.reader.value) {
+            this.checkedRoles.push("Reader");
+        }
+
+
         return (this.user = {
             username: this.username.value,
             email: this.email.value,
             password: this.password.value,
             phoneNumber: this.mobile.value,
+            roles: this.checkedRoles,
             imageUrl: !this.croppedImage ? "" : this.croppedImage
         });
+
     }
 
     // Getter methods from all controls
@@ -137,6 +177,7 @@ export class UserRegisterComponent implements OnInit {
 
     onSubmit() {
         console.log(this.registerationForm);
+
         this.userSubmitted = true;
         if (this.registerationForm.valid) {
 
@@ -144,10 +185,8 @@ export class UserRegisterComponent implements OnInit {
 
             this.authService.registerUser(this.userData()).subscribe(() => {
                 this.onReset();
-
-
-
                 this.alertifyService.success('Congrats, you are now registered');
+
             });
 
 
@@ -157,6 +196,7 @@ export class UserRegisterComponent implements OnInit {
     onReset() {
         this.userSubmitted = false;
         this.croppedImage = "";
+        this.checkedRoles = [];
         this.registerationForm.reset();
     }
 }

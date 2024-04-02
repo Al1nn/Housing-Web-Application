@@ -255,6 +255,34 @@ namespace WebAPI.Migrations
                     b.ToTable("PropertyTypes");
                 });
 
+            modelBuilder.Entity("WebAPI.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LastUpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("WebAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -284,9 +312,6 @@ namespace WebAPI.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -358,6 +383,17 @@ namespace WebAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("WebAPI.Models.Role", b =>
+                {
+                    b.HasOne("WebAPI.Models.User", "User")
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WebAPI.Models.UserImage", b =>
                 {
                     b.HasOne("WebAPI.Models.Image", "Image")
@@ -390,6 +426,8 @@ namespace WebAPI.Migrations
             modelBuilder.Entity("WebAPI.Models.User", b =>
                 {
                     b.Navigation("Images");
+
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

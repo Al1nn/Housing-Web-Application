@@ -8,6 +8,5 @@ namespace WebAPI.Dtos
 
         public string Token { get; set; }
 
-        public UserRole Role { get; set; }
     }
 }

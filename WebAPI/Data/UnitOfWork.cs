@@ -6,9 +6,7 @@ namespace WebAPI.Data
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DataContext dc;
-        private ICityRepository _cityRepository;
-        private IUserImageRepository _userRepository;
-        private IPropertyRepository _propertyRepository;
+       
    
         public UnitOfWork(DataContext dc)
         {

@@ -3,13 +3,13 @@ export interface IUserForRegister {
     email: string;
     password: string;
     phoneNumber: number;
+    roles: string[];
     imageUrl: string;
 }
 
 export interface IUserForLogin {
     username: string;
     password: string;
-    role: number;
     token: string;
 }
 

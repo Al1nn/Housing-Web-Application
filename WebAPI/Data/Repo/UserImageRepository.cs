@@ -18,13 +18,15 @@ namespace WebAPI.Data.Repo
             this.dc = dc;
         }
 
-        public async Task<User> Authenticate(string username, string passwordText, UserRole role)
+        public async Task<User> Authenticate(string username, string passwordText, List<string> roles)
         {
 
 
-            var user =  await dc.Users.FirstOrDefaultAsync( data => data.Username == username);
-           
-
+            var user =  await dc.Users.
+                Include(r => r.Roles)
+               .FirstOrDefaultAsync( data => data.Username == username);
+            
+            
             if (user == null || user.PasswordKey == null)
             {
                 return null;
@@ -35,14 +37,22 @@ namespace WebAPI.Data.Repo
                 return null;
             }
 
-            if(user.Role != role)
+            if(roles.Count == 0)
             {
                 return null;
             }
 
+            if(roles.Any(role => user.Roles.All(userRole => userRole.Name != role)))
+            {
+                return null;
+            }
+            
+
             return user;
             
         }
+
+       
 
         private bool MatchPasswordHash(string passwordText, byte[] password, byte[] passwordKey)
         {
@@ -63,7 +73,7 @@ namespace WebAPI.Data.Repo
 
  
 
-        public void Register(string username, string password, string email, string phoneNumber,string? imageUrl)
+        public void Register(string username, string password, string email, string phoneNumber, List<string> roles ,string? imageUrl)
         {
             byte[] passwordHash, passwordKey;
 
@@ -72,27 +82,27 @@ namespace WebAPI.Data.Repo
                 passwordKey = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
-
-            var count =  dc.Users.Count();
             
             User user = new User();
             user.Username = username;
             user.Password = passwordHash;
             user.PasswordKey = passwordKey;
             user.Email = email;
-            user.PhoneNumber = phoneNumber; 
-
-            if(count == 0)
-            {
-                user.Role = UserRole.UserEditor;
-            }
-            else
-            {
-                user.Role = UserRole.UserReader;
-            }
-
+            user.PhoneNumber = phoneNumber;
+            user.Roles = new List<Role>();
             
-            
+
+            foreach (var userRole in roles) {
+                var role = new Role
+                {
+                    LastUpdatedOn = DateTime.Now,
+                    UserId = user.Id,
+                    Name = userRole,
+                    LastUpdatedBy = user.LastUpdatedBy
+                };
+                user.Roles.Add(role);   
+            }
+
             if (!imageUrl.IsNullOrEmpty())
             {
                 Image image = new Image();
@@ -168,6 +178,5 @@ namespace WebAPI.Data.Repo
             return image;
         }
 
-     
     }
 }

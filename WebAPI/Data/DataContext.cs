@@ -43,9 +43,6 @@ namespace WebAPI.Data
                         .WithMany(i => i.Users)
                         .HasForeignKey(ui => ui.ImageId)
                         .OnDelete(DeleteBehavior.Cascade); 
-
-         
-         
         }
     }
 }

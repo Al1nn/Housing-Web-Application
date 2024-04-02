@@ -338,9 +338,7 @@ export class AddPropertyComponent implements OnInit {
             if (i == 0) {
                 this.propertyView.photo = originalUrl;
             }
-            const thumbnail = await this.rescaleImage(originalUrl, file.name);
-            this.imagesData.append("originalFiles", file);
-            this.imagesData.append("thumbnailFiles", thumbnail);
+            this.imagesData.append("files", file);
         }
 
     }
@@ -366,46 +364,7 @@ export class AddPropertyComponent implements OnInit {
     }
 
 
-    rescaleImage(imageUrl: string, fileName: string): Promise<File> { //Rescalare de imagine, vine in thumbnail
-        return new Promise((resolve, reject) => {
-            const maxSizeInMB = 4;
-            const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.src = imageUrl;
-            img.onload = function () {
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext('2d');
-                const width = img.width;
-                const height = img.height;
-                const aspectRatio = width >= height ? width / height : height / width;
-                const newWidth = Math.sqrt(maxSizeInBytes * aspectRatio);
-                const newHeight = Math.sqrt(maxSizeInBytes / aspectRatio);
-                canvas.width = newWidth;
-                canvas.height = newHeight;
-                if (ctx !== null) {
-                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                }
-                canvas.toBlob(
-                    (blob) => {
-                        if (blob !== null) {
-                            const thumbnailFileName = fileName.replace(/\.[^/.]+$/, '') + '_thumbnail.jpg';
-                            const file = new File([blob], thumbnailFileName, { type: blob.type });
-                            resolve(file);
-                        } else {
-                            reject("Failed to create blob from canvas");
-                        }
-                    }
-                    , 'image/jpeg'
-                    , 0.8
-                );
 
-            };
-            img.onerror = function (error) {
-                reject(error);
-            };
-        });
-    }
 
     getDataURL(file: File): Promise<string> { // Am luat URL-ul de la originalSize
         return new Promise((resolve, reject) => {

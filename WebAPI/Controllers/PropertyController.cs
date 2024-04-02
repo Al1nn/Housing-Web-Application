@@ -12,6 +12,9 @@ using WebAPI.Errors;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 using System.Text.RegularExpressions;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+
 
 namespace WebAPI.Controllers
 {
@@ -121,6 +124,7 @@ namespace WebAPI.Controllers
         {
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(id);
             ApiError apiError = new ApiError();
+            int userId = GetUserId();
 
             if (property == null)
             {
@@ -128,6 +132,14 @@ namespace WebAPI.Controllers
                 apiError.ErrorMessage = "Property not found for deleting";
                 apiError.ErrorDetails = "";
                 return NotFound(apiError);
+            }
+
+            if(property.PostedBy != userId)
+            {
+                apiError.ErrorCode = Unauthorized().StatusCode;
+                apiError.ErrorMessage = "You must be owner to delete";
+                apiError.ErrorDetails = "";
+                return Unauthorized(apiError);
             }
 
             uow.PropertyRepository.DeleteProperty(id);
@@ -162,15 +174,10 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> UpdateProperty(int propId,PropertyDto propertyDto)
         {
             ApiError apiError = new ApiError();
-            var userRole = GetUserRole();
-            var userId = GetUserId();
-            if (userRole != UserRole.UserEditor)
-            {
-                apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "You must be admin to update";
-                apiError.ErrorDetails = "";
-                return Unauthorized(apiError);
-            }
+            
+            int userId = GetUserId();
+
+           
             var newProperty = mapper.Map<Property>(propertyDto);
             if (newProperty == null)
             {
@@ -179,12 +186,20 @@ namespace WebAPI.Controllers
                 apiError.ErrorDetails = "";
                 return BadRequest(apiError);
             }
-            newProperty.PostedBy = userId;
-            newProperty.LastUpdatedBy = userId;
-
+         
+            
 
             var existingProperty = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
             
+            if (existingProperty.PostedBy != userId)
+            {
+                apiError.ErrorCode = Unauthorized().StatusCode;
+                apiError.ErrorMessage = "You must be owner to update";
+                apiError.ErrorDetails = "";
+                return Unauthorized(apiError);
+            }
+
+
             if(existingProperty == null)
             {
                 apiError.ErrorCode = NotFound().StatusCode;
@@ -253,7 +268,7 @@ namespace WebAPI.Controllers
         //property/add/photo/1
         [HttpPost("add/photos/{propId}")]
         [Authorize]
-        public async Task<IActionResult> AddPropertyPhoto([FromForm] List<IFormFile> originalFiles, [FromForm] List<IFormFile> thumbnailFiles, int propId)
+        public async Task<IActionResult> AddPropertyPhoto(List<IFormFile> files, int propId)
         {
             ApiError apiError = new ApiError();
 
@@ -269,11 +284,11 @@ namespace WebAPI.Controllers
                 return NotFound(apiError);
             }
 
-            if (originalFiles.Count == 0)
+            if (files.Count == 0)
             {
                 return NoContent();
             }
-
+           
             string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","UPLOADS","originalSizes");
             string thumbnailsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails");
 
@@ -287,49 +302,43 @@ namespace WebAPI.Controllers
                 Directory.CreateDirectory(thumbnailsDirectory);
             }
 
-            foreach (IFormFile file in originalFiles)
+            foreach (IFormFile file in files)
             {
                 string uniqueId = Guid.NewGuid().ToString();
                 var fileName = uniqueId + '-' + file.FileName;
-                var filePath = Path.Combine(originalSizesDirectory, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                var originalPath = Path.Combine(originalSizesDirectory, fileName);
+                var thumbnailPath = Path.Combine(thumbnailsDirectory, fileName);
+
+
+                using (var stream = new FileStream(originalPath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
 
-                var original = new Photo { 
+             
+                using (var image = SixLabors.ImageSharp.Image.Load(originalPath))
+                {
+                    var resizeOptions = new ResizeOptions { 
+                        Mode = ResizeMode.Max,
+                        Size = new Size(800,800),
+                        Position = AnchorPositionMode.Center
+                    };
+
+                    image.Mutate(x => x.Resize(resizeOptions));
+                    image.Save(thumbnailPath);
+                }
+
+                var photo = new Photo
+                {
                     FileName = fileName,
                     PropertyId = propId,
                     LastUpdatedOn = DateTime.Now,
                     LastUpdatedBy = userId
                 };
 
-                property.Photos.Add(original);
-
-                Console.WriteLine($"Original file saved : {file.FileName} in {filePath}");
+                property.Photos.Add(photo);
             }
-            //Continuare
-            foreach (IFormFile file in thumbnailFiles)
-            {
-                string uniqueId = Guid.NewGuid().ToString();
-                var fileName = uniqueId + '-'+ file.FileName;
-                var filePath = Path.Combine(thumbnailsDirectory, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
 
-                var thumbnail = new Photo
-                {
-                    FileName = fileName,
-                    PropertyId = propId,
-                    LastUpdatedOn = DateTime.Now,
-                    LastUpdatedBy = userId
-                };
-
-                property.Photos.Add(thumbnail);
-                Console.WriteLine($"Thumbnail file saved : {file.FileName} in {filePath}");
-            }
 
             if (await uow.SaveAsync()) return Ok();
 
@@ -338,6 +347,9 @@ namespace WebAPI.Controllers
             apiError.ErrorDetails = "";
             return BadRequest(apiError);
         }
+
+      
+
 
 
 
@@ -377,15 +389,10 @@ namespace WebAPI.Controllers
                 return Unauthorized(apiError);
             }
 
-            var thumbnail = property.Photos.FirstOrDefault(p => p.FileName == fileName && p.PropertyId == property.Id);
-        
+            var photo = property.Photos.FirstOrDefault(p => p.FileName == fileName && p.PropertyId == property.Id);
+       
 
-            string originalFileName = getOriginalName(fileName);
-          
-            var original = property.Photos.FirstOrDefault(p => p.FileName.Contains(originalFileName) && !p.FileName.Contains("_thumbnail") && p.PropertyId == property.Id);
-           
-
-            if(thumbnail == null )
+            if(photo == null )
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "No such property or photo exists";
@@ -393,10 +400,10 @@ namespace WebAPI.Controllers
                 return BadRequest(apiError);
             }
 
-            if(thumbnail.FileName != null && original.FileName != null)
+            if (photo.FileName != null )
             {
-                var thumbnailsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails", thumbnail.FileName);
-                var originalsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes", original.FileName);
+                var thumbnailsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails", photo.FileName);
+                var originalsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes", photo.FileName);
                 if(System.IO.File.Exists(thumbnailsPath)) { 
                     System.IO.File.Delete(thumbnailsPath);
                 }
@@ -405,8 +412,7 @@ namespace WebAPI.Controllers
                     System.IO.File.Delete(originalsPath);
                 }
 
-                property.Photos.Remove(thumbnail);
-                property.Photos.Remove(original);
+                property.Photos.Remove(photo);
             }
 
 
@@ -420,27 +426,6 @@ namespace WebAPI.Controllers
             
         }
 
-        private string getOriginalName(string fileName)
-        {
-            string pattern = @"(?:[a-f0-9]+(?:-[a-f0-9]+)*)-(.*?)_thumbnail\.jpg$"; // SEARCH ONLY FOR fileName, fileName can have '-' OR '_'  8f04909d-094e-4848-bccf-edb0f0bb5b3a-fileName_thumbnail.jpg
-
-
-            Match match = Regex.Match(fileName, pattern);
-
-           
-            if (match.Success)
-            {
-                string capturedSubstring = match.Groups[1].Value;
-
-                
-
-                return capturedSubstring;
-            }
-            else
-            {
-                
-                return string.Empty;
-            }
-        }
+        
     }
 }

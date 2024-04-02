@@ -82,6 +82,21 @@
           </span>
         </div>
 
+        <div class="form-group col-12 mb-3">
+          <label for="roles" class="form-label">Roles</label>
+
+          <div *ngFor="let role of rolesItems; let i = index" >
+            <input type="checkbox" formControlName="{{role.toLowerCase()}}"> {{role}}
+          </div>
+
+          <span class="error-block" *ngIf="!admin.value && (admin.touched || userSubmitted)
+          && !reader.value && (reader.touched || userSubmitted)
+          && !owner.value && (owner.touched || userSubmitted)">
+            Plese select atleast one role
+          </span>
+          
+        </div>
+
 
         <div class="form-group col-12">
           <button type="submit" class="btn btn-primary">Save</button>
