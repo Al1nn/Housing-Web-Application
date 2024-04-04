@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IUserForLogin, IUserForRegister } from '../model/IUser.interface';
+import { IUserForLogin } from '../model/IUser.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
@@ -14,24 +14,29 @@ export class AuthService {
     constructor(private http: HttpClient) { }
     baseUrl = environment.baseUrl;
 
-    authUser(user: IUserForRegister): Observable<IUserForLogin> {
+    authUser(user: FormData): Observable<IUserForLogin> {
         return this.http.post<IUserForLogin>(this.baseUrl + '/account/login', user);
     }
 
-    registerUser(user: IUserForRegister) {
+    registerUser(user: FormData) {
         return this.http.post(this.baseUrl + '/account/register', user);
     }
 
     decodeToken(): IToken | null {
-        let jwt = localStorage.getItem('token') as string;
-        if (jwt) {
-            let jwtData = jwt.split('.')[1]; //Payload
-            let decodedJwtJsonData = window.atob(jwtData);
-            let decodedJwtData = JSON.parse(decodedJwtJsonData);
-            return decodedJwtData as IToken;
+        if (typeof localStorage !== 'undefined') {
+            let jwt = localStorage.getItem('token') as string;
+            if (jwt) {
+                let jwtData = jwt.split('.')[1]; //Payload
+                let decodedJwtJsonData = window.atob(jwtData);
+                let decodedJwtData = JSON.parse(decodedJwtJsonData);
+                return decodedJwtData as IToken;
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
+
 
     }
 

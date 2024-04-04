@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
     AbstractControl,
     FormControl,
@@ -7,11 +7,9 @@ import {
     ValidationErrors,
     Validators,
 } from '@angular/forms';
-import { IUserForRegister } from '../../model/IUser.interface';
 import { AlertifyService } from '../../services/alertify.service';
 import { AuthService } from '../../services/auth.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ImageCroppedEvent } from 'ngx-image-cropper';
+
 
 
 
@@ -25,27 +23,19 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
 export class UserRegisterComponent implements OnInit {
 
     registerationForm: FormGroup;
-    user: IUserForRegister;
-
+    formData: FormData = new FormData();
     userSubmitted: boolean;
 
-
-    modalRef: BsModalRef;
-
-    croppedImage: any = '';
-    imageChangedEvent: any = '';
+    image: string;
 
     rolesItems = ["Admin", "Reader", "Owner"];
 
-    checkedRoles: string[] = [];
+
 
     constructor(
         private fb: FormBuilder,
         private authService: AuthService,
-        private modalService: BsModalService,
-        private alertifyService: AlertifyService,
-        private cdr: ChangeDetectorRef,
-
+        private alertifyService: AlertifyService
     ) { }
 
     get username() {
@@ -81,39 +71,25 @@ export class UserRegisterComponent implements OnInit {
     }
 
     onFileChange(event: any) {
-        this.imageChangedEvent = event;
+        if (event.target.files && event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.formData.append("file", file);
+            const reader = new FileReader();
+            reader.onload = () => {
+                const imageUrl = reader.result as string;
+                this.image = imageUrl;
+            }
+            reader.readAsDataURL(file);
+        }
     }
 
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
-    }
+
 
     resetInput() {
         const input = document.getElementById('avatar-input-file') as HTMLInputElement;
         if (input) {
             input.value = "";
         }
-    }
-
-    imageCropped(event: ImageCroppedEvent) {
-        this.croppedImage = event.base64;
-
-    }
-
-    loadImageFailed() {
-        // show message
-    }
-    cropperReady() {
-        // cropper ready
-    }
-    imageLoaded() {
-        // show cropper
-    }
-
-
-    submitProfilePicture() {
-        this.modalRef.hide();
-        this.cdr.detectChanges();
     }
 
 
@@ -149,26 +125,36 @@ export class UserRegisterComponent implements OnInit {
 
 
 
-    userData(): IUserForRegister {
+    userData(): FormData {
+        this.formData.append("username", this.username.value);
+        this.formData.append("email", this.email.value);
+        this.formData.append("password", this.password.value);
+        this.formData.append("phoneNumber", this.mobile.value);
+
+
         if (this.admin.value) {
-            this.checkedRoles.push("Admin");
+            this.formData.append("roles", "Admin");
         }
         if (this.owner.value) {
-            this.checkedRoles.push("Owner")
+            this.formData.append("roles", "Owner");
         }
         if (this.reader.value) {
-            this.checkedRoles.push("Reader");
+            this.formData.append("roles", "Reader");
         }
 
 
-        return (this.user = {
-            username: this.username.value,
-            email: this.email.value,
-            password: this.password.value,
-            phoneNumber: this.mobile.value,
-            roles: this.checkedRoles,
-            imageUrl: !this.croppedImage ? "" : this.croppedImage
-        });
+
+
+        return this.formData;
+
+        // return (this.user = {
+        //     username: this.username.value,
+        //     email: this.email.value,
+        //     password: this.password.value,
+        //     phoneNumber: this.mobile.value,
+        //     roles: this.checkedRoles,
+        //     imageUrl: !this.croppedImage ? "" : this.croppedImage
+        // });
 
     }
 
@@ -195,8 +181,12 @@ export class UserRegisterComponent implements OnInit {
 
     onReset() {
         this.userSubmitted = false;
-        this.croppedImage = "";
-        this.checkedRoles = [];
+        this.formData.delete("username");
+        this.formData.delete("email");
+        this.formData.delete("password");
+        this.formData.delete("phoneNumber");
+        this.formData.delete("roles");
+        this.image = "";
         this.registerationForm.reset();
     }
 }

@@ -1,4 +1,5 @@
 
+import { environment } from '../../environments/environment';
 import { AuthService } from '../services/auth.service';
 import { AlertifyService } from './../services/alertify.service';
 import { Component } from '@angular/core';
@@ -11,8 +12,8 @@ import { Component } from '@angular/core';
 export class NavBarComponent {
     loggedInUser: string;
     profilePicture: string;
-
-
+    thumbnailFolder: string = environment.thumbnailFolder;
+    originalFolder: string = environment.originalPictureFolder;
     constructor(
         private alertifyService: AlertifyService,
         private authService: AuthService
@@ -43,7 +44,6 @@ export class NavBarComponent {
 
     onLogout() {
         localStorage.removeItem('token');
-        localStorage.removeItem('username');
         localStorage.removeItem('image');
         this.alertifyService.success('You are logged out !');
     }

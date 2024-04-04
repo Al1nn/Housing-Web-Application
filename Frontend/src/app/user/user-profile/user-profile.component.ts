@@ -3,6 +3,7 @@ import { IUserCard } from '../../model/IUserCard.interface';
 import { AuthService } from '../../services/auth.service';
 import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-user-profile',
@@ -13,9 +14,12 @@ export class UserProfileComponent implements OnInit {
 
 
   public userCard: IUserCard;
-  hasImage: string;
   public userCards: IUserCard[];
   public propertiesListed: number;
+
+  public originalFolder: string = environment.originalPictureFolder;
+  public thumbnailFolder: string = environment.thumbnailFolder;
+
   constructor(private authService: AuthService,
     private housingService: HousingService
     , private route: ActivatedRoute) { }
@@ -23,7 +27,6 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe((data) => {
       this.userCard = data['usercard'];
-      this.hasImage = data['usercard'].url;
     });
 
     this.authService.getUserCards().subscribe((data: IUserCard[]) => {

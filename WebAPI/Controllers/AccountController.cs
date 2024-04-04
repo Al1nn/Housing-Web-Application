@@ -98,10 +98,10 @@ namespace WebAPI.Controllers
 
         //api/account/register
         [HttpPost("register")]
-        public async Task<IActionResult> Register(LoginReqDto loginReq)
+        public async Task<IActionResult> Register( [FromForm] LoginReqDto loginReq)
         {
             ApiError apiError = new ApiError();
-            if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsEmpty() || loginReq.PhoneNumber.IsEmpty() || loginReq.Roles.Count == 0 || loginReq.Roles.IsNullOrEmpty())
+            if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsNullOrEmpty() || loginReq.PhoneNumber.IsNullOrEmpty() || loginReq.Roles.Count == 0 || loginReq.Roles.IsNullOrEmpty())
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "User credentials cannot be blank or unselected";
@@ -119,7 +119,7 @@ namespace WebAPI.Controllers
 
            
 
-            uow.UserImageRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, loginReq.Roles, loginReq.imageUrl);
+            uow.UserImageRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, loginReq.Roles, loginReq.file);
 
             await uow.SaveAsync();
 

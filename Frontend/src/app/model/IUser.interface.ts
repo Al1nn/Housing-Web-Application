@@ -4,7 +4,6 @@ export interface IUserForRegister {
     password: string;
     phoneNumber: number;
     roles: string[];
-    imageUrl: string;
 }
 
 export interface IUserForLogin {

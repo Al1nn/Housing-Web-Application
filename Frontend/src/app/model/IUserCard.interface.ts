@@ -5,5 +5,5 @@ export interface IUserCard {
     phoneNumber: string;
     role: number;
     imageId: number;
-    url: string;
+    fileName: string;
 }

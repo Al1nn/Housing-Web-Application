@@ -17,7 +17,7 @@ namespace WebAPI.Helpers
 
             CreateMap<UserImage, ImageDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Image.Id))
-                .ForMember(d => d.Url, opt => opt.MapFrom(src => src.Image.Url));
+                .ForMember(d => d.FileName, opt => opt.MapFrom(src => src.Image.FileName));
 
 
             CreateMap<UserImage, UserImageDto>()
@@ -26,7 +26,7 @@ namespace WebAPI.Helpers
                 .ForMember(d => d.Email, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(d => d.PhoneNumber, opt => opt.MapFrom(src => src.User.PhoneNumber))
                 .ForMember(d => d.ImageId, opt => opt.MapFrom(src => src.Image.Id))
-                .ForMember(d => d.Url, opt => opt.MapFrom(src => src.Image.Url));
+                .ForMember(d => d.FileName, opt => opt.MapFrom(src => src.Image.FileName));
 
             
 

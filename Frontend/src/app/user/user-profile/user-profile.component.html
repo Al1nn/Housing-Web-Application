@@ -6,8 +6,8 @@
         <div class="card-body">
           <div class="avatar-container">
             <div class="image-container">
-              <img *ngIf="!hasImage" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
-              <img *ngIf="hasImage"[src]="userCard.url" class="img-fluid rounded-circle">
+              <img *ngIf="!userCard.fileName" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
+              <img *ngIf="userCard.fileName" src="{{originalFolder + userCard.fileName}}" class="img-fluid rounded-circle" >
             </div> 
           </div>
   
@@ -43,8 +43,8 @@
       <div class="row">
           <div class="col-2 mb-3" *ngFor="let userCard of userCards">
             <div class="text-center">
-              <img *ngIf="!userCard.url" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
-              <img *ngIf="userCard.url"[src]="userCard.url" class="img-fluid rounded-circle">
+              <img *ngIf="!userCard.fileName" src="/assets/user_images/user_default.jpg" class="img-thumbnail rounded-circle">
+              <img *ngIf="userCard.fileName" src="{{thumbnailFolder + userCard.fileName}}" class="img-thumbnail rounded-circle">
               <strong>{{userCard.username}}</strong>
             </div>
             

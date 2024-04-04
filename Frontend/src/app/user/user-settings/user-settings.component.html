@@ -6,11 +6,11 @@
         <div class="card-body">
           <div class="avatar-container">
             <div class="image-container">
-              <img *ngIf="!hasImage" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
-              <img *ngIf="hasImage"[src]="userCard.url" class="img-fluid rounded-circle">
+              <img *ngIf="!userCard.fileName" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
+              <img *ngIf="userCard.fileName" src="{{ thumbnailFolder + userCard.fileName}}" class="img-fluid rounded-circle">
             </div> 
             <div class="icon-wrapper">
-              <input type="file" id='avatar-input-file' accept="image/jpeg"  (change)="onFileChange($event); openModal(imageCropperModal)" #avatarInput />
+              <input type="file" id='avatar-input-file' accept="image/jpeg"  (change)="onFileChange($event)" #avatarInput />
               
               <button class="btn btn-primary rounded" (click)="avatarInput.click()"> <i class="fa-solid fa-pen fa-lg"></i> </button> 
               
@@ -64,30 +64,4 @@
   
 </div>
 
-<ng-template #imageCropperModal>
-  <div class="modal-header">
-     <h4 class="modal-title pull-left">Image Crop</h4>
-     
-  </div>
-  <div class="modal-body">
-    <image-cropper 
-      [imageChangedEvent]="imageChangedEvent"
-      [maintainAspectRatio]="true"
-      format="jpeg"
-      (imageCropped)="imageCropped($event)"
-      (imageLoaded)="imageLoaded()"
-      (cropperReady)="cropperReady()"
-      (loadImageFailed)="loadImageFailed()"
-      [roundCropper]="true"
-      [output]="'base64'"
-      style="width: 100%; height: 400px;">
-    </image-cropper>
-      
-      
-    
-  </div>
-  <div class="modal-footer">
-     <button type="button" class="btn btn-primary" (click)="submitProfilePicture()">Done</button>
-     
-  </div>
-</ng-template>
+

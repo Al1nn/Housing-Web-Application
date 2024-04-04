@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, OnInit, TemplateRef } from '@angular/core
 import { ActivatedRoute } from '@angular/router';
 import { IUserCard } from '../../model/IUserCard.interface';
 import { HousingService } from '../../services/housing.service';
-import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-user-settings',
@@ -14,10 +14,11 @@ export class UserSettingsComponent implements OnInit {
 
   userCard: IUserCard;
   propertiesListed: number;
-  hasImage: string;
   imageChangedEvent: Event;
   modalRef: BsModalRef;
 
+  public originalFolder: string = environment.originalPictureFolder;
+  public thumbnailFolder: string = environment.thumbnailFolder;
 
   constructor(private route: ActivatedRoute
     , private housingService: HousingService
@@ -27,7 +28,6 @@ export class UserSettingsComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe((data) => {
       this.userCard = data['usercard'];
-      this.hasImage = data['usercard'].url;
       console.log(this.userCard);
     });
 
@@ -57,16 +57,5 @@ export class UserSettingsComponent implements OnInit {
     }
   }
 
-  loadImageFailed() {
-    //failed
-  }
-  cropperReady() {
-    //ready
-  }
-  imageLoaded() {
-    //loaded
-  }
-  imageCropped(event: ImageCroppedEvent) {
-    this.userCard.url = event.base64 as string;
-  }
+
 }

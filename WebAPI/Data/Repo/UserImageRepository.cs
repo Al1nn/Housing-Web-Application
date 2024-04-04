@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using WebAPI.Interfaces;
 using WebAPI.Models;
+using Image = WebAPI.Models.Image;
 
 namespace WebAPI.Data.Repo
 {
@@ -73,7 +76,7 @@ namespace WebAPI.Data.Repo
 
  
 
-        public void Register(string username, string password, string email, string phoneNumber, List<string> roles ,string? imageUrl)
+        public void Register(string username, string password, string email, string phoneNumber, List<string> roles ,IFormFile file)
         {
             byte[] passwordHash, passwordKey;
 
@@ -103,11 +106,49 @@ namespace WebAPI.Data.Repo
                 user.Roles.Add(role);   
             }
 
-            if (!imageUrl.IsNullOrEmpty())
+            if (file != null)
             {
+                //Include file in original and thumbnail directory;
+                string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes");
+                string thumbnailsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails");
+
+                if (!Directory.Exists(originalSizesDirectory))
+                {
+                    Directory.CreateDirectory(originalSizesDirectory);
+                }
+
+                if (!Directory.Exists(thumbnailsDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailsDirectory);
+                }
+
+                string uniqueId = Guid.NewGuid().ToString();
+                var fileName = uniqueId + '-' + file.FileName;
+
+                var originalPath = Path.Combine(originalSizesDirectory, fileName);
+                var thumbnailPath = Path.Combine(thumbnailsDirectory, fileName);
+
+                using (var stream = new FileStream(originalPath, FileMode.Create))
+                {
+                    file.CopyToAsync(stream);
+                }
+
+                using (var thumbnail = SixLabors.ImageSharp.Image.Load(originalPath))
+                {
+                    var resizeOptions = new ResizeOptions
+                    {
+                        Mode = ResizeMode.Max,
+                        Size = new Size(250, 250),
+                        Position = AnchorPositionMode.Center
+                    };
+
+                    thumbnail.Mutate(x => x.Resize(resizeOptions));
+                    thumbnail.Save(thumbnailPath);
+                }
+
                 Image image = new Image();
-                image.Name = user.Username + '-' + user.Id.ToString() + ".jpg";
-                image.Url = imageUrl;
+
+                image.FileName = fileName;
 
                 UserImage userImage = new UserImage
                 {

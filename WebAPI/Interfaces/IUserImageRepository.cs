@@ -9,7 +9,7 @@ namespace WebAPI.Interfaces
 
         Task<User> GetUserByName(string username);
 
-         void Register(string username, string password, string email, string phoneNumber, List<string> roles,string? imageUrl);
+         void Register(string username, string password, string email, string phoneNumber, List<string> roles,IFormFile? file);
 
         Task<bool> UserAlreadyExists(string username);
 

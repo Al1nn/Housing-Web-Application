@@ -23,10 +23,11 @@ export class UserLoginComponent implements OnInit {
         username: "",
         password: "",
         email: "",
-        imageUrl: "",
         phoneNumber: 0,
         roles: []
     };
+
+    formData: FormData = new FormData();
 
     rolesData: any = [
         { name: "Admin", id: 1, selected: false },
@@ -51,10 +52,19 @@ export class UserLoginComponent implements OnInit {
     }
 
     onLogin() {
-        this.loginRequest.roles = this.getSelectedRoles();
-        console.log(this.loginRequest);
+        this.formData.append("username", this.loginRequest.username);
+        this.formData.append("password", this.loginRequest.password);
 
-        this.authService.authUser(this.loginRequest).subscribe(
+
+        this.loginRequest.roles = this.getSelectedRoles();
+
+        for (let e of this.loginRequest.roles) {
+            this.formData.append("roles", e);
+        }
+
+        console.log(this.formData);
+
+        this.authService.authUser(this.formData).subscribe(
             (response: IUserForLogin) => {
                 const user = response;
                 localStorage.setItem('token', user.token);
@@ -62,7 +72,7 @@ export class UserLoginComponent implements OnInit {
 
                 this.authService.getProfileImage().subscribe((data: IImage) => {
                     if (data !== null) {
-                        localStorage.setItem('image', data.url as string);
+                        localStorage.setItem('image', data.fileName as string);
                     }
                 })
 
@@ -77,7 +87,6 @@ export class UserLoginComponent implements OnInit {
             username: "",
             password: "",
             email: "",
-            imageUrl: "",
             phoneNumber: 0,
             roles: []
         };
