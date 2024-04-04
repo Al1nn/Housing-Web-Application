@@ -16,6 +16,7 @@ import { environment } from '../../../environments/environment';
 
 
 
+
 @Component({
     selector: 'app-property-detail',
     templateUrl: './property-detail.component.html',
@@ -43,7 +44,6 @@ export class PropertyDetailComponent implements OnInit {
     galleryImages: GalleryItem[];
     modalRef: BsModalRef;
 
-    isAdmin: boolean = false;
     originalFolder: string = environment.originalPictureFolder;
     thumbnailFolder: string = environment.thumbnailFolder;
 
@@ -206,20 +206,39 @@ export class PropertyDetailComponent implements OnInit {
 
         this.galleryImages = this.getPropertyPhotos();
 
-        var username = localStorage.getItem('username') as string;
-
-
-        if (username !== null) {
-            this.authService.isAdmin(username).subscribe((data) => {
-                this.isAdmin = data;
-            });
-        }
-
+        console.log(this.authService.decodeToken());
 
 
     }
 
+    loggedIn() {
+        const token = localStorage.getItem('token') as string;
+        if (token) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    isReader() {
+        const decodedToken = this.authService.decodeToken();
+        if (decodedToken) {
+            return decodedToken.role === 'Reader';
+        } else {
+            return false;
+        }
+
+    }
+
+    includesReader() {
+        const decodedToken = this.authService.decodeToken();
+        if (decodedToken) {
+            return decodedToken.role.includes('Reader');
+        } else {
+            return false;
+        }
+
+    }
 
     handleLogic() {
         switch (this.property.propertyType) {

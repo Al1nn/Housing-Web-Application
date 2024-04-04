@@ -139,7 +139,6 @@ namespace WebAPI.Controllers
             {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                //I need to put user.Roles in claims .
             };
 
             foreach (Role role in user.Roles)

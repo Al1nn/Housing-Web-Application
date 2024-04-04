@@ -47,6 +47,7 @@ import { UserSettingsComponent } from './user/user-settings/user-settings.compon
 import { UserProfileResolverService } from './user/user-profile/user-profile-resolver.service';
 import { PhotoEditorComponent } from './property/photo-editor/photo-editor.component';
 
+
 @NgModule({
     declarations: [
         AppComponent,

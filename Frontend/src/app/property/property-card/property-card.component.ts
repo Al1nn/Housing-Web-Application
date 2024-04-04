@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IPropertyBase } from '../../model/IPropertyBase.interface';
 import { AlertifyService } from '../../services/alertify.service';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-property-card',
@@ -19,13 +20,16 @@ export class PropertyCardElement implements OnInit {
 
 
     loggedIn() {
-        this.loggedInUser =
-            typeof localStorage !== 'undefined'
-                ? (localStorage.getItem('username') as string)
-                : '';
-        return this.loggedInUser;
+        const decodedToken = this.authService.decodeToken();
+        if (decodedToken) {
+            this.loggedInUser = decodedToken.unique_name;
+            return this.loggedInUser;
+        } else {
+            return "";
+        }
     }
-    constructor(private alertifyService: AlertifyService) { }
+    constructor(private alertifyService: AlertifyService,
+        private authService: AuthService) { }
 
     ngOnInit(
 

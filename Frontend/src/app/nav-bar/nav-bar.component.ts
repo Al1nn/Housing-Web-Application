@@ -1,4 +1,5 @@
 
+import { AuthService } from '../services/auth.service';
 import { AlertifyService } from './../services/alertify.service';
 import { Component } from '@angular/core';
 
@@ -13,7 +14,8 @@ export class NavBarComponent {
 
 
     constructor(
-        private alertifyService: AlertifyService
+        private alertifyService: AlertifyService,
+        private authService: AuthService
     ) {
 
     }
@@ -22,12 +24,13 @@ export class NavBarComponent {
 
 
     loggedIn() {
-        this.loggedInUser =
-            typeof localStorage !== 'undefined'
-                ? (localStorage.getItem('username') as string)
-                : '';
-
-        return this.loggedInUser;
+        const decodedToken = this.authService.decodeToken();
+        if (decodedToken) {
+            this.loggedInUser = decodedToken.unique_name;
+            return this.loggedInUser;
+        } else {
+            return "";
+        }
     }
 
     hasImage() {

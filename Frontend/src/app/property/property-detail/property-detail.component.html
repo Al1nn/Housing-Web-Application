@@ -1,5 +1,5 @@
 <div class="card-body">
-  <div class="btn-group d-flex mb-3" style="position: relative; margin-left: 75%;" >
+  <div class="btn-group d-flex mb-3" style="position: relative; margin-left: 75%;" *ngIf="!isReader() && includesReader() && loggedIn()">
     <button class="btn btn-primary" (click)="openModal('editModal',editModal)">
       <i class="fa-solid fa-pen-nib"></i> Update
     </button>
@@ -139,7 +139,7 @@
           <gallery *ngIf="galleryImages.length > 0" [items]="galleryImages" class="gallery-container"></gallery>
 
         </tab>
-        <tab heading="Upload/Edit Photos">
+        <tab heading="Upload/Edit Photos" *ngIf="loggedIn()">
           <app-photo-editor  [property]="property"></app-photo-editor>
         </tab>
       </tabset>
