@@ -7,7 +7,7 @@
           <div class="avatar-container">
             <div class="image-container">
               <img *ngIf="!userCard.fileName" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
-              <img *ngIf="userCard.fileName" src="{{originalFolder + userCard.fileName}}" class="img-fluid rounded-circle" >
+              <img *ngIf="userCard.fileName" src="{{thumbnailFolder + userCard.fileName}}" class="img-fluid rounded-circle" >
             </div> 
           </div>
   
@@ -23,7 +23,7 @@
           </div>
           <!-- <div>
             <i class="fa-regular fa-user"></i>
-            <strong *ngIf="userCard.role === 1"> Role : Editor </strong>
+            <strong *ngIf="userCard.role === 1">  </strong>
             <strong *ngIf="userCard.role === 0"> Role : Reader </strong>
           </div> -->
           <div>

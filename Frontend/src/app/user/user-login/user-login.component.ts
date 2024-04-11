@@ -62,8 +62,6 @@ export class UserLoginComponent implements OnInit {
             this.formData.append("roles", e);
         }
 
-        console.log(this.formData);
-
         this.authService.authUser(this.formData).subscribe(
             (response: IUserForLogin) => {
                 const user = response;
@@ -93,12 +91,20 @@ export class UserLoginComponent implements OnInit {
         this.rolesData.forEach((role: { selected: boolean; }) => {
             role.selected = false;
         });
+        this.formData.delete("username");
+        this.formData.delete("password");
+        this.formData.delete("roles");
         this.loginForm.resetForm();
     }
 
 
 
-    ngOnInit() { }
+    ngOnInit() {
+
+        this.formData.delete("username");
+        this.formData.delete("password");
+        this.formData.delete("roles");
+    }
 
 
 }

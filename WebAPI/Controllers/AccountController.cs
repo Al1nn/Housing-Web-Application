@@ -66,12 +66,18 @@ namespace WebAPI.Controllers
             return Ok(cardDto); 
         }
 
-        
+        [HttpGet("roles")]
+        [Authorize]
+        public async Task<IActionResult> GetRoles()
+        {
+            int userId = GetUserId();
+            return Ok();
+        }
        
 
         //api/account/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginReqDto loginReq)
+        public async Task<IActionResult> Login( [FromForm] LoginReqDto loginReq)
         {
             
             var user = await uow.UserImageRepository.Authenticate(loginReq.Username, loginReq.Password, loginReq.Roles);
@@ -94,19 +100,30 @@ namespace WebAPI.Controllers
             return Ok(loginRes);
         }
 
+        //api/account/verifyPassword
+        [HttpGet("verifyPassword/{password}")]
+        [Authorize]
+        public async Task<IActionResult> Verify(string password)
+        {
 
+            int userId = GetUserId();
+            bool isOldPassword = await uow.UserImageRepository.VerifyOldPassword(userId, password);
+            
+            
+            return Ok(isOldPassword);
+        }
 
         //api/account/register
         [HttpPost("register")]
         public async Task<IActionResult> Register( [FromForm] LoginReqDto loginReq)
         {
             ApiError apiError = new ApiError();
-            if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsNullOrEmpty() || loginReq.PhoneNumber.IsNullOrEmpty() || loginReq.Roles.Count == 0 || loginReq.Roles.IsNullOrEmpty())
+            if ( loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsEmpty() || loginReq.PhoneNumber.IsEmpty() || loginReq.Roles.Count == 0 || loginReq.Roles.IsNullOrEmpty())
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "User credentials cannot be blank or unselected";
                 return BadRequest(apiError);
-            }
+            } 
 
            
             

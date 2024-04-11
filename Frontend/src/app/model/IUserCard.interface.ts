@@ -3,7 +3,6 @@ export interface IUserCard {
     username: string;
     email: string;
     phoneNumber: string;
-    role: number;
     imageId: number;
     fileName: string;
 }

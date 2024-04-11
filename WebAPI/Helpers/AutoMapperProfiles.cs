@@ -14,6 +14,8 @@ namespace WebAPI.Helpers
             CreateMap<Property,PropertyDto>().ReverseMap();
             CreateMap<Property, PropertyDetailDto>().ReverseMap();
             CreateMap<Photo, PhotoDto>().ReverseMap();
+            CreateMap<Role, RoleDto>().ReverseMap();
+
 
             CreateMap<UserImage, ImageDto>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Image.Id))

@@ -47,7 +47,7 @@
         </div>
 
         <div class="form-group col-12 mb-3">
-          <label for="passwrod" class="form-label">Password</label>
+          <label for="password" class="form-label">Password</label>
           <input type="password" class="form-control" formControlName="password">
           <span *ngIf="!password.valid && (password.touched || userSubmitted)" class="error-block">
             <span *ngIf="password.hasError('required')">

@@ -40,7 +40,7 @@ namespace WebAPI.Data.Repo
                 return null;
             }
 
-            if(roles.Count == 0)
+            if(user.Roles.Count == 0)
             {
                 return null;
             }
@@ -49,13 +49,19 @@ namespace WebAPI.Data.Repo
             {
                 return null;
             }
-            
 
+         
             return user;
             
         }
 
-       
+        public async Task<bool> VerifyOldPassword(int id, string password) //Request pentru verificare la change user password
+        {
+            var user = await dc.Users.FirstOrDefaultAsync(user => user.Id == id);
+
+            return MatchPasswordHash(password, user.Password, user.PasswordKey);
+
+        }
 
         private bool MatchPasswordHash(string passwordText, byte[] password, byte[] passwordKey)
         {
@@ -130,14 +136,14 @@ namespace WebAPI.Data.Repo
 
                 using (var stream = new FileStream(originalPath, FileMode.Create))
                 {
-                    file.CopyToAsync(stream);
+                    file.CopyTo(stream);
                 }
 
                 using (var thumbnail = SixLabors.ImageSharp.Image.Load(originalPath))
                 {
                     var resizeOptions = new ResizeOptions
                     {
-                        Mode = ResizeMode.Max,
+                        Mode = ResizeMode.Crop,
                         Size = new Size(250, 250),
                         Position = AnchorPositionMode.Center
                     };
@@ -170,10 +176,7 @@ namespace WebAPI.Data.Repo
             return await dc.Users.AnyAsync( data => data.Username == username );
         }
 
-        public async Task<User> GetUserByName(string username )
-        {
-            return await dc.Users.FirstOrDefaultAsync(data => data.Username == username);
-        }
+
 
         public async Task<IEnumerable<UserImage>> GetUserCardsAsync()
         {
@@ -204,6 +207,7 @@ namespace WebAPI.Data.Repo
                     .SelectMany(
                         x => x.UserImages.DefaultIfEmpty(),
                         (x, userImage) => new UserImage { User = x.User, Image = userImage != null ? userImage.Image : null }
+                        // also select many matching roles
                     )
                     .FirstOrDefaultAsync();
 
@@ -219,5 +223,6 @@ namespace WebAPI.Data.Repo
             return image;
         }
 
+        
     }
 }

@@ -12,5 +12,6 @@ namespace WebAPI.Dtos
         public int ImageId { get; set; }
 
         public string FileName { get; set; }
+
     }
 }

@@ -22,6 +22,15 @@ export class AuthService {
         return this.http.post(this.baseUrl + '/account/register', user);
     }
 
+    verifyOldPassword(password: string): Observable<boolean> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.get<boolean>(this.baseUrl + '/account/verifyPassword/' + password, httpOptions);
+    }
+
     decodeToken(): IToken | null {
         if (typeof localStorage !== 'undefined') {
             let jwt = localStorage.getItem('token') as string;

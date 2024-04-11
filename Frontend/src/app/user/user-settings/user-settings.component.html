@@ -27,11 +27,11 @@
             <i class="fa-solid fa-phone"></i>
             <strong> Phone Number : {{userCard.phoneNumber}}</strong>
           </div>
-          <div>
+          <!-- <div>
             <i class="fa-regular fa-user"></i>
             <strong *ngIf="userCard.role === 1"> Role : Editor </strong>
             <strong *ngIf="userCard.role === 0"> Role : Reader </strong>
-          </div>
+          </div> -->
           <div>
             <i class="fa-solid fa-house"></i>
             <strong *ngIf="propertiesListed === 0"> No Properties Listed</strong>
@@ -39,7 +39,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <button class="btn btn-danger"> Delete</button>
+          <button class="btn btn-danger" (click)="onAccountDelete()"> Delete</button>
         </div>
       </div>
       
@@ -52,14 +52,36 @@
     </div>
     
     <div class="tab-panel p-3 shadow">
-      <tabset class="member-tabset">
+      <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">
+        <tabset class="member-tabset">
         <tab heading="Change Password">
-
-        </tab>
-        <tab heading="Account Details">
-
-        </tab>
+          
+            <div class="form-group col-12 mb-3">
+              <label for="oldPassword" class="form-label">Your Old Password</label>
+              <input type="password" class="form-control" formControlName="oldPassword">
+              <span class="error-block" *ngIf="oldPassword.touched && oldPassword.errors?.required">
+                Please provide your current password
+              </span>
+              <span class="error-block" *ngIf="oldPassword.errors?.notmatched">
+                Introduced password does not match with the current password
+              </span>
+            </div>
+            <div class="form-group col-12 mb-3">
+              <label for="newPassword" class="form-label">Your New Password</label>
+              <input type="password" class="form-control" formControlName="newPassword">
+              <span  class="error-block" *ngIf="newPassword.touched && newPassword.errors?.required">
+                  Please provide your new password
+              </span>
+            </div>
+            <div class="form-group col-12 mt-3 ">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="reset" class="btn btn-secondary" style="margin-left: 10px;">Cancel</button>
+            </div>
+        </tab> 
+       
       </tabset>
+      </form>
+      
   </div>
   
 </div>

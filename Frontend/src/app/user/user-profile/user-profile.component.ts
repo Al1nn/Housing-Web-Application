@@ -21,8 +21,8 @@ export class UserProfileComponent implements OnInit {
   public thumbnailFolder: string = environment.thumbnailFolder;
 
   constructor(private authService: AuthService,
-    private housingService: HousingService
-    , private route: ActivatedRoute) { }
+    private housingService: HousingService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.data.subscribe((data) => {
@@ -30,7 +30,8 @@ export class UserProfileComponent implements OnInit {
     });
 
     this.authService.getUserCards().subscribe((data: IUserCard[]) => {
-      this.userCards = data;
+      const decodedToken = this.authService.decodeToken();
+      this.userCards = data.filter(card => card.username !== decodedToken?.unique_name);
     });
 
     this.housingService.getPropertyCountByUser().subscribe((data: number) => {
