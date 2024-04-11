@@ -112,6 +112,52 @@ namespace WebAPI.Controllers
             
             return Ok(isOldPassword);
         }
+        //api/account/updatePassword/{newPassword}
+        [HttpPut("updatePassword/{newPassword}")] // IT KEEPS GETTING ME UNAUTHORIZED EVEN DO I HAVE THE TOKENNNNN
+        [Authorize] 
+        public async Task<IActionResult> UpdatePassword(string newPassword)
+        {
+            //For safety
+            ApiError apiError = new ApiError();
+            if (newPassword.IsEmpty())
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "New password empty";
+                apiError.ErrorDetails = "";
+                return BadRequest(apiError);
+            }
+            
+            int userId = GetUserId();
+
+
+
+            var user = await uow.UserImageRepository.GetUserById(userId);
+
+            
+            if(user == null)//For safety 
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorDetails = "User not found";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
+            byte[] passwordHash, passwordKey;
+            uow.UserImageRepository.EncryptPassword(newPassword, out passwordHash, out passwordKey);
+          
+
+            user.Password = passwordHash;
+            user.PasswordKey = passwordKey;
+
+            
+
+
+            uow.UserImageRepository.UpdatePassword(user);
+
+            await uow.SaveAsync();
+            return StatusCode(200);
+
+        }
 
         //api/account/register
         [HttpPost("register")]

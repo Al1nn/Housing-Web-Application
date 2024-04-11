@@ -63,6 +63,9 @@ namespace WebAPI.Data.Repo
 
         }
 
+
+        
+
         private bool MatchPasswordHash(string passwordText, byte[] password, byte[] passwordKey)
         {
 
@@ -80,17 +83,31 @@ namespace WebAPI.Data.Repo
 
         }
 
- 
-
-        public void Register(string username, string password, string email, string phoneNumber, List<string> roles ,IFormFile file)
+        public async Task<User> GetUserById(int id)
         {
-            byte[] passwordHash, passwordKey;
+            return await dc.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
 
+        public void EncryptPassword(string password, out byte[] passwordHash, out byte[] passwordKey)
+        {
             using (var hmac = new HMACSHA512())
             {
                 passwordKey = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
+        }
+
+
+        public void UpdatePassword(User user)
+        {
+            dc.Users.Update(user);
+        }
+
+        public void Register(string username, string password, string email, string phoneNumber, List<string> roles ,IFormFile file)
+        {
+            byte[] passwordHash, passwordKey;
+
+            EncryptPassword(password, out passwordHash, out passwordKey);
             
             User user = new User();
             user.Username = username;

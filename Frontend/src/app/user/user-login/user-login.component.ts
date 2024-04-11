@@ -76,6 +76,10 @@ export class UserLoginComponent implements OnInit {
 
                 this.alertifyService.success("Login successful");
                 this.router.navigate(['/']);
+            },
+            (error) => {
+                this.onCancel();
+                console.log(error);
             }
         );
     }

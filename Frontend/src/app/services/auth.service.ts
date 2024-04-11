@@ -31,6 +31,15 @@ export class AuthService {
         return this.http.get<boolean>(this.baseUrl + '/account/verifyPassword/' + password, httpOptions);
     }
 
+    updatePassword(newPassword: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.put(this.baseUrl + '/account/updatePassword/' + newPassword, {}, httpOptions); //THIS GETS ME UNAUTHORIZED
+    }
+
     decodeToken(): IToken | null {
         if (typeof localStorage !== 'undefined') {
             let jwt = localStorage.getItem('token') as string;

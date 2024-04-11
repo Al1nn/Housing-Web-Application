@@ -6,6 +6,7 @@ import { HousingService } from '../../services/housing.service';
 import { environment } from '../../../environments/environment';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { AlertifyService } from '../../services/alertify.service';
 
 
 
@@ -30,6 +31,7 @@ export class UserSettingsComponent implements OnInit {
     private route: ActivatedRoute
     , private housingService: HousingService
     , private authService: AuthService
+    , private alertifyService: AlertifyService
   ) { }
 
   get oldPassword() {
@@ -56,11 +58,13 @@ export class UserSettingsComponent implements OnInit {
   }
 
   CreateChangePasswordForm() {
-    this.passwordForm = this.fb.group(
+    this.passwordForm = this.fb.group({
+      oldPassword: [null, Validators.required, this.oldPasswordValidator.bind(this)],
+      newPassword: [null, Validators.required],
+    },
       {
-        oldPassword: [null, Validators.required, this.oldPasswordValidator.bind(this)],
-        newPassword: [null, Validators.required],
-      },
+        validators: this.samePasswordValidator
+      }
 
     );
   }
@@ -79,17 +83,38 @@ export class UserSettingsComponent implements OnInit {
     });
   }
 
+  // samePasswordValidator(control: AbstractControl): Promise<ValidationErrors | null> {
+  //Create me a password matching VALIDATOR AND PUT samePassword to TRUE, IF IT IS TRUE, MAKE IT SHOW THE ERROR-BLOCK
+  // }
+
+  samePasswordValidator(control: AbstractControl): ValidationErrors | null {
+    const oldPassword = control.get('oldPassword')?.value;
+    const newPassword = control.get('newPassword')?.value;
+
+    // Check if both old and new passwords are defined and equal
+    if (oldPassword !== null && newPassword !== null && oldPassword === newPassword) {
+      return { samePassword: true }; // Return error if passwords match
+    }
+
+    return null; // Return null if passwords are different or one of them is undefined
+  }
+
 
   onSubmit() {
-    // this.userSubmitted = true;
-    if (this.passwordForm.invalid) {
-      return;
+    if (this.passwordForm.valid) {
+      this.authService.updatePassword(this.newPassword.value).subscribe(
+        () => {
+          this.onReset();
+          this.alertifyService.success("Your password has been updated !");
+        },
+        (error) => {
+          console.error('Error updating password:', error);
+          this.alertifyService.error("Failed to update password. Please try again later.");
+        }
+      );
+    } else {
+      this.alertifyService.error("Please review your fields");
     }
-    console.log(this.passwordForm);
-
-
-
-
   }
 
   onReset() {

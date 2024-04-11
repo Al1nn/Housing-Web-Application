@@ -64,6 +64,7 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
             if (!error.error.errorMessage && error.error && error.status !== 0) {
                 errorMessage = error.error;
             }
+
         }
         return errorMessage;
     }

@@ -66,13 +66,16 @@
                 Introduced password does not match with the current password
               </span>
             </div>
-            <div class="form-group col-12 mb-3">
-              <label for="newPassword" class="form-label">Your New Password</label>
-              <input type="password" class="form-control" formControlName="newPassword">
-              <span  class="error-block" *ngIf="newPassword.touched && newPassword.errors?.required">
-                  Please provide your new password
-              </span>
-            </div>
+              <div class="form-group col-12 mb-3">
+                <label for="newPassword" class="form-label">Your New Password</label>
+                <input type="password" class="form-control" formControlName="newPassword">
+                <span class="error-block" *ngIf="newPassword.touched && newPassword.errors?.required">
+                    Please provide your new password
+                </span>
+                <span class="error-block" *ngIf="passwordForm.errors?.samePassword">
+                    Current Password and New Password are the same
+                </span>
+              </div>
             <div class="form-group col-12 mt-3 ">
               <button type="submit" class="btn btn-primary">Save</button>
               <button type="reset" class="btn btn-secondary" style="margin-left: 10px;">Cancel</button>
