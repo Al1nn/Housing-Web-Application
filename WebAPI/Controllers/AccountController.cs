@@ -265,6 +265,8 @@ namespace WebAPI.Controllers
 
                 var image = await uow.UserImageRepository.GetAvatarByFileName(oldPictureName);
 
+                image.LastUpdatedOn = DateTime.Now;
+                image.LastUpdatedBy = userId;
                 image.FileName = fileName;
 
                 uow.UserImageRepository.UpdateAvatar(image);
