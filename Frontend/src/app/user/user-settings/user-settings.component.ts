@@ -19,7 +19,6 @@ export class UserSettingsComponent implements OnInit {
 
   userCard: IUserCard;
   propertiesListed: number;
-  imageChangedEvent: Event;
   // userSubmitted: boolean;
   passwordForm: FormGroup;
 
@@ -73,30 +72,29 @@ export class UserSettingsComponent implements OnInit {
     return new Promise((resolve) => {
       this.authService.verifyOldPassword(control.value).subscribe(response => {
         if (response) {
-          resolve(null); // Password matches
+          resolve(null);
         } else {
-          resolve({ notmatched: true }); // Password does not match
+          resolve({ notmatched: true });
         }
       }, _error => {
-        resolve({ notmatched: true }); // Handle error
+        resolve({ notmatched: true });
       });
     });
   }
 
-  // samePasswordValidator(control: AbstractControl): Promise<ValidationErrors | null> {
-  //Create me a password matching VALIDATOR AND PUT samePassword to TRUE, IF IT IS TRUE, MAKE IT SHOW THE ERROR-BLOCK
-  // }
+
 
   samePasswordValidator(control: AbstractControl): ValidationErrors | null {
     const oldPassword = control.get('oldPassword')?.value;
     const newPassword = control.get('newPassword')?.value;
 
-    // Check if both old and new passwords are defined and equal
+
     if (oldPassword !== null && newPassword !== null && oldPassword === newPassword) {
-      return { samePassword: true }; // Return error if passwords match
+      return { samePassword: true };
     }
 
-    return null; // Return null if passwords are different or one of them is undefined
+
+    return null;
   }
 
 
@@ -122,8 +120,14 @@ export class UserSettingsComponent implements OnInit {
     this.passwordForm.reset();
   }
 
-  onFileChange(event: Event) {
-    this.imageChangedEvent = event;
+  onFileChange(event: any) {
+    console.log(this.userCard.fileName + "\n");
+    const selectedFile = event.target.files[0];
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    this.authService.updateAvatar(this.userCard.fileName, formData).subscribe(() => {
+      formData.delete("file");
+    });
   }
 
   onAccountDelete() {

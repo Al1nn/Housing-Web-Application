@@ -44,6 +44,7 @@ namespace WebAPI.Controllers
             return Ok(imageDto);
         }
 
+
         [HttpGet("cards")]
         [Authorize]
         public async Task<IActionResult> GetUserCards()
@@ -157,6 +158,25 @@ namespace WebAPI.Controllers
             await uow.SaveAsync();
             return StatusCode(200);
 
+        }
+
+        //api/account/updatePicture/{oldPictureName}
+        [HttpPut("updateAvatar/{oldPictureName}")]
+        [Authorize]
+        public async Task<IActionResult> UpdatePicture(string oldPictureName ,[FromForm] IFormFile file)
+        {
+            ApiError apiError = new ApiError();
+            if (file == null) // For Safety
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "You didnt selected any file";
+                apiError.ErrorDetails = "";
+                return BadRequest(apiError);
+            }
+            Console.WriteLine(oldPictureName + "\n\n\n\n");
+            Console.WriteLine(file.FileName);
+
+            return Ok();
         }
 
         //api/account/register

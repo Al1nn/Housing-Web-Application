@@ -352,18 +352,6 @@ namespace WebAPI.Controllers
 
 
 
-
-        //property/set-primary-photo/1/safasfsagsd
-        [HttpPost("set-primary-photo/{propId}/{fileName}")]
-        [Authorize]
-        public async Task<IActionResult> SetPrimaryPhoto(int propId, string fileName)
-        {
-
-
-            return Ok();
-        }
-
-
         [HttpDelete("delete/photo/{propId}/{fileName}")]
         [Authorize]
         public async Task<IActionResult> DeletePhoto(int propId, string fileName)
