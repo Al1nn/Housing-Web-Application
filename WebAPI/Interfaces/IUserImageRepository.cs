@@ -20,7 +20,13 @@ namespace WebAPI.Interfaces
 
         void UpdatePassword(User user);
 
+        void UpdateAvatar(Image image);
+
+        Task<Image> GetAvatarByFileName(string fileName);
+
         Task<UserImage> GetImageById(int id);
+
+        void AddUserAvatar(UserImage image);
 
         Task<IEnumerable<UserImage>> GetUserCardsAsync();
 

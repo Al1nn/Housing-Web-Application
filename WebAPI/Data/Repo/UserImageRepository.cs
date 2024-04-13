@@ -23,8 +23,6 @@ namespace WebAPI.Data.Repo
 
         public async Task<User> Authenticate(string username, string passwordText, List<string> roles)
         {
-
-
             var user =  await dc.Users.
                 Include(r => r.Roles)
                .FirstOrDefaultAsync( data => data.Username == username);
@@ -57,7 +55,7 @@ namespace WebAPI.Data.Repo
 
         public async Task<bool> VerifyOldPassword(int id, string password) //Request pentru verificare la change user password
         {
-            var user = await dc.Users.FirstOrDefaultAsync(user => user.Id == id);
+            var user = await GetUserById(id);
 
             return MatchPasswordHash(password, user.Password, user.PasswordKey);
 
@@ -88,6 +86,11 @@ namespace WebAPI.Data.Repo
             return await dc.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public void AddUserAvatar(UserImage userImage)
+        {
+            dc.UserImages.Add(userImage);
+        }
+
         public void EncryptPassword(string password, out byte[] passwordHash, out byte[] passwordKey)
         {
             using (var hmac = new HMACSHA512())
@@ -101,6 +104,11 @@ namespace WebAPI.Data.Repo
         public void UpdatePassword(User user)
         {
             dc.Users.Update(user);
+        }
+
+        public void UpdateAvatar(Image image)
+        {
+            dc.Images.Update(image);
         }
 
         public void Register(string username, string password, string email, string phoneNumber, List<string> roles ,IFormFile file)
@@ -231,15 +239,18 @@ namespace WebAPI.Data.Repo
             return userImage;
         }
 
+        public async Task<Image> GetAvatarByFileName(string fileName)
+        {
+            return await dc.Images.FirstOrDefaultAsync(i => i.FileName == fileName);
+        }
+
         public async Task<UserImage> GetImageById(int id)
         {
             var image = await dc.UserImages
                         .Include(x => x.Image)
                         .Where(x => x.UserId == id)
-                        .FirstOrDefaultAsync() ;
+                        .FirstOrDefaultAsync();
             return image;
         }
-
-        
     }
 }

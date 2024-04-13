@@ -127,7 +127,16 @@ export class UserSettingsComponent implements OnInit {
     formData.append("file", selectedFile);
     this.authService.updateAvatar(this.userCard.fileName, formData).subscribe(() => {
       formData.delete("file");
+
+      this.authService.getUserCard().subscribe((data) => {
+        this.userCard = data;
+        localStorage.setItem("image", data.fileName);
+        this.alertifyService.success("Avatar Changed");
+      });
+
     });
+
+
   }
 
   onAccountDelete() {

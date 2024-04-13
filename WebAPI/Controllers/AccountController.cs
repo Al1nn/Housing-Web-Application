@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
@@ -11,6 +13,7 @@ using WebAPI.Errors;
 using WebAPI.Extensions;
 using WebAPI.Interfaces;
 using WebAPI.Models;
+using Image = WebAPI.Models.Image;
 
 
 namespace WebAPI.Controllers
@@ -28,6 +31,7 @@ namespace WebAPI.Controllers
             this.configuration = configuration;
             this.mapper = mapper;
         }
+
         //api/account/image}
         [HttpGet("image")]
         [Authorize]
@@ -35,15 +39,14 @@ namespace WebAPI.Controllers
         {
             int userId = GetUserId();
 
-            var userImage = await  uow.UserImageRepository.GetImageById(userId);
-           
-           
+            var userImage = await uow.UserImageRepository.GetImageById(userId);
+
+
 
             var imageDto = mapper.Map<ImageDto>(userImage);
 
             return Ok(imageDto);
         }
-
 
         [HttpGet("cards")]
         [Authorize]
@@ -166,6 +169,9 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> UpdatePicture(string oldPictureName ,[FromForm] IFormFile file)
         {
             ApiError apiError = new ApiError();
+
+            int userId = GetUserId();
+
             if (file == null) // For Safety
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
@@ -173,10 +179,108 @@ namespace WebAPI.Controllers
                 apiError.ErrorDetails = "";
                 return BadRequest(apiError);
             }
-            Console.WriteLine(oldPictureName + "\n\n\n\n");
-            Console.WriteLine(file.FileName);
 
-            return Ok();
+            string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes");
+            string thumbnailsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails");
+
+            if (oldPictureName.Equals("null")) //User has no profile picture
+            {
+                string uniqueId = Guid.NewGuid().ToString();
+                var fileName = uniqueId + '-' + file.FileName;
+                var originalPath = Path.Combine(originalSizesDirectory, fileName); 
+                var thumbnailPath = Path.Combine(thumbnailsDirectory, fileName);
+
+                using(var stream = new FileStream(originalPath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                using (var thumbnail = await SixLabors.ImageSharp.Image.LoadAsync(originalPath))
+                {
+                    var resizeOptions = new ResizeOptions
+                    {
+                       Mode = ResizeMode.Crop,
+                       Size = new Size(250, 250),
+                       Position = AnchorPositionMode.Center
+                    };
+
+                    thumbnail.Mutate(x => x.Resize(resizeOptions));
+                    await thumbnail.SaveAsync(thumbnailPath);
+                }
+
+                var image = new Image { 
+                    FileName = fileName,
+                    LastUpdatedOn = DateTime.Now,
+                    LastUpdatedBy = userId,
+                };
+
+                var userImage = new UserImage
+                {
+                    UserId = userId,
+                    Image = image,
+                };
+
+                uow.UserImageRepository.AddUserAvatar(userImage);
+
+                if (await uow.SaveAsync()) return Ok();
+            }
+            else
+            {
+                //Delete the old picture file
+                var oldThumbnailsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails", oldPictureName);
+                var oldOriginalsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes", oldPictureName);
+
+                if (System.IO.File.Exists(oldThumbnailsPath))
+                {
+                    System.IO.File.Delete(oldThumbnailsPath);
+                }
+                if (System.IO.File.Exists(oldOriginalsPath))
+                {
+                    System.IO.File.Delete(oldOriginalsPath);
+                }
+
+                //Create a new file from IFormFile. 
+                string uniqueId = Guid.NewGuid().ToString();
+                var fileName = uniqueId + '-' + file.FileName;
+                var originalPath = Path.Combine(originalSizesDirectory, fileName);
+                var thumbnailPath = Path.Combine(thumbnailsDirectory, fileName);
+
+                using (var stream = new FileStream(originalPath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                using (var thumbnail = await SixLabors.ImageSharp.Image.LoadAsync(originalPath))
+                {
+                    var resizeOptions = new ResizeOptions
+                    {
+                        Mode = ResizeMode.Crop,
+                        Size = new Size(250, 250),
+                        Position = AnchorPositionMode.Center
+                    };
+
+                    thumbnail.Mutate(x => x.Resize(resizeOptions));
+                    await thumbnail.SaveAsync(thumbnailPath);
+                }
+
+                var image = await uow.UserImageRepository.GetAvatarByFileName(oldPictureName);
+
+                image.FileName = fileName;
+
+                uow.UserImageRepository.UpdateAvatar(image);
+
+
+
+                if(await uow.SaveAsync()) return Ok();
+            }
+            
+
+            
+
+            apiError.ErrorCode = BadRequest().StatusCode;
+            apiError.ErrorMessage = "Unknown Error Occured";
+            apiError.ErrorDetails = "";
+            return BadRequest();
         }
 
         //api/account/register

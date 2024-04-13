@@ -9,6 +9,7 @@ export interface IUserForRegister {
 export interface IUserForLogin {
     username: string;
     password: string;
+    fileName: string;
     token: string;
 }
 
