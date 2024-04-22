@@ -1,16 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AddPropertyComponent } from './property/add-property/add-property.component';
-import { PropertyListComponent } from './property/property-list/property-list.component';
 
-import { PropertyDetailComponent } from './property/property-detail/property-detail.component';
-import { PropertyContactsComponent } from './property/property-contacts/property-contacts.component';
 import { UserLoginComponent } from './user/user-login/user-login.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
-import { PropertyDetailResolverService } from './property/property-detail/property-detail-resolver.service';
-import { PropertyDashboardComponent } from './property/property-dashboard/property-dashboard.component';
-import { PropertyContactsResolverService } from './property/property-contacts/property-contacts-resolver.service';
-import { PropertyDashboardResolverService } from './property/property-dashboard/property-dashboard-resolver.service';
+
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
 import { UserProfileResolverService } from './user/user-profile/user-profile-resolver.service';
@@ -18,33 +11,9 @@ import { UserSettingsResolverService } from './user/user-settings/user-settings-
 const routes: Routes = [
     {
         path: '',
-        component: PropertyListComponent,
-
+        loadChildren: () => import('./property/property.module').then(m => m.PropertyModule)
     },
 
-    {
-        path: 'property-dashboard',
-        component: PropertyDashboardComponent,
-        resolve: {
-            property: PropertyDashboardResolverService
-        }
-    },
-    {
-        path: 'rent-property',
-        component: PropertyListComponent,
-
-    },
-    { path: 'add-property', component: AddPropertyComponent },
-    {
-        path: 'property-detail/:id',
-        component: PropertyDetailComponent,
-        resolve: { property: PropertyDetailResolverService },
-    },
-    {
-        path: 'property-contacts/:id',
-        component: PropertyContactsComponent,
-        resolve: { property: PropertyContactsResolverService },
-    },
     { path: 'user/login', component: UserLoginComponent },
     { path: 'user/register', component: UserRegisterComponent },
     {
@@ -57,7 +26,6 @@ const routes: Routes = [
         component: UserSettingsComponent,
         resolve: { usercard: UserSettingsResolverService }
     },
-    { path: '**', component: PropertyListComponent },
 
 ];
 

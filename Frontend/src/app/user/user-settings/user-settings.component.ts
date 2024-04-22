@@ -121,7 +121,6 @@ export class UserSettingsComponent implements OnInit {
   }
 
   onFileChange(event: any) {
-    console.log(this.userCard.fileName + "\n");
     const selectedFile = event.target.files[0];
     const formData = new FormData();
     formData.append("file", selectedFile);

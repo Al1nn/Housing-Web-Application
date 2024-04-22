@@ -1,0 +1,75 @@
+import { NgModule } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+
+import { PropertyRoutingModule } from './property-routing.module';
+import { PropertyCardElement } from './property-card/property-card.component';
+import { PropertyListComponent } from './property-list/property-list.component';
+import { PropertyDashboardComponent } from './property-dashboard/property-dashboard.component';
+import { PhotoEditorComponent } from './photo-editor/photo-editor.component';
+import { PropertyDetailComponent } from './property-detail/property-detail.component';
+import { PropertyContactsComponent } from './property-contacts/property-contacts.component';
+import { AddPropertyComponent } from './add-property/add-property.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FilterPipe } from '../pipes/filter.pipe';
+import { SortPipe } from '../pipes/sort.pipe';
+import { PriceAreaFilterPipe } from '../pipes/price-filter.pipe';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { GalleryComponent } from '@daelmaak/ngx-gallery';
+import { FileUploadModule } from 'ng2-file-upload';
+import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { HousingService } from '../services/housing.service';
+import { PropertyDetailResolverService } from './property-detail/property-detail-resolver.service';
+import { HttpErrorInterceptorService } from '../services/httperror-interceptor.service';
+
+
+
+@NgModule({
+  declarations: [
+    PropertyCardElement,
+    PropertyListComponent,
+    PropertyDashboardComponent,
+    AddPropertyComponent,
+    PhotoEditorComponent,
+    PropertyDetailComponent,
+    PropertyContactsComponent,
+    FilterPipe,
+    SortPipe,
+    PriceAreaFilterPipe,
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    PropertyRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    TabsModule.forRoot(),
+    ButtonsModule.forRoot(),
+    CarouselModule.forRoot(),
+    BsDatepickerModule.forRoot(),
+    GalleryComponent,
+    FileUploadModule,
+    ModalModule,
+    LoadingBarHttpClientModule,
+    LoadingBarModule,
+    ImageCropperModule,
+  ],
+  providers: [
+    BsModalService,
+    HousingService,
+    DatePipe,
+    PropertyDetailResolverService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptorService,
+      multi: true
+    },
+  ]
+})
+export class PropertyModule { }
