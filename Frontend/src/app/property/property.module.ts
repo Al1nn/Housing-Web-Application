@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-
 import { PropertyRoutingModule } from './property-routing.module';
 import { PropertyCardElement } from './property-card/property-card.component';
 import { PropertyListComponent } from './property-list/property-list.component';
 import { PropertyDashboardComponent } from './property-dashboard/property-dashboard.component';
 import { PhotoEditorComponent } from './photo-editor/photo-editor.component';
-import { PropertyDetailComponent } from './property-detail/property-detail.component';
+import { PropertyDetailAdminComponent } from './property-detail/property-detail-admin/property-detail.component';
 import { PropertyContactsComponent } from './property-contacts/property-contacts.component';
 import { AddPropertyComponent } from './add-property/add-property.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -27,6 +26,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { HousingService } from '../services/housing.service';
 import { PropertyDetailResolverService } from './property-detail/property-detail-resolver.service';
 import { HttpErrorInterceptorService } from '../services/httperror-interceptor.service';
+import { PropertyDetailOwnerComponent } from './property-detail/property-detail-owner/property-detail-owner.component';
+import { PropertyDetailReaderComponent } from './property-detail/property-detail-reader/property-detail-reader.component';
 
 
 
@@ -37,7 +38,9 @@ import { HttpErrorInterceptorService } from '../services/httperror-interceptor.s
     PropertyDashboardComponent,
     AddPropertyComponent,
     PhotoEditorComponent,
-    PropertyDetailComponent,
+    PropertyDetailAdminComponent,
+    PropertyDetailOwnerComponent,
+    PropertyDetailReaderComponent,
     PropertyContactsComponent,
     FilterPipe,
     SortPipe,

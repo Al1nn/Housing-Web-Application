@@ -5,9 +5,13 @@ import { PropertyDashboardComponent } from './property-dashboard/property-dashbo
 import { PropertyDashboardResolverService } from './property-dashboard/property-dashboard-resolver.service';
 import { AddPropertyComponent } from './add-property/add-property.component';
 import { PropertyDetailResolverService } from './property-detail/property-detail-resolver.service';
-import { PropertyDetailComponent } from './property-detail/property-detail.component';
+import { PropertyDetailAdminComponent } from './property-detail/property-detail-admin/property-detail.component';
 import { PropertyContactsComponent } from './property-contacts/property-contacts.component';
 import { PropertyContactsResolverService } from './property-contacts/property-contacts-resolver.service';
+import { authGuard, contactGuard } from '../guards/auth-guard.guard';
+import { PropertyDetailReaderComponent } from './property-detail/property-detail-reader/property-detail-reader.component';
+import { PropertyDetailOwnerComponent } from './property-detail/property-detail-owner/property-detail-owner.component';
+import { matchGuard } from '../guards/match-guard.guard';
 
 const routes: Routes = [
   {
@@ -28,16 +32,33 @@ const routes: Routes = [
     component: PropertyListComponent,
 
   },
-  { path: 'add-property', component: AddPropertyComponent },
+  {
+    path: 'add-property', component: AddPropertyComponent,
+    canActivate: [authGuard]
+  },
   {
     path: 'property-detail/:id',
-    component: PropertyDetailComponent,
+    component: PropertyDetailAdminComponent,
     resolve: { property: PropertyDetailResolverService },
+    canMatch: [matchGuard]
+  },
+  {
+    path: 'property-detail/:id',
+    component: PropertyDetailReaderComponent,
+    resolve: { property: PropertyDetailResolverService },
+    canMatch: [matchGuard]
+  },
+  {
+    path: 'property-detail/:id',
+    component: PropertyDetailOwnerComponent,
+    resolve: { property: PropertyDetailResolverService },
+    canMatch: [matchGuard]
   },
   {
     path: 'property-contacts/:id',
     component: PropertyContactsComponent,
     resolve: { property: PropertyContactsResolverService },
+    canActivate: [contactGuard]
   }
 ];
 

@@ -14,8 +14,7 @@ import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
 import { IPhoto } from '../../model/IPhoto';
-import { AuthService } from '../../services/auth.service';
-import { IToken } from '../../model/IToken.interface';
+
 
 
 
@@ -65,7 +64,6 @@ export class AddPropertyComponent implements OnInit {
         private datePipe: DatePipe,
         private alertifyService: AlertifyService,
         private housingService: HousingService,
-        private authService: AuthService,
         private fb: FormBuilder,
         private router: Router
     ) { }
@@ -181,28 +179,18 @@ export class AddPropertyComponent implements OnInit {
 
 
     ngOnInit() {
-        if (localStorage !== undefined) {
-            const decodedToken = this.authService.decodeToken() as IToken;
+        this.CreateAddPropertyForm();
+        this.housingService.getAllCities().subscribe((data) => {
+            this.cityList = data;
+        });
 
-            if (!decodedToken) {
-                this.alertifyService.error("You must be logged in to add a property");
-                this.router.navigate(['/user/login']);
-            }
-            this.CreateAddPropertyForm();
-            this.housingService.getAllCities().subscribe((data) => {
-                this.cityList = data;
-            });
+        this.housingService.getPropertyTypes().subscribe((data) => {
+            this.propertyTypes = data;
+        });
 
-            this.housingService.getPropertyTypes().subscribe((data) => {
-                this.propertyTypes = data;
-            });
-
-            this.housingService.getFurnishingTypes().subscribe((data) => {
-                this.furnishTypes = data;
-            });
-
-        }
-
+        this.housingService.getFurnishingTypes().subscribe((data) => {
+            this.furnishTypes = data;
+        });
     }
 
     CreateAddPropertyForm() {

@@ -46,7 +46,6 @@ export class UserSettingsComponent implements OnInit {
 
     this.route.data.subscribe((data) => {
       this.userCard = data['usercard'];
-      console.log(this.userCard);
     });
 
     this.housingService.getPropertyCountByUser().subscribe((data) => {
