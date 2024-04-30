@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Property } from '../../../model/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { HousingService } from '../../../services/housing.service';
-import { AuthService } from '../../../services/auth.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AlertifyService } from '../../../services/alertify.service';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -47,8 +46,7 @@ export class PropertyDetailAdminComponent implements OnInit {
     originalFolder: string = environment.originalPictureFolder;
     thumbnailFolder: string = environment.thumbnailFolder;
 
-    constructor(private authService: AuthService
-        , private housingService: HousingService
+    constructor(private housingService: HousingService
         , private route: ActivatedRoute
         , private modalService: BsModalService
         , private alertifyService: AlertifyService
@@ -205,10 +203,6 @@ export class PropertyDetailAdminComponent implements OnInit {
 
 
         this.galleryImages = this.getPropertyPhotos();
-
-        console.log(this.authService.decodeToken());
-
-
     }
 
 
@@ -305,8 +299,6 @@ export class PropertyDetailAdminComponent implements OnInit {
                 });
             }
         }
-
-
         return photoUrls;
     }
 

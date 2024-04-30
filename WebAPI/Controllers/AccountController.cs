@@ -329,7 +329,7 @@ namespace WebAPI.Controllers
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
-
+            /*Array*/
             foreach (Role role in user.Roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.Name));

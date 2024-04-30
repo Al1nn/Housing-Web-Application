@@ -11,7 +11,7 @@ import { PropertyContactsResolverService } from './property-contacts/property-co
 import { authGuard, contactGuard } from '../guards/auth-guard.guard';
 import { PropertyDetailReaderComponent } from './property-detail/property-detail-reader/property-detail-reader.component';
 import { PropertyDetailOwnerComponent } from './property-detail/property-detail-owner/property-detail-owner.component';
-import { matchGuard } from '../guards/match-guard.guard';
+import { matchGuardAdmin, matchGuardOwner } from '../guards/match-guard.guard';
 
 const routes: Routes = [
   {
@@ -36,23 +36,23 @@ const routes: Routes = [
     path: 'add-property', component: AddPropertyComponent,
     canActivate: [authGuard]
   },
+
   {
     path: 'property-detail/:id',
     component: PropertyDetailAdminComponent,
     resolve: { property: PropertyDetailResolverService },
-    canMatch: [matchGuard]
-  },
-  {
-    path: 'property-detail/:id',
-    component: PropertyDetailReaderComponent,
-    resolve: { property: PropertyDetailResolverService },
-    canMatch: [matchGuard]
+    canMatch: [matchGuardAdmin]
   },
   {
     path: 'property-detail/:id',
     component: PropertyDetailOwnerComponent,
     resolve: { property: PropertyDetailResolverService },
-    canMatch: [matchGuard]
+    canMatch: [matchGuardOwner]
+  },
+  {
+    path: 'property-detail/:id',
+    component: PropertyDetailReaderComponent,
+    resolve: { property: PropertyDetailResolverService },
   },
   {
     path: 'property-contacts/:id',

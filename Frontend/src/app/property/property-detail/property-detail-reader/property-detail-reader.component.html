@@ -1,3 +1,136 @@
-<p>
-  property-detail-reader works!
-</p>
+<div class="row shadow">
+  <div class="col-sm-4 p-0">
+    <div class="card">
+      <div class="card-img-wrapper">
+        <img class="card-img-top" *ngIf="property.photo" src="{{originalFolder + property.photo}}">
+        <img class="card-img-top" *ngIf="!property.photo" src="assets/images/house_default.jpg">
+      </div>
+      <div class="card-body" *ngIf="property">
+        <h1 class="card-title">{{property.name}}</h1>
+        <div>
+          <strong>{{property.bhk}} BHK {{property.propertyType}} &#64; ${{property.price}}</strong>
+        </div>
+        <div>
+          <strong> in {{property.city}}</strong>
+        </div>
+        <hr>
+        
+        <div>
+          <strong>Build Area : </strong>
+          {{property.builtArea}} Sqft
+        </div>
+        <div>
+          <strong>Carpet Area : </strong>
+          {{property.carpetArea}} Sqft
+        </div>
+        <div>
+          <strong>Furnishing Type : </strong>
+          {{property.furnishingType}}
+        </div>
+        <div>
+          <strong>Available for : </strong>
+          <span *ngIf="property.sellRent === 1">Purchase</span>
+          <span *ngIf="property.sellRent === 2">Rent</span>  
+        </div>
+
+      </div>
+      <div class="card-footer">
+        
+        <div class="btn-group d-flex">
+          <button class="btn btn-primary"><i class="fa-regular fa-heart"></i> Like</button>
+          <button class="btn btn-success"><i class="fa-regular fa-message"></i> Message</button>
+        </div>
+
+      </div>
+      
+    </div>
+    
+  </div>
+  <div class="col-sm-8 p-0">
+    <div class="tab-panel p-3">
+      <tabset class="member-tabset">
+        <tab heading="Overview">
+          <h1>Overview</h1>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="heading">
+                <strong>Project name</strong>
+                <p>{{property.name}}</p>
+              </div>
+
+              <div class="heading">
+                <strong>Floor Number</strong>
+                <p>{{property.floorNo}} of {{property.totalFloors}}</p>
+              </div>
+
+              <div class="heading">
+                <strong>Age Of Property</strong>
+                <p>{{property.age}}</p>
+              </div>
+
+              <div class="heading">
+                <strong>Posession</strong>
+                <p>{{property.estPossessionOn | date}}</p>
+              </div>
+
+            </div>
+
+            <div class="col-sm-6">
+              <div class="heading">
+                <strong>Main Entrance</strong>
+                <p *ngIf="property.mainEntrance == 1">East</p>
+                <p *ngIf="property.mainEntrance == 2">West</p>
+                <p *ngIf="property.mainEntrance == 3">South</p>
+                <p *ngIf="property.mainEntrance == 4">North</p>
+              </div>
+
+              <div class="heading">
+                <strong>Gated Community</strong>
+
+                <p *ngIf="property.gated">Yes</p>
+                <p *ngIf="!property.gated">No</p>
+              </div>
+
+              <div class="heading">
+                <strong>Security Deposit</strong>
+                <p>{{property.security}}</p>
+              </div>
+
+              <div class="heading">
+                <strong>Maintenance</strong>
+                <p>{{property.maintenance}}</p>
+              </div>
+            </div>
+
+            <div class="col-sm-12">
+              <div class="heading">
+                <strong>About Property</strong>
+                <p>{{property.description}}</p>
+              </div>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Landmark">
+          <div class="col-sm-12">
+            <h1>Landmark</h1>
+            <strong>{{property.landMark}}</strong><br>
+            
+      
+            <div class="heading">
+              <h1>City</h1>
+              <strong>{{property.city}}</strong>
+            </div>
+          </div>
+        </tab>
+        <tab heading="Photos">
+          <div class="text-center" *ngIf="galleryImages.length === 0">
+              <strong>No Photos to Show</strong>
+          </div>
+          <gallery *ngIf="galleryImages.length > 0" [items]="galleryImages" class="gallery-container"></gallery>
+
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>
+
