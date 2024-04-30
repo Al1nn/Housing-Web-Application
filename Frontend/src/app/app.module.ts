@@ -23,6 +23,7 @@ import { UserSettingsComponent } from './user/user-settings/user-settings.compon
 import { UserProfileResolverService } from './user/user-profile/user-profile-resolver.service';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
     declarations: [
@@ -51,6 +52,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
         AuthService,
 
         UserProfileResolverService,
+          provideAnimationsAsync(),
     ],
     bootstrap: [AppComponent],
 })

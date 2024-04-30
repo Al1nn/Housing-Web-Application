@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Property } from '../../model/Property.interface';
-import { FileUploader } from 'ng2-file-upload';
 import { HousingService } from '../../services/housing.service';
 
 @Component({
@@ -13,7 +12,6 @@ export class PhotoEditorComponent implements OnInit {
 
 
   @Input() property: Property;
-  uploader: FileUploader;
   thumbnailsFolder: string = environment.thumbnailFolder;
   maxAllowedFileSize = 10 * 1024 * 1024;
 

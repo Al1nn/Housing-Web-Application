@@ -13,17 +13,16 @@ import { FilterPipe } from '../pipes/filter.pipe';
 import { SortPipe } from '../pipes/sort.pipe';
 import { PriceAreaFilterPipe } from '../pipes/price-filter.pipe';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GalleryComponent } from '@daelmaak/ngx-gallery';
-import { FileUploadModule } from 'ng2-file-upload';
 import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { HousingService } from '../services/housing.service';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { PropertyDetailResolverService } from './property-detail/property-detail-resolver.service';
 import { HttpErrorInterceptorService } from '../services/httperror-interceptor.service';
 import { PropertyDetailOwnerComponent } from './property-detail/property-detail-owner/property-detail-owner.component';
@@ -52,12 +51,11 @@ import { PropertyDetailReaderComponent } from './property-detail/property-detail
     PropertyRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    TabsModule.forRoot(),
     ButtonsModule.forRoot(),
     CarouselModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    TabsModule.forRoot(),
     GalleryComponent,
-    FileUploadModule,
     ModalModule,
     LoadingBarHttpClientModule,
     LoadingBarModule,

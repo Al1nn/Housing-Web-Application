@@ -36,6 +36,7 @@
               "src/data"
             ],
             "styles": [
+              "src/custom-theme.scss",
               "node_modules/alertifyjs/build/css/alertify.min.css",
               "node_modules/alertifyjs/build/css/themes/bootstrap.min.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
