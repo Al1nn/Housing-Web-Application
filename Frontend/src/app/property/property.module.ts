@@ -27,9 +27,10 @@ import { PropertyDetailResolverService } from './property-detail/property-detail
 import { HttpErrorInterceptorService } from '../services/httperror-interceptor.service';
 import { PropertyDetailOwnerComponent } from './property-detail/property-detail-owner/property-detail-owner.component';
 import { PropertyDetailReaderComponent } from './property-detail/property-detail-reader/property-detail-reader.component';
-
-
-
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [
     PropertyCardElement,
@@ -50,6 +51,10 @@ import { PropertyDetailReaderComponent } from './property-detail/property-detail
     FormsModule,
     PropertyRoutingModule,
     HttpClientModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressBar,
+    MatButtonModule,
     ReactiveFormsModule,
     ButtonsModule.forRoot(),
     CarouselModule.forRoot(),
@@ -59,7 +64,7 @@ import { PropertyDetailReaderComponent } from './property-detail/property-detail
     ModalModule,
     LoadingBarHttpClientModule,
     LoadingBarModule,
-    ImageCropperModule,
+    ImageCropperModule
   ],
   providers: [
     BsModalService,
@@ -70,7 +75,7 @@ import { PropertyDetailReaderComponent } from './property-detail/property-detail
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptorService,
       multi: true
-    },
+    }
   ]
 })
 export class PropertyModule { }

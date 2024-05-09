@@ -121,7 +121,6 @@ export class HousingService {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token')
-
             })
         };
         return this.http.post(this.baseUrl + '/property/add/photos/' + propertyId, formData, httpOptions);

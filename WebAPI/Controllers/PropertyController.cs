@@ -284,6 +284,14 @@ namespace WebAPI.Controllers
                 return NotFound(apiError);
             }
 
+            if(property.PostedBy != userId)
+            {
+                apiError.ErrorCode = Unauthorized().StatusCode;
+                apiError.ErrorMessage = "You are not authorised to add photos";
+                apiError.ErrorDetails = "Not the right role";
+                return Unauthorized(apiError);
+            }
+
             if (files.Count == 0)
             {
                 return NoContent();
