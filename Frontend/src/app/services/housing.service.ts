@@ -123,7 +123,12 @@ export class HousingService {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.post(this.baseUrl + '/property/add/photos/' + propertyId, formData, httpOptions);
+
+        return this.http.post(this.baseUrl + '/property/add/photos/' + propertyId, formData, {
+            ...httpOptions,
+            observe: 'events',
+            reportProgress: true
+        });
     }
 
 

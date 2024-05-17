@@ -18,12 +18,12 @@
         (click)="fileUpload.click()">
           <mat-icon>attach_file</mat-icon>
       </button>
+      
   </div>
 
 
-    <mat-progress-bar class="progress-bar" mode="indeterminate" *ngIf="fileCount > 0">
-  
-    </mat-progress-bar>
+  <mat-progress-bar class="progress-bar" mode="determinate" *ngIf="fileCount > 0" [value]="uploadProgress">
+  </mat-progress-bar>
 
   
 </div>

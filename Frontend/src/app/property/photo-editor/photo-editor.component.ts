@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { Property } from '../../model/Property.interface';
 import { HousingService } from '../../services/housing.service';
 import { AlertifyService } from '../../services/alertify.service';
+import { HttpEventType } from '@angular/common/http';
 
 
 @Component({
@@ -39,18 +40,26 @@ export class PhotoEditorComponent implements OnInit {
     this.fileCount = files.length;
     if (this.fileCount > 0) {
       const formData = new FormData();
-      for (let i = 0; i < files.length; i++) {
+      for (let i = 0; i < this.fileCount; i++) {
         const file: File = files[i];
         formData.append("files", file);
       }
 
-      this.housingService.addPropertyPhotos(this.property.id, formData).subscribe(() => {
+      this.housingService.addPropertyPhotos(this.property.id, formData).subscribe(event => {
+        console.log(event.type + "\n");
+        if (event.type === HttpEventType.UploadProgress) {
+          if (event.total !== undefined)
+            this.uploadProgress = Math.round(100 * event.loaded / event.total);
+        } else if (event.type === HttpEventType.Response) {
 
-        this.housingService.getPropertyPhotos(this.property.id).subscribe(data => {
-          this.property.photos = data;
-        });
-        this.alertifyService.success("Photos added successfully");
-        this.fileCount = 0;
+          this.housingService.getPropertyPhotos(this.property.id).subscribe(data => {
+            this.property.photos = data;
+          });
+
+          this.alertifyService.success("Photos added successfully");
+          this.fileCount = 0;
+          this.uploadProgress = 0;
+        }
 
       });
 
