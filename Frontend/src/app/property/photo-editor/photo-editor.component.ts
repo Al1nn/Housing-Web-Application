@@ -3,7 +3,9 @@ import { environment } from '../../../environments/environment';
 import { Property } from '../../model/Property.interface';
 import { HousingService } from '../../services/housing.service';
 import { AlertifyService } from '../../services/alertify.service';
+import { switchMap, tap } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
+
 
 
 @Component({
@@ -12,20 +14,13 @@ import { HttpEventType } from '@angular/common/http';
   styleUrls: ['./photo-editor.component.css']
 })
 export class PhotoEditorComponent implements OnInit {
-
-
-
-
   @Input() property: Property;
   thumbnailsFolder: string = environment.thumbnailFolder;
   maxAllowedFileSize = 10 * 1024 * 1024;
   fileCount: number;
   uploadProgress: number = 0;
 
-  constructor(private housingService: HousingService
-    , private alertifyService: AlertifyService
-  ) { }
-
+  constructor(private housingService: HousingService, private alertifyService: AlertifyService) { }
 
   deletePhoto(propertyId: number, photoFileName: string) {
     this.housingService.deletePhoto(propertyId, photoFileName).subscribe(() => {
@@ -45,37 +40,27 @@ export class PhotoEditorComponent implements OnInit {
         formData.append("files", file);
       }
 
-      this.housingService.addPropertyPhotos(this.property.id, formData).subscribe(event => {
-        console.log(event.type + "\n");
-        if (event.type === HttpEventType.UploadProgress) {
-          if (event.total !== undefined)
-            this.uploadProgress = Math.round(100 * event.loaded / event.total);
-        } else if (event.type === HttpEventType.Response) {
-
-          this.housingService.getPropertyPhotos(this.property.id).subscribe(data => {
-            this.property.photos = data;
-          });
-
-          this.alertifyService.success("Photos added successfully");
-          this.fileCount = 0;
-          this.uploadProgress = 0;
-        }
-
-      });
+      this.housingService.addPropertyPhotos(this.property.id, formData) // I STILL CANT CATCH HttpEventType.UploadProgress GIVE CODE EXAMPLE
+        .pipe(
+          tap(event => {
+            if (event.type === HttpEventType.UploadProgress && event.total) {
+              this.uploadProgress = Math.round(100 * event.loaded / event.total);
+            }
+          }),
+          switchMap(() => this.housingService.getPropertyPhotos(this.property.id))
+        )
+        .subscribe(data => {
+          this.property.photos = data;
+          console.log('File is completely uploaded!');
+        }, error => {
+          console.error(error);
+        });
 
     } else {
       this.fileCount = 0;
       this.alertifyService.error("No file uploaded");
     }
-
   }
 
-
-
-
-
-  ngOnInit() {
-
-  }
-
+  ngOnInit() { }
 }

@@ -29,7 +29,7 @@ import { PropertyDetailOwnerComponent } from './property-detail/property-detail-
 import { PropertyDetailReaderComponent } from './property-detail/property-detail-reader/property-detail-reader.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [
@@ -53,7 +53,7 @@ import { MatButtonModule } from '@angular/material/button';
     HttpClientModule,
     MatCardModule,
     MatIconModule,
-    MatProgressBar,
+    MatProgressBarModule,
     MatButtonModule,
     ReactiveFormsModule,
     ButtonsModule.forRoot(),

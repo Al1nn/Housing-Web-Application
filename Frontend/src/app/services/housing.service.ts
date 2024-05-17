@@ -120,14 +120,15 @@ export class HousingService {
     addPropertyPhotos(propertyId: number, formData: FormData) {
         const httpOptions = {
             headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+                'ngsw-bypass': ''
             })
         };
 
         return this.http.post(this.baseUrl + '/property/add/photos/' + propertyId, formData, {
             ...httpOptions,
+            reportProgress: true,
             observe: 'events',
-            reportProgress: true
         });
     }
 

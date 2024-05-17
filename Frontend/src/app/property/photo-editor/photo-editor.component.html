@@ -7,23 +7,14 @@
       </button>
     </div>
   </div>
-  <input type="file" class="file-input" accept="image/jpeg"
-       (change)="onPhotoAdded($event)" #fileUpload multiple>
+  <input type="file" class="file-input" accept="image/jpeg" (change)="onPhotoAdded($event)" #fileUpload multiple>
 
   <div class="file-upload">
-
     {{ fileCount > 0 ? fileCount + ' Files Uploaded' : 'No files uploaded yet.' }}
-
-      <button mat-mini-fab color="primary" class="upload-btn"
-        (click)="fileUpload.click()">
-          <mat-icon>attach_file</mat-icon>
-      </button>
-      
+    <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+      <mat-icon>attach_file</mat-icon>
+    </button>
   </div>
 
-
-  <mat-progress-bar class="progress-bar" mode="determinate" *ngIf="fileCount > 0" [value]="uploadProgress">
-  </mat-progress-bar>
-
-  
+  <mat-progress-bar class="progress-bar" mode="determinate" *ngIf="fileCount > 0" [value]="uploadProgress"></mat-progress-bar>
 </div>
