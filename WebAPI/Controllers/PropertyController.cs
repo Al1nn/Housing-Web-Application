@@ -271,7 +271,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> AddPropertyPhoto(List<IFormFile> files, int propId)
         {
             ApiError apiError = new ApiError();
-
+          
 
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
             int userId = GetUserId();
@@ -312,6 +312,8 @@ namespace WebAPI.Controllers
 
             foreach (IFormFile file in files)
             {
+                
+
                 string uniqueId = Guid.NewGuid().ToString();
                 var fileName = uniqueId + '-' + file.FileName;
                 var originalPath = Path.Combine(originalSizesDirectory, fileName);
@@ -345,6 +347,8 @@ namespace WebAPI.Controllers
                 };
 
                 property.Photos.Add(photo);
+
+               
             }
 
 
