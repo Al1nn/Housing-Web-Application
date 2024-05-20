@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-photo-editor-popup',
@@ -10,11 +10,24 @@ export class PhotoEditorPopupComponent implements OnInit {
 
 
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(
+    public dialogRef: MatDialogRef<PhotoEditorPopupComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   formData: FormData;
   fileCredentials: any[] = [];
   propertyId: number;
+
+
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  uploadPhotos() {
+    this.closeDialog();
+  }
+
   ngOnInit() {
     this.formData = this.data.formData;
     this.fileCredentials = this.data.fileCredentials;

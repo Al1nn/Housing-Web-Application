@@ -1,0 +1,27 @@
+.custom-dialog-content {
+    padding: 24px;
+  }
+  
+  .dialog-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .file-item {
+    margin-bottom: 16px;
+  }
+  
+  .file-name {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .file-details {
+    font-size: 14px;
+    color: #777;
+  }
+  
+  .dialog-actions {
+    margin-top: 24px;
+  }
+  

@@ -67,6 +67,8 @@ export class PhotoEditorComponent implements OnInit {
 
   openDialog() {
     this.dialogRef.open(PhotoEditorPopupComponent, {
+      width: '400px',
+      height: '700px',
       data: { formData: this.formData, fileCredentials: this.fileCredentials, propertyId: this.property.id }
     });
 
