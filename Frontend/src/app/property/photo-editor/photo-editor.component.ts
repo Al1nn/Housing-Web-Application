@@ -3,9 +3,8 @@ import { environment } from '../../../environments/environment';
 import { Property } from '../../model/Property.interface';
 import { HousingService } from '../../services/housing.service';
 import { AlertifyService } from '../../services/alertify.service';
-import { switchMap, tap } from 'rxjs';
-import { HttpEventType } from '@angular/common/http';
-
+import { MatDialog } from '@angular/material/dialog';
+import { PhotoEditorPopupComponent } from './photo-editor-popup/photo-editor-popup.component';
 
 
 @Component({
@@ -19,8 +18,17 @@ export class PhotoEditorComponent implements OnInit {
   maxAllowedFileSize = 10 * 1024 * 1024;
   fileCount: number;
   uploadProgress: number = 0;
-
-  constructor(private housingService: HousingService, private alertifyService: AlertifyService) { }
+  formData = new FormData();
+  fileCredentials: any[] = [];
+  /*
+  I need fileCredentials to be something like : 
+  {
+    text: file.text,
+    size: file.size,
+    type: file.type
+  }
+  */
+  constructor(private housingService: HousingService, private alertifyService: AlertifyService, private dialogRef: MatDialog) { }
 
   deletePhoto(propertyId: number, photoFileName: string) {
     this.housingService.deletePhoto(propertyId, photoFileName).subscribe(() => {
@@ -32,35 +40,39 @@ export class PhotoEditorComponent implements OnInit {
 
   onPhotoAdded(event: any) {
     const files: FileList = event.target.files;
+
     this.fileCount = files.length;
     if (this.fileCount > 0) {
-      const formData = new FormData();
+
       for (let i = 0; i < this.fileCount; i++) {
         const file: File = files[i];
-        formData.append("files", file);
+
+        this.formData.append("files", file);
+        this.fileCredentials.push({
+          name: file.name,
+          size: file.size,
+          type: file.type,
+        });
       }
 
-      this.housingService.addPropertyPhotos(this.property.id, formData) // I STILL CANT CATCH HttpEventType.UploadProgress GIVE CODE EXAMPLE
-        .pipe(
-          tap(event => {
-            if (event.type === HttpEventType.UploadProgress && event.total) {
-              this.uploadProgress = Math.round(100 * event.loaded / event.total);
-            }
-          }),
-          switchMap(() => this.housingService.getPropertyPhotos(this.property.id))
-        )
-        .subscribe(data => {
-          this.property.photos = data;
-          console.log('File is completely uploaded!');
-        }, error => {
-          console.error(error);
-        });
 
+      this.openDialog();
     } else {
       this.fileCount = 0;
       this.alertifyService.error("No file uploaded");
     }
   }
+
+
+
+  openDialog() {
+    this.dialogRef.open(PhotoEditorPopupComponent, {
+      data: { formData: this.formData, fileCredentials: this.fileCredentials, propertyId: this.property.id }
+    });
+
+  }
+
+
 
   ngOnInit() { }
 }

@@ -31,6 +31,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/photo-editor-popup.component';
+
 @NgModule({
   declarations: [
     PropertyCardElement,
@@ -38,6 +41,7 @@ import { MatButtonModule } from '@angular/material/button';
     PropertyDashboardComponent,
     AddPropertyComponent,
     PhotoEditorComponent,
+    PhotoEditorPopupComponent,
     PropertyDetailAdminComponent,
     PropertyDetailOwnerComponent,
     PropertyDetailReaderComponent,
@@ -55,6 +59,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatProgressBarModule,
     MatButtonModule,
+    MatDialogModule,
     ReactiveFormsModule,
     ButtonsModule.forRoot(),
     CarouselModule.forRoot(),
@@ -65,6 +70,7 @@ import { MatButtonModule } from '@angular/material/button';
     LoadingBarHttpClientModule,
     LoadingBarModule,
     ImageCropperModule
+
   ],
   providers: [
     BsModalService,
@@ -75,7 +81,8 @@ import { MatButtonModule } from '@angular/material/button';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptorService,
       multi: true
-    }
+    },
+
   ]
 })
 export class PropertyModule { }
