@@ -20,14 +20,7 @@ export class PhotoEditorComponent implements OnInit {
   uploadProgress: number = 0;
   formData = new FormData();
   fileCredentials: any[] = [];
-  /*
-  I need fileCredentials to be something like : 
-  {
-    text: file.text,
-    size: file.size,
-    type: file.type
-  }
-  */
+
   constructor(private housingService: HousingService, private alertifyService: AlertifyService, private dialogRef: MatDialog) { }
 
   deletePhoto(propertyId: number, photoFileName: string) {
@@ -40,7 +33,7 @@ export class PhotoEditorComponent implements OnInit {
 
   onPhotoAdded(event: any) {
     const files: FileList = event.target.files;
-
+    this.fileCredentials = [];
     this.fileCount = files.length;
     if (this.fileCount > 0) {
 
@@ -56,25 +49,28 @@ export class PhotoEditorComponent implements OnInit {
       }
 
 
-      this.openDialog();
+
     } else {
       this.fileCount = 0;
       this.alertifyService.error("No file uploaded");
     }
+
+    this.openDialog();
+
   }
-
-
 
   openDialog() {
     this.dialogRef.open(PhotoEditorPopupComponent, {
       width: '400px',
       height: '700px',
-      data: { formData: this.formData, fileCredentials: this.fileCredentials, propertyId: this.property.id }
+      data: {
+        formData: this.formData,
+        fileCredentials: this.fileCredentials,
+        property: this.property,
+      }
     });
 
   }
-
-
 
   ngOnInit() { }
 }
