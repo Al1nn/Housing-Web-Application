@@ -5,6 +5,7 @@ import { HousingService } from '../../services/housing.service';
 import { AlertifyService } from '../../services/alertify.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PhotoEditorPopupComponent } from './photo-editor-popup/photo-editor-popup.component';
+import { HttpEventType } from '@angular/common/http';
 
 
 @Component({
@@ -23,12 +24,28 @@ export class PhotoEditorComponent implements OnInit {
 
   constructor(private housingService: HousingService, private alertifyService: AlertifyService, private dialogRef: MatDialog) { }
 
+
   deletePhoto(propertyId: number, photoFileName: string) {
     this.housingService.deletePhoto(propertyId, photoFileName).subscribe(() => {
-      this.housingService.getPropertyPhotos(propertyId).subscribe(data => {
-        this.property.photos = data;
+
+      this.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
+
+        if (event.type === HttpEventType.UploadProgress && event.total) { //Responsabil pentru sincronizarea Progress Barului, nu prinde HttpEventType.UploadProgress
+          this.uploadProgress = Math.round(100 * (event.loaded / event.total));
+        }
+
+        if (event.type === HttpEventType.Response) { //Prinde HttpEventType.Response
+          const photos = event.body;
+          if (photos !== null) {
+            this.property.photos = photos;
+          } else {
+            this.property.photos = [];
+          }
+        }
       });
+
     });
+
   }
 
   onPhotoAdded(event: any) {
@@ -60,14 +77,42 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   openDialog() {
-    this.dialogRef.open(PhotoEditorPopupComponent, {
+    const dialogRef = this.dialogRef.open(PhotoEditorPopupComponent, {
       width: '400px',
       height: '700px',
       data: {
-        formData: this.formData,
         fileCredentials: this.fileCredentials,
-        property: this.property,
       }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.housingService.addPropertyPhotos(this.property.id, this.formData).subscribe(() => {
+
+          this.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
+
+            if (event.type === HttpEventType.UploadProgress && event.total) { //Responsabil pentru sincronizarea Progress Barului, nu prinde HttpEventType.UploadProgress
+              this.uploadProgress = Math.round(100 * (event.loaded / event.total));
+            }
+
+            if (event.type === HttpEventType.Response) { //Prinde HttpEventType.Response
+              const photos = event.body;
+              if (photos !== null) {
+                this.property.photos = photos;
+              } else {
+                this.property.photos = [];
+              }
+            }
+          });
+
+        });
+
+        this.alertifyService.success("Files uploaded successfully");
+      } else if (!result) {
+        this.fileCount = 0;
+      }
+
+
     });
 
   }

@@ -1,6 +1,6 @@
 import { IProperty } from './../model/IProperty.interface';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Property } from '../model/Property.interface';
@@ -125,18 +125,17 @@ export class HousingService {
             })
         };
 
-        return this.http.post(this.baseUrl + '/property/add/photos/' + propertyId, formData, {
-            ...httpOptions,
-            reportProgress: true,
-            observe: 'events',
-        });
+        return this.http.post(this.baseUrl + '/property/add/photos/' + propertyId, formData, httpOptions);
     }
 
 
 
 
-    getPropertyPhotos(propertyId: number): Observable<IPhoto[]> {
-        return this.http.get<IPhoto[]>(this.baseUrl + '/property/get/photos/' + propertyId);
+    getPropertyPhotos(propertyId: number): Observable<HttpEvent<IPhoto[]>> {
+        return this.http.get<IPhoto[]>(this.baseUrl + '/property/get/photos/' + propertyId, {
+            reportProgress: true,
+            observe: 'events'
+        });
     }
 
     getLastIndex(): Observable<number> {

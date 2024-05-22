@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { HousingService } from '../../../services/housing.service';
-import { AlertifyService } from '../../../services/alertify.service';
+
 
 @Component({
   selector: 'app-photo-editor-popup',
@@ -15,36 +14,26 @@ export class PhotoEditorPopupComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<PhotoEditorPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-    , private housingService: HousingService
-    , private alertifyService: AlertifyService) { }
+  ) { }
 
   formData: FormData;
   fileCredentials: any[] = [];
   propertyId: number;
-
+  notifier: boolean;
 
 
   closeDialog() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.notifier);
   }
 
   uploadPhotos() {
-    this.housingService.addPropertyPhotos(this.propertyId, this.formData).subscribe(() => { //Reorganize these API calls with switchMap or IDK,
-      this.housingService.getPropertyPhotos(this.propertyId).subscribe((data) => {
-        this.data.property.photos = data;
-      });
-
-
-    });
-    this.formData.delete("files");
-    this.alertifyService.success("Photos uploaded successfully");
+    this.notifier = true;
     this.closeDialog();
   }
 
   ngOnInit() {
-    this.formData = this.data.formData;
+    this.notifier = false;
     this.fileCredentials = this.data.fileCredentials;
-    this.propertyId = this.data.property.id;
   }
 
 }
