@@ -4,6 +4,7 @@ import { IPropertyBase } from '../../model/IPropertyBase.interface';
 import { environment } from '../../../environments/environment';
 
 
+
 @Component({
     selector: 'app-property-card',
     templateUrl: 'property-card.component.html',
@@ -22,7 +23,6 @@ export class PropertyCardElement implements OnInit {
     constructor() { }
 
     ngOnInit() {
-
     }
 
 

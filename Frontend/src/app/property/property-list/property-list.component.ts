@@ -34,26 +34,21 @@ export class PropertyListComponent implements OnInit {
 
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            // this.housingService.getUserProperties().subscribe((data) => {
-            //     this.Properties = data;
-            // });
+
             return;
         }
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('rent-property')) {
-            this.SellRent = 2; // Means we are on rent-property URL
+            this.SellRent = 2;
         }
 
-        // this.route.data.subscribe((data) => {
-        //     this.Properties = this.SellRent === 2 ? data['propertyRent'] : data['propertySell'];
-        // }
-        // );
 
-        this.housingService.getAllProperties(this.SellRent).subscribe((data) => {
+
+        this.housingService.getAllProperties(this.SellRent).subscribe((data) => { //THIS CALLING
             this.Properties = data;
         });
 
-        //this.housingService.clearPhotoStorage();
+
 
     }
 

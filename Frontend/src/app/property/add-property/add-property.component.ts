@@ -22,6 +22,7 @@ import { IPhoto } from '../../model/IPhoto';
 
 
 
+
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
@@ -242,16 +243,15 @@ export class AddPropertyComponent implements OnInit {
             this.mapProperty();
             this.housingService.addProperty(this.property).subscribe(
                 () => {
+
+
                     if (this.photosToUpload.length > 0) {
                         this.uploadPropertyPhotos(this.property.id);
-                        // this.housingService.getFirstPropertyPhoto(this.property.id).subscribe(data => {
-                        //     this.property.photo = data.fileName;
-                        // });
+
                     }
 
-
-                    console.log(this.addPropertyForm);
-
+                    console.log(this.addPropertyForm + "\n\n\n");
+                    console.log(this.property);
                     if (this.sellRent.value === '2') {
                         this.router.navigate(['/rent-property']);
                     } else {
@@ -259,6 +259,11 @@ export class AddPropertyComponent implements OnInit {
                     }
 
                     this.alertifyService.success('Congrats, your property listed successfully on our website');
+
+
+
+
+
 
 
                 }
@@ -273,6 +278,7 @@ export class AddPropertyComponent implements OnInit {
     }
 
     mapProperty(): void {
+
 
         this.property.id = this.housingService.newPropID();
         this.property.sellRent = +this.sellRent.value;
@@ -298,6 +304,8 @@ export class AddPropertyComponent implements OnInit {
         this.property.mainEntrance = this.mainEntrance.value;
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.property.description = this.description.value;
+
+
     }
 
 
@@ -356,7 +364,7 @@ export class AddPropertyComponent implements OnInit {
 
     uploadPropertyPhotos(propertyId: number) {
 
-        this.photosToUpload.forEach(file => {
+        this.photosToUpload.forEach((file) => {
             const formData = new FormData();
             formData.append("file", file);
             this.housingService.addPropertyPhoto(propertyId, formData).subscribe(
@@ -369,6 +377,7 @@ export class AddPropertyComponent implements OnInit {
                     console.error('Error uploading photo : ', error);
                 }
             );
+
         });
 
     }
