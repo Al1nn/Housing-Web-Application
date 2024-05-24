@@ -19,8 +19,7 @@ export class PhotoEditorComponent implements OnInit {
   maxAllowedFileSize = 10 * 1024 * 1024;
   fileCount: number;
   uploadProgress: number = 0;
-  formData = new FormData();
-  fileCredentials: any[] = [];
+  photosToUpload: File[] = [];
 
   constructor(private housingService: HousingService, private alertifyService: AlertifyService, private dialogRef: MatDialog) { }
 
@@ -50,46 +49,44 @@ export class PhotoEditorComponent implements OnInit {
 
   onPhotoAdded(event: any) {
     const files: FileList = event.target.files;
-    this.fileCredentials = [];
     this.fileCount = files.length;
+    this.photosToUpload = [];
     if (this.fileCount > 0) {
-
       for (let i = 0; i < this.fileCount; i++) {
         const file: File = files[i];
-        const fileURL = URL.createObjectURL(file);
-
-        this.formData.append("files", file);
-        this.fileCredentials.push({
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          url: fileURL
-        });
+        this.photosToUpload.push(file);
       }
-
-
-
+      // Open the dialog only if files are uploaded
+      this.openDialog();
     } else {
+      // If no files are selected, reset file count and do not open the dialog
       this.fileCount = 0;
+      // Check if the input element still has files selected
+      // const fileInputElement: HTMLInputElement = event.target;
+      // if (!fileInputElement.value) {
+      //   console.log("Event file dialog closed without selecting files");
+      // }
       this.alertifyService.error("No file uploaded");
     }
-
-    this.openDialog();
-
   }
 
   openDialog() {
 
-    this.dialogRef.open(PhotoEditorPopupComponent, {
+    const dialogRef = this.dialogRef.open(PhotoEditorPopupComponent, {
       width: '400px',
       height: '700px',
       data: {
-        fileCredentials: this.fileCredentials,
-        formData: this.formData
+        photosToUpload: this.photosToUpload,
       }
     });
 
-
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log("Getter of the uploaded files");
+      } else {
+        this.fileCount = 0;
+      }
+    })
 
   }
 

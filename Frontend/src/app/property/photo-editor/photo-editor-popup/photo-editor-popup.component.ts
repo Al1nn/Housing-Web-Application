@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-photo-editor-popup',
@@ -16,25 +16,34 @@ export class PhotoEditorPopupComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
-  fileCredentials: any[] = [];
-  formData: FormData;
+  photosToUpload: File[] = [];
+  notifier: boolean;
+  fileControl = new FormControl();
 
+  formatFileSize(size: number): string {
+    if (size < 1024) {
+      return size + ' bytes';
+    } else if (size < 1024 * 1024) {
+      return (size / 1024).toFixed(2) + ' KB';
+    } else {
+      return (size / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+  }
 
   closeDialog() {
-    this.dialogRef.close();
+
+    this.dialogRef.close(this.notifier);
   }
 
   uploadPhotos() {
-    console.log(this.formData.getAll("files"));
-    //Aici fac call-ul pentru API . Si tot aici trimit fiecare descriere din acel textbox
-
-    this.formData.delete("files");
+    this.notifier = true;
+    console.log(this.photosToUpload);
     this.closeDialog();
   }
 
   ngOnInit() {
-    this.fileCredentials = this.data.fileCredentials;
-    this.formData = this.data.formData;
+    this.notifier = false;
+    this.photosToUpload = this.data.photosToUpload;
   }
 
 }
