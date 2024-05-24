@@ -16,24 +16,25 @@ export class PhotoEditorPopupComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
-  formData: FormData;
   fileCredentials: any[] = [];
-  propertyId: number;
-  notifier: boolean;
+  formData: FormData;
 
 
   closeDialog() {
-    this.dialogRef.close(this.notifier);
+    this.dialogRef.close();
   }
 
   uploadPhotos() {
-    this.notifier = true;
+    console.log(this.formData.getAll("files"));
+    //Aici fac call-ul pentru API . Si tot aici trimit fiecare descriere din acel textbox
+
+    this.formData.delete("files");
     this.closeDialog();
   }
 
   ngOnInit() {
-    this.notifier = false;
     this.fileCredentials = this.data.fileCredentials;
+    this.formData = this.data.formData;
   }
 
 }

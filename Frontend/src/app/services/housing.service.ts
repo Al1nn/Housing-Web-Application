@@ -117,7 +117,7 @@ export class HousingService {
     }
 
 
-    addPropertyPhotos(propertyId: number, formData: FormData) {
+    addPropertyPhoto(propertyId: number, formData: FormData) {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -125,7 +125,11 @@ export class HousingService {
             })
         };
 
-        return this.http.post(this.baseUrl + '/property/add/photos/' + propertyId, formData, httpOptions);
+        return this.http.post(this.baseUrl + '/property/add/photo/' + propertyId, formData, {
+            ...httpOptions,
+            reportProgress: true,
+            observe: 'events'
+        });
     }
 
 

@@ -41,9 +41,10 @@ export class AddPropertyComponent implements OnInit {
     originalSizes: IPhoto[];
     originalSizesString: string | null;
     thumbnailsString: string | null;
-    imagesData = new FormData();
 
     firstImageView: string | ArrayBuffer;
+
+    photosToUpload: File[] = [];
 
     propertyView: IPropertyBase = {
         id: 0,
@@ -234,13 +235,26 @@ export class AddPropertyComponent implements OnInit {
         this.router.navigate(['/']);
     }
 
-    onSubmit() { //Aici se apeleaza dupa ce apas pe save 
+    onSubmit() {
         this.nextClicked = true;
         if (this.allTabsValid()) {
             this.mapProperty();
             this.housingService.addProperty(this.property).subscribe(
                 () => {
-                    this.uploadPropertyPhotos(this.property.id, this.imagesData);
+                    if (this.photosToUpload.length > 0) {
+                        this.uploadPropertyPhotos(this.property.id);
+                    }
+
+
+                    console.log(this.addPropertyForm);
+
+                    if (this.sellRent.value === '2') {
+                        this.router.navigate(['/rent-property']);
+                    } else {
+                        this.router.navigate(['/']);
+                    }
+
+                    this.alertifyService.success('Congrats, your property listed successfully on our website');
 
 
                 }
@@ -322,44 +336,44 @@ export class AddPropertyComponent implements OnInit {
         }
     }
 
-    async onPhotoSelected(event: any) { //Se apeleaza de la input type file 
+    async onPhotoSelected(event: any) {
 
         const files: FileList = event.target.files;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
+            this.photosToUpload.push(file);
             const originalUrl = await this.getDataURL(file);
             if (i == 0) {
                 this.propertyView.photo = originalUrl;
             }
-            this.imagesData.append("files", file);
+
         }
 
+
+
     }
 
-    uploadPropertyPhotos(propertyId: number, formData: FormData) { // Transmite datele
-        this.housingService.addPropertyPhotos(propertyId, formData).subscribe(
-            response => {
-                console.log(`Photos added successfully:`, response);
+    uploadPropertyPhotos(propertyId: number) {
 
-                console.log(this.addPropertyForm);
-
-                if (this.sellRent.value === '2') {
-                    this.router.navigate(['/rent-property']);
-                } else {
-                    this.router.navigate(['/']);
+        this.photosToUpload.forEach(file => {
+            const formData = new FormData();
+            formData.append("file", file);
+            this.housingService.addPropertyPhoto(propertyId, formData).subscribe(
+                () => {
+                    console.log('Photo uploaded successfully');
+                },
+                error => {
+                    console.error('Error uploading photo : ', error);
                 }
+            );
+        })
 
-                this.alertifyService.success('Congrats, your property listed successfully on our website');
-            }, error => {
-                console.log("Error adding photo", error);
-            }
-        );
     }
 
 
 
 
-    getDataURL(file: File): Promise<string> { // Am luat URL-ul de la originalSize
+    getDataURL(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = (event) => {

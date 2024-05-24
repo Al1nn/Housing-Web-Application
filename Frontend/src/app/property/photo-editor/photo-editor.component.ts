@@ -56,12 +56,14 @@ export class PhotoEditorComponent implements OnInit {
 
       for (let i = 0; i < this.fileCount; i++) {
         const file: File = files[i];
+        const fileURL = URL.createObjectURL(file);
 
         this.formData.append("files", file);
         this.fileCredentials.push({
           name: file.name,
           size: file.size,
           type: file.type,
+          url: fileURL
         });
       }
 
@@ -77,43 +79,17 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialogRef.open(PhotoEditorPopupComponent, {
+
+    this.dialogRef.open(PhotoEditorPopupComponent, {
       width: '400px',
       height: '700px',
       data: {
         fileCredentials: this.fileCredentials,
+        formData: this.formData
       }
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.housingService.addPropertyPhotos(this.property.id, this.formData).subscribe(() => {
 
-          this.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
-
-            if (event.type === HttpEventType.UploadProgress && event.total) { //Responsabil pentru sincronizarea Progress Barului, nu prinde HttpEventType.UploadProgress
-              this.uploadProgress = Math.round(100 * (event.loaded / event.total));
-            }
-
-            if (event.type === HttpEventType.Response) { //Prinde HttpEventType.Response
-              const photos = event.body;
-              if (photos !== null) {
-                this.property.photos = photos;
-              } else {
-                this.property.photos = [];
-              }
-            }
-          });
-
-        });
-
-        this.alertifyService.success("Files uploaded successfully");
-      } else if (!result) {
-        this.fileCount = 0;
-      }
-
-
-    });
 
   }
 
