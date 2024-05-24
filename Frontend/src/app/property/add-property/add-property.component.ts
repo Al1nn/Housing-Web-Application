@@ -21,6 +21,7 @@ import { IPhoto } from '../../model/IPhoto';
 
 
 
+
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
@@ -243,6 +244,9 @@ export class AddPropertyComponent implements OnInit {
                 () => {
                     if (this.photosToUpload.length > 0) {
                         this.uploadPropertyPhotos(this.property.id);
+                        // this.housingService.getFirstPropertyPhoto(this.property.id).subscribe(data => {
+                        //     this.property.photo = data.fileName;
+                        // });
                     }
 
 
@@ -294,9 +298,6 @@ export class AddPropertyComponent implements OnInit {
         this.property.mainEntrance = this.mainEntrance.value;
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.property.description = this.description.value;
-
-
-
     }
 
 
@@ -360,13 +361,15 @@ export class AddPropertyComponent implements OnInit {
             formData.append("file", file);
             this.housingService.addPropertyPhoto(propertyId, formData).subscribe(
                 () => {
+
                     console.log('Photo uploaded successfully');
+
                 },
                 error => {
                     console.error('Error uploading photo : ', error);
                 }
             );
-        })
+        });
 
     }
 

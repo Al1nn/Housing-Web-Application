@@ -142,6 +142,10 @@ export class HousingService {
         });
     }
 
+    getFirstPropertyPhoto(propertyId: number): Observable<IPhoto> {
+        return this.http.get<IPhoto>(this.baseUrl + '/property/get/first/photo/' + propertyId);
+    }
+
     getLastIndex(): Observable<number> {
         const httpOptions = {
             headers: new HttpHeaders({

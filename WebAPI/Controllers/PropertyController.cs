@@ -241,6 +241,33 @@ namespace WebAPI.Controllers
             return StatusCode(200);
         }
 
+        [HttpGet("get/first/photo/{propId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFirstPropertyPhoto(int propId)
+        {
+            ApiError apiError = new ApiError();
+            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
+
+            if (property == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "Property Not Found";
+                apiError.ErrorDetails = "Invalid propId";
+                return NotFound(apiError);
+            }
+
+            if (!property.Photos.Any()) 
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "Photos Not Found";
+                apiError.ErrorDetails = "No photos available for this property";
+                return NotFound(apiError);
+            }
+
+            var firstPhotoDto = mapper.Map<PhotoDto>(property.Photos.FirstOrDefault());
+            return Ok(firstPhotoDto);
+        }
+
 
         [HttpGet("get/photos/{propId}")]
         [AllowAnonymous]
@@ -266,9 +293,9 @@ namespace WebAPI.Controllers
  
 
         //property/add/photo/1
-        [HttpPost("add/photos/{propId}")]
+        [HttpPost("add/photo/{propId}")]
         [Authorize]
-        public async Task<IActionResult> AddPropertyPhoto(List<IFormFile> files, int propId)
+        public async Task<IActionResult> AddPropertyPhoto(IFormFile file, int propId)
         {
             ApiError apiError = new ApiError();
           
@@ -292,7 +319,7 @@ namespace WebAPI.Controllers
                 return Unauthorized(apiError);
             }
 
-            if (files.Count == 0)
+            if (file.Length == 0)
             {
                 return NoContent();
             }
@@ -310,48 +337,43 @@ namespace WebAPI.Controllers
                 Directory.CreateDirectory(thumbnailsDirectory);
             }
 
-            foreach (IFormFile file in files)
-            {
                 
 
-                string uniqueId = Guid.NewGuid().ToString();
-                var fileName = uniqueId + '-' + file.FileName;
-                var originalPath = Path.Combine(originalSizesDirectory, fileName);
-                var thumbnailPath = Path.Combine(thumbnailsDirectory, fileName);
+            string uniqueId = Guid.NewGuid().ToString();
+            var fileName = uniqueId + '-' + file.FileName;
+            var originalPath = Path.Combine(originalSizesDirectory, fileName);
+            var thumbnailPath = Path.Combine(thumbnailsDirectory, fileName);
 
 
-                using (var stream = new FileStream(originalPath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-             
-                using (var image = SixLabors.ImageSharp.Image.Load(originalPath))
-                {
-                    var resizeOptions = new ResizeOptions { 
-                        Mode = ResizeMode.Max,
-                        Size = new Size(800,800),
-                        Position = AnchorPositionMode.Center
-                    };
-
-                    image.Mutate(x => x.Resize(resizeOptions));
-                    image.Save(thumbnailPath);
-                }
-
-                var photo = new Photo
-                {
-                    FileName = fileName,
-                    PropertyId = propId,
-                    LastUpdatedOn = DateTime.Now,
-                    LastUpdatedBy = userId
-                };
-
-                property.Photos.Add(photo);
-
-               
+            using (var stream = new FileStream(originalPath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
             }
 
+             
+            using (var image = SixLabors.ImageSharp.Image.Load(originalPath))
+            {
+                var resizeOptions = new ResizeOptions { 
+                   Mode = ResizeMode.Max,
+                   Size = new Size(800,800),
+                   Position = AnchorPositionMode.Center
+                };
 
+                image.Mutate(x => x.Resize(resizeOptions));
+                image.Save(thumbnailPath);
+            }
+
+            var photo = new Photo
+            {
+               FileName = fileName,
+               PropertyId = propId,
+               LastUpdatedOn = DateTime.Now,
+               LastUpdatedBy = userId
+            };
+
+            property.Photos.Add(photo);
+
+             
             if (await uow.SaveAsync()) return Ok();
 
             apiError.ErrorCode = BadRequest().StatusCode;
