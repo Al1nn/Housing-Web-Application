@@ -6,6 +6,7 @@ import { AlertifyService } from '../../services/alertify.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PhotoEditorPopupComponent } from './photo-editor-popup/photo-editor-popup.component';
 import { HttpEventType } from '@angular/common/http';
+import { IPhoto } from '../../model/IPhoto';
 
 
 @Component({
@@ -16,7 +17,6 @@ import { HttpEventType } from '@angular/common/http';
 export class PhotoEditorComponent implements OnInit {
   @Input() property: Property;
   thumbnailsFolder: string = environment.thumbnailFolder;
-  maxAllowedFileSize = 10 * 1024 * 1024;
   fileCount: number;
   uploadProgress: number = 0;
   photosToUpload: File[] = [];
@@ -26,14 +26,10 @@ export class PhotoEditorComponent implements OnInit {
 
   deletePhoto(propertyId: number, photoFileName: string) {
     this.housingService.deletePhoto(propertyId, photoFileName).subscribe(() => {
-
+      this.fileCount = 0;
       this.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
 
-        if (event.type === HttpEventType.UploadProgress && event.total) { //Responsabil pentru sincronizarea Progress Barului, nu prinde HttpEventType.UploadProgress
-          this.uploadProgress = Math.round(100 * (event.loaded / event.total));
-        }
-
-        if (event.type === HttpEventType.Response) { //Prinde HttpEventType.Response
+        if (event.type === HttpEventType.Response) {
           const photos = event.body;
           if (photos !== null) {
             this.property.photos = photos;
@@ -56,16 +52,13 @@ export class PhotoEditorComponent implements OnInit {
         const file: File = files[i];
         this.photosToUpload.push(file);
       }
-      // Open the dialog only if files are uploaded
+      this.uploadProgress = 0;
       this.openDialog();
     } else {
-      // If no files are selected, reset file count and do not open the dialog
+
       this.fileCount = 0;
-      // Check if the input element still has files selected
-      // const fileInputElement: HTMLInputElement = event.target;
-      // if (!fileInputElement.value) {
-      //   console.log("Event file dialog closed without selecting files");
-      // }
+      this.uploadProgress = 0;
+
       this.alertifyService.error("No file uploaded");
     }
   }
@@ -77,18 +70,38 @@ export class PhotoEditorComponent implements OnInit {
       height: '700px',
       data: {
         photosToUpload: this.photosToUpload,
+        property: this.property,
+        uploadProgress: this.uploadProgress,
+
       }
     });
-
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log("Getter of the uploaded files");
-      } else {
+        this.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
+          console.log(event.type);
+          if (event.type === HttpEventType.DownloadProgress && event.total !== undefined) {
+            this.uploadProgress = Math.round(100 * (event.loaded / event.total));
+          }
+
+          if (event.type === HttpEventType.Response) {
+
+            const photos = event.body;
+
+            this.property.photos = photos as IPhoto[]
+
+          }
+
+        });
+      } else if (!result) {
+        this.uploadProgress = 0;
         this.fileCount = 0;
       }
     })
 
+
   }
+
+
 
   ngOnInit() { }
 }

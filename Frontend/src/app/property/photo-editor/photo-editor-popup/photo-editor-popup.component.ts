@@ -1,6 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
+import { HousingService } from '../../../services/housing.service';
+import { Property } from '../../../model/Property.interface';
+
+
+
+
 
 @Component({
   selector: 'app-photo-editor-popup',
@@ -13,12 +19,15 @@ export class PhotoEditorPopupComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<PhotoEditorPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private housingService: HousingService
   ) { }
 
   photosToUpload: File[] = [];
   notifier: boolean;
   fileControl = new FormControl();
+  property: Property;
+  uploadProgress: number;
 
   formatFileSize(size: number): string {
     if (size < 1024) {
@@ -37,12 +46,25 @@ export class PhotoEditorPopupComponent implements OnInit {
 
   uploadPhotos() {
     this.notifier = true;
-    console.log(this.photosToUpload);
-    this.closeDialog();
+
+    const uploadTasks = this.photosToUpload.map(file => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      return this.housingService.addPropertyPhoto(this.property.id, formData).toPromise();
+    });
+
+    Promise.all(uploadTasks).then(() => {
+      this.closeDialog();
+    }).catch(() => {
+      this.notifier = false;
+      this.closeDialog();
+    });
   }
 
   ngOnInit() {
     this.notifier = false;
+    this.property = this.data.property;
     this.photosToUpload = this.data.photosToUpload;
   }
 
