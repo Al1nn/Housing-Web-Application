@@ -16,7 +16,6 @@ import { Property } from '../../../model/Property.interface';
 export class PhotoEditorPopupComponent implements OnInit {
 
 
-
   constructor(
     public dialogRef: MatDialogRef<PhotoEditorPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -28,6 +27,7 @@ export class PhotoEditorPopupComponent implements OnInit {
   fileControl = new FormControl();
   property: Property;
   uploadProgress: number;
+  descriptions: string[] = [];
 
   formatFileSize(size: number): string {
     if (size < 1024) {
@@ -47,10 +47,10 @@ export class PhotoEditorPopupComponent implements OnInit {
   uploadPhotos() {
     this.notifier = true;
 
-    const uploadTasks = this.photosToUpload.map(file => {
+    const uploadTasks = this.photosToUpload.map((file, index) => {
       const formData = new FormData();
       formData.append("file", file);
-
+      formData.append("description", this.descriptions[index]); // Using descriptions array
       return this.housingService.addPropertyPhoto(this.property.id, formData).toPromise();
     });
 
@@ -66,6 +66,7 @@ export class PhotoEditorPopupComponent implements OnInit {
     this.notifier = false;
     this.property = this.data.property;
     this.photosToUpload = this.data.photosToUpload;
+    this.descriptions = new Array(this.photosToUpload.length).fill('');
   }
 
 }

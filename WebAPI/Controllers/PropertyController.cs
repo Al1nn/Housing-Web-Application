@@ -14,6 +14,9 @@ using WebAPI.Models;
 using System.Text.RegularExpressions;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using System.Runtime.InteropServices;
+using WebAPI.Extensions;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace WebAPI.Controllers
@@ -295,10 +298,15 @@ namespace WebAPI.Controllers
         //property/add/photo/1
         [HttpPost("add/photo/{propId}")]
         [Authorize]
-        public async Task<IActionResult> AddPropertyPhoto(IFormFile file, int propId)
+        public async Task<IActionResult> AddPropertyPhoto([FromForm] IFormFile file, [FromForm] string description, int propId)
         {
             ApiError apiError = new ApiError();
-          
+
+
+           
+            Console.WriteLine(description);
+            
+            
 
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
             int userId = GetUserId();

@@ -1,11 +1,11 @@
 <mat-dialog-content class="custom-dialog-content">
   <h1 class="dialog-title">Files</h1>
-  <div *ngFor="let file of photosToUpload" class="file-item">
+  <div *ngFor="let file of photosToUpload; let index = index;" class="file-item">
     <h2 class="file-name">{{ file.name }}</h2>
     <p class="file-details">
        Type: {{ file.type }} | Size: {{ formatFileSize(file.size) }} <br>
     </p>
-    <textarea matInput class="form-control" rows="5" placeholder="Description..."></textarea>
+    <textarea matInput class="form-control" rows="5" placeholder="Description..." [(ngModel)]="descriptions[index]"></textarea>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="center" class="dialog-actions">
