@@ -303,10 +303,10 @@ namespace WebAPI.Controllers
             ApiError apiError = new ApiError();
 
 
-           
-            Console.WriteLine(description);
-            
-            
+
+            await Console.Out.WriteLineAsync(description);
+
+
 
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
             int userId = GetUserId();

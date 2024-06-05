@@ -75,6 +75,8 @@ export class PhotoEditorComponent implements OnInit {
 
       }
     });
+
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
@@ -96,7 +98,7 @@ export class PhotoEditorComponent implements OnInit {
         this.uploadProgress = 0;
         this.fileCount = 0;
       }
-    })
+    });
 
 
   }

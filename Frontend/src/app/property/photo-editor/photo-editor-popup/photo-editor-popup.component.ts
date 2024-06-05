@@ -48,16 +48,18 @@ export class PhotoEditorPopupComponent implements OnInit {
     this.notifier = true;
 
     const uploadTasks = this.photosToUpload.map((file, index) => {
+      console.log(this.descriptions.at(index));
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("description", this.descriptions[index]); // Using descriptions array
+      formData.append("description", this.descriptions.at(index) as string);
       return this.housingService.addPropertyPhoto(this.property.id, formData).toPromise();
     });
 
     Promise.all(uploadTasks).then(() => {
       this.closeDialog();
-    }).catch(() => {
+    }).catch((error) => {
       this.notifier = false;
+      console.log(error);
       this.closeDialog();
     });
   }
