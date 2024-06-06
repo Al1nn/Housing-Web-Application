@@ -48,7 +48,6 @@ export class PhotoEditorPopupComponent implements OnInit {
     this.notifier = true;
 
     const uploadTasks = this.photosToUpload.map((file, index) => {
-      console.log(this.descriptions.at(index));
       const formData = new FormData();
       formData.append("file", file);
       formData.append("description", this.descriptions.at(index) as string);
