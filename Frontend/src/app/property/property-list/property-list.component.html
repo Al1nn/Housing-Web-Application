@@ -40,7 +40,15 @@
 <button type="button" (click)="clearFilters()">Clear</button>
 <br><br>
 
-
+<!--I need to center mat-paginator using bootstrap -->
+<div class="d-flex justify-content-center">
+  <mat-paginator 
+                [length]="Properties.length"
+                 [pageSize]="5"
+                 showFirstLastButtons
+                 hidePageSize="true">
+  </mat-paginator>
+</div>
 
 <div class="row">
   <div *ngFor="let property of Properties
@@ -49,4 +57,14 @@
     class="shadow-lg col-sm-4 p-3">
     <app-property-card [property_index]="property" ></app-property-card>
   </div>
+</div>
+<!--I need to center mat-paginator using bootstrap-->
+
+<div class="d-flex justify-content-center shadow-lg">
+  <mat-paginator 
+                [length]="Properties.length"
+                 [pageSize]="5"
+                 showFirstLastButtons
+                 hidePageSize="true">
+  </mat-paginator>
 </div>

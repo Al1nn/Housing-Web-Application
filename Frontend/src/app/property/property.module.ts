@@ -33,6 +33,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/photo-editor-popup.component';
 
 @NgModule({
@@ -62,6 +64,7 @@ import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/pho
     MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
+    MatPaginatorModule,
     ReactiveFormsModule,
     ButtonsModule.forRoot(),
     CarouselModule.forRoot(),

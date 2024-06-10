@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 //import { IPropertyBase } from '../../model/IPropertyBase.interface';
 import { Property } from '../../model/Property.interface';
 
+
+
 @Component({
     selector: 'app-property-list',
     templateUrl: './property-list.component.html',
@@ -11,6 +13,9 @@ import { Property } from '../../model/Property.interface';
 })
 export class PropertyListComponent implements OnInit {
     SellRent = 1;
+    PageNumber = 1;
+
+
     @Input() Properties: Property[];
     Today = new Date();
     filterInput = '';
