@@ -57,6 +57,11 @@ export class HousingService {
         return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString());
     }
 
+
+    getPaginatedProperty(SellRent: number, PageNumber: number, PageSize: number): Observable<Property[]> {
+        return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString() + '/' + PageNumber?.toString() + '/' + PageSize?.toString());
+    }
+
     getUserProperties(): Observable<Property[]> {
         const httpOptions = {
             headers: new HttpHeaders({
