@@ -43,6 +43,16 @@ namespace WebAPI.Controllers
             return Ok(propertyListDto);
         }
 
+        [HttpGet("list/{sellRent}/{pageNumber}/{pageSize}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPropertyPage(int sellRent, int pageNumber, int pageSize)
+        {
+            var paginatedProperties = await uow.PropertyRepository.GetPropertiesPageAsync(sellRent, pageNumber, pageSize);
+            var paginatedPropertiesDto = mapper.Map<IEnumerable<PropertyListDto>>(paginatedProperties);
+            return Ok(paginatedPropertiesDto);
+        }
+
+
         [HttpGet("count")]
         [Authorize]
         public async Task<IActionResult> GetPropertyCountByUser()

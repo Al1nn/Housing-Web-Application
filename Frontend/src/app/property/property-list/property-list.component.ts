@@ -52,6 +52,8 @@ export class PropertyListComponent implements OnInit {
 
     }
 
+
+
     onFilterCityAPI(filterInput: string) {
 
 
