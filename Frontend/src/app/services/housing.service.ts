@@ -1,8 +1,6 @@
-import { IProperty } from './../model/IProperty.interface';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Property } from '../model/Property.interface';
 import { environment } from '../../environments/environment';
 import { IKeyValuePair } from '../model/IKeyValuePair';
@@ -79,10 +77,10 @@ export class HousingService {
         return this.http.get<Property>(this.baseUrl + '/property/detail/' + id.toString());
     }
 
-    getNumberOfProperties(): Observable<number> {
-        return this.http
-            .get<IProperty[]>('data/properties.json')
-            .pipe(map((properties) => properties.length as number));
+    getPropertiesLength(SellRent?: number): Observable<number> {
+        return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString()).pipe(
+            map(properties => properties.length)
+        );
     }
 
     getPropertyCountByUser(): Observable<number> {

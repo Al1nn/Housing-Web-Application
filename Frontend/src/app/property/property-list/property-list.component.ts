@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
-//import { IPropertyBase } from '../../model/IPropertyBase.interface';
 import { Property } from '../../model/Property.interface';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 
 
@@ -12,16 +12,24 @@ import { Property } from '../../model/Property.interface';
     styleUrls: ['./property-list.component.css'],
 })
 export class PropertyListComponent implements OnInit {
+
     SellRent = 1;
     PageNumber = 1;
 
+    @ViewChild('paginator1') paginator1: MatPaginator;
+    @ViewChild('paginator2') paginator2: MatPaginator;
 
     @Input() Properties: Property[];
+    @Input() isDashboard: boolean;
+    PropertiesLength: number;
+
+
     Today = new Date();
     filterInput = '';
     urlSegments = this.route.snapshot.url;
     SortbyParam = '';
     SortDirection = 'asc';
+
 
     min = 0;
     max = 0;
@@ -49,15 +57,35 @@ export class PropertyListComponent implements OnInit {
 
 
 
-        this.housingService.getAllProperties(this.SellRent).subscribe((data) => { //THIS CALLING
-            this.Properties = data;
+        this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
+            this.PropertiesLength = data;
         });
 
-
+        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 5).subscribe(data => {
+            this.Properties = data;
+        })
 
     }
 
+    onPageChange($event: PageEvent) {
 
+
+
+        if (this.paginator1) {
+            this.paginator1.pageIndex = $event.pageIndex;
+        }
+        if (this.paginator2) {
+            this.paginator2.pageIndex = $event.pageIndex;
+        }
+
+        this.PageNumber = $event.pageIndex + 1;
+
+        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 5).subscribe(data => {
+            this.Properties = data;
+        })
+
+
+    }
 
     onFilterCityAPI(filterInput: string) {
 
