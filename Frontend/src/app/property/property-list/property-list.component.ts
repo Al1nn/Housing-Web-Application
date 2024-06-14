@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, HostListener } from '@angular/core';
 import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
@@ -17,12 +17,13 @@ export class PropertyListComponent implements OnInit {
     PageNumber = 1;
 
     @ViewChild('paginator1') paginator1: MatPaginator;
-    @ViewChild('paginator2') paginator2: MatPaginator;
+
 
     @Input() Properties: Property[];
     @Input() isDashboard: boolean;
     PropertiesLength: number;
-
+    debounceTimer: any;
+    isLoading: boolean = false;
 
     Today = new Date();
     filterInput = '';
@@ -41,7 +42,10 @@ export class PropertyListComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private housingService: HousingService
-    ) { }
+    ) {
+
+
+    }
 
     ngOnInit(): void {
 
@@ -67,6 +71,38 @@ export class PropertyListComponent implements OnInit {
 
     }
 
+    @HostListener('window:scroll', ['$event'])
+    onWindowScroll(_event: Event) {
+
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+            // Evitam dashboard-ul
+            return;
+        }
+
+        const scrolled = window.scrollY;
+        const threshold = 400;
+
+        // Ca sa scap de zece mii de request-uri in timp ce dau scroll
+        if (this.debounceTimer) {
+            clearTimeout(this.debounceTimer);
+        }
+
+        this.debounceTimer = setTimeout(() => { //Do not call a request if there are no properties to load. 
+            if (scrolled >= threshold && !this.isLoading) {
+                this.isLoading = true;
+                this.PageNumber++;
+                this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 5).subscribe(data => {
+                    this.Properties.push(...data);
+                    this.isLoading = false;
+                }, error => {
+                    this.isLoading = false;
+                    console.error('Error loading data:', error);
+                });
+            }
+        }, 200);
+
+    }
+
     onPageChange($event: PageEvent) {
 
 
@@ -74,9 +110,7 @@ export class PropertyListComponent implements OnInit {
         if (this.paginator1) {
             this.paginator1.pageIndex = $event.pageIndex;
         }
-        if (this.paginator2) {
-            this.paginator2.pageIndex = $event.pageIndex;
-        }
+
 
         this.PageNumber = $event.pageIndex + 1;
 
