@@ -14,6 +14,7 @@ import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
 import { IPhoto } from '../../model/IPhoto';
+import { ICity } from '../../model/ICity.interface';
 
 
 
@@ -38,7 +39,7 @@ export class AddPropertyComponent implements OnInit {
     // This later will come from the database
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
-    cityList: any[];
+    cityList: ICity[];
     thumbnails: IPhoto[];
     originalSizes: IPhoto[];
     originalSizesString: string | null;
@@ -57,6 +58,7 @@ export class AddPropertyComponent implements OnInit {
         furnishingType: null,
         bhk: null,
         city: null,
+        country: null,
         builtArea: null,
         carpetArea: null,
         readyToMove: false,
@@ -286,6 +288,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.propertyTypeId = this.propertyType.value;
         this.property.name = this.name.value;
         this.property.cityId = this.city.value;
+
         this.property.furnishingTypeId = this.furnishingType.value;
         this.property.price = this.price.value;
         this.property.security = this.security.value;
@@ -383,7 +386,11 @@ export class AddPropertyComponent implements OnInit {
     }
 
 
-
+    updateCityAndCountry(selectedText: string) {
+        const [city, country] = selectedText.split(',').map(item => item.trim());
+        this.propertyView.city = city;
+        this.propertyView.country = country;
+    }
 
     getDataURL(file: File): Promise<string> {
         return new Promise((resolve, reject) => {

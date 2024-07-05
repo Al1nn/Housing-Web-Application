@@ -78,14 +78,14 @@
                 <div class="form-group col-12">
                   <label>City</label>
                   <select #City
-                  (ngModelChange)="propertyView.city = City.options[City.options.selectedIndex].text"
+                  (ngModelChange)="updateCityAndCountry(City.options[City.options.selectedIndex].text)"
                   class="form-control m-2"
                   formControlName="city"
                   >
                     <option value="">--Select City --</option>
                     <option *ngFor="let city of cityList"
                       value={{city.id}} >
-                      {{city.name}}
+                      {{city.name}}, {{city.country}}
                     </option>
 
 
@@ -357,8 +357,8 @@
           <h1 class="mb-0"> {{propertyView.bhk}} BHK {{propertyView.propertyType}} </h1>
       
           in {{propertyView.name}}
-          <span *ngIf="propertyView.name">,</span>
-          {{propertyView.city}}
+          <span *ngIf="propertyView.name">|</span>
+          {{propertyView.city}}, {{propertyView.country}}
         
           <h6  class="mt-2">{{propertyView.furnishingType}}
           <span *ngIf="propertyView.furnishingType !== 'Unfurnished'">Furnished</span>

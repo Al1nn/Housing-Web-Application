@@ -66,6 +66,7 @@ export class PropertyListComponent implements OnInit {
         });
 
         this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 5).subscribe(data => {
+            console.log(data);
             this.Properties = data;
         })
 
@@ -82,12 +83,12 @@ export class PropertyListComponent implements OnInit {
         const scrolled = window.scrollY;
         const threshold = 400;
 
-        // Ca sa scap de zece mii de request-uri in timp ce dau scroll
+
         if (this.debounceTimer) {
             clearTimeout(this.debounceTimer);
         }
 
-        this.debounceTimer = setTimeout(() => { //Do not call a request if there are no properties to load. 
+        this.debounceTimer = setTimeout(() => {
             if (scrolled >= threshold && !this.isLoading) {
                 this.isLoading = true;
                 this.PageNumber++;

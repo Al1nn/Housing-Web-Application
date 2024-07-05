@@ -5,6 +5,7 @@ import { Property } from '../model/Property.interface';
 import { environment } from '../../environments/environment';
 import { IKeyValuePair } from '../model/IKeyValuePair';
 import { IPhoto } from '../model/IPhoto';
+import { ICity } from '../model/ICity.interface';
 
 
 
@@ -32,8 +33,8 @@ export class HousingService {
         return this.http.get<IKeyValuePair[]>(this.baseUrl + '/FurnishingType/list');
     }
 
-    getAllCities(): Observable<string[]> {
-        return this.http.get<string[]>(this.baseUrl + '/city/cities');
+    getAllCities(): Observable<ICity[]> {
+        return this.http.get<ICity[]>(this.baseUrl + '/city/cities');
     }
 
     // Get method cu filtrare

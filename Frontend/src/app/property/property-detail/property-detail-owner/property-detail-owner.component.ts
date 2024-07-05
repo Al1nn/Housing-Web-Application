@@ -28,6 +28,7 @@ export class PropertyDetailOwnerComponent implements OnInit {
 
     this.route.data.subscribe((data) => {
       this.property = data['property'];
+      console.log(data);
     });
     this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
     this.galleryImages = this.getPropertyPhotos();

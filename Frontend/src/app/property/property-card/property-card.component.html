@@ -18,8 +18,8 @@
     <h1 class="mb-0"> {{property_index.bhk}} BHK {{property_index.propertyType}} </h1>
 
     in {{property_index.name}}
-    <span *ngIf="property_index.name">,</span>
-    {{property_index.city}}
+    <span *ngIf="property_index.name">|</span>
+    {{property_index.city}} , {{property_index.country}}
   
     <h6  class="mt-2">{{property_index.furnishingType}}
     <span *ngIf="property_index.furnishingType !== 'Unfurnished'">Furnished</span>

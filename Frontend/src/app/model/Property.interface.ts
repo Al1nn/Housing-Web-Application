@@ -18,6 +18,7 @@ export class Property implements IPropertyBase {
     phoneNumber: string;
     cityId: number;
     city: string;
+    country: string;
     floorNo?: string;
     totalFloors?: string;
     readyToMove: boolean;
