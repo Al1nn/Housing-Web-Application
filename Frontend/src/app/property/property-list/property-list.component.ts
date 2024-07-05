@@ -18,6 +18,7 @@ export class PropertyListComponent implements OnInit {
 
 
 
+
     SellRent = 1;
     PageNumber = 1;
 
@@ -69,7 +70,7 @@ export class PropertyListComponent implements OnInit {
 
             this.initializeCityOptions();
 
-            this.FilteredCityListOptions = this.autoCompleteControl.valueChanges.pipe(
+            this.FilteredCityListOptions = this.autoCompleteControl.valueChanges.pipe( //keypress
                 startWith(''),
                 map(value => this._filter(value || '')),
             );
@@ -92,7 +93,7 @@ export class PropertyListComponent implements OnInit {
 
         this.initializeCityOptions();
 
-        this.FilteredCityListOptions = this.autoCompleteControl.valueChanges.pipe(
+        this.FilteredCityListOptions = this.autoCompleteControl.valueChanges.pipe( //keypress
             startWith(''),
             map(value => this._filter(value || '')),
         );
