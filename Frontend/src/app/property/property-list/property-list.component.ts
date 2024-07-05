@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
@@ -65,44 +65,13 @@ export class PropertyListComponent implements OnInit {
             this.PropertiesLength = data;
         });
 
-        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 5).subscribe(data => {
-            console.log(data);
+        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
         })
 
     }
 
-    @HostListener('window:scroll', ['$event'])
-    onWindowScroll(_event: Event) {
 
-        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            // Evitam dashboard-ul
-            return;
-        }
-
-        const scrolled = window.scrollY;
-        const threshold = 400;
-
-
-        if (this.debounceTimer) {
-            clearTimeout(this.debounceTimer);
-        }
-
-        this.debounceTimer = setTimeout(() => {
-            if (scrolled >= threshold && !this.isLoading) {
-                this.isLoading = true;
-                this.PageNumber++;
-                this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 5).subscribe(data => {
-                    this.Properties.push(...data);
-                    this.isLoading = false;
-                }, error => {
-                    this.isLoading = false;
-                    console.error('Error loading data:', error);
-                });
-            }
-        }, 200);
-
-    }
 
     onPageChange($event: PageEvent) {
 
@@ -115,7 +84,7 @@ export class PropertyListComponent implements OnInit {
 
         this.PageNumber = $event.pageIndex + 1;
 
-        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 5).subscribe(data => {
+        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
         })
 
@@ -155,7 +124,6 @@ export class PropertyListComponent implements OnInit {
                 (data) => {
                     this.Properties = data;
 
-                    console.log(data);
                 },
                 (error) => {
                     console.log('httperror:');

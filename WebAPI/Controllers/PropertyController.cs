@@ -104,6 +104,7 @@ namespace WebAPI.Controllers
                                        where property.Name.ToLower().Contains(filterWord.ToLower()) 
                                             || property.PropertyType.ToLower().Contains(filterWord.ToLower())
                                             || property.City.ToLower().Contains(filterWord.ToLower())
+                                            || property.Country.ToLower().Contains(filterWord.ToLower())
 
                                        select property; 
                                        
