@@ -1,5 +1,5 @@
 input[type = "text"]:focus , input[type = "password"]:focus{
-    box-shadow: 0 0 7px rgba(0, 0, 0, 0.5);
+    /*box-shadow: 0 0 7px rgba(0, 0, 0, 0.5);*/
     border-color: rgba(0, 0, 0, 0.5);
   }
 

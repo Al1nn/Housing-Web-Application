@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { PropertyRoutingModule } from './property-routing.module';
 import { PropertyCardElement } from './property-card/property-card.component';
 import { PropertyListComponent } from './property-list/property-list.component';
@@ -33,6 +33,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/photo-editor-popup.component';
@@ -64,6 +67,8 @@ import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/pho
     MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
     MatPaginatorModule,
     ReactiveFormsModule,
     ButtonsModule.forRoot(),
@@ -81,6 +86,7 @@ import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/pho
     BsModalService,
     HousingService,
     DatePipe,
+    AsyncPipe,
     PropertyDetailResolverService,
     {
       provide: HTTP_INTERCEPTORS,

@@ -3,6 +3,9 @@ import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { ICity } from '../../model/ICity.interface';
+import { FormControl } from '@angular/forms';
+import { Observable, map, startWith } from 'rxjs';
 
 
 
@@ -13,6 +16,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 })
 export class PropertyListComponent implements OnInit {
 
+
+
     SellRent = 1;
     PageNumber = 1;
 
@@ -21,6 +26,16 @@ export class PropertyListComponent implements OnInit {
 
     @Input() Properties: Property[];
     @Input() isDashboard: boolean;
+
+
+
+
+    //Example
+    autoCompleteControl = new FormControl('');
+    CityListOptions: ICity[] = [];
+    FilteredCityListOptions: Observable<ICity[]>;
+    //
+
     PropertiesLength: number;
     debounceTimer: any;
     isLoading: boolean = false;
@@ -52,6 +67,12 @@ export class PropertyListComponent implements OnInit {
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
 
+            this.initializeCityOptions();
+
+            this.FilteredCityListOptions = this.autoCompleteControl.valueChanges.pipe(
+                startWith(''),
+                map(value => this._filter(value || '')),
+            );
             return;
         }
 
@@ -67,7 +88,36 @@ export class PropertyListComponent implements OnInit {
 
         this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
-        })
+        });
+
+        this.initializeCityOptions();
+
+        this.FilteredCityListOptions = this.autoCompleteControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this._filter(value || '')),
+        );
+
+    }
+
+    initializeCityOptions() {
+        this.housingService.getAllCities().subscribe(data => {
+            this.CityListOptions = data;
+        });
+    }
+
+    private _filter(value: string): ICity[] {
+        const filterValue = value.toLowerCase();
+        console.log(filterValue);
+
+
+        if (filterValue.length >= 3) {
+            return this.CityListOptions
+                .filter(option => option.name.toLowerCase().includes(filterValue) || option.country.toLowerCase().includes(filterValue))
+            //.slice(0, 10); Pentru a da decat primele 10 optiuni care se potrivesc, dar eu am in tabelul City decat 6 optiuni deocamdata
+        } else {
+
+            return this.CityListOptions;
+        }
 
     }
 
