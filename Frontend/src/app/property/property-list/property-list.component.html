@@ -8,7 +8,7 @@
            matInput
            [formControl]="autoCompleteControl"
            [matAutocomplete]="auto"
-      
+           
            >
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let option of FilteredCityListOptions | async" [value]="option.name">
@@ -20,12 +20,7 @@
 
 
 
-<label>Filter City, Type , Name: </label>
-<input [(ngModel)]="filterInput" (ngModelChange)="onFilterCityAPI(filterInput)">
-<!-- <button class="btn btn-primary" (click)="onFilterCityAPI(filterInput)">Search</button> -->
-<div *ngFor="let city of filteredCities">{{city}}</div>
 
-<br>
 <label>Filter Price & SqrArea : </label><br>
 
 <label>Min :</label>

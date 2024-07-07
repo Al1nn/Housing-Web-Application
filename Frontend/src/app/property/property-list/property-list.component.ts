@@ -19,6 +19,7 @@ export class PropertyListComponent implements OnInit {
 
 
 
+
     SellRent = 1;
     PageNumber = 1;
 
@@ -108,15 +109,14 @@ export class PropertyListComponent implements OnInit {
 
     private _filter(value: string): ICity[] {
         const filterValue = value.toLowerCase();
-        console.log(filterValue);
-
 
         if (filterValue.length >= 3) {
+            this.filterCityAPI(filterValue);
             return this.CityListOptions
                 .filter(option => option.name.toLowerCase().includes(filterValue) || option.country.toLowerCase().includes(filterValue))
             //.slice(0, 10); Pentru a da decat primele 10 optiuni care se potrivesc, dar eu am in tabelul City decat 6 optiuni deocamdata
         } else {
-
+            this.filterCityAPI(filterValue);
             return this.CityListOptions;
         }
 
@@ -142,18 +142,18 @@ export class PropertyListComponent implements OnInit {
 
     }
 
-    onFilterCityAPI(filterInput: string) {
+    filterCityAPI(filterValue: string) {
 
 
-        if (filterInput !== '') {
+        if (filterValue !== '') {
             if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-                this.housingService.getAllFilteredUserProperties(filterInput).subscribe((data) => {
+                this.housingService.getAllFilteredUserProperties(filterValue).subscribe((data) => {
                     this.Properties = data;
                 });
                 return;
             }
 
-            this.housingService.getAllFilteredProperties(this.SellRent, filterInput).subscribe(
+            this.housingService.getAllFilteredProperties(this.SellRent, filterValue).subscribe(
                 (data) => {
                     this.Properties = data;
 
@@ -163,7 +163,7 @@ export class PropertyListComponent implements OnInit {
                 }
             );
         } else {
-            console.log('Filter Input empty');
+
             if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
                 this.housingService.getUserProperties().subscribe((data) => {
                     this.Properties = data;
