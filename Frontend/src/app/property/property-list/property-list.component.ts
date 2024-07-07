@@ -110,6 +110,8 @@ export class PropertyListComponent implements OnInit {
     private _filter(value: string): ICity[] {
         const filterValue = value.toLowerCase();
 
+
+
         if (filterValue.length >= 3) {
             this.filterCityAPI(filterValue);
             return this.CityListOptions
@@ -171,16 +173,9 @@ export class PropertyListComponent implements OnInit {
                 return;
             }
 
-            this.housingService.getAllProperties(this.SellRent).subscribe(
-                (data) => {
-                    this.Properties = data;
-
-                },
-                (error) => {
-                    console.log('httperror:');
-                    console.log(error);
-                }
-            );
+            this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
+                this.Properties = data;
+            });
         }
 
     }
