@@ -1,10 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ICity } from '../../model/ICity.interface';
-import { FormControl } from '@angular/forms';
+
 
 
 
@@ -21,11 +21,13 @@ export class PropertyListComponent implements OnInit {
 
 
 
+
     SellRent = 1;
     PageNumber = 1;
 
     @ViewChild('paginator1') paginator1: MatPaginator;
 
+    @ViewChild('autocompleteInput') autoCompleteInput: ElementRef;
 
     @Input() Properties: Property[];
     @Input() isDashboard: boolean;
@@ -34,9 +36,8 @@ export class PropertyListComponent implements OnInit {
 
 
     //Example
-    autoCompleteControl = new FormControl('');
     CityListOptions: ICity[] = [];
-    FilteredCityListOptions: ICity[];
+    FilteredCityListOptions: ICity[] = [];
     //
 
     PropertiesLength: number;
@@ -67,10 +68,11 @@ export class PropertyListComponent implements OnInit {
 
     ngOnInit(): void {
 
+        this.initializeCityOptions();
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
 
-            this.initializeCityOptions();
+
 
             return;
         }
@@ -90,7 +92,7 @@ export class PropertyListComponent implements OnInit {
         });
 
 
-        this.initializeCityOptions();
+
 
 
     }
@@ -100,6 +102,25 @@ export class PropertyListComponent implements OnInit {
             this.CityListOptions = data;
         });
     }
+
+    selectCity(option: ICity) {
+        this.autoCompleteInput.nativeElement.value = `${option.name}, ${option.country}`;
+        this.FilteredCityListOptions = [];
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+
+            this.housingService.getAllFilteredUserProperties(option.name).subscribe(data => {
+                this.Properties = data;
+            });
+
+            return;
+        }
+
+        this.housingService.getAllFilteredProperties(this.SellRent, option.name).subscribe(data => {
+            this.Properties = data;
+        });
+    }
+
+
     /*
         Eliminam acel autoCompleteControl.
 
@@ -113,22 +134,46 @@ export class PropertyListComponent implements OnInit {
 
     keyPress($event: any) {
         const inputValue = $event.target.value;
-
+        console.log(inputValue);
         if (inputValue.length >= 3) {
-            //If I initially type 3 CHARS, IT GIVES ME EMPTY this.FilteredCityListOptions, after backspacing and remaining with 3 chars, it filters correct
+
 
 
 
             this.FilteredCityListOptions = this.CityListOptions.filter(option =>
                 option.name.toLowerCase().includes(inputValue.toLowerCase())
                 || option.country.toLowerCase().includes(inputValue.toLowerCase())
-            );
+            ).slice(0, 10); //primele 10 optiuni
 
-            console.log(this.FilteredCityListOptions);
+            if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
 
+                this.housingService.getAllFilteredUserProperties(inputValue).subscribe(data => {
+                    this.Properties = data;
+                });
+
+                return;
+            }
+
+            this.housingService.getAllFilteredProperties(this.SellRent, inputValue).subscribe(data => {
+                this.Properties = data;
+            });
+
+        } else {
+            this.FilteredCityListOptions = [];
+            this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
+                this.Properties = data;
+            });
         }
     }
 
+
+    @HostListener('document:click', ['$event'])
+    clickout(_event: Event) {
+        // Clicked outside the dropdown, hide it
+        // Clear input value
+        this.FilteredCityListOptions = []; // Clear dropdown options
+
+    }
 
     onPageChange($event: PageEvent) {
 
@@ -148,41 +193,7 @@ export class PropertyListComponent implements OnInit {
 
     }
 
-    filterCityAPI(filterValue: string) {
 
-
-        if (filterValue !== '') {
-            if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-                this.housingService.getAllFilteredUserProperties(filterValue).subscribe((data) => {
-                    this.Properties = data;
-                });
-                return;
-            }
-
-            this.housingService.getAllFilteredProperties(this.SellRent, filterValue).subscribe(
-                (data) => {
-                    this.Properties = data;
-
-                }, (error) => {
-                    console.log('httperror:');
-                    console.log(error);
-                }
-            );
-        } else {
-
-            if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-                this.housingService.getUserProperties().subscribe((data) => {
-                    this.Properties = data;
-                });
-                return;
-            }
-
-            this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
-                this.Properties = data;
-            });
-        }
-
-    }
 
     clearFilters() {
         this.min = 0;

@@ -1,9 +1,37 @@
-.example-form {
-    min-width: 100px;
-    max-width: 500px;
-    width: 50%;
-  }
-  
-  .example-full-width {
-    width: 50%;
-  }
+.dropdown {
+  position: absolute;
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+  overflow-y: auto;
+  max-height: 250px;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-item button {
+  border: none;
+  background: none;
+  text-align: left;
+  width: 100%;
+}
+
+.dropdown-item button:hover {
+  text-decoration: underline;
+}
+
+.dropdown.show {
+  display: block;
+}

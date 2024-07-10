@@ -11,6 +11,7 @@ import { AddPropertyComponent } from './add-property/add-property.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterPipe } from '../pipes/filter.pipe';
 import { SortPipe } from '../pipes/sort.pipe';
+import { HighlightPipe } from '../pipes/highlight.pipe';
 import { PriceAreaFilterPipe } from '../pipes/price-filter.pipe';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
@@ -55,6 +56,7 @@ import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/pho
     FilterPipe,
     SortPipe,
     PriceAreaFilterPipe,
+    HighlightPipe,
   ],
   imports: [
     CommonModule,
