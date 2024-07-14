@@ -36,13 +36,14 @@ export class PropertyListComponent implements OnInit {
 
 
     //Example
-    CityListOptions: ICity[] = [];
     FilteredCityListOptions: ICity[] = [];
     //
 
     PropertiesLength: number;
     debounceTimer: any;
     isLoading: boolean = false;
+
+
 
     Today = new Date();
     filterInput = '';
@@ -68,7 +69,7 @@ export class PropertyListComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.initializeCityOptions();
+
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
 
@@ -97,16 +98,10 @@ export class PropertyListComponent implements OnInit {
 
     }
 
-    initializeCityOptions() {
-        this.housingService.getAllCities().subscribe(data => {
-            this.CityListOptions = data;
-        });
-    }
-
     selectCity(option: ICity) {
         this.autoCompleteInput.nativeElement.value = `${option.name}, ${option.country}`;
         this.FilteredCityListOptions = [];
-        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) { //daca suntem in property-dashboard
 
             this.housingService.getAllFilteredUserProperties(option.name).subscribe(data => {
                 this.Properties = data;
@@ -120,58 +115,47 @@ export class PropertyListComponent implements OnInit {
         });
     }
 
-
-    /*
-        Eliminam acel autoCompleteControl.
-
-        Adaugam metoda (keypress) pe input text.
-
-        
-        la metoda (keypress) pentru input text 
-        , voi pune, ceea ce tastez >= 3  fac sugestiile si apelez  GetFilteredProperties (API), la fiecare caracter introdus.
-        , daca e mai mic decat 3, nu mai intoarce sugestiile si nu mai fac nici call in API. 
-    */
-
     keyPress($event: any) {
         const inputValue = $event.target.value;
         console.log(inputValue);
-        if (inputValue.length >= 3) {
 
 
-
-
-            this.FilteredCityListOptions = this.CityListOptions.filter(option =>
-                option.name.toLowerCase().includes(inputValue.toLowerCase())
-                || option.country.toLowerCase().includes(inputValue.toLowerCase())
-            ).slice(0, 10); //primele 10 optiuni
-
-            if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-
-                this.housingService.getAllFilteredUserProperties(inputValue).subscribe(data => {
+        if (inputValue.length === 2) {
+            this.FilteredCityListOptions = [];
+            setTimeout(() => {
+                this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
                     this.Properties = data;
                 });
+            }, 400);
 
-                return;
-            }
-
-            this.housingService.getAllFilteredProperties(this.SellRent, inputValue).subscribe(data => {
-                this.Properties = data;
-            });
-
-        } else {
-            this.FilteredCityListOptions = [];
-            this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
-                this.Properties = data;
-            });
+            return;
         }
+
+        setTimeout(() => {
+            if (inputValue.length >= 3) {
+                this.housingService.getAllCitiesFiltered(inputValue, 10).subscribe(data => {
+                    this.FilteredCityListOptions = data;
+                });
+
+                if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+                    this.housingService.getAllFilteredUserProperties(inputValue).subscribe(data => {
+                        this.Properties = data;
+                    });
+                    return;
+                }
+
+                this.housingService.getAllFilteredProperties(this.SellRent, inputValue).subscribe(data => {
+                    this.Properties = data;
+                });
+            }
+        }, 400);
     }
 
 
     @HostListener('document:click', ['$event'])
     clickout(_event: Event) {
-        // Clicked outside the dropdown, hide it
-        // Clear input value
-        this.FilteredCityListOptions = []; // Clear dropdown options
+        //daca apas inafara dropdown-ului de sugestii
+        this.FilteredCityListOptions = [];
 
     }
 

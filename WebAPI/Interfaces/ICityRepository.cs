@@ -6,6 +6,8 @@ namespace WebAPI.Interfaces
     {
         Task<IEnumerable<City>> GetCitiesAsync();
 
+        Task<IEnumerable<City>> FilterCitiesAsync(string filterWord, int amount);
+
         void AddCity(City city);
 
         void DeleteCity(int CityId);

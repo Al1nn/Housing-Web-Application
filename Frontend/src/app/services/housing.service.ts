@@ -37,6 +37,10 @@ export class HousingService {
         return this.http.get<ICity[]>(this.baseUrl + '/city/cities');
     }
 
+    getAllCitiesFiltered(filterWord: string, amount: number): Observable<ICity[]> {
+        return this.http.get<ICity[]>(this.baseUrl + '/city/cities/' + filterWord + '/' + amount);
+    }
+
     // Get method cu filtrare
 
     getAllFilteredProperties(sellRent: number, filterWord: string): Observable<Property[]> {

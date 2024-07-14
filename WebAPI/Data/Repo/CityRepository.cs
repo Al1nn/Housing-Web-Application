@@ -19,6 +19,14 @@ namespace WebAPI.Data.Repo
             return await dc.Cities.ToListAsync();
         }
 
+        public async Task<IEnumerable<City>> FilterCitiesAsync(string filterWord, int amount)
+        {
+            return await dc.Cities
+                .Where( city => city.Name.ToLower().Contains(filterWord.ToLower())  || city.Country.ToLower().Contains(filterWord.ToLower()))
+                .Take(amount)
+                .ToListAsync();
+        }
+
         public void AddCity(City city)
         {
             dc.Cities.Add(city);
@@ -34,5 +42,6 @@ namespace WebAPI.Data.Repo
         {
             return await dc.Cities.FindAsync(id);
         }
+
     }
 }

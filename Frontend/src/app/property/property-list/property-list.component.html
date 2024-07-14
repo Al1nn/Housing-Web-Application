@@ -9,7 +9,7 @@ placeholder="Filter by City, Type, Name"
   [class.show]="autocompleteInput.value !== ''"
   [style.width.px]="autocompleteInput.offsetWidth" 
   >
-  <li class="dropdown-item" *ngFor="let option of FilteredCityListOptions" > <!--Design me this li-->
+  <li class="dropdown-item" *ngFor="let option of FilteredCityListOptions" > 
     <button (click)="selectCity(option)">
       
       <span [innerHTML]="option.name | highlight:autocompleteInput.value"></span>,
