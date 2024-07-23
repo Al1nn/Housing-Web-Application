@@ -86,6 +86,10 @@ export class PropertyListComponent implements OnInit {
         this.FilteredCityListOptions = [];
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) { //daca suntem in property-dashboard
 
+            this.housingService.getAllFilteredUserPropertiesLength(this.SellRent, this.autoCompleteInput.nativeElement.value).subscribe(data => {
+                this.PropertiesLength = data;
+            });
+
             this.housingService.getAllFilteredUserProperties(option.name, this.PageNumber, 6).subscribe(data => {
                 this.Properties = data;
             }); // se schimba
@@ -93,6 +97,10 @@ export class PropertyListComponent implements OnInit {
             this.isFiltering = true;
             return;
         }
+
+        this.housingService.getAllFilteredUserPropertiesLength(this.SellRent, this.autoCompleteInput.nativeElement.value).subscribe(data => {
+            this.PropertiesLength = data;
+        });
 
         this.housingService.getAllFilteredProperties(this.SellRent, option.name, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
@@ -156,9 +164,7 @@ export class PropertyListComponent implements OnInit {
 
         if (this.isFiltering) {
 
-            this.housingService.getAllFilteredUserPropertiesLength(this.SellRent, this.autoCompleteInput.nativeElement.value).subscribe(data => {
-                this.PropertiesLength = data;
-            });
+
 
             this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.PageNumber, 6).subscribe(data => {
                 this.Properties = data;
