@@ -16,12 +16,6 @@ import { ICity } from '../../model/ICity.interface';
 })
 export class PropertyListComponent implements OnInit {
 
-
-
-
-
-
-
     SellRent = 1;
     PageNumber = 1;
 
@@ -36,6 +30,8 @@ export class PropertyListComponent implements OnInit {
     private filterTimeoutId: number;
     private propertyTimeoutId: number;
 
+
+    isFiltering: boolean = false;
     //Example
     FilteredCityListOptions: ICity[] = [];
     //
@@ -86,7 +82,7 @@ export class PropertyListComponent implements OnInit {
     }
 
     selectCity(option: ICity) {
-        this.autoCompleteInput.nativeElement.value = `${option.name}, ${option.country}`;
+        this.autoCompleteInput.nativeElement.value = `${option.name}`;
         this.FilteredCityListOptions = [];
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) { //daca suntem in property-dashboard
 
@@ -94,14 +90,14 @@ export class PropertyListComponent implements OnInit {
                 this.Properties = data;
             }); // se schimba
 
-
+            this.isFiltering = true;
             return;
         }
 
         this.housingService.getAllFilteredProperties(this.SellRent, option.name, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
         }); // se schimba
-
+        this.isFiltering = true;
     }
 
     keyPress($event: any) {
@@ -126,6 +122,7 @@ export class PropertyListComponent implements OnInit {
             }, 400);
 
 
+            this.isFiltering = false;
 
             return;
         }
@@ -136,7 +133,7 @@ export class PropertyListComponent implements OnInit {
                     this.FilteredCityListOptions = data;
                 });
 
-
+                this.isFiltering = false;
             }, 400);
         }
     }
@@ -153,18 +150,26 @@ export class PropertyListComponent implements OnInit {
 
 
         //logica page navigatorului trebuie actualizata de fiecare data cand trebuie filtrata 
-
-
-
         this.paginator.pageIndex = $event.pageIndex;
-
-
-
         this.PageNumber = $event.pageIndex + 1;
 
+
+        if (this.isFiltering) {
+
+            this.housingService.getAllFilteredUserPropertiesLength(this.SellRent, this.autoCompleteInput.nativeElement.value).subscribe(data => {
+                this.PropertiesLength = data;
+            });
+
+            this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.PageNumber, 6).subscribe(data => {
+                this.Properties = data;
+
+            });
+
+            return;
+        }
         this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
-        })
+        });
 
         // de pus metoda de apelare a filtrarii paginate
     }

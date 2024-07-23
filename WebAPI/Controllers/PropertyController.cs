@@ -99,7 +99,7 @@ namespace WebAPI.Controllers
                                     .Take(pageSize)
                                     .ToList();
 
-            return Ok(filteredPropertyList);
+            return Ok(pagedProperties);
         }
 
 
@@ -122,13 +122,38 @@ namespace WebAPI.Controllers
             var pagedProperties = filteredPropertyList
                                     .Skip((pageNumber - 1) * pageSize)
                                     .Take(pageSize)
-                                    .ToList();
+                                    .ToList()
+;
+
+            
 
             return Ok(pagedProperties);
         }
 
 
+        [HttpGet("filter/{sellRent}/{filterWord}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPropertiesFilteredLength(int sellRent, string filterWord)
+        {
+            var properties = await uow.PropertyRepository.GetPropertiesAsync(sellRent);
+            var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
 
+            var filteredPropertyList = propertyListDto
+                                        .Where(property => property.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                              || property.PropertyType.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                               || property.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                               || property.Country.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                               )
+
+                                        .ToList();
+
+            
+;
+
+
+
+            return Ok(filteredPropertyList);
+        }
 
 
         [HttpGet("{id}")]

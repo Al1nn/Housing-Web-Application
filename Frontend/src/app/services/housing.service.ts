@@ -37,14 +37,16 @@ export class HousingService {
         return this.http.get<ICity[]>(this.baseUrl + '/city/cities');
     }
 
-    getAllCitiesFiltered(filterWord: string, amount: number): Observable<ICity[]> {
-        return this.http.get<ICity[]>(this.baseUrl + '/city/cities/' + filterWord + '/' + amount);
-    }
+
 
     // Get method cu filtrare
 
     getAllFilteredProperties(sellRent: number, filterWord: string, pageNumber: number, pageSize: number): Observable<Property[]> {
         return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord + '/' + pageNumber + '/' + pageSize);
+    }
+
+    getAllCitiesFiltered(filterWord: string, amount: number): Observable<ICity[]> {
+        return this.http.get<ICity[]>(this.baseUrl + '/city/cities/' + filterWord + '/' + amount);
     }
 
     getAllFilteredUserProperties(filterWord: string, pageNumber: number, pageSize: number): Observable<Property[]> {
@@ -56,9 +58,14 @@ export class HousingService {
         return this.http.get<Property[]>(this.baseUrl + '/property/filter/dashboard/' + filterWord + '/' + pageNumber + '/' + pageSize, httpOptions);
     }
 
+    getAllFilteredUserPropertiesLength(SellRent: number, filterWord: string): Observable<number> {
+        return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + SellRent?.toString() + '/' + filterWord).pipe(
+            map(properties => properties.length)
+        );
+    }
 
 
-
+    //////
     getAllProperties(SellRent?: number): Observable<Property[]> {
         return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString());
     }
