@@ -25,7 +25,7 @@ export class PropertyListComponent implements OnInit {
     SellRent = 1;
     PageNumber = 1;
 
-    @ViewChild('paginator1') paginator1: MatPaginator;
+    @ViewChild('paginator') paginator: MatPaginator;
 
     @ViewChild('autocompleteInput') autoCompleteInput: ElementRef;
 
@@ -63,10 +63,7 @@ export class PropertyListComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private housingService: HousingService
-    ) {
-
-
-    }
+    ) { }
 
     ngOnInit(): void {
 
@@ -93,16 +90,18 @@ export class PropertyListComponent implements OnInit {
         this.FilteredCityListOptions = [];
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) { //daca suntem in property-dashboard
 
-            this.housingService.getAllFilteredUserProperties(option.name).subscribe(data => {
+            this.housingService.getAllFilteredUserProperties(option.name, this.PageNumber, 6).subscribe(data => {
                 this.Properties = data;
-            });
+            }); // se schimba
+
 
             return;
         }
 
-        this.housingService.getAllFilteredProperties(this.SellRent, option.name).subscribe(data => {
+        this.housingService.getAllFilteredProperties(this.SellRent, option.name, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
-        });
+        }); // se schimba
+
     }
 
     keyPress($event: any) {
@@ -125,6 +124,8 @@ export class PropertyListComponent implements OnInit {
                     this.Properties = data;
                 });
             }, 400);
+
+
 
             return;
         }
@@ -151,10 +152,12 @@ export class PropertyListComponent implements OnInit {
     onPageChange($event: PageEvent) {
 
 
+        //logica page navigatorului trebuie actualizata de fiecare data cand trebuie filtrata 
 
-        if (this.paginator1) {
-            this.paginator1.pageIndex = $event.pageIndex;
-        }
+
+
+        this.paginator.pageIndex = $event.pageIndex;
+
 
 
         this.PageNumber = $event.pageIndex + 1;
@@ -163,7 +166,7 @@ export class PropertyListComponent implements OnInit {
             this.Properties = data;
         })
 
-
+        // de pus metoda de apelare a filtrarii paginate
     }
 
 
@@ -182,5 +185,6 @@ export class PropertyListComponent implements OnInit {
             this.SortDirection = 'desc';
         }
     }
+
 
 }

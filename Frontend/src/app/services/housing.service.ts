@@ -43,18 +43,21 @@ export class HousingService {
 
     // Get method cu filtrare
 
-    getAllFilteredProperties(sellRent: number, filterWord: string): Observable<Property[]> {
-        return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord);
+    getAllFilteredProperties(sellRent: number, filterWord: string, pageNumber: number, pageSize: number): Observable<Property[]> {
+        return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord + '/' + pageNumber + '/' + pageSize);
     }
 
-    getAllFilteredUserProperties(filterWord: string): Observable<Property[]> {
+    getAllFilteredUserProperties(filterWord: string, pageNumber: number, pageSize: number): Observable<Property[]> {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.get<Property[]>(this.baseUrl + '/property/filter/dashboard/' + filterWord, httpOptions);
+        return this.http.get<Property[]>(this.baseUrl + '/property/filter/dashboard/' + filterWord + '/' + pageNumber + '/' + pageSize, httpOptions);
     }
+
+
+
 
     getAllProperties(SellRent?: number): Observable<Property[]> {
         return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString());

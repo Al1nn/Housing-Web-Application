@@ -17,6 +17,7 @@ using SixLabors.ImageSharp.Processing;
 using System.Runtime.InteropServices;
 using WebAPI.Extensions;
 using Microsoft.IdentityModel.Tokens;
+using System.Drawing.Printing;
 
 
 namespace WebAPI.Controllers
@@ -75,21 +76,29 @@ namespace WebAPI.Controllers
             return Ok(propertyListDto);
         }
 
-        [HttpGet("filter/dashboard/{filterWord}")]
+        [HttpGet("filter/dashboard/{filterWord}/{pageNumber}/{pageSize}")]
         [Authorize]
-        public async Task<IActionResult> GetUserPropertiesFiltered(string filterWord)
+        public async Task<IActionResult> GetUserPropertiesFiltered(string filterWord, int pageNumber, int pageSize)
         {
             int userId = GetUserId();
             var properties = await uow.PropertyRepository.GetUserPropertiesAsync(userId);
             var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
 
 
-            var filteredPropertyList = from property in propertyListDto
-                                       where property.Name.ToLower().Contains(filterWord.ToLower())
-                                            || property.PropertyType.ToLower().Contains(filterWord.ToLower())
-                                            || property.City.ToLower().Contains(filterWord.ToLower())
-                                            || property.Country.ToLower().Contains(filterWord.ToLower())
-                                       select property;
+            var filteredPropertyList = propertyListDto
+                                        .Where(property => property.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                              || property.PropertyType.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                               || property.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                               || property.Country.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                               )
+                                        .ToList();
+
+
+            var pagedProperties = filteredPropertyList
+                                    .Skip((pageNumber - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToList();
+
             return Ok(filteredPropertyList);
         }
 
