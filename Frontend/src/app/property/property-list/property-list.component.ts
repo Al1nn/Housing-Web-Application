@@ -44,7 +44,7 @@ export class PropertyListComponent implements OnInit {
 
     Today = new Date();
     urlSegments = this.route.snapshot.url;
-    SortbyParam = '';
+    SortbyParam: string;
     SortDirection = 'asc';
 
 
@@ -106,6 +106,8 @@ export class PropertyListComponent implements OnInit {
         }); // se schimba
         this.isFiltering = true;
     }
+
+
 
     keyPress($event: any) {
         const inputValue = $event.target.value;
@@ -184,12 +186,20 @@ export class PropertyListComponent implements OnInit {
         // de pus metoda de apelare a filtrarii paginate
     }
 
+    onMinMaxChange() {
+        console.log("Min : " + this.min);
+        console.log("Max : " + this.max);
+    }
 
+    onSortChange() {
+        console.log('Sort by:', this.SortbyParam);
+    }
 
     clearFilters() {
         this.min = 0;
         this.max = 0;
         this.autoCompleteInput.nativeElement.value = '';
+        this.SortbyParam = '';
         this.isFiltering = false;
         this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
             this.PropertiesLength = data;
@@ -202,8 +212,10 @@ export class PropertyListComponent implements OnInit {
 
     onSortDirection() {
         if (this.SortDirection === 'desc') {
+
             this.SortDirection = 'asc';
         } else {
+
             this.SortDirection = 'desc';
         }
     }

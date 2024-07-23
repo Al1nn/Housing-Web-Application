@@ -26,25 +26,26 @@ placeholder="Filter by City, Type, Name"
 <label>Filter Price & SqrArea : </label><br>
 
 <label>Min :</label>
-<select [(ngModel)]="min">
+<select [(ngModel)]="min" (change)="onMinMaxChange()">
   <option *ngFor="let number of filterPriceAndAreaRange" [value]="number">
     {{number}}
   </option>
 </select>
 
 <label>Max : </label>
-<select [(ngModel)]="max">
+<select [(ngModel)]="max" (change)="onMinMaxChange()">
   <option *ngFor="let number of filterPriceAndAreaRange" [value]="number">
     {{number}}
   </option>
 </select><br><br>
 
 <label>Sort by &nbsp;</label>
-<select [(ngModel)]="SortbyParam">
+<select [(ngModel)]="SortbyParam" (change)="onSortChange()">
   <option value="city">City</option>
   <option value="price">Price</option>
   <option value="Price Per Area">Price Per Area</option>
 </select>
+
 
 <button type="button" (click)="onSortDirection()">
   <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down"></i>
