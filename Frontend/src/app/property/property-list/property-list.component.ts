@@ -43,7 +43,6 @@ export class PropertyListComponent implements OnInit {
 
 
     Today = new Date();
-    filterInput = '';
     urlSegments = this.route.snapshot.url;
     SortbyParam = '';
     SortDirection = 'asc';
@@ -120,10 +119,15 @@ export class PropertyListComponent implements OnInit {
         }
 
 
-        if (inputValue.length === 2) {
+        if (inputValue.length <= 2) {
             this.FilteredCityListOptions = [];
 
             this.propertyTimeoutId = window.setTimeout(() => {
+
+                this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
+                    this.PropertiesLength = data;
+                });
+
                 this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
                     this.Properties = data;
                 });
@@ -185,7 +189,14 @@ export class PropertyListComponent implements OnInit {
     clearFilters() {
         this.min = 0;
         this.max = 0;
-        this.filterInput = '';
+        this.autoCompleteInput.nativeElement.value = '';
+        this.isFiltering = false;
+        this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
+            this.PropertiesLength = data;
+        });
+        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
+            this.Properties = data;
+        });
     }
 
 
