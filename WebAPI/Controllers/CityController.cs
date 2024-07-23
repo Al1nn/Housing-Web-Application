@@ -3,6 +3,8 @@ using Azure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Primitives;
 using WebAPI.Dtos;
 using WebAPI.Interfaces;
 using WebAPI.Models;
@@ -17,47 +19,89 @@ namespace WebAPI.Controllers
     {
         private readonly IUnitOfWork uow;
         private readonly IMapper mapper;
+        private readonly IMemoryCache cache;
 
-        public CityController(IUnitOfWork uow, IMapper mapper)
+
+        public CityController(IUnitOfWork uow, IMapper mapper, IMemoryCache cache)
         {
             this.uow = uow;
             this.mapper = mapper;
+            this.cache = cache;
         }
 
-        [HttpGet ("cities")]
+        [HttpGet("cities")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetCities()
+        public async Task<IActionResult> LoadFromCache()
         {
-           
+
+            var citiesData = cache.Get("cities") as IEnumerable<CityDto>;
+
+            if (citiesData == null)
+            {
+                
+                citiesData = await GetCities();
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+                    SlidingExpiration = TimeSpan.FromMinutes(30),
+                };
+
+                cache.Set("cities", citiesData, cacheEntryOptions);
+            }
+
+            return Ok(citiesData);
+        }
+
+        [HttpGet("cities/{filterWord}/{amount}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> FilterFromCache(string filterWord, int amount)
+        {
+            var citiesData = cache.Get("cities") as IEnumerable<CityDto>;
+
+            if (citiesData == null)
+            {
+               
+                citiesData = await GetCities();
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5),
+                    SlidingExpiration = TimeSpan.FromSeconds(5),
+                };
+
+                cache.Set("cities", citiesData, cacheEntryOptions);
+            }
+
+            var filteredData = citiesData
+                .Where(city => city.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase) || city.Country.Contains(filterWord,StringComparison.OrdinalIgnoreCase))
+                .Take(amount)
+                .ToList();
+
+
+            return Ok(filteredData);
+        }
+
+
+        private async Task<List<CityDto>> GetCities()
+        {
             var cities = await uow.CityRepository.GetCitiesAsync();
-            var citiesDto = mapper.Map<IEnumerable<CityDto>>(cities);
+            var citiesDto = mapper.Map<List<CityDto>>(cities);
 
-            //var citiesDto = from c in cities
-            //                select new CityDto() 
-            //                { Id = c.Id,
-            //                    Name = c.Name };
-
-
-
-            return Ok(citiesDto);
+            return citiesDto;
         }
 
+        //private async Task<IEnumerable<CityDto>> FilteredCities(string filterWord, int amount)
+        //{
+        //    var filteredCities = await uow.CityRepository.FilterCitiesAsync(filterWord, amount);
+        //    var filteredCitiesDto = mapper.Map<IEnumerable<CityDto>>(filteredCities);
 
-        [HttpGet ("cities/{filterWord}/{amount}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> FilterCities(string filterWord, int amount)
-        {
-            var filteredCities = await uow.CityRepository.FilterCitiesAsync(filterWord,amount);
-            var filteredCitiesDto = mapper.Map<IEnumerable<CityDto>>(filteredCities);
-
-            return Ok(filteredCitiesDto);
-        }
+        //    return filteredCitiesDto;
+        //}
 
         [HttpPost("post")]
         public async Task<IActionResult> AddCity(CityDto cityDto)
         {
-            
-
             var city = mapper.Map<City>(cityDto);
             city.LastUpdatedBy = 1;
             city.LastUpdatedOn = DateTime.Now;
@@ -124,17 +168,6 @@ namespace WebAPI.Controllers
             return StatusCode(200);
         }
 
-        // Post api/city/add?cityname=Miami
-        // Post api/city/add/Los Angeles
-        // [HttpPost("add")]
-        // [HttpPost("add/{cityname}")]
-        // public async Task<IActionResult> AddCity(string cityName)
-        // {
-        //     City city = new City();
-        //     city.Name = cityName;
-        //     await dc.Cities.AddAsync(city);
-        //     await dc.SaveChangesAsync();
-        //     return Ok(city);
-        // }
+        
     }
 }

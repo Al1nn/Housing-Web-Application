@@ -93,24 +93,34 @@ namespace WebAPI.Controllers
             return Ok(filteredPropertyList);
         }
 
-        [HttpGet("filter/{sellRent}/{filterWord}")]
+
+        [HttpGet("filter/{sellRent}/{filterWord}/{pageNumber}/{pageSize}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetPropertiesFiltered(int sellRent, string filterWord)
+        public async Task<IActionResult> GetPropertiesFiltered(int sellRent, string filterWord, int pageNumber, int pageSize)
         {
             var properties = await uow.PropertyRepository.GetPropertiesAsync(sellRent);
             var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
 
-            var filteredPropertyList = from property in propertyListDto
-                                       where property.Name.ToLower().Contains(filterWord.ToLower()) 
-                                            || property.PropertyType.ToLower().Contains(filterWord.ToLower())
-                                            || property.City.ToLower().Contains(filterWord.ToLower())
-                                            || property.Country.ToLower().Contains(filterWord.ToLower())
+            var filteredPropertyList = propertyListDto
+                                        .Where(property => property.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                              || property.PropertyType.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                               || property.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                               || property.Country.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                                               )
 
-                                       select property; 
-                                       
+                                        .ToList();
 
-            return Ok(filteredPropertyList);
+            var pagedProperties = filteredPropertyList
+                                    .Skip((pageNumber - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToList();
+
+            return Ok(pagedProperties);
         }
+
+
+
+
 
         [HttpGet("{id}")]
         [AllowAnonymous]

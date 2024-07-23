@@ -47,8 +47,12 @@ builder.Services.AddDbContext<DataContext>( options => {
 
 });
 builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddMemoryCache();
+
 builder.Services.AddCors();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
 var secretKey = builder.Configuration.GetSection("AppSettings:Key").Value;
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

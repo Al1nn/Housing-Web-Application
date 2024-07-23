@@ -33,7 +33,8 @@ export class PropertyListComponent implements OnInit {
     @Input() isDashboard: boolean;
 
 
-
+    private filterTimeoutId: number;
+    private propertyTimeoutId: number;
 
     //Example
     FilteredCityListOptions: ICity[] = [];
@@ -69,20 +70,13 @@ export class PropertyListComponent implements OnInit {
 
     ngOnInit(): void {
 
-
-
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-
-
-
             return;
         }
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('rent-property')) {
             this.SellRent = 2;
         }
-
-
 
         this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
             this.PropertiesLength = data;
@@ -91,10 +85,6 @@ export class PropertyListComponent implements OnInit {
         this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
         });
-
-
-
-
 
     }
 
@@ -119,10 +109,18 @@ export class PropertyListComponent implements OnInit {
         const inputValue = $event.target.value;
         console.log(inputValue);
 
+        if (this.filterTimeoutId) {
+            clearTimeout(this.filterTimeoutId);
+        }
+        if (this.propertyTimeoutId) {
+            clearTimeout(this.propertyTimeoutId);
+        }
+
 
         if (inputValue.length === 2) {
             this.FilteredCityListOptions = [];
-            setTimeout(() => {
+
+            this.propertyTimeoutId = window.setTimeout(() => {
                 this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
                     this.Properties = data;
                 });
@@ -131,24 +129,15 @@ export class PropertyListComponent implements OnInit {
             return;
         }
 
-        setTimeout(() => {
-            if (inputValue.length >= 3) {
+        if (inputValue.length >= 3) {
+            this.filterTimeoutId = window.setTimeout(() => {
                 this.housingService.getAllCitiesFiltered(inputValue, 10).subscribe(data => {
                     this.FilteredCityListOptions = data;
                 });
 
-                if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-                    this.housingService.getAllFilteredUserProperties(inputValue).subscribe(data => {
-                        this.Properties = data;
-                    });
-                    return;
-                }
 
-                this.housingService.getAllFilteredProperties(this.SellRent, inputValue).subscribe(data => {
-                    this.Properties = data;
-                });
-            }
-        }, 400);
+            }, 400);
+        }
     }
 
 
