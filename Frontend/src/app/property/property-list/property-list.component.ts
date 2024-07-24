@@ -101,7 +101,7 @@ export class PropertyListComponent implements OnInit {
             this.PropertiesLength = data;
         });
 
-        this.housingService.getAllFilteredProperties(this.SellRent, option.name, this.min, this.max, this.PageNumber, 6).subscribe(data => {
+        this.housingService.getAllFilteredProperties(this.SellRent, option.name, this.min, this.max, this.SortbyParam, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
         }); // se schimba
         this.isFiltering = true;
@@ -172,9 +172,8 @@ export class PropertyListComponent implements OnInit {
 
 
 
-            this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.min, this.max, this.PageNumber, 6).subscribe(data => {
+            this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.min, this.max, this.SortbyParam, this.PageNumber, 6).subscribe(data => {
                 this.Properties = data;
-
             });
 
             return;
@@ -189,24 +188,32 @@ export class PropertyListComponent implements OnInit {
     onMinMaxChange() {
         console.log("Min : " + this.min);
         console.log("Max : " + this.max);
-        this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.min, this.max, this.PageNumber, 6).subscribe(data => {
+
+        this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.min, this.max, this.SortbyParam, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
         });
+
+
     }
 
     onSortChange() {
         console.log('Sort by:', this.SortbyParam);
+
+        this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.min, this.max, this.SortbyParam, this.PageNumber, 6).subscribe(data => {
+            this.Properties = data;
+        });
     }
 
     clearFilters() {
         this.min = 0;
         this.max = 0;
         this.autoCompleteInput.nativeElement.value = '';
-        this.SortbyParam = '';
+        this.SortbyParam = '-';
         this.isFiltering = false;
         this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
             this.PropertiesLength = data;
         });
+        this.PageNumber = 1;
         this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
         });
