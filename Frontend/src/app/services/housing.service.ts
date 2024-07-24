@@ -41,8 +41,8 @@ export class HousingService {
 
     // Get method cu filtrare
 
-    getAllFilteredProperties(sellRent: number, filterWord: string, pageNumber: number, pageSize: number): Observable<Property[]> {
-        return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord + '/' + pageNumber + '/' + pageSize);
+    getAllFilteredProperties(sellRent: number, filterWord: string, minArea: number, maxArea: number, pageNumber: number, pageSize: number): Observable<Property[]> {
+        return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord + '/' + minArea + '/' + maxArea + '/' + pageNumber + '/' + pageSize);
     }
 
     getAllCitiesFiltered(filterWord: string, amount: number): Observable<ICity[]> {

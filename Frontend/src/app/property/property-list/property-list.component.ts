@@ -101,7 +101,7 @@ export class PropertyListComponent implements OnInit {
             this.PropertiesLength = data;
         });
 
-        this.housingService.getAllFilteredProperties(this.SellRent, option.name, this.PageNumber, 6).subscribe(data => {
+        this.housingService.getAllFilteredProperties(this.SellRent, option.name, this.min, this.max, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
         }); // se schimba
         this.isFiltering = true;
@@ -172,7 +172,7 @@ export class PropertyListComponent implements OnInit {
 
 
 
-            this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.PageNumber, 6).subscribe(data => {
+            this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.min, this.max, this.PageNumber, 6).subscribe(data => {
                 this.Properties = data;
 
             });
@@ -189,6 +189,9 @@ export class PropertyListComponent implements OnInit {
     onMinMaxChange() {
         console.log("Min : " + this.min);
         console.log("Max : " + this.max);
+        this.housingService.getAllFilteredProperties(this.SellRent, this.autoCompleteInput.nativeElement.value, this.min, this.max, this.PageNumber, 6).subscribe(data => {
+            this.Properties = data;
+        });
     }
 
     onSortChange() {
