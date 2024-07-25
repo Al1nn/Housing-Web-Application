@@ -41,8 +41,15 @@ export class HousingService {
 
     // Get method cu filtrare
 
-    getAllFilteredProperties(sellRent: number, filterWord: string, minArea: number, maxArea: number, sortByParam: string, pageNumber: number, pageSize: number): Observable<Property[]> {
-        return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + filterWord + '/' + minArea + '/' + maxArea + '/' + sortByParam + '/' + pageNumber + '/' + pageSize);
+    getAllFilteredProperties(sellRent: number, pageNumber: number, pageSize: number, minBuiltArea?: number, maxBuiltArea?: number, filterWord?: number): Observable<Property[]> {
+
+        if (filterWord === undefined) {
+            return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + pageNumber + '/' + pageSize + '/' + minBuiltArea + '/' + maxBuiltArea);
+        }
+
+
+
+        return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + pageNumber + '/' + pageSize + '/' + minBuiltArea + '/' + maxBuiltArea + '/' + filterWord);
     }
 
     getAllCitiesFiltered(filterWord: string, amount: number): Observable<ICity[]> {
