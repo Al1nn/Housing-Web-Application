@@ -115,7 +115,6 @@ namespace WebAPI.Controllers
 
 
 
-            //Sort filtered properties based on filters.sortDirection using filteredProperties.Sort()
 
             bool isAscending = filters.sortDirection.Equals("asc", StringComparison.OrdinalIgnoreCase);
             filteredProperties = filters.sortByParam?.ToLower() switch
@@ -126,8 +125,30 @@ namespace WebAPI.Controllers
                 _ => filteredProperties
             };
             
+            
+            if (filters.sortByParam.IsEmpty())
+            {
+                filteredProperties = filters.sortDirection?.ToLower() switch
+                {
+                    "asc" => filteredProperties.OrderBy(property => property.Name),
+                    "desc" => filteredProperties.OrderByDescending(property => property.Name),
+                    _ => filteredProperties
+                };
+                
 
+                if(filters.filterWord.IsEmpty())
+                {
+                    filteredProperties = filters.sortDirection?.ToLower() switch
+                    {
+                        "asc" => filteredProperties.OrderBy(property => property.BuiltArea),
+                        "desc" => filteredProperties.OrderByDescending(property => property.BuiltArea),
+                        _ => filteredProperties
+                    };
+                }
+               
 
+            }
+            
 
             var paginatedProperties = PaginateProperties(filteredProperties, filters.pageNumber, filters.pageSize);
 

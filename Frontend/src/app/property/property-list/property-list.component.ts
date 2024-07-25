@@ -212,7 +212,7 @@ export class PropertyListComponent implements OnInit {
             pageSize: 6
         };
         console.log(this.filters);
-
+        this.isFiltering = false;
         this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
             this.PropertiesLength = data;
         });
