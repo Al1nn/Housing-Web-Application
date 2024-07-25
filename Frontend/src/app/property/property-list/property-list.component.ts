@@ -94,7 +94,9 @@ export class PropertyListComponent implements OnInit {
         this.FilteredCityListOptions = [];
 
 
+
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
+
             this.Properties = data;
             this.isFiltering = true;
         });
@@ -119,7 +121,7 @@ export class PropertyListComponent implements OnInit {
             this.propertyTimeoutId = window.setTimeout(() => {
 
                 this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
-                    this.PropertiesLength = data;
+                    this.paginator.length = data;
                 });
 
                 this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
@@ -180,7 +182,10 @@ export class PropertyListComponent implements OnInit {
     onMinMaxChange() {
         this.filters.minBuiltArea = this.min;
         this.filters.maxBuiltArea = this.max;
+
+
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
+            this.paginator.length = data.length;
             this.Properties = data;
             this.isFiltering = true;
         });
@@ -189,6 +194,7 @@ export class PropertyListComponent implements OnInit {
     onSortChange() {
         console.log('Sort by:', this.SortbyParam);
         this.filters.sortByParam = this.SortbyParam;
+
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.Properties = data;
             this.isFiltering = true;
@@ -200,7 +206,7 @@ export class PropertyListComponent implements OnInit {
         this.max = 0;
         this.autoCompleteInput.nativeElement.value = '';
         this.SortbyParam = '';
-
+        this.SortDirection = 'asc';
         this.filters = {
             pageNumber: 1,
             pageSize: 6

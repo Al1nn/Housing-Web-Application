@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using WebAPI.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System.Drawing.Printing;
+using System.ComponentModel;
 
 
 namespace WebAPI.Controllers
@@ -112,26 +113,27 @@ namespace WebAPI.Controllers
 
             var filteredProperties = FilterProperties(propertyListDto, filters.filterWord, filters.minBuiltArea, filters.maxBuiltArea);
 
-            var sortedProperties = SortProperties(filteredProperties, filters.sortByParam, filters.sortDirection);
 
-            var paginatedProperties = PaginateProperties(sortedProperties, filters.pageNumber, filters.pageSize);
+
+            //Sort filtered properties based on filters.sortDirection using filteredProperties.Sort()
+
+            bool isAscending = filters.sortDirection.Equals("asc", StringComparison.OrdinalIgnoreCase);
+            filteredProperties = filters.sortByParam?.ToLower() switch
+            {
+                "city" => isAscending ? filteredProperties.OrderBy(property => property.City) : filteredProperties.OrderByDescending(property => property.City),
+                "price" => isAscending ? filteredProperties.OrderBy(property => property.Price) : filteredProperties.OrderByDescending(property => property.Price),
+                "price per area" => isAscending ? filteredProperties.OrderBy(property => property.Price / property.BuiltArea) : filteredProperties.OrderByDescending(property => property.Price / property.BuiltArea),
+                _ => filteredProperties
+            };
+            
+
+
+
+            var paginatedProperties = PaginateProperties(filteredProperties, filters.pageNumber, filters.pageSize);
 
             return Ok(paginatedProperties);
         }
 
-        private IEnumerable<PropertyListDto> SortProperties(IEnumerable<PropertyListDto> properties,string sortByParam, string sortDirection)
-        {
-
-            bool isAscending = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase);
-
-            return sortByParam?.ToLower() switch
-            {
-                "city" => isAscending ? properties.OrderBy(property => property.City) : properties.OrderByDescending(property => property.City),
-                "price" => isAscending ? properties.OrderBy(property => property.Price) : properties.OrderByDescending(property => property.Price),
-                "price per area" => isAscending ? properties.OrderBy(property => property.Price / property.BuiltArea) : properties.OrderByDescending(property => property.Price / property.BuiltArea),
-                _ => properties
-            };
-        }
 
         private IEnumerable<PropertyListDto> FilterProperties(IEnumerable<PropertyListDto> properties, string filterWord, int minBuiltArea, int maxBuiltArea)
         {
