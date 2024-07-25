@@ -103,41 +103,62 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpGet("filter/{sellRent}/{filterWord}/{minBuiltArea}/{maxBuiltArea}/{pageNumber}/{pageSize}")]
+        [HttpPost("filter/{sellRent}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetPropertiesFiltered(int sellRent, string filterWord, int minBuiltArea, int maxBuiltArea, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetPropertiesFiltered(int sellRent, [FromBody] FiltersDto filters)
         {
             var properties = await uow.PropertyRepository.GetPropertiesAsync(sellRent);
             var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
 
-            var filteredPropertyList = propertyListDto
-                                        .Where(property => 
-                                            (
-                                            property.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                            || property.PropertyType.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                            || property.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                            || property.Country.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                            ) 
-                                            && 
-                                            (
-                                                (minBuiltArea == 0 && maxBuiltArea == 0) ||
-                                                (minBuiltArea != 0 && maxBuiltArea == 0 && property.BuiltArea >= minBuiltArea) ||
-                                                (minBuiltArea == 0 && maxBuiltArea != 0 && property.BuiltArea <= maxBuiltArea) ||
-                                                (minBuiltArea != 0 && maxBuiltArea != 0 && property.BuiltArea >= minBuiltArea && property.BuiltArea <= maxBuiltArea)
-                                            )
-                                            
-                                            
-                                            
-                                            
-                                            )
-                                        .Skip((pageNumber - 1) * pageSize)
-                                        .Take(pageSize)
-                                        .ToList();
+            var filteredProperties = FilterProperties(propertyListDto, filters.filterWord, filters.minBuiltArea, filters.maxBuiltArea);
 
-          
-     
-            return Ok(filteredPropertyList);
+            var sortedProperties = SortProperties(filteredProperties, filters.sortByParam, filters.sortDirection);
+
+            var paginatedProperties = PaginateProperties(sortedProperties, filters.pageNumber, filters.pageSize);
+
+            return Ok(paginatedProperties);
         }
+
+        private IEnumerable<PropertyListDto> SortProperties(IEnumerable<PropertyListDto> properties,string sortByParam, string sortDirection)
+        {
+
+            bool isAscending = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase);
+
+            return sortByParam?.ToLower() switch
+            {
+                "city" => isAscending ? properties.OrderBy(property => property.City) : properties.OrderByDescending(property => property.City),
+                "price" => isAscending ? properties.OrderBy(property => property.Price) : properties.OrderByDescending(property => property.Price),
+                "price per area" => isAscending ? properties.OrderBy(property => property.Price / property.BuiltArea) : properties.OrderByDescending(property => property.Price / property.BuiltArea),
+                _ => properties
+            };
+        }
+
+        private IEnumerable<PropertyListDto> FilterProperties(IEnumerable<PropertyListDto> properties, string filterWord, int minBuiltArea, int maxBuiltArea)
+        {
+            return properties.Where(property =>
+                    (
+                        string.IsNullOrEmpty(filterWord)
+                        || property.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                        || property.PropertyType.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                        || property.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                        || property.Country.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
+                    )
+                    &&
+                    (
+                        (minBuiltArea == 0 && maxBuiltArea == 0) ||
+                        (minBuiltArea != 0 && maxBuiltArea == 0 && property.BuiltArea >= minBuiltArea) ||
+                        (minBuiltArea == 0 && maxBuiltArea != 0 && property.BuiltArea <= maxBuiltArea) ||
+                        (minBuiltArea != 0 && maxBuiltArea != 0 && property.BuiltArea >= minBuiltArea && property.BuiltArea <= maxBuiltArea)
+                    )
+                );
+        }
+
+        private IEnumerable<PropertyListDto> PaginateProperties(IEnumerable<PropertyListDto> properties, int pageNumber, int pageSize)
+        {
+            return properties.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+        }
+
+
 
 
         [HttpGet("filter/{sellRent}/{filterWord}")]

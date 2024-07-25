@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ICity } from '../../model/ICity.interface';
+import { IFilters } from '../../model/IFilters.interface';
 
 
 
@@ -31,19 +32,26 @@ export class PropertyListComponent implements OnInit {
     private propertyTimeoutId: number;
 
 
-    isFiltering: boolean = false;
+
     //Example
     FilteredCityListOptions: ICity[] = [];
     //
 
+    filters: IFilters = {
+        pageNumber: 1,
+        pageSize: 6
+    };
+
+
     PropertiesLength: number;
     debounceTimer: any;
     isLoading: boolean = false;
-
+    isFiltering: boolean = false;
 
 
     Today = new Date();
     urlSegments = this.route.snapshot.url;
+
     SortbyParam: string;
     SortDirection = 'asc';
 
@@ -81,38 +89,21 @@ export class PropertyListComponent implements OnInit {
     }
 
     selectCity(option: ICity) {
-        this.autoCompleteInput.nativeElement.value = `${option.name}`;
+        this.autoCompleteInput.nativeElement.value = `${option.name}, ${option.country}`;
+        this.filters.filterWord = option.name;
         this.FilteredCityListOptions = [];
-        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) { //daca suntem in property-dashboard
 
-            this.housingService.getAllFilteredUserPropertiesLength(this.SellRent, this.autoCompleteInput.nativeElement.value).subscribe(data => {
-                this.PropertiesLength = data;
-            });
 
-            this.housingService.getAllFilteredUserProperties(option.name, this.PageNumber, 6).subscribe(data => {
-                this.Properties = data;
-            }); // se schimba
-
-            this.isFiltering = true;
-            return;
-        }
-
-        this.housingService.getAllFilteredUserPropertiesLength(this.SellRent, this.autoCompleteInput.nativeElement.value).subscribe(data => {
-            this.PropertiesLength = data;
-        });
-
-        this.housingService.getAllFilteredProperties(this.SellRent, this.PageNumber, 6, this.min, this.max, this.autoCompleteInput.nativeElement.value).subscribe(data => {
+        this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.Properties = data;
-        }); // se schimba
-
-        this.isFiltering = true;
+            this.isFiltering = true;
+        });
     }
 
 
 
     keyPress($event: any) {
         const inputValue = $event.target.value;
-        console.log(inputValue);
 
         if (this.filterTimeoutId) {
             clearTimeout(this.filterTimeoutId);
@@ -133,11 +124,12 @@ export class PropertyListComponent implements OnInit {
 
                 this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
                     this.Properties = data;
+
                 });
             }, 400);
 
 
-            this.isFiltering = false;
+
 
             return;
         }
@@ -148,7 +140,7 @@ export class PropertyListComponent implements OnInit {
                     this.FilteredCityListOptions = data;
                 });
 
-                this.isFiltering = false;
+
             }, 400);
         }
     }
@@ -167,18 +159,17 @@ export class PropertyListComponent implements OnInit {
         //logica page navigatorului trebuie actualizata de fiecare data cand trebuie filtrata 
         this.paginator.pageIndex = $event.pageIndex;
         this.PageNumber = $event.pageIndex + 1;
-
+        this.filters.pageNumber = this.PageNumber;
 
         if (this.isFiltering) {
 
-
-
-            this.housingService.getAllFilteredProperties(this.SellRent, this.PageNumber, 6, this.min, this.max, this.autoCompleteInput.nativeElement.value).subscribe(data => {
+            this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
                 this.Properties = data;
             });
 
             return;
         }
+
         this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
             this.Properties = data;
         });
@@ -187,16 +178,21 @@ export class PropertyListComponent implements OnInit {
     }
 
     onMinMaxChange() {
-        console.log("Min : " + this.min);
-        console.log("Max : " + this.max);
-        this.housingService.getAllFilteredProperties(this.SellRent, this.PageNumber, 6, this.min, this.max, this.autoCompleteInput.nativeElement.value).subscribe(data => {
+        this.filters.minBuiltArea = this.min;
+        this.filters.maxBuiltArea = this.max;
+        this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.Properties = data;
+            this.isFiltering = true;
         });
-        this.isFiltering = true;
     }
 
     onSortChange() {
         console.log('Sort by:', this.SortbyParam);
+        this.filters.sortByParam = this.SortbyParam;
+        this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
+            this.Properties = data;
+            this.isFiltering = true;
+        });
     }
 
     clearFilters() {
@@ -204,7 +200,13 @@ export class PropertyListComponent implements OnInit {
         this.max = 0;
         this.autoCompleteInput.nativeElement.value = '';
         this.SortbyParam = '';
-        this.isFiltering = false;
+
+        this.filters = {
+            pageNumber: 1,
+            pageSize: 6
+        };
+        console.log(this.filters);
+
         this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
             this.PropertiesLength = data;
         });
@@ -216,12 +218,17 @@ export class PropertyListComponent implements OnInit {
 
     onSortDirection() {
         if (this.SortDirection === 'desc') {
-
             this.SortDirection = 'asc';
         } else {
-
             this.SortDirection = 'desc';
         }
+
+        this.filters.sortDirection = this.SortDirection;
+
+        this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
+            this.Properties = data;
+            this.isFiltering = true;
+        });
     }
 
 

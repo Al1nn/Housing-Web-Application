@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import { IKeyValuePair } from '../model/IKeyValuePair';
 import { IPhoto } from '../model/IPhoto';
 import { ICity } from '../model/ICity.interface';
+import { IFilters } from '../model/IFilters.interface';
 
 
 
@@ -41,15 +42,8 @@ export class HousingService {
 
     // Get method cu filtrare
 
-    getAllFilteredProperties(sellRent: number, pageNumber: number, pageSize: number, minBuiltArea?: number, maxBuiltArea?: number, filterWord?: number): Observable<Property[]> {
-
-        if (filterWord === undefined) {
-            return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + pageNumber + '/' + pageSize + '/' + minBuiltArea + '/' + maxBuiltArea);
-        }
-
-
-
-        return this.http.get<Property[]>(this.baseUrl + '/property/filter/' + sellRent + '/' + pageNumber + '/' + pageSize + '/' + minBuiltArea + '/' + maxBuiltArea + '/' + filterWord);
+    getAllFilteredProperties(sellRent: number, filters: IFilters): Observable<Property[]> {
+        return this.http.post<Property[]>(`${this.baseUrl}/property/filter/${sellRent}`, filters);
     }
 
     getAllCitiesFiltered(filterWord: string, amount: number): Observable<ICity[]> {
