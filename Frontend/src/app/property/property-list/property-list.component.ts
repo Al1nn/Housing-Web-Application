@@ -46,7 +46,8 @@ export class PropertyListComponent implements OnInit {
 
 
 
-    debounceTimer: any;
+    private debounceTimer: number;
+
     isLoading: boolean = false;
     isFiltering: boolean = false;
 
@@ -171,10 +172,41 @@ export class PropertyListComponent implements OnInit {
 
     }
 
+    @HostListener('window:scroll', ['$event'])
+    onWindowScroll(_event: Event) {
+        const scrolled = window.scrollY;
+        const threshold = 30;
+
+
+        if (this.debounceTimer) {
+            clearTimeout(this.debounceTimer);
+        }
+
+        this.debounceTimer = window.setTimeout(() => {
+            if (scrolled >= threshold && !this.isLoading) {
+
+
+                this.isLoading = true;
+                this.PageNumber++;
+
+                if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+                    return;
+                }
+
+                this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
+                    this.Properties.push(...data.properties);
+                    this.isLoading = false;
+                }, error => {
+                    this.isLoading = false;
+                    console.error('Error loading data:', error);
+                });
+            }
+        }, 200);
+    }
+
+
     onPageChange($event: PageEvent) {
 
-
-        //logica page navigatorului trebuie actualizata de fiecare data cand trebuie filtrata 
         this.paginator.pageIndex = $event.pageIndex;
         this.PageNumber = $event.pageIndex + 1;
         this.filters.pageNumber = this.PageNumber;
@@ -212,7 +244,7 @@ export class PropertyListComponent implements OnInit {
             this.Properties = data.properties;
         });
 
-        // de pus metoda de apelare a filtrarii paginate
+
     }
 
     onMinMaxChange() {
