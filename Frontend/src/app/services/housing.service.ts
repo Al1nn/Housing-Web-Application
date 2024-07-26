@@ -7,6 +7,7 @@ import { IKeyValuePair } from '../model/IKeyValuePair';
 import { IPhoto } from '../model/IPhoto';
 import { ICity } from '../model/ICity.interface';
 import { IFilters } from '../model/IFilters.interface';
+import { PaginatedProperties } from '../model/PaginatedProperties.interface';
 
 
 
@@ -26,6 +27,8 @@ export class HousingService {
 
     constructor(private http: HttpClient) { }
 
+
+    //Get ALL fara filtrare
     getPropertyTypes(): Observable<IKeyValuePair[]> {
         return this.http.get<IKeyValuePair[]>(this.baseUrl + '/PropertyType/list');
     }
@@ -38,12 +41,57 @@ export class HousingService {
         return this.http.get<ICity[]>(this.baseUrl + '/city/cities');
     }
 
+    getAllProperties(SellRent?: number): Observable<Property[]> {
+        return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString());
+    }
+
+    getUserProperties(): Observable<Property[]> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.get<Property[]>(this.baseUrl + '/property/dashboard', httpOptions);
+    }
+
+    getUserPaginatedProperty(pageNumber: number, pageSize: number): Observable<PaginatedProperties> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+
+        return this.http.get<PaginatedProperties>(this.baseUrl + '/property/dashboard/' + pageNumber + '/' + pageSize, httpOptions);
+    }
+
+    //Get By ID / User
 
 
-    // Get method cu filtrare
+    getPropertyById(id: number) {
+        return this.http.get<Property>(this.baseUrl + '/property/' + id.toString());
+    }
 
-    getAllFilteredProperties(sellRent: number, filters: IFilters): Observable<Property[]> {
-        return this.http.post<Property[]>(`${this.baseUrl}/property/filter/${sellRent}`, filters);
+    getPropertyDetailById(id: number) {
+        return this.http.get<Property>(this.baseUrl + '/property/detail/' + id.toString());
+    }
+
+    getPropertyCountByUser(): Observable<number> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+        return this.http.get<number>(this.baseUrl + '/property/count', httpOptions);
+    }
+
+    getPaginatedProperty(SellRent: number, PageNumber: number, PageSize: number): Observable<PaginatedProperties> {
+        return this.http.get<PaginatedProperties>(this.baseUrl + '/property/list/' + SellRent?.toString() + '/' + PageNumber?.toString() + '/' + PageSize?.toString());
+    }
+
+    // Get ALL method cu filtrare
+
+    getAllFilteredProperties(sellRent: number, filters: IFilters): Observable<PaginatedProperties> {
+        return this.http.post<PaginatedProperties>(`${this.baseUrl}/property/filter/${sellRent}`, filters);
     }
 
     getAllCitiesFiltered(filterWord: string, amount: number): Observable<ICity[]> {
@@ -67,46 +115,16 @@ export class HousingService {
 
 
     //////
-    getAllProperties(SellRent?: number): Observable<Property[]> {
-        return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString());
-    }
 
 
-    getPaginatedProperty(SellRent: number, PageNumber: number, PageSize: number): Observable<Property[]> {
-        return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString() + '/' + PageNumber?.toString() + '/' + PageSize?.toString());
-    }
 
-    getUserProperties(): Observable<Property[]> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.get<Property[]>(this.baseUrl + '/property/dashboard', httpOptions);
-    }
 
-    getPropertyById(id: number) {
-        return this.http.get<Property>(this.baseUrl + '/property/' + id.toString());
-    }
 
-    getPropertyDetailById(id: number) {
-        return this.http.get<Property>(this.baseUrl + '/property/detail/' + id.toString());
-    }
 
-    getPropertiesLength(SellRent?: number): Observable<number> {
-        return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString()).pipe(
-            map(properties => properties.length)
-        );
-    }
 
-    getPropertyCountByUser(): Observable<number> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.get<number>(this.baseUrl + '/property/count', httpOptions);
-    }
+
+
+
 
     addProperty(property: Property): Observable<Property> {
         const httpOptions = {

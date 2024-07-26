@@ -49,22 +49,19 @@ namespace WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetPropertyPage(int sellRent, int pageNumber, int pageSize)
         {
+            var propertyListDto = await uow.PropertyRepository.GetPropertiesAsync(sellRent);
+
             var paginatedProperties = await uow.PropertyRepository.GetPropertiesPageAsync(sellRent, pageNumber, pageSize);
             var paginatedPropertiesDto = mapper.Map<IEnumerable<PropertyListDto>>(paginatedProperties);
-            return Ok(paginatedPropertiesDto);
+
+            var response = new
+            {
+                totalRecords = propertyListDto.Count(),
+                properties = paginatedPropertiesDto
+            };
+
+            return Ok(response);
         }
-
-
-        [HttpGet("count")]
-        [Authorize]
-        public async Task<IActionResult> GetPropertyCountByUser()
-        {
-            int userId = GetUserId();
-            int propertyCount = await uow.PropertyRepository.GetPropertyCountByUserAsync(userId);
-
-            return Ok(propertyCount);
-        }
-
 
         [HttpGet("dashboard")]
         [Authorize]
@@ -77,30 +74,85 @@ namespace WebAPI.Controllers
             return Ok(propertyListDto);
         }
 
-        [HttpGet("filter/dashboard/{filterWord}/{pageNumber}/{pageSize}")]
+        [HttpGet("dashboard/{pageNumber}/{pageSize}")]
         [Authorize]
-        public async Task<IActionResult> GetUserPropertiesFiltered(string filterWord, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetUserPropertyPage(int pageNumber, int pageSize)
         {
             int userId = GetUserId();
+
             var properties = await uow.PropertyRepository.GetUserPropertiesAsync(userId);
             var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
 
 
-            var filteredPropertyList = propertyListDto
-                                        .Where(property => property.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                              || property.PropertyType.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                               || property.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                               || property.Country.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                               )
-                                        .ToList();
+
+            var paginatedUserProperty = await uow.PropertyRepository.GetUserPropertiesPageAsync(userId, pageNumber, pageSize);
+            var paginatedUserPropertyDto = mapper.Map<IEnumerable<PropertyListDto>>(paginatedUserProperty);
 
 
-            var pagedProperties = filteredPropertyList
-                                    .Skip((pageNumber - 1) * pageSize)
-                                    .Take(pageSize)
-                                    .ToList();
+            var response = new { 
+                totalRecords = propertyListDto.Count(),
+                properties = paginatedUserPropertyDto
+            };
 
-            return Ok(pagedProperties);
+            return Ok(response);
+        }
+
+
+        [HttpPost("filter/dashboard")]
+        [Authorize]
+        public async Task<IActionResult> GetUserPropertiesFiltered([FromBody] FiltersDto filters)
+        {
+            int userId = GetUserId();
+            var userProperties = await uow.PropertyRepository.GetUserPropertiesAsync(userId);
+            var userPropertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(userProperties);
+
+
+            var userFilteredPropertyListDto = FilterProperties(userPropertyListDto, filters.filterWord, filters.minBuiltArea, filters.maxBuiltArea);
+
+
+            bool isAscending = filters.sortDirection.Equals("asc", StringComparison.OrdinalIgnoreCase);
+
+            userFilteredPropertyListDto = filters.sortByParam?.ToLower() switch
+            {
+                "city" => isAscending ? userFilteredPropertyListDto.OrderBy(property => property.City) : userFilteredPropertyListDto.OrderByDescending(property => property.City),
+                "price" => isAscending ? userFilteredPropertyListDto.OrderBy(property => property.Price) : userFilteredPropertyListDto.OrderByDescending(property => property.Price),
+                "price per area" => isAscending ? userFilteredPropertyListDto.OrderBy(property => property.Price / property.BuiltArea) : userFilteredPropertyListDto.OrderByDescending(property => property.Price / property.BuiltArea),
+                _ => userFilteredPropertyListDto
+            };
+
+            if (filters.sortByParam.IsEmpty())
+            {
+
+                userFilteredPropertyListDto = filters.sortDirection?.ToLower() switch
+                {
+                    "asc" => userFilteredPropertyListDto.OrderBy(property => property.Name),
+                    "desc" => userFilteredPropertyListDto.OrderByDescending(property => property.Name),
+                    _ => userFilteredPropertyListDto
+                };
+
+
+                if (filters.minBuiltArea > 0 || filters.maxBuiltArea > 0)
+                {
+                    userFilteredPropertyListDto = filters.sortDirection?.ToLower() switch
+                    {
+                        "asc" => userFilteredPropertyListDto.OrderBy(property => property.BuiltArea),
+                        "desc" => userFilteredPropertyListDto.OrderByDescending(property => property.BuiltArea),
+                        _ => userFilteredPropertyListDto
+                    };
+                }
+
+            }
+
+            var paginatedProperties = PaginateProperties(userFilteredPropertyListDto, filters.pageNumber, filters.pageSize);
+
+            var response = new
+            {
+                totalRecords = userFilteredPropertyListDto.Count(),
+                properties = paginatedProperties
+            };
+
+
+            return Ok(response);
         }
 
 
@@ -112,9 +164,6 @@ namespace WebAPI.Controllers
             var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
 
             var filteredProperties = FilterProperties(propertyListDto, filters.filterWord, filters.minBuiltArea, filters.maxBuiltArea);
-
-
-
 
             bool isAscending = filters.sortDirection.Equals("asc", StringComparison.OrdinalIgnoreCase);
             filteredProperties = filters.sortByParam?.ToLower() switch
@@ -147,14 +196,17 @@ namespace WebAPI.Controllers
                     };
                 }
                 
-
-
             }
             
-
             var paginatedProperties = PaginateProperties(filteredProperties, filters.pageNumber, filters.pageSize);
 
-            return Ok(paginatedProperties);
+            var response = new
+            {
+                totalRecords = filteredProperties.Count(),
+                properties = paginatedProperties
+            };
+
+            return Ok(response);
         }
 
 
@@ -186,30 +238,6 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpGet("filter/{sellRent}/{filterWord}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetPropertiesFilteredLength(int sellRent, string filterWord)
-        {
-            var properties = await uow.PropertyRepository.GetPropertiesAsync(sellRent);
-            var propertyListDto = mapper.Map<IEnumerable<PropertyListDto>>(properties);
-
-            var filteredPropertyList = propertyListDto
-                                        .Where(property => property.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                              || property.PropertyType.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                               || property.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                               || property.Country.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                                               )
-
-                                        .ToList();
-
-            
-;
-
-
-
-            return Ok(filteredPropertyList);
-        }
-
 
         [HttpGet("{id}")]
         [AllowAnonymous]
@@ -218,6 +246,17 @@ namespace WebAPI.Controllers
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(id);
             var propertyDto = mapper.Map<PropertyDto>(property);
             return Ok(propertyDto);
+        }
+
+
+        [HttpGet("count")]
+        [Authorize]
+        public async Task<IActionResult> GetPropertyCountByUser()
+        {
+            int userId = GetUserId();
+            int propertyCount = await uow.PropertyRepository.GetPropertyCountByUserAsync(userId);
+
+            return Ok(propertyCount);
         }
 
         //property/add

@@ -5,6 +5,7 @@ import { Property } from '../../model/Property.interface';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ICity } from '../../model/ICity.interface';
 import { IFilters } from '../../model/IFilters.interface';
+import { PaginatedProperties } from '../../model/PaginatedProperties.interface';
 
 
 
@@ -25,8 +26,9 @@ export class PropertyListComponent implements OnInit {
     @ViewChild('autocompleteInput') autoCompleteInput: ElementRef;
 
     @Input() Properties: Property[];
-    @Input() isDashboard: boolean;
+    @Input() PropertiesLength: number;
 
+    PaginatedProperties: PaginatedProperties;
 
     private filterTimeoutId: number;
     private propertyTimeoutId: number;
@@ -39,11 +41,11 @@ export class PropertyListComponent implements OnInit {
 
     filters: IFilters = {
         pageNumber: 1,
-        pageSize: 6
+        pageSize: 2
     };
 
 
-    PropertiesLength: number;
+
     debounceTimer: any;
     isLoading: boolean = false;
     isFiltering: boolean = false;
@@ -78,12 +80,10 @@ export class PropertyListComponent implements OnInit {
             this.SellRent = 2;
         }
 
-        this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
-            this.PropertiesLength = data;
-        });
 
-        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
-            this.Properties = data;
+        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
+            this.PropertiesLength = data.totalRecords;
+            this.Properties = data.properties;
         });
 
     }
@@ -94,9 +94,18 @@ export class PropertyListComponent implements OnInit {
         this.FilteredCityListOptions = [];
 
 
+        this.PageNumber = 1;
+        this.filters.pageNumber = 1;
+        this.paginator.pageIndex = 0;
+
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+            console.log("In property-dashboard"); //APELEZ API
+            return;
+        }
 
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
-            this.Properties = data;
+            this.paginator.length = data.totalRecords;
+            this.Properties = data.properties;
             this.isFiltering = true;
         });
     }
@@ -118,14 +127,18 @@ export class PropertyListComponent implements OnInit {
             this.FilteredCityListOptions = [];
 
             this.propertyTimeoutId = window.setTimeout(() => {
+                this.PageNumber = 1;
+                this.filters.pageNumber = 1;
+                this.paginator.pageIndex = 0;
 
-                this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
-                    this.paginator.length = data;
-                });
+                if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+                    console.log("In property-dashboard"); //APELEZ API
+                    return;
+                }
 
-                this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
-                    this.Properties = data;
-
+                this.housingService.getPaginatedProperty(this.SellRent, 1, 2).subscribe(data => {
+                    this.paginator.length = data.totalRecords;
+                    this.Properties = data.properties;
                 });
             }, 400);
 
@@ -164,15 +177,32 @@ export class PropertyListComponent implements OnInit {
 
         if (this.isFiltering) {
 
+            if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+
+                console.log("In property-dashboard"); //APELEZ API
+                return;
+            }
+
             this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
-                this.Properties = data;
+                this.paginator.length = data.totalRecords;
+                this.Properties = data.properties;
             });
 
             return;
         }
 
-        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
-            this.Properties = data;
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+
+            this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
+                this.paginator.length = data.totalRecords;
+                this.Properties = data.properties;
+            })
+            return;
+        }
+
+        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
+            this.paginator.length = data.totalRecords;
+            this.Properties = data.properties;
         });
 
         // de pus metoda de apelare a filtrarii paginate
@@ -182,10 +212,19 @@ export class PropertyListComponent implements OnInit {
         this.filters.minBuiltArea = this.min;
         this.filters.maxBuiltArea = this.max;
 
+        this.PageNumber = 1;
+        this.filters.pageNumber = 1;
+        this.paginator.pageIndex = 0;
+
+
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+            console.log("In property-dashboard"); //APELEZ API
+            return;
+        }
 
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
-            this.paginator.length = data.length;
-            this.Properties = data;
+            this.paginator.length = data.totalRecords;
+            this.Properties = data.properties;
             this.isFiltering = true;
         });
     }
@@ -194,8 +233,14 @@ export class PropertyListComponent implements OnInit {
         console.log('Sort by:', this.SortbyParam);
         this.filters.sortByParam = this.SortbyParam;
 
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+            console.log("In property-dashboard"); //APELEZ API
+            return;
+        }
+
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
-            this.Properties = data;
+            this.paginator.length = data.totalRecords;
+            this.Properties = data.properties;
             this.isFiltering = true;
         });
     }
@@ -208,30 +253,45 @@ export class PropertyListComponent implements OnInit {
         this.SortDirection = 'asc';
         this.filters = {
             pageNumber: 1,
-            pageSize: 6
+            pageSize: 2
         };
         console.log(this.filters);
+
+        this.PageNumber = 1;
+        this.paginator.pageIndex = 0;
+
         this.isFiltering = false;
-        this.housingService.getPropertiesLength(this.SellRent).subscribe((data) => {
-            this.PropertiesLength = data;
-        });
-        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 6).subscribe(data => {
-            this.Properties = data;
+
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+            console.log("In property-dashboard"); //APELEZ API
+            return;
+        }
+
+        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
+            this.paginator.length = data.totalRecords;
+            this.Properties = data.properties;
         });
     }
 
 
     onSortDirection() {
         if (this.SortDirection === 'desc') {
+            this.filters.sortDirection = this.SortDirection;
             this.SortDirection = 'asc';
         } else {
+            this.filters.sortDirection = 'asc';
             this.SortDirection = 'desc';
         }
 
-        this.filters.sortDirection = this.SortDirection;
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+            console.log("In property-dashboard"); //APELEZ API
+            return;
+        }
+
 
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
-            this.Properties = data;
+            this.paginator.length = data.totalRecords;
+            this.Properties = data.properties;
             this.isFiltering = true;
         });
     }

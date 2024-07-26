@@ -1,6 +1,7 @@
-import { IProperty } from "./IProperty.interface";
+import { Property } from "./Property.interface";
+
 
 export class PaginatedProperties {
     totalRecords: number;
-    properties: IProperty[];
+    properties: Property[];
 }

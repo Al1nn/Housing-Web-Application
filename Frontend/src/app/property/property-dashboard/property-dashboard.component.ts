@@ -10,6 +10,7 @@ import { Property } from '../../model/Property.interface';
 export class PropertyDashboardComponent implements OnInit {
 
   Properties: Property[];
+  PropertiesLength: number;
 
   constructor(
     private route: ActivatedRoute) { }
@@ -18,7 +19,8 @@ export class PropertyDashboardComponent implements OnInit {
 
 
     this.route.data.subscribe((data) => {
-      this.Properties = data['property'];
+      this.PropertiesLength = data['property'].totalRecords;
+      this.Properties = data['property'].properties;
     }
     );
 

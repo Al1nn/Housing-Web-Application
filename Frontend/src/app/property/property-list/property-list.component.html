@@ -55,11 +55,11 @@ placeholder="Filter by City, Type, Name"
 <br><br>
 
 <!-- Ensure both paginators call the same page change method -->
-<div class="d-flex justify-content-center" *ngIf="!isDashboard">
+<div class="d-flex justify-content-center">
   <mat-paginator
                 #paginator
                 [length]="PropertiesLength"
-                 [pageSize]="6"
+                 [pageSize]="2"
                  showFirstLastButtons
                  hidePageSize="true"
                  (page)="onPageChange($event)">

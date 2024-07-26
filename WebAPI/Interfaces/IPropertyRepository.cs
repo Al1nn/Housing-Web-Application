@@ -10,6 +10,8 @@ namespace WebAPI.Interfaces
 
         Task<IEnumerable<Property>> GetUserPropertiesAsync(int userId);
 
+        Task<IEnumerable<Property>> GetUserPropertiesPageAsync(int userId, int pageNumber, int pageSize);
+
         Task<Property> GetPropertyDetailAsync(int id);
 
         Task<Property> GetPropertyByIdAsync(int id);

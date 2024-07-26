@@ -40,6 +40,21 @@ namespace WebAPI.Data.Repo
             return properties;
         }
 
+        public async Task<IEnumerable<Property>> GetUserPropertiesPageAsync(int userId, int pageNumber, int pageSize)
+        {
+            var properties = await dc.Properties
+                                .Include(p => p.PropertyType)
+                                .Include(p => p.FurnishingType)
+                                .Include(p => p.City)
+                                .Include(p => p.User)
+                                .Include(p => p.Photos)
+                                .Where(p => p.PostedBy == userId)
+                                .Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
+            return properties;
+        }
+
         public async Task<IEnumerable<Property>> GetPropertiesAsync(int sellRent)
         {
             var properties = await dc.Properties
@@ -108,6 +123,6 @@ namespace WebAPI.Data.Repo
             return propertyCount;
         }
 
-        
+     
     }
 }
