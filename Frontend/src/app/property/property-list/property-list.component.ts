@@ -96,7 +96,6 @@ export class PropertyListComponent implements OnInit {
 
 
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
-
             this.Properties = data;
             this.isFiltering = true;
         });

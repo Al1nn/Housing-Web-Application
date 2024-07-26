@@ -128,15 +128,16 @@ namespace WebAPI.Controllers
             
             if (filters.sortByParam.IsEmpty())
             {
+                
                 filteredProperties = filters.sortDirection?.ToLower() switch
                 {
                     "asc" => filteredProperties.OrderBy(property => property.Name),
                     "desc" => filteredProperties.OrderByDescending(property => property.Name),
                     _ => filteredProperties
                 };
-                
 
-                if(filters.filterWord.IsEmpty())
+
+                if(filters.minBuiltArea > 0 || filters.maxBuiltArea > 0)
                 {
                     filteredProperties = filters.sortDirection?.ToLower() switch
                     {
@@ -145,7 +146,8 @@ namespace WebAPI.Controllers
                         _ => filteredProperties
                     };
                 }
-               
+                
+
 
             }
             
