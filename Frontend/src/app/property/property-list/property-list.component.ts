@@ -99,7 +99,11 @@ export class PropertyListComponent implements OnInit {
         this.paginator.pageIndex = 0;
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            console.log("In property-dashboard"); //APELEZ API
+            this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+                this.paginator.length = data.totalRecords;
+                this.Properties = data.properties;
+                this.isFiltering = true;
+            });
             return;
         }
 
@@ -179,7 +183,10 @@ export class PropertyListComponent implements OnInit {
 
             if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
 
-                console.log("In property-dashboard"); //APELEZ API
+                this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+                    this.paginator.length = data.totalRecords;
+                    this.Properties = data.properties;
+                });
                 return;
             }
 
@@ -196,7 +203,7 @@ export class PropertyListComponent implements OnInit {
             this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
-            })
+            });
             return;
         }
 
@@ -218,7 +225,11 @@ export class PropertyListComponent implements OnInit {
 
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            console.log("In property-dashboard"); //APELEZ API
+            this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+                this.paginator.length = data.totalRecords;
+                this.Properties = data.properties;
+                this.isFiltering = true;
+            });
             return;
         }
 
@@ -234,7 +245,11 @@ export class PropertyListComponent implements OnInit {
         this.filters.sortByParam = this.SortbyParam;
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            console.log("In property-dashboard"); //APELEZ API
+            this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+                this.paginator.length = data.totalRecords;
+                this.Properties = data.properties;
+                this.isFiltering = true;
+            });
             return;
         }
 
@@ -263,7 +278,10 @@ export class PropertyListComponent implements OnInit {
         this.isFiltering = false;
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            console.log("In property-dashboard"); //APELEZ API
+            this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
+                this.paginator.length = data.totalRecords;
+                this.Properties = data.properties;
+            });
             return;
         }
 
@@ -284,7 +302,11 @@ export class PropertyListComponent implements OnInit {
         }
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            console.log("In property-dashboard"); //APELEZ API
+            this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+                this.paginator.length = data.totalRecords;
+                this.Properties = data.properties;
+                this.isFiltering = true;
+            });
             return;
         }
 

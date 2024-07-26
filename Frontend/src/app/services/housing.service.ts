@@ -98,13 +98,13 @@ export class HousingService {
         return this.http.get<ICity[]>(this.baseUrl + '/city/cities/' + filterWord + '/' + amount);
     }
 
-    getAllFilteredUserProperties(filterWord: string, pageNumber: number, pageSize: number): Observable<Property[]> {
+    getAllFilteredUserProperties(filters: IFilters): Observable<PaginatedProperties> {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.get<Property[]>(this.baseUrl + '/property/filter/dashboard/' + filterWord + '/' + pageNumber + '/' + pageSize, httpOptions);
+        return this.http.post<PaginatedProperties>(this.baseUrl + '/property/filter/dashboard/', filters, httpOptions);
     }
 
     getAllFilteredUserPropertiesLength(SellRent: number, filterWord: string): Observable<number> {
