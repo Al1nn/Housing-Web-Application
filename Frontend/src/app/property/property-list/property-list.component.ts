@@ -71,9 +71,13 @@ export class PropertyListComponent implements OnInit {
         private housingService: HousingService
     ) { }
 
+    private isPropertyDashboard(): boolean {
+        return this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard');
+    }
+
     ngOnInit(): void {
 
-        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+        if (this.isPropertyDashboard()) {
             return;
         }
 
@@ -170,10 +174,10 @@ export class PropertyListComponent implements OnInit {
 
     @HostListener('document:click', ['$event'])
     clickout(_event: Event) {
-        //daca apas inafara dropdown-ului de sugestii
         this.FilteredCityListOptions = [];
-
     }
+
+
 
 
 
@@ -262,6 +266,14 @@ export class PropertyListComponent implements OnInit {
                     this.isLoading = false;
                     console.error('Error loading data:', error);
                 });
+
+
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: window.scrollY - 50,
+                        behavior: 'smooth'
+                    });
+                }, 100);
             }
         }, 200);
     }
@@ -274,7 +286,7 @@ export class PropertyListComponent implements OnInit {
 
         if (this.isFiltering) {
 
-            if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+            if (this.isPropertyDashboard()) {
 
                 this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                     this.paginator.length = data.totalRecords;
@@ -291,7 +303,7 @@ export class PropertyListComponent implements OnInit {
             return;
         }
 
-        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+        if (this.isPropertyDashboard()) {
 
             this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
                 this.paginator.length = data.totalRecords;
@@ -317,7 +329,7 @@ export class PropertyListComponent implements OnInit {
         this.paginator.pageIndex = 0;
 
 
-        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+        if (this.isPropertyDashboard()) {
             this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
