@@ -137,7 +137,10 @@ export class PropertyListComponent implements OnInit {
                 this.paginator.pageIndex = 0;
 
                 if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-                    console.log("In property-dashboard"); //APELEZ API
+                    this.housingService.getUserPaginatedProperty(1, 2).subscribe(data => {
+                        this.paginator.length = data.totalRecords;
+                        this.Properties = data.properties;
+                    })
                     return;
                 }
 
@@ -183,15 +186,39 @@ export class PropertyListComponent implements OnInit {
         this.debounceTimer = window.setTimeout(() => {
             const windowHeight = window.innerHeight;
             const documentHeight = document.documentElement.scrollHeight;
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
-            // Check if we've scrolled to the bottom
+
             if ((windowHeight + scrollTop) >= (documentHeight - 10) && !this.isLoading) {
                 this.isLoading = true;
                 this.PageNumber++;
 
-                // The rest of your code remains the same
+
                 if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+
+                    if (this.isFiltering) {
+                        this.filters.pageNumber = this.PageNumber;
+
+
+                        this.housingService.getAllFilteredUserProperties(this.filters).subscribe(
+                            (data: PaginatedProperties) => {
+                                console.log("In dashboard request");
+                                if (this.PageNumber <= Math.ceil(data.totalRecords / this.filters.pageSize)) {
+                                    this.Properties.push(...data.properties);
+                                    this.isLoading = false;
+                                } else {
+                                    this.isLoading = false;
+                                }
+                            },
+                            error => {
+                                this.isLoading = false;
+                                console.error('Error loading filtered properties:', error);
+                            }
+                        );
+
+                        return;
+                    }
+
 
                     this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
                         this.Properties.push(...data.properties);
@@ -203,6 +230,7 @@ export class PropertyListComponent implements OnInit {
 
                     return;
                 }
+
 
                 if (this.isFiltering) {
                     this.filters.pageNumber = this.PageNumber;
