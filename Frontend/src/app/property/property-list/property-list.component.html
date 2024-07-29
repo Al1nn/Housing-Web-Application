@@ -2,8 +2,8 @@
 <div>
 <input type="text" 
 #autocompleteInput
-placeholder="Filter by City, Type, Name"
-(input)="keyPress($event)" autocomplete="off" >
+placeholder="Filter by City"
+(input)="keyPress($event)" autocomplete="off">
 <ul *ngIf="FilteredCityListOptions.length > 0" 
   class="dropdown"
   [class.show]="autocompleteInput.value !== ''"
@@ -11,7 +11,6 @@ placeholder="Filter by City, Type, Name"
   >
   <li class="dropdown-item" *ngFor="let option of FilteredCityListOptions" > 
     <button (click)="selectCity(option)">
-      
       <span [innerHTML]="option.name | highlight:autocompleteInput.value"></span>,
       <span [innerHTML]="option.country | highlight:autocompleteInput.value"></span>
     </button>

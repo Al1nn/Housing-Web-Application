@@ -193,6 +193,30 @@ export class PropertyListComponent implements OnInit {
                     return;
                 }
 
+                if (this.isFiltering) {
+
+                    this.filters.pageNumber = this.PageNumber;
+                    console.log(this.filters);
+
+
+                    this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(
+                        (data: PaginatedProperties) => {
+                            if (this.PageNumber <= Math.ceil(data.totalRecords / this.filters.pageSize)) {
+                                this.Properties.push(...data.properties);
+                                this.isLoading = false;
+                            } else {
+                                this.isLoading = false;
+                            }
+                        },
+                        error => {
+                            this.isLoading = false;
+                            console.error('Error loading filtered properties:', error);
+                        }
+                    );
+
+                    return;
+                }
+
                 this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
                     this.Properties.push(...data.properties);
                     this.isLoading = false;
@@ -302,7 +326,7 @@ export class PropertyListComponent implements OnInit {
             pageNumber: 1,
             pageSize: 2
         };
-        console.log(this.filters);
+
 
         this.PageNumber = 1;
         this.paginator.pageIndex = 0;

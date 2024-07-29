@@ -215,10 +215,7 @@ namespace WebAPI.Controllers
             return properties.Where(property =>
                     (
                         string.IsNullOrEmpty(filterWord)
-                        || property.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                        || property.PropertyType.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
                         || property.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
-                        || property.Country.Contains(filterWord, StringComparison.OrdinalIgnoreCase)
                     )
                     &&
                     (
