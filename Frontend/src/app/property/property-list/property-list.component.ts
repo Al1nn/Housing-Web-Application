@@ -202,7 +202,7 @@ export class PropertyListComponent implements OnInit {
 
                         this.housingService.getAllFilteredUserProperties(this.filters).subscribe(
                             (data: PaginatedProperties) => {
-                                console.log("In dashboard request");
+
                                 if (this.PageNumber <= Math.ceil(data.totalRecords / this.filters.pageSize)) {
                                     this.Properties.push(...data.properties);
                                     this.isLoading = false;
