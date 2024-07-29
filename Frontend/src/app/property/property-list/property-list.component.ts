@@ -172,31 +172,41 @@ export class PropertyListComponent implements OnInit {
 
     }
 
+
+
     @HostListener('window:scroll', ['$event'])
     onWindowScroll(_event: Event) {
-        const scrolled = window.scrollY;
-        const threshold = 30;
-
-
         if (this.debounceTimer) {
             clearTimeout(this.debounceTimer);
         }
 
         this.debounceTimer = window.setTimeout(() => {
-            if (scrolled >= threshold && !this.isLoading) {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-
+            // Check if we've scrolled to the bottom
+            if ((windowHeight + scrollTop) >= (documentHeight - 10) && !this.isLoading) {
                 this.isLoading = true;
                 this.PageNumber++;
 
+                // The rest of your code remains the same
                 if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+
+                    this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
+                        this.Properties.push(...data.properties);
+                        this.isLoading = false;
+                    }, error => {
+                        this.isLoading = false;
+                        console.error('Error loading data:', error);
+                    });
+
                     return;
                 }
 
                 if (this.isFiltering) {
-
                     this.filters.pageNumber = this.PageNumber;
-                    console.log(this.filters);
+
 
 
                     this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(
@@ -227,7 +237,6 @@ export class PropertyListComponent implements OnInit {
             }
         }, 200);
     }
-
 
     onPageChange($event: PageEvent) {
 
@@ -299,7 +308,8 @@ export class PropertyListComponent implements OnInit {
     onSortChange() {
         console.log('Sort by:', this.SortbyParam);
         this.filters.sortByParam = this.SortbyParam;
-
+        this.PageNumber = 1;
+        this.filters.pageNumber = this.PageNumber;
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
             this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                 this.paginator.length = data.totalRecords;
@@ -329,6 +339,7 @@ export class PropertyListComponent implements OnInit {
 
 
         this.PageNumber = 1;
+        this.filters.pageNumber = this.PageNumber;
         this.paginator.pageIndex = 0;
 
         this.isFiltering = false;
@@ -356,6 +367,9 @@ export class PropertyListComponent implements OnInit {
             this.filters.sortDirection = 'asc';
             this.SortDirection = 'desc';
         }
+
+        this.PageNumber = 1;
+        this.filters.pageNumber = this.PageNumber;
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
             this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
