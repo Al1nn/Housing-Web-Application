@@ -2,18 +2,31 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   ChartComponent,
   ApexAxisChartSeries,
-  ApexNonAxisChartSeries,
   ApexChart,
   ApexXAxis,
-  ApexTitleSubtitle
+  ApexDataLabels,
+  ApexPlotOptions,
+  ApexYAxis,
+  ApexStroke,
+  ApexTitleSubtitle,
+  ApexTooltip,
+  ApexFill,
+  ApexLegend,
 } from "ng-apexcharts";
 
 export type ChartOptions = {
-  series: ApexAxisChartSeries | ApexNonAxisChartSeries | undefined;
+  series: ApexAxisChartSeries;
   chart: ApexChart;
+  dataLabels: ApexDataLabels;
+  plotOptions: ApexPlotOptions;
   xaxis: ApexXAxis;
+  yaxis: ApexYAxis;
+  stroke: ApexStroke;
   title: ApexTitleSubtitle;
-}
+  tooltip: ApexTooltip;
+  fill: ApexFill;
+  legend: ApexLegend;
+};
 
 @Component({
   selector: 'app-property-stats',
@@ -29,19 +42,69 @@ export class PropertyStatsComponent implements OnInit {
     this.chartOptions = {
       series: [
         {
-          name: "My-series",
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-        }
+          name: "Sell",
+          data: [44, 55, 41, 37, 22, 43, 21]
+        },
+        {
+          name: "Rent",
+          data: [53, 32, 33, 52, 13, 43, 32]
+        },
       ],
       chart: {
-        height: 350,
-        type: "bar"
+        type: "bar",
+        height: 500,
+        stacked: true
+      },
+      plotOptions: {
+        bar: {
+          horizontal: true
+        }
+      },
+      stroke: {
+        width: 1,
+        colors: ["#fff"],
       },
       title: {
-        text: "My First Angular Chart"
+        text: "Property Stats",
+
       },
       xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"]
+        categories: ["Pitesti", "Bucuresti", "Hunedoara", "Gaesti", "Cluj", "Timisoara", "Ploiesti"],
+        labels: {
+          formatter: function (val) {
+            return val;
+          }
+        }
+      },
+      yaxis: {
+        title: {
+          text: undefined
+        }
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val.toString();
+          }
+        }
+      },
+      fill: {
+        opacity: 1
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "right",
+        offsetX: 40,
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: function (val) {
+          return val.toString();
+        },
+        style: { //Styling for data labels
+          fontSize: '15px',
+          colors: ['#fff']
+        }
       }
     };
   }
