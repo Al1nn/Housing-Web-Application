@@ -34,6 +34,19 @@ export class NavBarComponent {
         }
     }
 
+    isAdmin() {
+        const decodedToken = this.authService.decodeToken();
+        if (decodedToken && decodedToken.role) {
+            if (Array.isArray(decodedToken.role)) {
+                return decodedToken.role.includes("Admin");
+            } else {
+                return decodedToken.role === "Admin";
+            }
+        } else {
+            return false;
+        }
+    }
+
     hasImage() {
         this.profilePicture =
             typeof localStorage !== 'undefined'

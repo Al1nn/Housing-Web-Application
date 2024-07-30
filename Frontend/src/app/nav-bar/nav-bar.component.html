@@ -44,6 +44,8 @@
               <i class="fas fa-tachometere-alt"></i> View Dashboard</a>
             <a href="#" class="dropdown-item" routerLink="/user/profile" >
               <i class="fas fa-user-circle"></i> My Profile</a>
+            <a href="#" class="dropdown-item" *ngIf="isAdmin()">
+            <i class="fas fa-chart-simple"></i> View Stats</a>  
             <a href="#" class="dropdown-item" routerLink="/user/settings">
               <i class="fas fa-key"></i> Change Password</a>
             <a href="#" class="dropdown-item" (click)="onLogout()">
