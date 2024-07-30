@@ -38,7 +38,7 @@ export class HousingService {
     }
 
     getAllCities(): Observable<ICity[]> {
-        return this.http.get<ICity[]>(this.baseUrl + '/city/cities');
+        return this.http.get<ICity[]>(`${this.baseUrl}/city/cities`);
     }
 
     getAllProperties(SellRent?: number): Observable<Property[]> {
