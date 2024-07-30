@@ -21,6 +21,7 @@ export const authGuard: CanActivateFn = () => {
   return true;
 };
 
+
 export const contactGuard: CanActivateFn = () => {
   const router = inject(Router);
   const alertifyService = inject(AlertifyService);

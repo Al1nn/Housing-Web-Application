@@ -44,8 +44,11 @@
               "node_modules/cropperjs/dist/cropper.css"
             ],
             "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/alertifyjs/build/alertify.min.js",
+              "node_modules/apexcharts/dist/apexcharts.min.js",
               "node_modules/cropperjs/dist/cropper.js"
+
             ],
             "server": "src/main.server.ts",
             "prerender": true,

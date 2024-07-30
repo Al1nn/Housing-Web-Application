@@ -33,10 +33,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
-
+import { NgApexchartsModule } from 'ng-apexcharts';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/photo-editor-popup.component';
+import { PropertyStatsComponent } from './property-stats/property-stats.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/pho
     PropertyDetailAdminComponent,
     PropertyDetailOwnerComponent,
     PropertyDetailReaderComponent,
+    PropertyStatsComponent,
     PropertyContactsComponent,
     HighlightPipe,
   ],
@@ -67,6 +69,7 @@ import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/pho
     MatAutocompleteModule,
     MatPaginatorModule,
     ReactiveFormsModule,
+    NgApexchartsModule,
     ButtonsModule.forRoot(),
     CarouselModule.forRoot(),
     BsDatepickerModule.forRoot(),

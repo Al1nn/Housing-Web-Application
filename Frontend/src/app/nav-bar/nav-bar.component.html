@@ -41,10 +41,10 @@
           </a>
           <div class="dropdown-menu" *dropdownMenu>
             <a class="dropdown-item" routerLink="/property-dashboard">
-              <i class="fas fa-tachometere-alt"></i> View Dashboard</a>
+              <i class="fas fa-house"></i> View Dashboard</a>
             <a href="#" class="dropdown-item" routerLink="/user/profile" >
               <i class="fas fa-user-circle"></i> My Profile</a>
-            <a href="#" class="dropdown-item" *ngIf="isAdmin()">
+            <a href="#" class="dropdown-item" *ngIf="isAdmin()" routerLink="/property-stats" >
             <i class="fas fa-chart-simple"></i> View Stats</a>  
             <a href="#" class="dropdown-item" routerLink="/user/settings">
               <i class="fas fa-key"></i> Change Password</a>

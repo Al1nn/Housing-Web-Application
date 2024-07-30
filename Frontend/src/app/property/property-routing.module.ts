@@ -12,6 +12,7 @@ import { authGuard, contactGuard } from '../guards/auth-guard.guard';
 import { PropertyDetailReaderComponent } from './property-detail/property-detail-reader/property-detail-reader.component';
 import { PropertyDetailOwnerComponent } from './property-detail/property-detail-owner/property-detail-owner.component';
 import { matchGuardAdmin, matchGuardOwner } from '../guards/match-guard.guard';
+import { PropertyStatsComponent } from './property-stats/property-stats.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,11 @@ const routes: Routes = [
     resolve: {
       property: PropertyDashboardResolverService
     }
+  },
+  {
+    path: 'property-stats',
+    component: PropertyStatsComponent,
+    canMatch: [matchGuardAdmin]
   },
   {
     path: 'rent-property',
