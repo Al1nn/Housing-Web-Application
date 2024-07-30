@@ -53,7 +53,8 @@ export class PropertyStatsComponent implements OnInit {
       chart: {
         type: "bar",
         height: 500,
-        stacked: true
+        stacked: true,
+        fontFamily: 'Roboto'
       },
       plotOptions: {
         bar: {
@@ -65,7 +66,12 @@ export class PropertyStatsComponent implements OnInit {
         colors: ["#fff"],
       },
       title: {
+
+        align: "center",
         text: "Property Stats",
+        style: {
+          fontSize: "20px",
+        }
 
       },
       xaxis: {
@@ -89,20 +95,29 @@ export class PropertyStatsComponent implements OnInit {
         }
       },
       fill: {
-        opacity: 1
+        opacity: 1,
+        colors: ['#007bff', '#00C853']
       },
       legend: {
         position: "top",
-        horizontalAlign: "right",
-        offsetX: 40,
+        fontSize: "20px",
+        fontFamily: "Roboto",
+        horizontalAlign: "left",
+        width: 200,
+        height: 50,
+        itemMargin: {
+          horizontal: 10,
+          vertical: 5
+        }
       },
       dataLabels: {
         enabled: true,
         formatter: function (val) {
           return val.toString();
         },
-        style: { //Styling for data labels
+        style: { //Stil pentru data labels, scrisul de pe bar-uri
           fontSize: '15px',
+          fontFamily: 'Roboto',
           colors: ['#fff']
         }
       }
