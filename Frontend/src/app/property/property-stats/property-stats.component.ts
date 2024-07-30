@@ -58,8 +58,8 @@ export class PropertyStatsComponent implements OnInit {
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: "30px"
-
+        barHeight: "30px",
+        borderRadius: 5
       }
     },
     stroke: {
@@ -72,11 +72,15 @@ export class PropertyStatsComponent implements OnInit {
         formatter: function (val) {
           return val;
         },
-
+        style: {
+          fontFamily: 'Roboto',
+          fontSize: '20px'
+        }
       },
 
     },
     yaxis: {
+
       title: {
         text: undefined,
       },
@@ -146,9 +150,29 @@ export class PropertyStatsComponent implements OnInit {
 
   updateChartCategories() {
     if (this.cities && this.cities.length > 0) {
+
       this.chartOptions.xaxis = {
-        categories: this.cities
-      }
+        ...this.chartOptions.xaxis,
+        categories: this.cities,
+        labels: {
+          ...this.chartOptions.xaxis.labels,
+          style: {
+            fontFamily: 'Roboto',
+            fontSize: '20px'
+          }
+        }
+      };
+
+      this.chartOptions.yaxis = {
+        ...this.chartOptions.yaxis,
+        labels: {
+          ...this.chartOptions.yaxis.labels,
+          style: {
+            fontFamily: 'Roboto',
+            fontSize: '20px'
+          }
+        }
+      };
 
 
       const sellData = this.cities.map(() => Math.floor(Math.random() * 100));
