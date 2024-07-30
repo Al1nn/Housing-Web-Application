@@ -8,12 +8,13 @@ import {
   ApexPlotOptions,
   ApexYAxis,
   ApexStroke,
-  ApexTitleSubtitle,
   ApexTooltip,
   ApexFill,
   ApexLegend,
 } from "ng-apexcharts";
 import { HousingService } from '../../services/housing.service';
+
+
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -23,7 +24,6 @@ export type ChartOptions = {
   xaxis: ApexXAxis;
   yaxis: ApexYAxis;
   stroke: ApexStroke;
-  title: ApexTitleSubtitle;
   tooltip: ApexTooltip;
   fill: ApexFill;
   legend: ApexLegend;
@@ -53,24 +53,18 @@ export class PropertyStatsComponent implements OnInit {
       height: 1200,
       stacked: true,
       fontFamily: 'Roboto'
+
     },
     plotOptions: {
       bar: {
-        horizontal: true
+        horizontal: true,
+        barHeight: "30px"
+
       }
     },
     stroke: {
       width: 1,
       colors: ["#fff"],
-    },
-    title: {
-
-      align: "center",
-      text: "Property Stats",
-      style: {
-        fontSize: "20px",
-      }
-
     },
     xaxis: {
       categories: ["Pitesti", "Bucuresti", "Hunedoara", "Gaesti", "Cluj", "Timisoara", "Ploiesti"],
@@ -78,16 +72,22 @@ export class PropertyStatsComponent implements OnInit {
         formatter: function (val) {
           return val;
         },
-        style: {
-          fontSize: "20px",
-          fontFamily: "Roboto"
-        }
+
       },
 
     },
     yaxis: {
       title: {
-        text: undefined
+        text: undefined,
+      },
+      labels: {
+        formatter: function (val) {
+          return val.toString();
+        },
+        style: {
+          fontFamily: 'Roboto',
+          fontSize: '20px'
+        }
       }
     },
     tooltip: {
@@ -105,13 +105,14 @@ export class PropertyStatsComponent implements OnInit {
       position: "top",
       fontSize: "20px",
       fontFamily: "Roboto",
-      horizontalAlign: "left",
+      horizontalAlign: "center",
       width: 200,
       height: 50,
       itemMargin: {
         horizontal: 10,
         vertical: 5
       }
+
     },
     dataLabels: {
       enabled: true,
@@ -121,11 +122,13 @@ export class PropertyStatsComponent implements OnInit {
       style: { //Stil pentru data labels, scrisul de pe bar-uri
         fontSize: '15px',
         fontFamily: 'Roboto',
-        colors: ['#fff']
+        colors: ['#fff'],
+
       }
+
     }
   };
-  cities: any;
+  cities: string[];
 
 
   constructor(private housingService: HousingService) {
@@ -136,7 +139,6 @@ export class PropertyStatsComponent implements OnInit {
   ngOnInit() {
     this.housingService.getAllCities().subscribe(data => {
       this.cities = data.map(city => city.name);
-      console.log(this.cities);
       this.updateChartCategories();
     });
 
