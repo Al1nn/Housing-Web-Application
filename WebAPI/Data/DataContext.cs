@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebAPI.Dtos;
 using WebAPI.Models;
 
 namespace WebAPI.Data
@@ -25,6 +26,9 @@ namespace WebAPI.Data
 
         public DbSet<FurnishingType> FurnishingTypes { get; set; }
 
+        public DbSet<PropertyStatsDto> PropertyStatsView { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -42,7 +46,12 @@ namespace WebAPI.Data
                         .HasOne(ui => ui.Image)
                         .WithMany(i => i.Users)
                         .HasForeignKey(ui => ui.ImageId)
-                        .OnDelete(DeleteBehavior.Cascade); 
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PropertyStatsDto>()
+                .ToView(nameof(PropertyStatsView))
+                .HasKey(t => t.Id);
+
         }
     }
 }

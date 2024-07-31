@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebAPI.Dtos;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 
@@ -123,6 +124,9 @@ namespace WebAPI.Data.Repo
             return propertyCount;
         }
 
-     
+        public async Task<IEnumerable<PropertyStatsDto>> GetPropertyStatsAsync()
+        {
+            return await dc.PropertyStatsView.ToListAsync();
+        }
     }
 }

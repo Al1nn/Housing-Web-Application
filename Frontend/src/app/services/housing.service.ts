@@ -8,6 +8,7 @@ import { IPhoto } from '../model/IPhoto';
 import { ICity } from '../model/ICity.interface';
 import { IFilters } from '../model/IFilters.interface';
 import { PaginatedProperties } from '../model/PaginatedProperties.interface';
+import { IPropertyStats } from '../model/IPropertyStats.interface';
 
 
 
@@ -43,6 +44,10 @@ export class HousingService {
 
     getAllProperties(SellRent?: number): Observable<Property[]> {
         return this.http.get<Property[]>(this.baseUrl + '/property/list/' + SellRent?.toString());
+    }
+
+    getAllPropertyStats(): Observable<IPropertyStats[]> {
+        return this.http.get<IPropertyStats[]>(`${this.baseUrl}/property/stats`);
     }
 
     getUserProperties(): Observable<Property[]> {

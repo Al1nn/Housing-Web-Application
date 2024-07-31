@@ -1,4 +1,5 @@
-﻿using WebAPI.Models;
+﻿using WebAPI.Dtos;
+using WebAPI.Models;
 
 namespace WebAPI.Interfaces
 {
@@ -11,6 +12,8 @@ namespace WebAPI.Interfaces
         Task<IEnumerable<Property>> GetUserPropertiesAsync(int userId);
 
         Task<IEnumerable<Property>> GetUserPropertiesPageAsync(int userId, int pageNumber, int pageSize);
+
+        Task<IEnumerable<PropertyStatsDto>> GetPropertyStatsAsync();
 
         Task<Property> GetPropertyDetailAsync(int id);
 

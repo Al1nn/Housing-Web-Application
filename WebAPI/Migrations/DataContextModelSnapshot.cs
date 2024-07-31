@@ -22,6 +22,32 @@ namespace WebAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("WebAPI.Dtos.PropertyStatsDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Rent")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sell")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("PropertyStatsView", (string)null);
+                });
+
             modelBuilder.Entity("WebAPI.Models.City", b =>
                 {
                     b.Property<int>("Id")

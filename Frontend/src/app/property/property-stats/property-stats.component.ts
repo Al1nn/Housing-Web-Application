@@ -13,6 +13,7 @@ import {
   ApexLegend,
 } from "ng-apexcharts";
 import { HousingService } from '../../services/housing.service';
+import { IPropertyStats } from '../../model/IPropertyStats.interface';
 
 
 
@@ -72,10 +73,7 @@ export class PropertyStatsComponent implements OnInit {
         formatter: function (val) {
           return val;
         },
-        style: {
-          fontFamily: 'Roboto',
-          fontSize: '20px'
-        }
+
       },
 
     },
@@ -88,11 +86,9 @@ export class PropertyStatsComponent implements OnInit {
         formatter: function (val) {
           return val.toString();
         },
-        style: {
-          fontFamily: 'Roboto',
-          fontSize: '20px'
-        }
+
       }
+
     },
     tooltip: {
       y: {
@@ -112,10 +108,6 @@ export class PropertyStatsComponent implements OnInit {
       horizontalAlign: "center",
       width: 200,
       height: 50,
-      itemMargin: {
-        horizontal: 10,
-        vertical: 5
-      }
 
     },
     dataLabels: {
@@ -132,7 +124,7 @@ export class PropertyStatsComponent implements OnInit {
 
     }
   };
-  cities: string[];
+  propertyStats: IPropertyStats[];
 
 
   constructor(private housingService: HousingService) {
@@ -141,24 +133,26 @@ export class PropertyStatsComponent implements OnInit {
 
 
   ngOnInit() {
-    this.housingService.getAllCities().subscribe(data => {
-      this.cities = data.map(city => city.name);
+    this.housingService.getAllPropertyStats().subscribe(data => {
+      this.propertyStats = data;
       this.updateChartCategories();
     });
 
   }
 
   updateChartCategories() {
-    if (this.cities && this.cities.length > 0) {
+    if (this.propertyStats && this.propertyStats.length > 0) {
+
+
 
       this.chartOptions.xaxis = {
         ...this.chartOptions.xaxis,
-        categories: this.cities,
+        categories: this.propertyStats.map(stats => `${stats.city}, ${stats.country}`),
         labels: {
           ...this.chartOptions.xaxis.labels,
           style: {
             fontFamily: 'Roboto',
-            fontSize: '20px'
+            fontSize: '1rem'
           }
         }
       };
@@ -169,14 +163,15 @@ export class PropertyStatsComponent implements OnInit {
           ...this.chartOptions.yaxis.labels,
           style: {
             fontFamily: 'Roboto',
-            fontSize: '20px'
+            fontSize: '12px',
+
           }
         }
       };
 
 
-      const sellData = this.cities.map(() => Math.floor(Math.random() * 100));
-      const rentData = this.cities.map(() => Math.floor(Math.random() * 100));
+      const sellData = this.propertyStats.map(stats => stats.sellCount);
+      const rentData = this.propertyStats.map(stats => stats.rentCount);
 
       this.chartOptions.series = [
         {

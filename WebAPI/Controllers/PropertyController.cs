@@ -45,6 +45,16 @@ namespace WebAPI.Controllers
             return Ok(propertyListDto);
         }
 
+        [HttpGet("stats")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPropertyStats()
+        {
+            var stats = await uow.PropertyRepository.GetPropertyStatsAsync();
+            return Ok(stats);
+        }
+
+
+
         [HttpGet("list/{sellRent}/{pageNumber}/{pageSize}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetPropertyPage(int sellRent, int pageNumber, int pageSize)
