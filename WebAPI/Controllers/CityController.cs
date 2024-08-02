@@ -53,33 +53,50 @@ namespace WebAPI.Controllers
             return Ok(citiesData);
         }
 
-        [HttpGet("cities/{filterWord}/{amount}")]
+        [HttpGet("cities/{filterWord}/{amount}/{sellRent}")]
         [AllowAnonymous]
-        public async Task<IActionResult> FilterFromCache(string filterWord, int amount)
+        public async Task<IActionResult> FilterFromCache(string filterWord, int amount, int sellRent)
         {
-            var citiesData = cache.Get("cities") as IEnumerable<CityDto>;
+            var citiesData = cache.Get("sugestions") as IEnumerable<PropertyStatsDto>;
 
             if (citiesData == null)
             {
                
-                citiesData = await GetCities();
+                citiesData = await GetSugestions();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5),
-                    SlidingExpiration = TimeSpan.FromSeconds(5),
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
                 };
 
-                cache.Set("cities", citiesData, cacheEntryOptions);
+                cache.Set("sugestions", citiesData, cacheEntryOptions);
             }
 
             var filteredData = citiesData
-                .Where(city => city.Name.Contains(filterWord, StringComparison.OrdinalIgnoreCase) || city.Country.Contains(filterWord,StringComparison.OrdinalIgnoreCase))
-                .Take(amount)
-                .ToList();
+                                .Where(city => city.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase) ||
+                                               city.Country.Contains(filterWord, StringComparison.OrdinalIgnoreCase))
+                                .Take(amount)
+                                .Select(city => new
+                                {
+                                    city.Id,
+                                    city.City,
+                                    city.Country,
+                                    SellRentCount = sellRent == 1 ? city.SellCount : city.RentCount
+                                })
+                                .ToList();
+
+
 
 
             return Ok(filteredData);
+        }
+
+        private async Task<IEnumerable<PropertyStatsDto>> GetSugestions()
+        {
+            var sugestions = await uow.PropertyRepository.GetPropertyStatsAsync();
+           
+
+            return sugestions;
         }
 
 
@@ -91,13 +108,7 @@ namespace WebAPI.Controllers
             return citiesDto;
         }
 
-        //private async Task<IEnumerable<CityDto>> FilteredCities(string filterWord, int amount)
-        //{
-        //    var filteredCities = await uow.CityRepository.FilterCitiesAsync(filterWord, amount);
-        //    var filteredCitiesDto = mapper.Map<IEnumerable<CityDto>>(filteredCities);
-
-        //    return filteredCitiesDto;
-        //}
+        
 
         [HttpPost("post")]
         public async Task<IActionResult> AddCity(CityDto cityDto)

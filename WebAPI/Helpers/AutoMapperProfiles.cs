@@ -30,8 +30,7 @@ namespace WebAPI.Helpers
                 .ForMember(d => d.ImageId, opt => opt.MapFrom(src => src.Image.Id))
                 .ForMember(d => d.FileName, opt => opt.MapFrom(src => src.Image.FileName));
 
-            
-
+           
 
             //Add methods to map Model to Dto
             CreateMap<Property, PropertyListDto>()

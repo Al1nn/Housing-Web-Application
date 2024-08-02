@@ -3,9 +3,9 @@ import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { ICity } from '../../model/ICity.interface';
 import { IFilters } from '../../model/IFilters.interface';
 import { PaginatedProperties } from '../../model/PaginatedProperties.interface';
+import { ISugestion } from '../../model/ISugestion.interface';
 
 
 
@@ -36,7 +36,7 @@ export class PropertyListComponent implements OnInit {
 
 
     //Example
-    FilteredCityListOptions: ICity[] = [];
+    FilteredCityListOptions: ISugestion[] = [];
     //
 
     filters: IFilters = {
@@ -75,13 +75,17 @@ export class PropertyListComponent implements OnInit {
         return this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard');
     }
 
+    isPropertyRent(): boolean {
+        return this.urlSegments.length > 0 && this.urlSegments[0].path.includes('rent-property');
+    }
+
     ngOnInit(): void {
 
         if (this.isPropertyDashboard()) {
             return;
         }
 
-        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('rent-property')) {
+        if (this.isPropertyRent()) {
             this.SellRent = 2;
         }
 
@@ -93,9 +97,9 @@ export class PropertyListComponent implements OnInit {
 
     }
 
-    selectCity(option: ICity) {
-        this.autoCompleteInput.nativeElement.value = `${option.name}, ${option.country}`;
-        this.filters.filterWord = option.name;
+    selectCity(option: ISugestion) {
+        this.autoCompleteInput.nativeElement.value = `${option.city}, ${option.country}`;
+        this.filters.filterWord = option.city;
         this.FilteredCityListOptions = [];
 
 
@@ -162,7 +166,7 @@ export class PropertyListComponent implements OnInit {
 
         if (inputValue.length >= 3) {
             this.filterTimeoutId = window.setTimeout(() => {
-                this.housingService.getAllCitiesFiltered(inputValue, 10).subscribe(data => {
+                this.housingService.getAllCitiesFiltered(inputValue, 10, this.SellRent).subscribe(data => {
                     this.FilteredCityListOptions = data;
                 });
 

@@ -9,6 +9,7 @@ import { ICity } from '../model/ICity.interface';
 import { IFilters } from '../model/IFilters.interface';
 import { PaginatedProperties } from '../model/PaginatedProperties.interface';
 import { IPropertyStats } from '../model/IPropertyStats.interface';
+import { ISugestion } from '../model/ISugestion.interface';
 
 
 
@@ -99,8 +100,8 @@ export class HousingService {
         return this.http.post<PaginatedProperties>(`${this.baseUrl}/property/filter/${sellRent}`, filters);
     }
 
-    getAllCitiesFiltered(filterWord: string, amount: number): Observable<ICity[]> {
-        return this.http.get<ICity[]>(this.baseUrl + '/city/cities/' + filterWord + '/' + amount);
+    getAllCitiesFiltered(filterWord: string, amount: number, sellRent: number): Observable<ISugestion[]> {
+        return this.http.get<ISugestion[]>(`${this.baseUrl}/city/cities/${filterWord}/${amount}/${sellRent}`);
     }
 
     getAllFilteredUserProperties(filters: IFilters): Observable<PaginatedProperties> {
