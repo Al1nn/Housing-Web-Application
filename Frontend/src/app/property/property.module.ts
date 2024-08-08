@@ -39,6 +39,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/photo-editor-popup.component';
 import { PropertyStatsComponent } from './property-stats/property-stats.component';
 
+
+
 @NgModule({
   declarations: [
     PropertyCardElement,
@@ -92,6 +94,8 @@ import { PropertyStatsComponent } from './property-stats/property-stats.componen
       useClass: HttpErrorInterceptorService,
       multi: true
     },
+
+
 
   ]
 })

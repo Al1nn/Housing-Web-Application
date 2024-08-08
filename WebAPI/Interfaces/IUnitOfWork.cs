@@ -13,7 +13,10 @@
 
         IFurnishingTypeRepository FurnishingTypeRepository { get; }
 
+        ITreeRepository TreeRepository { get; }
 
         public Task<bool> SaveAsync();
+
+        public Task<bool> SaveTreeAsync();
     }
 }

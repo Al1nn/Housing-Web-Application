@@ -52,7 +52,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         AuthService,
 
         UserProfileResolverService,
-          provideAnimationsAsync(),
+        provideAnimationsAsync(),
     ],
     bootstrap: [AppComponent],
 })

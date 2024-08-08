@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -14,6 +14,7 @@ import {
 } from "ng-apexcharts";
 import { HousingService } from '../../services/housing.service';
 import { IPropertyStats } from '../../model/IPropertyStats.interface';
+import { isPlatformBrowser } from '@angular/common';
 
 
 
@@ -127,16 +128,21 @@ export class PropertyStatsComponent implements OnInit {
   propertyStats: IPropertyStats[];
 
 
-  constructor(private housingService: HousingService) {
+  constructor(private housingService: HousingService
+    , @Inject(PLATFORM_ID) private platformId: Object
+  ) {
 
   }
 
 
   ngOnInit() {
-    this.housingService.getAllPropertyStats().subscribe(data => {
-      this.propertyStats = data;
-      this.updateChartCategories();
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.housingService.getAllPropertyStats().subscribe(data => {
+        this.propertyStats = data;
+        this.updateChartCategories();
+      });
+    }
+
 
   }
 
