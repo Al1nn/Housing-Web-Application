@@ -10,6 +10,7 @@ import { IFilters } from '../model/IFilters.interface';
 import { PaginatedProperties } from '../model/PaginatedProperties.interface';
 import { IPropertyStats } from '../model/IPropertyStats.interface';
 import { ISugestion } from '../model/ISugestion.interface';
+import { ITree } from '../model/ITree.interface';
 
 
 
@@ -79,6 +80,10 @@ export class HousingService {
 
     getPropertyDetailById(id: number) {
         return this.http.get<Property>(this.baseUrl + '/property/detail/' + id.toString());
+    }
+
+    getPropertyTree(root: number): Observable<ITree[]> {
+        return this.http.get<ITree[]>(`${this.baseUrl}/tree/procedure/${root}`);
     }
 
     getPropertyCountByUser(): Observable<number> {

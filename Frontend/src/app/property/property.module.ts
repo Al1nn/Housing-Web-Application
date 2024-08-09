@@ -6,6 +6,8 @@ import { PropertyListComponent } from './property-list/property-list.component';
 import { PropertyDashboardComponent } from './property-dashboard/property-dashboard.component';
 import { PhotoEditorComponent } from './photo-editor/photo-editor.component';
 import { PropertyDetailAdminComponent } from './property-detail/property-detail-admin/property-detail.component';
+import { PropertyTreeComponent } from './property-tree/property-tree.component';
+import { PropertyNodeComponent } from './property-tree/property-node/property-node.component';
 import { PropertyContactsComponent } from './property-contacts/property-contacts.component';
 import { AddPropertyComponent } from './add-property/add-property.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -53,6 +55,8 @@ import { PropertyStatsComponent } from './property-stats/property-stats.componen
     PropertyDetailOwnerComponent,
     PropertyDetailReaderComponent,
     PropertyStatsComponent,
+    PropertyTreeComponent,
+    PropertyNodeComponent,
     PropertyContactsComponent,
     HighlightPipe,
   ],

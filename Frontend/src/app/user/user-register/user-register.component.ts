@@ -147,18 +147,11 @@ export class UserRegisterComponent implements OnInit {
 
         return this.formData;
 
-        // return (this.user = {
-        //     username: this.username.value,
-        //     email: this.email.value,
-        //     password: this.password.value,
-        //     phoneNumber: this.mobile.value,
-        //     roles: this.checkedRoles,
-        //     imageUrl: !this.croppedImage ? "" : this.croppedImage
-        // });
+
 
     }
 
-    // Getter methods from all controls
+
 
 
     onSubmit() {

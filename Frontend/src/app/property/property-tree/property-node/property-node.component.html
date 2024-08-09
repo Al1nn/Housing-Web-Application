@@ -1,0 +1,11 @@
+<div [style.margin-left.px]="(node.level - 1) * 20">
+  {{ node.parentID}} <br> 
+  {{ node.nodeID }}<br> 
+   ({{ node.path }})<br>
+   (Level : {{node.level}})<br>
+  <ul *ngIf="node.properties.length > 0">
+    <li *ngFor="let childNode of node.properties">
+      <app-property-node [node]="childNode"></app-property-node>
+    </li>
+  </ul>
+</div>

@@ -13,6 +13,7 @@ import { PropertyDetailReaderComponent } from './property-detail/property-detail
 import { PropertyDetailOwnerComponent } from './property-detail/property-detail-owner/property-detail-owner.component';
 import { matchGuardAdmin, matchGuardOwner } from '../guards/match-guard.guard';
 import { PropertyStatsComponent } from './property-stats/property-stats.component';
+import { PropertyTreeComponent } from './property-tree/property-tree.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
     path: 'property-stats',
     component: PropertyStatsComponent,
     canMatch: [matchGuardAdmin]
+  },
+  {
+    path: 'property-tree',
+    component: PropertyTreeComponent,
   },
   {
     path: 'rent-property',
