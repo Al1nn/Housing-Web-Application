@@ -1,7 +1,7 @@
 <ul>
   <li *ngFor="let tree of PropertyTree; let i = index;">
-    <div>
-      <app-property-card [property_index]="Properties[i]"></app-property-card>
+    <div class="shadow-lg col-sm-4 p-3">
+      <app-property-card [property_index]="Properties[tree.nodeID]"></app-property-card>
     </div>
     
     <app-property-node [node]="tree"></app-property-node>
