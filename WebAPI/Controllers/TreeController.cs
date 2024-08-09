@@ -35,80 +35,85 @@ namespace WebAPI.Controllers
         {
             var procedure = await uow.TreeRepository.GetPropertyTreeWithCursorAsync(rootID);
 
-            var result = new Dictionary<int, TreeResult>();
-            TreeResult item = null;
-
-            for(int i = 0; i < procedure.Count; i++)
+            procedure.Add(new TreeResult
             {
-                item = procedure[i];
+                ParentID = 1,
+                NodeID = 2,
+                Path = "1->2"
+            });
+            procedure.Add(new TreeResult
+            {
+                ParentID = 1,
+                NodeID = 14,
+                Path = "1->14"
+            });
 
-                if (item.ParentID == 0)
+            procedure.Add(new TreeResult { 
+                ParentID = 14,
+                NodeID = 15,
+                Path = "1->14->15"
+            });
+
+            procedure.Add(new TreeResult { 
+                ParentID = 2,
+                NodeID = 3,
+                Path = "1->2->3"
+            });
+            procedure.Add(new TreeResult
+            {
+                ParentID = 3,
+                NodeID = 5,
+                Path = "1->2->3->5"
+            });
+
+            procedure.Add(new TreeResult { 
+                ParentID = 9,
+                NodeID = 11,
+                Path = "8->9->11"
+            });
+            procedure.Add(new TreeResult
+            {
+                ParentID = 11,
+                NodeID = 12,
+                Path = "8->9->11->12"
+            });
+            procedure.Add(new TreeResult { 
+                ParentID = 12,
+                NodeID = 13,
+                Path = "8->9->11->12->13"
+            });
+
+
+            Dictionary<int, TreeResult> nodeDict = procedure.ToDictionary(n => n.NodeID);
+
+            foreach(var node in procedure)
+            {
+                if(node.ParentID != 0 && nodeDict.ContainsKey(node.ParentID))
                 {
-                    result.Add(item.NodeID, item);
-                    continue;
-                }
-
-                if (result.ContainsKey(item.ParentID))
-                {
-                    result[item.ParentID].Children.Add(item.NodeID, item);
-                    continue;
-                }
-                else
-                {
-                    //Traverse(result.Keys.ToList(), result, item);
-                    TreeResult _root = null;
-
-                    for(int j = 0; j < item.KeysPath.Count; j++)
-                    {
-                        _root = j == 0 ? result[item.KeysPath[j]] : _root.Children[item.KeysPath[j]];
-
-                        if (!result.ContainsKey(item.KeysPath[j]))
-                        {
-                            break;
-                        }
-                        
-                    }
-
-                    if(_root != null && !_root.Children.ContainsKey(item.ParentID))
-                    {
-                        _root.Children.Add(item.NodeID, item);
-                        _root = null;
-                    } else
-                    {
-                        _root.Children[item.ParentID] = item;
-                    }
-
-                    
-                    
+                    nodeDict[node.ParentID].Children[node.NodeID] = node;
                 }
             }
 
+            var rootNodes = procedure.Where(n => n.ParentID == 0).ToList();
 
-            return Ok(result.Values);
+            foreach(var rootNode in rootNodes)
+            {
+                TraverseNode(rootNode, 0);
+            }
+
+            return Ok(rootNodes);
         }
 
-        private void Traverse(List<int> Keys, Dictionary<int, TreeResult> tree, TreeResult crtItem)
+        private void TraverseNode(TreeResult node, int depth)
         {
-           
-            foreach (var key in Keys)
+            foreach(var child in node.Children.Values)
             {
-                if (tree[key].Children.Count > 0 && tree[key].Children.ContainsKey(crtItem.ParentID))
-                {
-                    tree[key].Children[crtItem.ParentID].Children.Add(crtItem.NodeID, crtItem);
-                }
-                else if (!tree[key].Children.ContainsKey(crtItem.ParentID) ) 
-                  
-                {
-                  
-
-                    tree[key].Children.Add(crtItem.NodeID, crtItem);
-                }
-                else
-                {
-                    Traverse(Keys, tree[key].Children, crtItem);
-                }
+                TraverseNode(child, depth + 1);
             }
         }
+
+
+        
 
 
 
