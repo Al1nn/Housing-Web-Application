@@ -34,19 +34,19 @@ namespace WebAPI.Helpers
 
             //Add methods to map Model to Dto
             CreateMap<Property, PropertyListDto>()
+                .ForMember(d => d.Photo, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.PropertyId == p.Property.Id).FileName))
                 .ForMember(d => d.City, opt => opt.MapFrom(src => src.City.Name))
                 .ForMember(d => d.Country, opt => opt.MapFrom(src => src.City.Country))
                 .ForMember(d => d.PropertyType, opt => opt.MapFrom(src => src.PropertyType.Name))
-                .ForMember(d => d.FurnishingType, opt => opt.MapFrom(src => src.FurnishingType.Name))
-                .ForMember(d=> d.Photo , opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.PropertyId == p.Property.Id).FileName));
+                .ForMember(d => d.FurnishingType, opt => opt.MapFrom(src => src.FurnishingType.Name));
 
             CreateMap<Property, PropertyDetailDto>()
+                .ForMember(d => d.Photo, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.PropertyId == p.Property.Id).FileName))
                 .ForMember(d => d.City, opt => opt.MapFrom(src => src.City.Name))
                 .ForMember(d => d.Country, opt => opt.MapFrom(src => src.City.Country))
                 .ForMember(d => d.PropertyType, opt => opt.MapFrom(src => src.PropertyType.Name))
                 .ForMember(d => d.FurnishingType, opt => opt.MapFrom(src => src.FurnishingType.Name))
-                .ForMember(d => d.Photos, opt => opt.MapFrom(src => src.Photos.Where( p =>  p.PropertyId == p.Property.Id )))
-                .ForMember(d => d.Photo, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.PropertyId == p.Property.Id).FileName));
+                .ForMember(d => d.Photos, opt => opt.MapFrom(src => src.Photos.Where( p =>  p.PropertyId == p.Property.Id )));
 
             CreateMap<PropertyType, KeyValuePairDto>();
             CreateMap<FurnishingType, KeyValuePairDto>();

@@ -12,7 +12,7 @@ import { environment } from '../../../../environments/environment';
 export class PropertyNodeComponent implements OnInit {
 
   @Input() node!: ITree;
-  Property: Property;
+  Property: Property = {} as Property;
   thumbnailFolder: string = environment.thumbnailFolder;
   constructor(private housingService: HousingService) { }
 

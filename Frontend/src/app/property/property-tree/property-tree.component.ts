@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HousingService } from '../../services/housing.service';
 import { ITree } from '../../model/ITree.interface';
-
+import { Property } from '../../model/Property.interface';
 
 @Component({
   selector: 'app-property-tree',
@@ -10,8 +10,8 @@ import { ITree } from '../../model/ITree.interface';
 })
 export class PropertyTreeComponent implements OnInit {
 
-  PropertyTree: ITree[];
-
+  PropertyTree: ITree[] = [];
+  Properties: Property[];
   constructor(private housingService: HousingService) { }
 
   ngOnInit() {

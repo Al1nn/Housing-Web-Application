@@ -1,20 +1,15 @@
-
-  {{ node.parentID}} <br> 
-  {{ node.nodeID }}<br> 
-   ({{ node.path }})<br>
-   (Level : {{node.level}})<br>
-
-    <div class=" d-flex">
-      <app-property-card [property_index]="Property"></app-property-card>
-    </div>
-
+<div [style.margin-left.px]="(node.level - 1) * 210" >
+  <div class="small text-muted mb-2">
+    {{ node.parentID}} | {{ node.nodeID }} | ({{ node.path }}) | (Level: {{node.level}})
+  </div>
+  <div class="property-card-wrapper" *ngIf="Property">
     
+      <app-property-card [property_index]="Property" [hideIcons]="true"></app-property-card>
     
-  
-   
-  <ul *ngIf="node.properties.length > 0">
+  </div>
+  <ul class="list-unstyled mt-3" *ngIf="node.properties.length > 0">
     <li *ngFor="let childNode of node.properties">
       <app-property-node [node]="childNode"></app-property-node>
     </li>
   </ul>
-
+</div>

@@ -1,8 +1,7 @@
-<ul >
-  <li *ngFor="let tree of PropertyTree">
-   
+<div class="container">
+  <ul class="list-unstyled">
+    <li *ngFor="let tree of PropertyTree; let i = index;" class="mb-4">
       <app-property-node [node]="tree"></app-property-node>
-    
-  </li>
-  
-</ul>
+    </li>
+  </ul>
+</div>
