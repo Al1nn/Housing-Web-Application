@@ -91,6 +91,7 @@ namespace WebAPI.Data.Repo
         {
             var properties = await dc.Properties
                             .Include(p => p.Photos)
+                            .Include(p => p.City)
                             .Where(p => p.Id == id)
                             .FirstOrDefaultAsync();
             return properties;

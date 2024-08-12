@@ -1,7 +1,8 @@
 /* eslint-disable @angular-eslint/component-class-suffix */
 import { Component, Input, OnInit } from '@angular/core';
-import { IPropertyBase } from '../../model/IPropertyBase.interface';
 import { environment } from '../../../environments/environment';
+
+import { IPropertyBase } from '../../model/IPropertyBase.interface';
 
 
 

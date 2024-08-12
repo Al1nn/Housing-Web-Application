@@ -251,7 +251,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetPropertyById(int id)
         {
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(id);
-            var propertyDto = mapper.Map<PropertyDto>(property);
+            var propertyDto = mapper.Map<PropertyListDto>(property);
             return Ok(propertyDto);
         }
 

@@ -35,53 +35,7 @@ namespace WebAPI.Controllers
         {
             var procedure = await uow.TreeRepository.GetPropertyTreeWithCursorAsync(rootID);
 
-            procedure.Add(new TreeResult
-            {
-                ParentID = 1,
-                NodeID = 2,
-                Path = "1->2"
-            });
-            procedure.Add(new TreeResult
-            {
-                ParentID = 1,
-                NodeID = 14,
-                Path = "1->14"
-            });
-
-            procedure.Add(new TreeResult { 
-                ParentID = 14,
-                NodeID = 15,
-                Path = "1->14->15"
-            });
-
-            procedure.Add(new TreeResult { 
-                ParentID = 2,
-                NodeID = 3,
-                Path = "1->2->3"
-            });
-            procedure.Add(new TreeResult
-            {
-                ParentID = 3,
-                NodeID = 5,
-                Path = "1->2->3->5"
-            });
-
-            procedure.Add(new TreeResult { 
-                ParentID = 9,
-                NodeID = 11,
-                Path = "8->9->11"
-            });
-            procedure.Add(new TreeResult
-            {
-                ParentID = 11,
-                NodeID = 12,
-                Path = "8->9->11->12"
-            });
-            procedure.Add(new TreeResult { 
-                ParentID = 12,
-                NodeID = 13,
-                Path = "8->9->11->12->13"
-            });
+           
 
 
             Dictionary<int, TreeResult> nodeDict = procedure.ToDictionary(n => n.NodeID);
