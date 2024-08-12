@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-property-contacts',
@@ -11,6 +12,7 @@ export class PropertyContactsComponent implements OnInit {
     public propertyId: number;
     property = new Property();
     public mainPhotoUrl: string;
+    originalFolder: string = environment.originalPictureFolder;
 
     constructor(private route: ActivatedRoute) { }
 

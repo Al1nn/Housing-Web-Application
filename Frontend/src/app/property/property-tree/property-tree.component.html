@@ -1,3 +1,8 @@
-<div *ngFor="let property of Properties; let i = index;" class="shadow-lg col-sm-4 p-3">
-  <app-property-card  [property_index]="property" [hideIcons]="true"></app-property-card>
-</div>
+<ul >
+  <li *ngFor="let tree of PropertyTree">
+   
+      <app-property-node [node]="tree"></app-property-node>
+    
+  </li>
+  
+</ul>

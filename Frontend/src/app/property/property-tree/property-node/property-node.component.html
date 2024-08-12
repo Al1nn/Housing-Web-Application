@@ -1,1 +1,20 @@
 
+  {{ node.parentID}} <br> 
+  {{ node.nodeID }}<br> 
+   ({{ node.path }})<br>
+   (Level : {{node.level}})<br>
+
+    <div class=" d-flex">
+      <app-property-card [property_index]="Property"></app-property-card>
+    </div>
+
+    
+    
+  
+   
+  <ul *ngIf="node.properties.length > 0">
+    <li *ngFor="let childNode of node.properties">
+      <app-property-node [node]="childNode"></app-property-node>
+    </li>
+  </ul>
+

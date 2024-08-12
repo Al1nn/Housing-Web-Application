@@ -1,8 +1,9 @@
 /* eslint-disable @angular-eslint/component-class-suffix */
 import { Component, Input, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { Property } from '../../model/Property.interface';
 
-import { IPropertyBase } from '../../model/IPropertyBase.interface';
+
 
 
 
@@ -14,7 +15,8 @@ import { IPropertyBase } from '../../model/IPropertyBase.interface';
 
 export class PropertyCardElement implements OnInit {
 
-    @Input() property_index: IPropertyBase; // Input, poate sa imprumute proprietatile obiectului Property
+    @Input() property_index: Property; // Input, poate sa imprumute proprietatile obiectului Property
+
     @Input() hideIcons: boolean;
     loggedInUser: string;
     thumbnailFolder: string = environment.thumbnailFolder;
@@ -24,6 +26,7 @@ export class PropertyCardElement implements OnInit {
     constructor() { }
 
     ngOnInit() {
+
     }
 
 

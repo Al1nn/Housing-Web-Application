@@ -2,8 +2,8 @@
     <div class="col-sm-4 p-0">
         <div class="card">
           <div class="card-img-wrapper">
-            <img class="card-img-top" *ngIf="mainPhotoUrl" src="{{mainPhotoUrl}}">
-            <img class="card-img-top" *ngIf="!mainPhotoUrl" src="assets/images/house_default.jpg">
+            <img class="card-img-top" *ngIf="property.photo" src="{{originalFolder + property.photo}}">
+            <img class="card-img-top" *ngIf="!property.photo" src="assets/images/house_default.jpg">
           </div>
           <div class="card-body" *ngIf="property">
             <h1 class="card-title">{{property.name}}</h1>
