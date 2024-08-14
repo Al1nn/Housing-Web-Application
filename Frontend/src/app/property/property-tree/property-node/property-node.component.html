@@ -1,15 +1,3 @@
-<div [style.margin-left.px]="(node.level - 1) * 210" >
-  <div class="small text-muted mb-2">
-    {{ node.parentID}} | {{ node.nodeID }} | ({{ node.path }}) | (Level: {{node.level}})
-  </div>
-  <div class="property-card-wrapper" *ngIf="Property">
-    
-      <app-property-card [property_index]="Property" [hideIcons]="true"></app-property-card>
-    
-  </div>
-  <ul class="list-unstyled mt-3" *ngIf="node.properties.length > 0">
-    <li *ngFor="let childNode of node.properties">
-      <app-property-node [node]="childNode"></app-property-node>
-    </li>
-  </ul>
-</div>
+<p>
+  property-node works!
+</p>

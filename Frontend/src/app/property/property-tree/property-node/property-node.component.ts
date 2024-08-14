@@ -1,8 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ITree } from '../../../model/ITree.interface';
-import { Property } from '../../../model/Property.interface';
-import { HousingService } from '../../../services/housing.service';
-import { environment } from '../../../../environments/environment';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-property-node',
@@ -11,15 +7,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class PropertyNodeComponent implements OnInit {
 
-  @Input() node!: ITree;
-  Property: Property = {} as Property;
-  thumbnailFolder: string = environment.thumbnailFolder;
-  constructor(private housingService: HousingService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.housingService.getPropertyById(this.node.nodeID).subscribe(data => {
-      this.Property = data;
-    });
   }
 
 }

@@ -35,9 +35,6 @@ namespace WebAPI.Controllers
         {
             var procedure = await uow.TreeRepository.GetPropertyTreeWithCursorAsync(rootID);
 
-           
-
-
             Dictionary<int, TreeResult> nodeDict = procedure.ToDictionary(n => n.NodeID);
 
             foreach(var node in procedure)

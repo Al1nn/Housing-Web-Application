@@ -14,6 +14,13 @@ import { PropertyDetailOwnerComponent } from './property-detail/property-detail-
 import { matchGuardAdmin, matchGuardOwner } from '../guards/match-guard.guard';
 import { PropertyStatsComponent } from './property-stats/property-stats.component';
 import { PropertyTreeComponent } from './property-tree/property-tree.component';
+import { PropertyNodeComponent } from './property-tree/property-node/property-node.component';
+
+
+
+
+
+
 
 const routes: Routes = [
   {
@@ -32,11 +39,26 @@ const routes: Routes = [
   {
     path: 'property-stats',
     component: PropertyStatsComponent,
-    canMatch: [matchGuardAdmin]
+    canMatch: [matchGuardAdmin],
   },
   {
     path: 'property-tree',
     component: PropertyTreeComponent,
+    data: {
+      breadcrumb: 'Tree'
+    },
+
+    children: [
+
+      {
+        path: '**',
+        component: PropertyNodeComponent,
+        data: {
+          breadcrumb: 'Node'
+        }
+      }
+    ]
+
   },
   {
     path: 'rent-property',

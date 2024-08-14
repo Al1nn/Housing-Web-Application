@@ -25,6 +25,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -32,7 +33,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         UserLoginComponent,
         UserRegisterComponent,
         UserProfileComponent,
-        UserSettingsComponent,
+        UserSettingsComponent
     ],
     imports: [
         AppRoutingModule,

@@ -414,7 +414,7 @@ export class PropertyListComponent implements OnInit {
 
         this.PageNumber = 1;
         this.filters.pageNumber = this.PageNumber;
-
+        this.paginator.pageIndex = 0;
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
             this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                 this.paginator.length = data.totalRecords;
