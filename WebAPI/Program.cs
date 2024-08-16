@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Data;
+using WebAPI.Data.Proxy;
 using WebAPI.Extensions;
 using WebAPI.Helpers;
 using WebAPI.Interfaces;
@@ -72,6 +73,7 @@ builder.Services.AddControllers().AddNewtonsoftJson((x) =>
 builder.Services.AddMemoryCache();
 
 builder.Services.AddCors();
+builder.Services.AddScoped<ICachedCityProxy, CachedCityProxy>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 

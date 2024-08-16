@@ -1,4 +1,5 @@
-﻿using WebAPI.Data.Repo;
+﻿using WebAPI.Data.Proxy;
+using WebAPI.Data.Repo;
 using WebAPI.Interfaces;
 
 namespace WebAPI.Data
@@ -27,6 +28,8 @@ namespace WebAPI.Data
         public IPropertyTypeRepository PropertyTypeRepository => new PropertyTypeRepository(dc);
 
         public IFurnishingTypeRepository FurnishingTypeRepository => new FurnishingTypeRepository(dc);
+
+       
 
         // Add more repos
         public ITreeRepository TreeRepository => new TreeRepository(tc);

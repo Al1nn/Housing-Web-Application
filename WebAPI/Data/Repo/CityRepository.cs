@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 
@@ -7,17 +8,23 @@ namespace WebAPI.Data.Repo
     public class CityRepository : ICityRepository
     {
         private readonly DataContext dc;
+        
 
         public CityRepository(DataContext dc)
         {
             this.dc = dc;
         }
 
-        
+       
+
+
         public async Task<IEnumerable<City>> GetCitiesAsync()
         {
             return await dc.Cities.ToListAsync();
         }
+
+
+
 
         public async Task<IEnumerable<City>> FilterCitiesAsync(string filterWord, int amount)
         {
@@ -43,5 +50,6 @@ namespace WebAPI.Data.Repo
             return await dc.Cities.FindAsync(id);
         }
 
+        
     }
 }

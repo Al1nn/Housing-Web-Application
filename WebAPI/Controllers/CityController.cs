@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Primitives;
+using WebAPI.Data.Proxy;
 using WebAPI.Dtos;
 using WebAPI.Interfaces;
 using WebAPI.Models;
@@ -20,13 +21,14 @@ namespace WebAPI.Controllers
         private readonly IUnitOfWork uow;
         private readonly IMapper mapper;
         private readonly IMemoryCache cache;
+        private readonly ICachedCityProxy cachedCityProxy;
 
-
-        public CityController(IUnitOfWork uow, IMapper mapper, IMemoryCache cache)
+        public CityController(IUnitOfWork uow, IMapper mapper, IMemoryCache cache, ICachedCityProxy cachedCityProxy)
         {
             this.uow = uow;
             this.mapper = mapper;
             this.cache = cache;
+            this.cachedCityProxy = cachedCityProxy;
         }
 
         [HttpGet("cities")]
@@ -34,21 +36,9 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> LoadFromCache()
         {
 
-            var citiesData = cache.Get("cities") as IEnumerable<CityDto>;
+            var citiesData = await cachedCityProxy.LoadFromCache();
 
-            if (citiesData == null)
-            {
-                
-                citiesData = await GetCities();
-
-                var cacheEntryOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
-                    SlidingExpiration = TimeSpan.FromMinutes(30),
-                };
-
-                cache.Set("cities", citiesData, cacheEntryOptions);
-            }
+            
 
             return Ok(citiesData);
         }
@@ -57,20 +47,9 @@ namespace WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> FilterFromCache(string filterWord, int amount, int sellRent)
         {
-            var citiesData = cache.Get("sugestions") as IEnumerable<PropertyStatsDto>;
+            var citiesData = await cachedCityProxy.FilterFromCache(filterWord,amount,sellRent);
 
-            if (citiesData == null)
-            {
-               
-                citiesData = await GetSugestions();
-
-                var cacheEntryOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
-                };
-
-                cache.Set("sugestions", citiesData, cacheEntryOptions);
-            }
+            
 
             var filteredData = citiesData
                                 .Where(city => city.City.Contains(filterWord, StringComparison.OrdinalIgnoreCase) ||
@@ -91,22 +70,10 @@ namespace WebAPI.Controllers
             return Ok(filteredData);
         }
 
-        private async Task<IEnumerable<PropertyStatsDto>> GetSugestions()
-        {
-            var sugestions = await uow.PropertyRepository.GetPropertyStatsAsync();
-           
-
-            return sugestions;
-        }
+       
 
 
-        private async Task<List<CityDto>> GetCities()
-        {
-            var cities = await uow.CityRepository.GetCitiesAsync();
-            var citiesDto = mapper.Map<List<CityDto>>(cities);
-
-            return citiesDto;
-        }
+        
 
         
 
