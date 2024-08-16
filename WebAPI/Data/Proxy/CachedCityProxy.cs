@@ -3,29 +3,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using WebAPI.Dtos;
 using WebAPI.Interfaces;
+using WebAPI.Models;
 
 namespace WebAPI.Data.Proxy
 {
-    public class CachedCityProxy : ICachedCityProxy
+    public class CachedCityProxy : ICityRepository
     {
-        private readonly DataContext dc;
+        private readonly ICityRepository cityRepository;
         private readonly IMemoryCache cache;
-        private readonly IMapper mapper;
 
-        public CachedCityProxy(DataContext dc, IMemoryCache cache, IMapper mapper)
+
+        public CachedCityProxy(ICityRepository cityRepository)
         {
-            this.dc = dc;
+            this.cityRepository = cityRepository;
             this.cache = cache;
-            this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<CityDto>> LoadFromCache()
+        public async Task<IEnumerable<City>> GetCitiesAsync()
         {
-            var cachedData = cache.Get("cities") as IEnumerable<CityDto>;
+            var cachedData = cache.Get("cities") as IEnumerable<City>;
 
-            if (cachedData == null)
+            if(cachedData ==  null)
             {
-                cachedData = await GetCities();
+                cachedData = await cityRepository.GetCitiesAsync();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions
                 {
@@ -35,42 +35,43 @@ namespace WebAPI.Data.Proxy
                 cache.Set("cities", cachedData, cacheEntryOptions);
             }
 
-
             return cachedData;
         }
 
-
-        public async Task<IEnumerable<PropertyStatsDto>> FilterFromCache(string filterWord, int amount, int sellRent)
+        public async Task<IEnumerable<PropertyStatsDto>> GetCitySugestions()
         {
             var cachedData = cache.Get("sugestions") as IEnumerable<PropertyStatsDto>;
 
-            if(cachedData == null)
+            if (cachedData == null)
             {
-                cachedData = await GetSugestions();
+                cachedData = await cityRepository.GetCitySugestions();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(5)
                 };
 
-                cache.Set("sugestions", cachedData, cacheEntryOptions);
+                cache.Set("cities", cachedData, cacheEntryOptions);
             }
-
 
             return cachedData;
         }
 
-        private async Task<IEnumerable<PropertyStatsDto>> GetSugestions()
+        public void AddCity(City city)
         {
-            return await dc.PropertyStatsView.ToListAsync();
+            cityRepository.AddCity(city);
         }
 
-        private async Task<List<CityDto>> GetCities()
+        public void DeleteCity(int CityId)
         {
-            var cities = await dc.Cities.ToListAsync();
-            var citiesDto = mapper.Map<List<CityDto>>(cities);
-
-            return citiesDto;
+            cityRepository.DeleteCity(CityId);
         }
+
+        public async Task<City> FindCity(int id)
+        {
+            return await cityRepository.FindCity(id);    
+        }
+
+        
     }
 }

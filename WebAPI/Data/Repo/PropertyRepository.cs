@@ -56,6 +56,11 @@ namespace WebAPI.Data.Repo
             return properties;
         }
 
+        public async Task<IEnumerable<PropertyStatsDto>> GetPropertyStatsAsync()
+        {
+            return await dc.PropertyStatsView.ToListAsync();
+        }
+
         public async Task<IEnumerable<Property>> GetPropertiesAsync(int sellRent)
         {
             var properties = await dc.Properties
@@ -127,9 +132,6 @@ namespace WebAPI.Data.Repo
             return propertyCount;
         }
 
-        public async Task<IEnumerable<PropertyStatsDto>> GetPropertyStatsAsync()
-        {
-            return await dc.PropertyStatsView.ToListAsync();
-        }
+        
     }
 }

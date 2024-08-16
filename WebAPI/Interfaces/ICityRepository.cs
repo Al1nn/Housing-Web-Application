@@ -1,4 +1,5 @@
-﻿using WebAPI.Models;
+﻿using WebAPI.Dtos;
+using WebAPI.Models;
 
 namespace WebAPI.Interfaces
 {
@@ -6,8 +7,7 @@ namespace WebAPI.Interfaces
     {
         Task<IEnumerable<City>> GetCitiesAsync();
 
-        Task<IEnumerable<City>> FilterCitiesAsync(string filterWord, int amount);
-
+        Task<IEnumerable<PropertyStatsDto>> GetCitySugestions();
 
         void AddCity(City city);
 

@@ -21,33 +21,31 @@ namespace WebAPI.Controllers
         private readonly IUnitOfWork uow;
         private readonly IMapper mapper;
         private readonly IMemoryCache cache;
-        private readonly ICachedCityProxy cachedCityProxy;
+       
 
-        public CityController(IUnitOfWork uow, IMapper mapper, IMemoryCache cache, ICachedCityProxy cachedCityProxy)
+        public CityController(IUnitOfWork uow, IMapper mapper, IMemoryCache cache)
         {
             this.uow = uow;
             this.mapper = mapper;
             this.cache = cache;
-            this.cachedCityProxy = cachedCityProxy;
+            
         }
 
         [HttpGet("cities")]
         [AllowAnonymous]
         public async Task<IActionResult> LoadFromCache()
         {
+           var citiesData = await uow.CityRepository.GetCitiesAsync();
+           var citiesDto = mapper.Map<IEnumerable<CityDto>>(citiesData);
 
-            var citiesData = await cachedCityProxy.LoadFromCache();
-
-            
-
-            return Ok(citiesData);
+           return Ok(citiesDto);                 
         }
 
         [HttpGet("cities/{filterWord}/{amount}/{sellRent}")]
         [AllowAnonymous]
         public async Task<IActionResult> FilterFromCache(string filterWord, int amount, int sellRent)
         {
-            var citiesData = await cachedCityProxy.FilterFromCache(filterWord,amount,sellRent);
+            var citiesData = await uow.CityRepository.GetCitySugestions();
 
             
 
@@ -69,13 +67,6 @@ namespace WebAPI.Controllers
 
             return Ok(filteredData);
         }
-
-       
-
-
-        
-
-        
 
         [HttpPost("post")]
         public async Task<IActionResult> AddCity(CityDto cityDto)

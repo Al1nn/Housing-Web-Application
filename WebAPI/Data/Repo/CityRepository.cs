@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using WebAPI.Dtos;
 using WebAPI.Interfaces;
 using WebAPI.Models;
 
@@ -15,24 +16,17 @@ namespace WebAPI.Data.Repo
             this.dc = dc;
         }
 
-       
 
+        public async Task<IEnumerable<PropertyStatsDto>> GetCitySugestions()
+        {
+            return await dc.PropertyStatsView.ToListAsync();
+        }
 
         public async Task<IEnumerable<City>> GetCitiesAsync()
         {
             return await dc.Cities.ToListAsync();
         }
 
-
-
-
-        public async Task<IEnumerable<City>> FilterCitiesAsync(string filterWord, int amount)
-        {
-            return await dc.Cities
-                .Where( city => city.Name.ToLower().Contains(filterWord.ToLower())  || city.Country.ToLower().Contains(filterWord.ToLower()))
-                .Take(amount)
-                .ToListAsync();
-        }
 
         public void AddCity(City city)
         {

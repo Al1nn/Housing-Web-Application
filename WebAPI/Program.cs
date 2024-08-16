@@ -73,7 +73,6 @@ builder.Services.AddControllers().AddNewtonsoftJson((x) =>
 builder.Services.AddMemoryCache();
 
 builder.Services.AddCors();
-builder.Services.AddScoped<ICachedCityProxy, CachedCityProxy>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
