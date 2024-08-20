@@ -38,6 +38,10 @@ export type ChartOptions = {
 })
 export class PropertyStatsComponent implements OnInit {
 
+
+
+
+
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: ChartOptions = {
     series: [
@@ -137,6 +141,7 @@ export class PropertyStatsComponent implements OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
+
       this.housingService.getAllPropertyStats().subscribe(data => {
         this.propertyStats = data;
         this.updateChartCategories();

@@ -14,7 +14,7 @@
 // hue. Available color palettes: https://material.io/design/color/
 
 
-$my-first-app-primary: mat.define-palette(mat.$blue-palette, A700); // ADJUST HUE BASED ON THIS COLOR :  #007bff
+$my-first-app-primary: mat.define-palette(mat.$blue-palette, A700); 
 $my-first-app-accent: mat.define-palette(mat.$green-palette, A700);
 
 // The warn palette is optional (defaults to red).

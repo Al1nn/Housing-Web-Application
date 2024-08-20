@@ -43,6 +43,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTreeModule } from '@angular/material/tree';
 import { PropertyTreeComponent } from './property-tree/property-tree.component';
 import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 
@@ -68,6 +69,7 @@ import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.compone
     FormsModule,
     PropertyRoutingModule,
     HttpClientModule,
+    GoogleMapsModule,
     MatCardModule,
     MatIconModule,
     MatProgressBarModule,

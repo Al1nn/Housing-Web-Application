@@ -232,7 +232,7 @@ namespace WebAPI.Data.Repo
                     .SelectMany(
                         x => x.UserImages.DefaultIfEmpty(),
                         (x, userImage) => new UserImage { User = x.User, Image = userImage != null ? userImage.Image : null }
-                        // also select many matching roles
+                        
                     )
                     .FirstOrDefaultAsync();
 

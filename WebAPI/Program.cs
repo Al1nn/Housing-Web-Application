@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Data;
-using WebAPI.Data.Proxy;
+using WebAPI.Data.Repo;
 using WebAPI.Extensions;
 using WebAPI.Helpers;
 using WebAPI.Interfaces;
@@ -73,6 +74,7 @@ builder.Services.AddControllers().AddNewtonsoftJson((x) =>
 builder.Services.AddMemoryCache();
 
 builder.Services.AddCors();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 

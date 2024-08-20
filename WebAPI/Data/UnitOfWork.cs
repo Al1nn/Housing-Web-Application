@@ -1,4 +1,4 @@
-﻿using WebAPI.Data.Proxy;
+﻿
 using WebAPI.Data.Repo;
 using WebAPI.Interfaces;
 
@@ -15,9 +15,9 @@ namespace WebAPI.Data
             this.tc = tc;
         }
 
-        
 
         public ICityRepository CityRepository => new CityRepository(dc);
+        
 
         public IUserImageRepository UserImageRepository => new UserImageRepository(dc);
         
@@ -26,6 +26,7 @@ namespace WebAPI.Data
         
 
         public IPropertyTypeRepository PropertyTypeRepository => new PropertyTypeRepository(dc);
+
 
         public IFurnishingTypeRepository FurnishingTypeRepository => new FurnishingTypeRepository(dc);
 

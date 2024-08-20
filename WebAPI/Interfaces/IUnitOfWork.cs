@@ -4,7 +4,6 @@
     {
         ICityRepository CityRepository { get; }
 
-        //Add more Repositories 
         IUserImageRepository UserImageRepository { get; }
 
         IPropertyRepository PropertyRepository { get; }

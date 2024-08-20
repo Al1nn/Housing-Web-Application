@@ -1,5 +1,4 @@
-﻿using WebAPI.Dtos;
-using WebAPI.Models;
+﻿using WebAPI.Models;
 
 namespace WebAPI.Interfaces
 {
@@ -7,12 +6,12 @@ namespace WebAPI.Interfaces
     {
         Task<IEnumerable<City>> GetCitiesAsync();
 
-        Task<IEnumerable<PropertyStatsDto>> GetCitySugestions();
+        Task<IEnumerable<City>> FilterCitiesAsync(string filterWord, int amount);
 
         void AddCity(City city);
 
         void DeleteCity(int CityId);
 
-        Task<City> FindCity(int id); 
+        Task<City> FindCity(int id);
     }
 }
