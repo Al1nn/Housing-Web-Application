@@ -10,7 +10,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { IKeyValuePair } from '../../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
 import { environment } from '../../../../environments/environment';
-import { IPhoto } from '../../../model/IPhoto';
+
 
 
 
@@ -288,13 +288,11 @@ export class PropertyDetailAdminComponent implements OnInit {
 
     onMainPhotoChanged(_$event: string) {
         console.log("Main Photo Changed");
+        this.galleryImages.length = this.getPropertyPhotos().length;
         this.galleryImages = this.getPropertyPhotos();
     }
 
-    updateGallery(updatedPhotos: IPhoto[]) {
-        this.property.photos = updatedPhotos;
-        this.galleryImages = this.getPropertyPhotos();
-    }
+
 
     getPropertyPhotos(): GalleryItem[] {
         const photoUrls: GalleryItem[] = [];

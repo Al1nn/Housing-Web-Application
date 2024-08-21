@@ -23,7 +23,7 @@ export class PhotoEditorComponent implements OnInit {
   uploadProgress: number = 0;
   photosToUpload: File[] = [];
   @Output() mainPhotoChangedEvent = new EventEmitter<string>();
-  @Output() photosUpdated = new EventEmitter<IPhoto[]>();
+
 
 
 
@@ -54,7 +54,7 @@ export class PhotoEditorComponent implements OnInit {
 
           } else {
             this.property.photos = [];
-            this.photosUpdated.emit([]);
+
             this.mainPhotoChangedEvent.emit("");
           }
         }
