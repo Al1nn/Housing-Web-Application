@@ -335,7 +335,7 @@ namespace WebAPI.Controllers
             ApiError apiError = new ApiError();
             
             int userId = GetUserId();
-
+          
            
             var newProperty = mapper.Map<Property>(propertyDto);
             if (newProperty == null)
@@ -350,7 +350,15 @@ namespace WebAPI.Controllers
 
             var existingProperty = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
             
-            if (existingProperty.PostedBy != userId)
+            if(existingProperty == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "Property to update is not found";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
+            if (existingProperty.PostedBy != userId && !IsAdmin())
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
                 apiError.ErrorMessage = "You must be owner to update";
@@ -359,13 +367,7 @@ namespace WebAPI.Controllers
             }
 
 
-            if(existingProperty == null)
-            {
-                apiError.ErrorCode = NotFound().StatusCode;
-                apiError.ErrorMessage = "Property to update is not found";
-                apiError.ErrorDetails = "";
-                return NotFound(apiError);
-            }
+            
 
             existingProperty.SellRent = newProperty.SellRent;
             existingProperty.Name = newProperty.Name;
@@ -392,6 +394,7 @@ namespace WebAPI.Controllers
             existingProperty.LandMark = newProperty.LandMark;
             existingProperty.Address = newProperty.Address;
             existingProperty.PhoneNumber = newProperty.PhoneNumber;
+           
             existingProperty.LastUpdatedOn = DateTime.Now;
             existingProperty.LastUpdatedBy = userId;
             uow.PropertyRepository.UpdateProperty(existingProperty);

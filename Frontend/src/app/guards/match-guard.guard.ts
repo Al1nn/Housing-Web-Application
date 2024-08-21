@@ -17,7 +17,7 @@ export const matchGuardAdmin: CanMatchFn = () => {
 
   const rolesArray = Array.isArray(decodedRoles) ? decodedRoles : [decodedRoles];
   const normalizedRoles = rolesArray.map(role => role.toLowerCase());
-  console.log(rolesArray);
+
   if (normalizedRoles.includes("admin")) {
     return true;
   }

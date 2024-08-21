@@ -184,6 +184,7 @@ export class PropertyDetailAdminComponent implements OnInit {
         this.housingService.getPropertyById(this.propertyId).subscribe(
             (data) => {
                 this.propertyDetail = data;
+                console.log(this.propertyDetail);
             }
         );
 
@@ -384,16 +385,26 @@ export class PropertyDetailAdminComponent implements OnInit {
         // this.property.carpetArea = +this.carpetArea.value;
         // this.property.floorNo = this.floorNo.value;
         // this.property.totalFloors = this.totalFloors.value;
-        // this.property.landMark = this.landMark.value;
+        //this.property.landMark = this.landMark.value;
 
-        // this.property.address = this.address.value;
-        // this.property.phoneNumber = this.phoneNumber.value;
+        //this.property.address = this.address.value;
+        //this.property.phoneNumber = this.phoneNumber.value;
 
         // this.property.readyToMove = this.readyToMove.value;
         // this.property.gated = this.gated.value;
         // this.property.mainEntrance = this.mainEntrance.value;
+
+        this.propertyDetail.address = this.address.value;
+        this.propertyDetail.description = this.description.value;
+        this.propertyDetail.landMark = this.landMark.value;
+        this.propertyDetail.mainEntrance = this.mainEntrance.value;
+        this.propertyDetail.phoneNumber = this.phoneNumber.value;
+
         this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
         this.propertyDetail.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
+
+
+
     }
 
 
@@ -403,7 +414,7 @@ export class PropertyDetailAdminComponent implements OnInit {
             this.mapProperty();
             this.housingService.updateProperty(this.propertyId, this.propertyDetail).subscribe(
                 () => {
-                    console.log(this.propertyDetail);
+                    console.log(this.property);
                     this.modalRef.hide();
                     this.alertifyService.success("Property Updated Successfully");
                 }

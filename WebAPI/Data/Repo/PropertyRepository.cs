@@ -119,10 +119,6 @@ namespace WebAPI.Data.Repo
 
         
 
-        public void UpdateProperty(Property property)
-        {
-            dc.Properties.Update(property);
-        }
 
         public async Task<int> GetPropertyCountByUserAsync(int userId)
         {
@@ -132,6 +128,17 @@ namespace WebAPI.Data.Repo
             return propertyCount;
         }
 
-        
+        public void UpdateProperty(Property property)
+        {
+            dc.Properties.Attach(property);
+
+            dc.Entry(property).State = EntityState.Modified;
+
+
+            foreach(var photo in property.Photos)
+            {
+                dc.Entry(photo).State = EntityState.Modified;
+            }
+        }
     }
 }

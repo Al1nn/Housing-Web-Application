@@ -15,7 +15,10 @@ namespace WebAPI.Controllers
             return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
         }
 
-       
+        protected bool IsAdmin()
+        {
+            return User.Claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin");
+        }
 
     }
 }

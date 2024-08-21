@@ -28,6 +28,8 @@ namespace WebAPI.Data
 
         public DbSet<PropertyStatsDto> PropertyStatsView { get; set; }
 
+        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
