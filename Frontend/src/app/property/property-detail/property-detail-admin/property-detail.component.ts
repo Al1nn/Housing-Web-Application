@@ -10,6 +10,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { IKeyValuePair } from '../../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
 import { environment } from '../../../../environments/environment';
+import { IPhoto } from '../../../model/IPhoto';
 
 
 
@@ -22,6 +23,8 @@ import { environment } from '../../../../environments/environment';
     styleUrls: ['./property-detail.component.css'],
 })
 export class PropertyDetailAdminComponent implements OnInit {
+
+
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
     editPropertyForm: FormGroup;
 
@@ -184,7 +187,7 @@ export class PropertyDetailAdminComponent implements OnInit {
         this.housingService.getPropertyById(this.propertyId).subscribe(
             (data) => {
                 this.propertyDetail = data;
-                console.log(this.propertyDetail);
+
             }
         );
 
@@ -244,7 +247,6 @@ export class PropertyDetailAdminComponent implements OnInit {
 
     }
     CreateEditForm() {
-        //Handle the different components data.
         this.handleLogic();
 
 
@@ -284,9 +286,15 @@ export class PropertyDetailAdminComponent implements OnInit {
     }
 
 
+    onMainPhotoChanged(_$event: string) {
+        console.log("Main Photo Changed");
+        this.galleryImages = this.getPropertyPhotos();
+    }
 
-
-
+    updateGallery(updatedPhotos: IPhoto[]) {
+        this.property.photos = updatedPhotos;
+        this.galleryImages = this.getPropertyPhotos();
+    }
 
     getPropertyPhotos(): GalleryItem[] {
         const photoUrls: GalleryItem[] = [];

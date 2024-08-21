@@ -145,7 +145,7 @@
 
         </tab>
         <tab heading="Upload/Edit Photos">
-          <app-photo-editor  [property]="property"></app-photo-editor>
+          <app-photo-editor [property]="property"  (mainPhotoChangedEvent)="onMainPhotoChanged($event)"></app-photo-editor>
         </tab>
       </tabset>
     </div>

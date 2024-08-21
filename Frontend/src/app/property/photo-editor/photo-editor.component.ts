@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Property } from '../../model/Property.interface';
 import { HousingService } from '../../services/housing.service';
@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { PhotoEditorPopupComponent } from './photo-editor-popup/photo-editor-popup.component';
 import { HttpEventType } from '@angular/common/http';
 import { IPhoto } from '../../model/IPhoto';
+
+
 
 
 @Component({
@@ -20,12 +22,17 @@ export class PhotoEditorComponent implements OnInit {
   fileCount: number;
   uploadProgress: number = 0;
   photosToUpload: File[] = [];
+  @Output() mainPhotoChangedEvent = new EventEmitter<string>();
+  @Output() photosUpdated = new EventEmitter<IPhoto[]>();
+
+
 
   constructor(private housingService: HousingService, private alertifyService: AlertifyService, private dialogRef: MatDialog) { }
 
 
-  deletePhoto(propertyId: number, photoFileName: string) {
-    this.housingService.deletePhoto(propertyId, photoFileName).subscribe(() => {
+  deletePhoto(propertyId: number, photo: IPhoto) {
+
+    this.housingService.deletePhoto(propertyId, photo.fileName).subscribe(() => {
       this.fileCount = 0;
       this.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
 
@@ -33,8 +40,22 @@ export class PhotoEditorComponent implements OnInit {
           const photos = event.body;
           if (photos !== null) {
             this.property.photos = photos;
+            this.mainPhotoChangedEvent.emit(photos[0].fileName);
+
+            if (this.property.photo === photo.fileName) {
+              if (photos.length > 0) {
+
+                this.setMainPhoto(photos[0]);
+              } else {
+
+                this.mainPhotoChangedEvent.emit("");
+              }
+            }
+
           } else {
             this.property.photos = [];
+            this.photosUpdated.emit([]);
+            this.mainPhotoChangedEvent.emit("");
           }
         }
       });
@@ -42,6 +63,13 @@ export class PhotoEditorComponent implements OnInit {
     });
 
   }
+
+  setMainPhoto(photo: IPhoto) {
+    this.property.photo = photo.fileName; // Assuming mainPhotoUrl is a property in the Property interface
+    this.mainPhotoChangedEvent.emit(photo.fileName); // Emit the new main photo change event
+  }
+
+
 
   onPhotoAdded(event: any) {
     const files: FileList = event.target.files;
@@ -89,8 +117,8 @@ export class PhotoEditorComponent implements OnInit {
 
             const photos = event.body;
 
-            this.property.photos = photos as IPhoto[]
-
+            this.property.photos = photos as IPhoto[];
+            this.mainPhotoChangedEvent.emit(this.property.photos[0].fileName);
           }
 
         });

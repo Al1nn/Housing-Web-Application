@@ -358,13 +358,21 @@ namespace WebAPI.Controllers
                 return NotFound(apiError);
             }
 
-            if (existingProperty.PostedBy != userId && !IsAdmin())
+            if (!IsAdmin())
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "You must be owner to update";
+                apiError.ErrorMessage = "You must be admin to update";
                 apiError.ErrorDetails = "";
                 return Unauthorized(apiError);
             }
+
+            //if (existingProperty.PostedBy != userId)
+            //{
+            //    apiError.ErrorCode = Unauthorized().StatusCode;
+            //    apiError.ErrorMessage = "You must be owner to update";
+            //    apiError.ErrorDetails = "";
+            //    return Unauthorized(apiError);
+            //}
 
 
             
