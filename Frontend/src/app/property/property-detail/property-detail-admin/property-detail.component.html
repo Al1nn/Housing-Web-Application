@@ -259,17 +259,16 @@
           <div class="form-group col-12 mt-3">
             <label>City</label>
             <select #City
-              (ngModelChange)="
-              this.propertyDetail.city = City.options[City.options.selectedIndex].text;
-              this.property.city= City.options[City.options.selectedIndex].text;
-              this.propertyDetail.cityId = +City.value;
-              this.property.cityId = +City.value;"
+              (ngModelChange)="onCityChange(City.options[City.options.selectedIndex].text, +City.value)"
+              
+
+              
               class="form-control m-2"
               formControlName="city"
             >
             <option *ngFor="let city of cityList"
               value={{city.id}} >
-              {{city.name}}
+              {{city.name}}, {{city.country}}
             </option>
             
             </select>

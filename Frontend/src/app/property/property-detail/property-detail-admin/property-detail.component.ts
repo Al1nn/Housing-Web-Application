@@ -25,6 +25,7 @@ import { environment } from '../../../../environments/environment';
 export class PropertyDetailAdminComponent implements OnInit {
 
 
+
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
     editPropertyForm: FormGroup;
 
@@ -48,6 +49,10 @@ export class PropertyDetailAdminComponent implements OnInit {
 
     originalFolder: string = environment.originalPictureFolder;
     thumbnailFolder: string = environment.thumbnailFolder;
+
+
+
+
 
     constructor(private housingService: HousingService
         , private route: ActivatedRoute
@@ -182,12 +187,13 @@ export class PropertyDetailAdminComponent implements OnInit {
 
         this.route.data.subscribe((data) => {
             this.property = data['property'];
+            console.log(this.property);
         });
 
         this.housingService.getPropertyById(this.propertyId).subscribe(
             (data) => {
                 this.propertyDetail = data;
-
+                console.log(this.propertyDetail);
             }
         );
 
@@ -201,6 +207,7 @@ export class PropertyDetailAdminComponent implements OnInit {
 
         this.housingService.getAllCities().subscribe((data) => {
             this.cityList = data;
+            console.log(this.cityList);
         });
 
         this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
@@ -287,7 +294,6 @@ export class PropertyDetailAdminComponent implements OnInit {
 
 
     onMainPhotoChanged(_$event: string) {
-        console.log("Main Photo Changed");
         this.galleryImages.length = this.getPropertyPhotos().length;
         this.galleryImages = this.getPropertyPhotos();
     }
@@ -400,6 +406,7 @@ export class PropertyDetailAdminComponent implements OnInit {
         // this.property.gated = this.gated.value;
         // this.property.mainEntrance = this.mainEntrance.value;
 
+
         this.propertyDetail.address = this.address.value;
         this.propertyDetail.description = this.description.value;
         this.propertyDetail.landMark = this.landMark.value;
@@ -413,7 +420,18 @@ export class PropertyDetailAdminComponent implements OnInit {
 
     }
 
+    onCityChange(selectedText: string, cityId: number) {
+        const [city, country] = selectedText.split(", ");
 
+        this.propertyDetail.city = city;
+        this.property.city = city;
+
+        this.propertyDetail.country = country;
+        this.property.country = country;
+
+        this.propertyDetail.cityId = cityId;
+        this.property.cityId = cityId;
+    }
 
     onSubmit() {
         if (this.editPropertyForm.valid) {
