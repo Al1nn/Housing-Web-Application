@@ -252,7 +252,7 @@ export class AddPropertyComponent implements OnInit {
 
                     }
 
-                    console.log(this.addPropertyForm + "\n\n\n");
+                    console.log(this.addPropertyForm + '\n\n\n');
                     console.log(this.property);
                     if (this.sellRent.value === '2') {
                         this.router.navigate(['/rent-property']);
@@ -355,7 +355,7 @@ export class AddPropertyComponent implements OnInit {
             const file = files[i];
             this.photosToUpload.push(file);
             const originalUrl = await this.getDataURL(file);
-            if (i == 0) {
+            if (i === 0) {
                 this.propertyView.photo = originalUrl;
             }
 
@@ -369,7 +369,7 @@ export class AddPropertyComponent implements OnInit {
 
         this.photosToUpload.forEach((file) => {
             const formData = new FormData();
-            formData.append("file", file);
+            formData.append('file', file);
             this.housingService.addPropertyPhoto(propertyId, formData).subscribe(
                 () => {
 

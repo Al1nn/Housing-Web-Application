@@ -17,62 +17,138 @@ import { ISugestion } from '../../model/ISugestion.interface';
     styleUrls: ['./property-list.component.css'],
 })
 export class PropertyListComponent implements OnInit {
-
-    SellRent = 1;
-    PageNumber = 1;
-
     @ViewChild('paginator') paginator: MatPaginator;
-
     @ViewChild('autocompleteInput') autoCompleteInput: ElementRef;
-
     @Input() Properties: Property[];
     @Input() PropertiesLength: number;
-
+    SellRent = 1;
+    PageNumber = 1;
     PaginatedProperties: PaginatedProperties;
-
-    private filterTimeoutId: number;
-    private propertyTimeoutId: number;
-
-
-
-    //Example
     FilteredCityListOptions: ISugestion[] = [];
-    //
-
     filters: IFilters = {
         pageNumber: 1,
         pageSize: 2
     };
-
-
-
-    private debounceTimer: number;
-
-    isLoading: boolean = false;
-    isFiltering: boolean = false;
-
-
+    isLoading = false;
+    isFiltering = false;
     Today = new Date();
     urlSegments = this.route.snapshot.url;
-
     SortbyParam: string;
     SortDirection = 'asc';
-
-
     min = 0;
     max = 0;
     filterPriceAndAreaRange = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 125
         , 140, 150, 175, 180, 190, 200, 225, 235, 250, 275, 285, 300];
-
     filteredCities: string[];
+    private filterTimeoutId: number;
+    private propertyTimeoutId: number;
+    private debounceTimer: number;
 
     constructor(
         private route: ActivatedRoute,
         private housingService: HousingService
     ) { }
 
-    private isPropertyDashboard(): boolean {
-        return this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard');
+    @HostListener('document:click', ['$event'])
+    clickout(_event: Event) {
+        this.FilteredCityListOptions = [];
+    }
+
+    @HostListener('window:scroll', ['$event'])
+    onWindowScroll(_event: Event) {
+        if (this.debounceTimer) {
+            clearTimeout(this.debounceTimer);
+        }
+
+        this.debounceTimer = window.setTimeout(() => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+
+            if ((windowHeight + scrollTop) >= (documentHeight - 10) && !this.isLoading) {
+                this.isLoading = true;
+                this.PageNumber++;
+
+
+                if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+
+                    if (this.isFiltering) {
+                        this.filters.pageNumber = this.PageNumber;
+
+
+                        this.housingService.getAllFilteredUserProperties(this.filters).subscribe(
+                            (data: PaginatedProperties) => {
+
+                                if (this.PageNumber <= Math.ceil(data.totalRecords / this.filters.pageSize)) {
+                                    this.Properties.push(...data.properties);
+                                    this.isLoading = false;
+                                } else {
+                                    this.isLoading = false;
+                                }
+                            },
+                            error => {
+                                this.isLoading = false;
+                                console.error('Error loading filtered properties:', error);
+                            }
+                        );
+
+                        return;
+                    }
+
+
+                    this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
+                        this.Properties.push(...data.properties);
+                        this.isLoading = false;
+                    }, error => {
+                        this.isLoading = false;
+                        console.error('Error loading data:', error);
+                    });
+
+                    return;
+                }
+
+
+                if (this.isFiltering) {
+                    this.filters.pageNumber = this.PageNumber;
+
+
+
+                    this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(
+                        (data: PaginatedProperties) => {
+                            if (this.PageNumber <= Math.ceil(data.totalRecords / this.filters.pageSize)) {
+                                this.Properties.push(...data.properties);
+                                this.isLoading = false;
+                            } else {
+                                this.isLoading = false;
+                            }
+                        },
+                        error => {
+                            this.isLoading = false;
+                            console.error('Error loading filtered properties:', error);
+                        }
+                    );
+
+                    return;
+                }
+
+                this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
+                    this.Properties.push(...data.properties);
+                    this.isLoading = false;
+                }, error => {
+                    this.isLoading = false;
+                    console.error('Error loading data:', error);
+                });
+
+
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: window.scrollY - 50,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            }
+        }, 200);
     }
 
     isPropertyRent(): boolean {
@@ -173,113 +249,6 @@ export class PropertyListComponent implements OnInit {
 
             }, 400);
         }
-    }
-
-
-    @HostListener('document:click', ['$event'])
-    clickout(_event: Event) {
-        this.FilteredCityListOptions = [];
-    }
-
-
-
-
-
-    @HostListener('window:scroll', ['$event'])
-    onWindowScroll(_event: Event) {
-        if (this.debounceTimer) {
-            clearTimeout(this.debounceTimer);
-        }
-
-        this.debounceTimer = window.setTimeout(() => {
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            const scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-
-            if ((windowHeight + scrollTop) >= (documentHeight - 10) && !this.isLoading) {
-                this.isLoading = true;
-                this.PageNumber++;
-
-
-                if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-
-                    if (this.isFiltering) {
-                        this.filters.pageNumber = this.PageNumber;
-
-
-                        this.housingService.getAllFilteredUserProperties(this.filters).subscribe(
-                            (data: PaginatedProperties) => {
-
-                                if (this.PageNumber <= Math.ceil(data.totalRecords / this.filters.pageSize)) {
-                                    this.Properties.push(...data.properties);
-                                    this.isLoading = false;
-                                } else {
-                                    this.isLoading = false;
-                                }
-                            },
-                            error => {
-                                this.isLoading = false;
-                                console.error('Error loading filtered properties:', error);
-                            }
-                        );
-
-                        return;
-                    }
-
-
-                    this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
-                        this.Properties.push(...data.properties);
-                        this.isLoading = false;
-                    }, error => {
-                        this.isLoading = false;
-                        console.error('Error loading data:', error);
-                    });
-
-                    return;
-                }
-
-
-                if (this.isFiltering) {
-                    this.filters.pageNumber = this.PageNumber;
-
-
-
-                    this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(
-                        (data: PaginatedProperties) => {
-                            if (this.PageNumber <= Math.ceil(data.totalRecords / this.filters.pageSize)) {
-                                this.Properties.push(...data.properties);
-                                this.isLoading = false;
-                            } else {
-                                this.isLoading = false;
-                            }
-                        },
-                        error => {
-                            this.isLoading = false;
-                            console.error('Error loading filtered properties:', error);
-                        }
-                    );
-
-                    return;
-                }
-
-                this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
-                    this.Properties.push(...data.properties);
-                    this.isLoading = false;
-                }, error => {
-                    this.isLoading = false;
-                    console.error('Error loading data:', error);
-                });
-
-
-                setTimeout(() => {
-                    window.scrollTo({
-                        top: window.scrollY - 50,
-                        behavior: 'smooth'
-                    });
-                }, 100);
-            }
-        }, 200);
     }
 
     onPageChange($event: PageEvent) {
@@ -432,5 +401,7 @@ export class PropertyListComponent implements OnInit {
         });
     }
 
-
+    private isPropertyDashboard(): boolean {
+        return this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard');
+    }
 }

@@ -25,9 +25,11 @@ module.exports = {
         'sourceType': 'module'
     },
     'plugins': [
-        'eslint-plugin-local-rules',
         '@angular-eslint/eslint-plugin',
         '@typescript-eslint',
+    ],
+    extends: [
+        'plugin:@angular-eslint/recommended'
     ],
     'root': true,
     'rules': {
@@ -185,7 +187,7 @@ module.exports = {
         'radix': 'error',
         'semi': 'off',
         'spaced-comment': [
-            'error',
+            'warn',
             'always',
             {
                 'markers': [
@@ -195,14 +197,6 @@ module.exports = {
         ],
         'use-isnan': 'error',
         'valid-typeof': 'error',
-        'import-spacing': 'error',
-        'invoke-injectable': 'error',
-        'no-access-missing-member': 'error',
-        'templates-use-public': 'error',
-        'use-host-property-decorator': 'error',
-        'use-input-property-decorator': 'error',
-        'use-life-cycle-interface': 'error',
-        'use-output-property-decorator': 'error',
-        'whitespace': 'error'
+        
     }
 };

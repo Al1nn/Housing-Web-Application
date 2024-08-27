@@ -15,11 +15,7 @@ export class PropertyContactsComponent implements OnInit {
     public mainPhotoUrl: string;
     originalFolder: string = environment.originalPictureFolder;
 
-    options: google.maps.MapOptions = {
-        mapId: "DEMO_MAP_ID",
-        center: { lat: -31, lng: 147 },
-        zoom: 4
-    };
+
 
     constructor(private route: ActivatedRoute) { }
 

@@ -6,37 +6,37 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-user-profile',
-  templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.css']
+    selector: 'app-user-profile',
+    templateUrl: './user-profile.component.html',
+    styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
 
 
-  public userCard: IUserCard;
-  public userCards: IUserCard[];
-  public propertiesListed: number;
+    public userCard: IUserCard;
+    public userCards: IUserCard[];
+    public propertiesListed: number;
 
-  public originalFolder: string = environment.originalPictureFolder;
-  public thumbnailFolder: string = environment.thumbnailFolder;
+    public originalFolder: string = environment.originalPictureFolder;
+    public thumbnailFolder: string = environment.thumbnailFolder;
 
-  constructor(private authService: AuthService,
-    private housingService: HousingService,
-    private route: ActivatedRoute) { }
+    constructor(private authService: AuthService,
+        private housingService: HousingService,
+        private route: ActivatedRoute) { }
 
-  ngOnInit() {
-    this.route.data.subscribe((data) => {
-      this.userCard = data['usercard'];
-    });
+    ngOnInit() {
+        this.route.data.subscribe((data) => {
+            this.userCard = data['usercard'];
+        });
 
-    this.authService.getUserCards().subscribe((data: IUserCard[]) => {
-      const decodedToken = this.authService.decodeToken();
-      this.userCards = data.filter(card => card.username !== decodedToken?.unique_name);
-    });
+        this.authService.getUserCards().subscribe((data: IUserCard[]) => {
+            const decodedToken = this.authService.decodeToken();
+            this.userCards = data.filter(card => card.username !== decodedToken?.unique_name);
+        });
 
-    this.housingService.getPropertyCountByUser().subscribe((data: number) => {
-      this.propertiesListed = data;
-    });
-  }
+        this.housingService.getPropertyCountByUser().subscribe((data: number) => {
+            this.propertiesListed = data;
+        });
+    }
 
 }

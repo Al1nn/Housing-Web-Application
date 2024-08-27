@@ -7,4 +7,4 @@ export enum ErrorCode {
     internalServerError = 500
 }
 
-//Add more error codes
+// Add more error codes

@@ -30,7 +30,7 @@ export class NavBarComponent {
             this.loggedInUser = decodedToken.unique_name;
             return this.loggedInUser;
         } else {
-            return "";
+            return '';
         }
     }
 
@@ -38,9 +38,9 @@ export class NavBarComponent {
         const decodedToken = this.authService.decodeToken();
         if (decodedToken && decodedToken.role) {
             if (Array.isArray(decodedToken.role)) {
-                return decodedToken.role.includes("Admin");
+                return decodedToken.role.includes('Admin');
             } else {
-                return decodedToken.role === "Admin";
+                return decodedToken.role === 'Admin';
             }
         } else {
             return false;

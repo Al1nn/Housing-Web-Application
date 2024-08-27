@@ -1,3 +1,5 @@
+/* eslint-disable spaced-comment */
+/* eslint-disable max-len */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
@@ -143,7 +145,7 @@ export class HousingService {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.post<Property>(this.baseUrl + "/property/add", property, httpOptions);
+        return this.http.post<Property>(this.baseUrl + '/property/add', property, httpOptions);
     }
 
     updateProperty(id: number, property: Property): Observable<Property> {
@@ -152,7 +154,7 @@ export class HousingService {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.put<Property>(this.baseUrl + "/property/update/" + id, property, httpOptions);
+        return this.http.put<Property>(this.baseUrl + '/property/update/' + id, property, httpOptions);
     }
 
     deleteProperty(id: number): Observable<Property> {
@@ -161,7 +163,7 @@ export class HousingService {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.delete<Property>(this.baseUrl + "/property/delete/" + id, httpOptions);
+        return this.http.delete<Property>(this.baseUrl + '/property/delete/' + id, httpOptions);
     }
 
 
@@ -225,8 +227,11 @@ export class HousingService {
 
     getPropID() {
         const currentPID = localStorage.getItem('PID');
-        if (currentPID !== null) return +currentPID;
-        else return -1;
+        if (currentPID !== null) {
+            return +currentPID;
+        } else {
+            return -1;
+        }
     }
 
     getPropertyAge(dateofEstablishment: string): string {

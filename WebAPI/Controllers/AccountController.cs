@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp;
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text;
 using WebAPI.Dtos;
@@ -117,7 +116,7 @@ namespace WebAPI.Controllers
             return Ok(isOldPassword);
         }
         //api/account/updatePassword/{newPassword}
-        [HttpPut("updatePassword/{newPassword}")] // IT KEEPS GETTING ME UNAUTHORIZED EVEN DO I HAVE THE TOKENNNNN
+        [HttpPut("updatePassword/{newPassword}")] 
         [Authorize] 
         public async Task<IActionResult> UpdatePassword(string newPassword)
         {

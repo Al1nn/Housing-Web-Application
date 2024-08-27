@@ -28,7 +28,7 @@ export class UserRegisterComponent implements OnInit {
 
     image: string;
 
-    rolesItems = ["Admin", "Reader", "Owner"];
+    rolesItems = ['Admin', 'Reader', 'Owner'];
 
 
 
@@ -73,7 +73,7 @@ export class UserRegisterComponent implements OnInit {
     onFileChange(event: any) {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            this.formData.append("file", file);
+            this.formData.append('file', file);
             const reader = new FileReader();
             reader.onload = () => {
                 const imageUrl = reader.result as string;
@@ -88,7 +88,7 @@ export class UserRegisterComponent implements OnInit {
     resetInput() {
         const input = document.getElementById('avatar-input-file') as HTMLInputElement;
         if (input) {
-            input.value = "";
+            input.value = '';
         }
     }
 
@@ -126,20 +126,20 @@ export class UserRegisterComponent implements OnInit {
 
 
     userData(): FormData {
-        this.formData.append("username", this.username.value);
-        this.formData.append("email", this.email.value);
-        this.formData.append("password", this.password.value);
-        this.formData.append("phoneNumber", this.mobile.value);
+        this.formData.append('username', this.username.value);
+        this.formData.append('email', this.email.value);
+        this.formData.append('password', this.password.value);
+        this.formData.append('phoneNumber', this.mobile.value);
 
 
         if (this.admin.value) {
-            this.formData.append("roles", "Admin");
+            this.formData.append('roles', 'Admin');
         }
         if (this.owner.value) {
-            this.formData.append("roles", "Owner");
+            this.formData.append('roles', 'Owner');
         }
         if (this.reader.value) {
-            this.formData.append("roles", "Reader");
+            this.formData.append('roles', 'Reader');
         }
 
 
@@ -174,12 +174,12 @@ export class UserRegisterComponent implements OnInit {
 
     onReset() {
         this.userSubmitted = false;
-        this.formData.delete("username");
-        this.formData.delete("email");
-        this.formData.delete("password");
-        this.formData.delete("phoneNumber");
-        this.formData.delete("roles");
-        this.image = "";
+        this.formData.delete('username');
+        this.formData.delete('email');
+        this.formData.delete('password');
+        this.formData.delete('phoneNumber');
+        this.formData.delete('roles');
+        this.image = '';
         this.registerationForm.reset();
     }
 }

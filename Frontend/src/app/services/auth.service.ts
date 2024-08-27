@@ -11,8 +11,9 @@ import { IToken } from '../model/IToken.interface';
     providedIn: 'root',
 })
 export class AuthService {
-    constructor(private http: HttpClient) { }
     baseUrl = environment.baseUrl;
+    constructor(private http: HttpClient) { }
+
 
     authUser(user: FormData): Observable<IUserForLogin> {
         return this.http.post<IUserForLogin>(this.baseUrl + '/account/login', user);
@@ -37,7 +38,7 @@ export class AuthService {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.put(this.baseUrl + '/account/updatePassword/' + newPassword, {}, httpOptions); //THIS GETS ME UNAUTHORIZED
+        return this.http.put(this.baseUrl + '/account/updatePassword/' + newPassword, {}, httpOptions);
     }
 
     updateAvatar(oldPictureName: string, file: FormData) {
@@ -51,11 +52,11 @@ export class AuthService {
 
     decodeToken(): IToken | null {
         if (typeof localStorage !== 'undefined') {
-            let jwt = localStorage.getItem('token') as string;
+            const jwt = localStorage.getItem('token') as string;
             if (jwt) {
-                let jwtData = jwt.split('.')[1]; //Payload
-                let decodedJwtJsonData = window.atob(jwtData);
-                let decodedJwtData = JSON.parse(decodedJwtJsonData);
+                const jwtData = jwt.split('.')[1]; // Payload
+                const decodedJwtJsonData = window.atob(jwtData);
+                const decodedJwtData = JSON.parse(decodedJwtJsonData);
                 return decodedJwtData as IToken;
             } else {
                 return null;
@@ -83,7 +84,7 @@ export class AuthService {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.get<IUserCard>(this.baseUrl + "/account/card", httpOptions);
+        return this.http.get<IUserCard>(this.baseUrl + '/account/card', httpOptions);
     }
 
     getUserCards(): Observable<IUserCard[]> {
@@ -92,6 +93,6 @@ export class AuthService {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             })
         };
-        return this.http.get<IUserCard[]>(this.baseUrl + "/account/cards", httpOptions);
+        return this.http.get<IUserCard[]>(this.baseUrl + '/account/cards', httpOptions);
     }
 }

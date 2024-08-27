@@ -1,8 +1,8 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { Observable, catchError, concatMap, of, retryWhen, throwError } from "rxjs";
-import { AlertifyService } from "./alertify.service";
-import { Injectable } from "@angular/core";
-import { ErrorCode } from "../enums/enums";
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Observable, catchError, concatMap, of, retryWhen, throwError } from 'rxjs';
+import { AlertifyService } from './alertify.service';
+import { Injectable } from '@angular/core';
+import { ErrorCode } from '../enums/enums';
 
 
 
@@ -17,7 +17,7 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
     constructor(private alertifyService: AlertifyService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log("HTTP Request started");
+        console.log('HTTP Request started');
         return next.handle(request)
             .pipe(
                 retryWhen(error => this.retryRequest(error, 10)),
@@ -52,7 +52,7 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
     setError(error: HttpErrorResponse): string {
         let errorMessage = 'Unknown error occured';
         if (error.error instanceof ErrorEvent) {
-            //Client-Side error
+            // Client-Side error
             errorMessage = error.error.message;
         } else {
             if (error.status === ErrorCode.unauthorised) {

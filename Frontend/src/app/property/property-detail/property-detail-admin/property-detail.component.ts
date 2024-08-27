@@ -40,8 +40,8 @@ export class PropertyDetailAdminComponent implements OnInit {
     cityList: any[];
 
     estPossessionOnDate: Date;
-    propertyTypeId: number = 0;
-    furnishTypeId: number = 0;
+    propertyTypeId = 0;
+    furnishTypeId = 0;
     estPossessionOnFormatted: string;
 
     galleryImages: GalleryItem[];
@@ -187,13 +187,13 @@ export class PropertyDetailAdminComponent implements OnInit {
 
         this.route.data.subscribe((data) => {
             this.property = data['property'];
-            console.log(this.property);
+
         });
 
         this.housingService.getPropertyById(this.propertyId).subscribe(
             (data) => {
                 this.propertyDetail = data;
-                console.log(this.propertyDetail);
+
             }
         );
 
@@ -207,7 +207,7 @@ export class PropertyDetailAdminComponent implements OnInit {
 
         this.housingService.getAllCities().subscribe((data) => {
             this.cityList = data;
-            console.log(this.cityList);
+
         });
 
         this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
@@ -281,9 +281,9 @@ export class PropertyDetailAdminComponent implements OnInit {
                 phoneNumber: [this.property.phoneNumber, Validators.required]
             }),
             OtherInfo: this.fb.group({
-                readyToMove: [this.property.readyToMove ? "true" : "false"],
+                readyToMove: [this.property.readyToMove ? 'true' : 'false'],
                 estPossessionOn: [this.estPossessionOnDate],
-                gated: [this.property.gated ? "true" : "false"],
+                gated: [this.property.gated ? 'true' : 'false'],
                 mainEntrance: [this.property.mainEntrance],
                 description: [this.property.description, Validators.required]
             })
@@ -304,7 +304,9 @@ export class PropertyDetailAdminComponent implements OnInit {
         const photoUrls: GalleryItem[] = [];
         if (this.property.photos !== undefined) {
             for (let i = 0; i < this.property.photos.length; i++) {
-                if (i == 0) continue;
+                if (i === 0) {
+                    continue;
+                }
                 const photo = this.property.photos[i];
                 photoUrls.push({
                     src: this.thumbnailFolder + photo.fileName,
@@ -317,7 +319,7 @@ export class PropertyDetailAdminComponent implements OnInit {
 
     openModal(modalName: string, template: TemplateRef<any>) {
         if (modalName === 'editModal') {
-            console.log("In edit modal");
+            console.log('In edit modal');
 
             this.CreateEditForm();
             this.modalRef = this.modalService.show(template);
@@ -333,10 +335,10 @@ export class PropertyDetailAdminComponent implements OnInit {
     deleteProperty(propId: number) {
         console.log(propId);
 
-        //Call the API Endpoint
+        // Call the API Endpoint
         this.housingService.deleteProperty(this.propertyId).subscribe(
             () => {
-                console.log("Deleted successfully");
+                console.log('Deleted successfully');
 
                 if (this.property.sellRent === 2) {
                     this.router.navigate(['/rent-property']);
@@ -379,7 +381,7 @@ export class PropertyDetailAdminComponent implements OnInit {
                 "estPossessionOn": "2024-06-06T00:00:00",
                 "age": 0,
                 "description": "Apartament in Razboieni cu de toate"
-                } 
+                }
         */
 
 
@@ -397,10 +399,10 @@ export class PropertyDetailAdminComponent implements OnInit {
         // this.property.carpetArea = +this.carpetArea.value;
         // this.property.floorNo = this.floorNo.value;
         // this.property.totalFloors = this.totalFloors.value;
-        //this.property.landMark = this.landMark.value;
+        // this.property.landMark = this.landMark.value;
 
-        //this.property.address = this.address.value;
-        //this.property.phoneNumber = this.phoneNumber.value;
+        // this.property.address = this.address.value;
+        // this.property.phoneNumber = this.phoneNumber.value;
 
         // this.property.readyToMove = this.readyToMove.value;
         // this.property.gated = this.gated.value;
@@ -421,7 +423,7 @@ export class PropertyDetailAdminComponent implements OnInit {
     }
 
     onCityChange(selectedText: string, cityId: number) {
-        const [city, country] = selectedText.split(", ");
+        const [city, country] = selectedText.split(', ');
 
         this.propertyDetail.city = city;
         this.property.city = city;
@@ -440,7 +442,7 @@ export class PropertyDetailAdminComponent implements OnInit {
                 () => {
                     console.log(this.property);
                     this.modalRef.hide();
-                    this.alertifyService.success("Property Updated Successfully");
+                    this.alertifyService.success('Property Updated Successfully');
                 }
             );
 

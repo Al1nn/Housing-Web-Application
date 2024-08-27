@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PropertyListComponent } from './property-list/property-list.component';

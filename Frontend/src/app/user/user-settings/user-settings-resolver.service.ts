@@ -5,13 +5,13 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class UserSettingsResolverService implements Resolve<IUserCard>{
 
-  constructor(private authService: AuthService) { }
-  resolve(): Observable<IUserCard> | IUserCard {
-    return this.authService.getUserCard();
-  }
+    constructor(private authService: AuthService) { }
+    resolve(): Observable<IUserCard> | IUserCard {
+        return this.authService.getUserCard();
+    }
 
 }

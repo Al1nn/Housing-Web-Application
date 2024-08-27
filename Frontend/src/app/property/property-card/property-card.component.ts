@@ -1,5 +1,5 @@
 /* eslint-disable @angular-eslint/component-class-suffix */
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Property } from '../../model/Property.interface';
 
@@ -13,7 +13,7 @@ import { Property } from '../../model/Property.interface';
     styleUrls: ['property-card.component.css']
 })
 
-export class PropertyCardElement implements OnInit {
+export class PropertyCardElement {
 
     @Input() property_index: Property; // Input, poate sa imprumute proprietatile obiectului Property
 
@@ -24,14 +24,5 @@ export class PropertyCardElement implements OnInit {
 
 
     constructor() { }
-
-    ngOnInit() {
-
-    }
-
-
-
-
-
 
 }

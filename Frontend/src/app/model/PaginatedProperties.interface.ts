@@ -1,4 +1,4 @@
-import { Property } from "./Property.interface";
+import { Property } from './Property.interface';
 
 
 export class PaginatedProperties {

@@ -33,7 +33,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { NgxApexchartsModule } from 'ngx-apexcharts';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/photo-editor-popup.component';
@@ -43,71 +43,67 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTreeModule } from '@angular/material/tree';
 import { PropertyTreeComponent } from './property-tree/property-tree.component';
 import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.component';
-import { GoogleMapsModule } from '@angular/google-maps';
+import { AngularOpenlayersModule } from 'ng-openlayers';
 
 
 
 @NgModule({
-  declarations: [
-    PropertyCardElement,
-    PropertyListComponent,
-    PropertyDashboardComponent,
-    PropertyTreeComponent,
-    AddPropertyComponent,
-    PhotoEditorComponent,
-    PhotoEditorPopupComponent,
-    PropertyDetailAdminComponent,
-    PropertyDetailOwnerComponent,
-    PropertyDetailReaderComponent,
-    BreadcrumbComponent,
-    PropertyStatsComponent,
-    PropertyContactsComponent,
-    HighlightPipe,
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    PropertyRoutingModule,
-    HttpClientModule,
-    GoogleMapsModule,
-    MatCardModule,
-    MatIconModule,
-    MatProgressBarModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatTreeModule,
-    MatAutocompleteModule,
-    MatPaginatorModule,
-    ReactiveFormsModule,
-    NgApexchartsModule,
-    ButtonsModule.forRoot(),
-    CarouselModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-    TabsModule.forRoot(),
-    GalleryComponent,
-    ModalModule,
-    LoadingBarHttpClientModule,
-    LoadingBarModule,
-    ImageCropperModule
-
-  ],
-  providers: [
-    BsModalService,
-    HousingService,
-    DatePipe,
-    AsyncPipe,
-    PropertyDetailResolverService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpErrorInterceptorService,
-      multi: true
-    },
-
-
-
-  ]
+    declarations: [
+        PropertyCardElement,
+        PropertyListComponent,
+        PropertyDashboardComponent,
+        PropertyTreeComponent,
+        AddPropertyComponent,
+        PhotoEditorComponent,
+        PhotoEditorPopupComponent,
+        PropertyDetailAdminComponent,
+        PropertyDetailOwnerComponent,
+        PropertyDetailReaderComponent,
+        BreadcrumbComponent,
+        PropertyStatsComponent,
+        PropertyContactsComponent,
+        HighlightPipe,
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        PropertyRoutingModule,
+        HttpClientModule,
+        MatCardModule,
+        MatIconModule,
+        MatProgressBarModule,
+        AngularOpenlayersModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatTreeModule,
+        MatAutocompleteModule,
+        MatPaginatorModule,
+        ReactiveFormsModule,
+        NgxApexchartsModule,
+        ButtonsModule.forRoot(),
+        CarouselModule.forRoot(),
+        BsDatepickerModule.forRoot(),
+        TabsModule.forRoot(),
+        GalleryComponent,
+        ModalModule,
+        LoadingBarHttpClientModule,
+        LoadingBarModule,
+        ImageCropperModule
+    ],
+    providers: [
+        BsModalService,
+        HousingService,
+        DatePipe,
+        AsyncPipe,
+        PropertyDetailResolverService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpErrorInterceptorService,
+            multi: true
+        },
+    ]
 })
 export class PropertyModule { }

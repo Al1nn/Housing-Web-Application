@@ -17,12 +17,12 @@ import { IImage } from '../../model/IImage.interface';
     styleUrls: ['./user-login.component.css'],
 })
 export class UserLoginComponent implements OnInit {
-    @ViewChild("loginForm") loginForm: NgForm;
+    @ViewChild('loginForm') loginForm: NgForm;
 
     loginRequest: IUserForRegister = {
-        username: "",
-        password: "",
-        email: "",
+        username: '',
+        password: '',
+        email: '',
         phoneNumber: 0,
         roles: []
     };
@@ -30,9 +30,9 @@ export class UserLoginComponent implements OnInit {
     formData: FormData = new FormData();
 
     rolesData: any = [
-        { name: "Admin", id: 1, selected: false },
-        { name: "Owner", id: 2, selected: false },
-        { name: "Reader", id: 3, selected: false },
+        { name: 'Admin', id: 1, selected: false },
+        { name: 'Owner', id: 2, selected: false },
+        { name: 'Reader', id: 3, selected: false },
     ]
 
     constructor(
@@ -42,8 +42,8 @@ export class UserLoginComponent implements OnInit {
     ) { }
 
     getSelectedRoles(): string[] {
-        let selectedRoles: string[] = [];
-        for (let e of this.rolesData) {
+        const selectedRoles: string[] = [];
+        for (const e of this.rolesData) {
             if (this.loginForm.value[e.id]) {
                 selectedRoles.push(e.name);
             }
@@ -52,14 +52,14 @@ export class UserLoginComponent implements OnInit {
     }
 
     onLogin() {
-        this.formData.append("username", this.loginRequest.username);
-        this.formData.append("password", this.loginRequest.password);
+        this.formData.append('username', this.loginRequest.username);
+        this.formData.append('password', this.loginRequest.password);
 
 
         this.loginRequest.roles = this.getSelectedRoles();
 
-        for (let e of this.loginRequest.roles) {
-            this.formData.append("roles", e);
+        for (const e of this.loginRequest.roles) {
+            this.formData.append('roles', e);
         }
 
         this.authService.authUser(this.formData).subscribe(
@@ -74,7 +74,7 @@ export class UserLoginComponent implements OnInit {
                     }
                 })
 
-                this.alertifyService.success("Login successful");
+                this.alertifyService.success('Login successful');
                 this.router.navigate(['/']);
             },
             (error) => {
@@ -86,18 +86,18 @@ export class UserLoginComponent implements OnInit {
 
     onCancel() {
         this.loginRequest = {
-            username: "",
-            password: "",
-            email: "",
+            username: '',
+            password: '',
+            email: '',
             phoneNumber: 0,
             roles: []
         };
         this.rolesData.forEach((role: { selected: boolean; }) => {
             role.selected = false;
         });
-        this.formData.delete("username");
-        this.formData.delete("password");
-        this.formData.delete("roles");
+        this.formData.delete('username');
+        this.formData.delete('password');
+        this.formData.delete('roles');
         this.loginForm.resetForm();
     }
 
@@ -105,9 +105,9 @@ export class UserLoginComponent implements OnInit {
 
     ngOnInit() {
 
-        this.formData.delete("username");
-        this.formData.delete("password");
-        this.formData.delete("roles");
+        this.formData.delete('username');
+        this.formData.delete('password');
+        this.formData.delete('roles');
     }
 
 
