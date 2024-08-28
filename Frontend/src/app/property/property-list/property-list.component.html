@@ -61,11 +61,11 @@
   
 </mat-form-field>
 
-<button type="button" style="height: 57px;" mat-stroked-button (click)="onSortDirection()">
+<button type="button" style="height: 57px;" mat-raised-button (click)="onSortDirection()">
   <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down"></i>
   <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up"></i>
 </button>
-<button type="button" style="height: 57px;" mat-stroked-button (click)="clearFilters()">Clear</button>
+<button type="button" style="height: 57px;" mat-raised-button (click)="clearFilters()">Clear</button>
 <br>
 
 <div class="d-flex justify-content-left">
