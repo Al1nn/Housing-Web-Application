@@ -1,11 +1,11 @@
 <div>
   <input type="text" 
-  class="autocomplete-input"
+  class="autocomplete-input form-control mb-2"
   #autocompleteInput
   placeholder="Filter by City"
   (input)="keyPress($event)" autocomplete="off">
   <ul *ngIf="FilteredCityListOptions.length > 0" 
-    class="dropdown"
+    class="dropdown form-control"
     [class.show]="autocompleteInput.value !== ''"
     [style.width.px]="autocompleteInput.offsetWidth" 
     >
@@ -19,36 +19,54 @@
   </ul>
 </div>
 
-<label>Filter Price & SqrArea : </label><br>
+<mat-label>Filter SqrArea&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</mat-label>
 
-<label>Min :</label>
-<select [(ngModel)]="min" (change)="onMinMaxChange()">
-  <option *ngFor="let number of filterPriceAndAreaRange" [value]="number">
+
+
+
+<mat-label>Min : </mat-label>
+<mat-form-field  style="width: 75px;">
+  <mat-select placeholder="{{min}}" [(ngModel)]="min" (selectionChange)="onMinMaxChange()">
+    <mat-option *ngFor="let number of filterPriceAndAreaRange" [value]="number">
     {{number}}
-  </option>
-</select>
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
 
 <label>Max : </label>
-<select [(ngModel)]="max" (change)="onMinMaxChange()">
-  <option *ngFor="let number of filterPriceAndAreaRange" [value]="number">
+<mat-form-field style="width: 75px;">
+  <mat-select placeholder="{{max}}" [(ngModel)]="max" (selectionChange)="onMinMaxChange()">
+    <mat-option *ngFor="let number of filterPriceAndAreaRange" [value]="number">
     {{number}}
-  </option>
-</select><br><br>
-
-<label>Sort by &nbsp;</label>
-<select [(ngModel)]="SortbyParam" (change)="onSortChange()">
-  <option value="City">City</option>
-  <option value="Price">Price</option>
-  <option value="Price Per Area">Price Per Area</option>
-</select>
+    </mat-option>
+  </mat-select>
+</mat-form-field><br>
 
 
-<button type="button" (click)="onSortDirection()">
+
+
+<mat-form-field style="height: 25px;" appearance="outline">
+  <mat-select placeholder="Sort by" [(ngModel)]="SortbyParam"  (selectionChange)="onSortChange()">
+    <mat-option value="City">
+      City
+    </mat-option>
+    <mat-option value="Price">
+      Price
+    </mat-option>
+    <mat-option value="Price Per Area">
+      Price Per Area
+    </mat-option>
+  </mat-select>
+  
+</mat-form-field>
+
+<button type="button" style="height: 57px;" mat-stroked-button (click)="onSortDirection()">
   <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down"></i>
   <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up"></i>
-</button><br>
-<button type="button" (click)="clearFilters()">Clear</button>
-<br><br>
+</button>
+<button type="button" style="height: 57px;" mat-stroked-button (click)="clearFilters()">Clear</button>
+<br>
 
 <div class="d-flex justify-content-left">
   <mat-paginator
