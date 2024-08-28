@@ -104,7 +104,12 @@ export class PropertyListComponent implements OnInit {
                         this.isLoading = false;
                         console.error('Error loading data:', error);
                     });
-
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: window.scrollY - 50,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
                     return;
                 }
 
@@ -252,15 +257,12 @@ export class PropertyListComponent implements OnInit {
     }
 
     onPageChange($event: PageEvent) {
-
         this.paginator.pageIndex = $event.pageIndex;
         this.PageNumber = $event.pageIndex + 1;
         this.filters.pageNumber = this.PageNumber;
-
         if (this.isFiltering) {
 
             if (this.isPropertyDashboard()) {
-
                 this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                     this.paginator.length = data.totalRecords;
                     this.Properties = data.properties;
@@ -277,7 +279,6 @@ export class PropertyListComponent implements OnInit {
         }
 
         if (this.isPropertyDashboard()) {
-
             this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
@@ -289,19 +290,14 @@ export class PropertyListComponent implements OnInit {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
         });
-
-
     }
 
     onMinMaxChange() {
         this.filters.minBuiltArea = this.min;
         this.filters.maxBuiltArea = this.max;
-
         this.PageNumber = 1;
         this.filters.pageNumber = 1;
         this.paginator.pageIndex = 0;
-
-
         if (this.isPropertyDashboard()) {
             this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                 this.paginator.length = data.totalRecords;
@@ -310,7 +306,6 @@ export class PropertyListComponent implements OnInit {
             });
             return;
         }
-
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
@@ -331,7 +326,6 @@ export class PropertyListComponent implements OnInit {
             });
             return;
         }
-
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
@@ -349,14 +343,10 @@ export class PropertyListComponent implements OnInit {
             pageNumber: 1,
             pageSize: 2
         };
-
-
         this.PageNumber = 1;
         this.filters.pageNumber = this.PageNumber;
         this.paginator.pageIndex = 0;
-
         this.isFiltering = false;
-
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
             this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
                 this.paginator.length = data.totalRecords;
@@ -364,7 +354,6 @@ export class PropertyListComponent implements OnInit {
             });
             return;
         }
-
         this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
@@ -380,7 +369,6 @@ export class PropertyListComponent implements OnInit {
             this.filters.sortDirection = 'asc';
             this.SortDirection = 'desc';
         }
-
         this.PageNumber = 1;
         this.filters.pageNumber = this.PageNumber;
         this.paginator.pageIndex = 0;
@@ -392,8 +380,6 @@ export class PropertyListComponent implements OnInit {
             });
             return;
         }
-
-
         this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;

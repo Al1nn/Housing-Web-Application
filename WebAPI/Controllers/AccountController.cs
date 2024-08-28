@@ -31,7 +31,7 @@ namespace WebAPI.Controllers
             this.mapper = mapper;
         }
 
-        //api/account/image}
+        //api/account/image
         [HttpGet("image")]
         [Authorize]
         public async Task<IActionResult> GetUserImage()
@@ -321,14 +321,12 @@ namespace WebAPI.Controllers
             var secretKey = configuration.GetSection("AppSettings:Key").Value;
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
-            
-
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
-            /*Array*/
+
             foreach (Role role in user.Roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.Name));

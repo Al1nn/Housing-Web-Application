@@ -11,20 +11,27 @@ import { UserSettingsResolverService } from './user/user-settings/user-settings-
 const routes: Routes = [
     {
         path: '',
-        loadChildren: () => import('./property/property.module').then(m => m.PropertyModule)
+        loadChildren: () => import('./property/property.module').then(m => m.PropertyModule),
+        data: { breadcrumb: 'Home' }
     },
 
-    { path: 'user/login', component: UserLoginComponent },
-    { path: 'user/register', component: UserRegisterComponent },
+    { path: 'user/login', component: UserLoginComponent, data: { breadcrumb: null } },
+    { path: 'user/register', component: UserRegisterComponent, data: { breadcrumb: null } },
     {
         path: 'user/profile',
         component: UserProfileComponent,
-        resolve: { usercard: UserProfileResolverService }
+        resolve: { usercard: UserProfileResolverService },
+        data: {
+            breadcrumb: null
+        }
     },
     {
         path: 'user/settings',
         component: UserSettingsComponent,
-        resolve: { usercard: UserSettingsResolverService }
+        resolve: { usercard: UserSettingsResolverService },
+        data: {
+            breadcrumb: null
+        }
     },
 
 ];

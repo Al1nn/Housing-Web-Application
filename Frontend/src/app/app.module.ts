@@ -24,11 +24,13 @@ import { UserProfileResolverService } from './user/user-profile/user-profile-res
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { BreadcrumbService } from './services/breadcrumb.service';
 
 @NgModule({
     declarations: [
         AppComponent,
+        BreadcrumbComponent,
         NavBarComponent,
         UserLoginComponent,
         UserRegisterComponent,
@@ -51,7 +53,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         provideAnimations(),
         AlertifyService,
         AuthService,
-
+        BreadcrumbService,
         UserProfileResolverService,
         provideAnimationsAsync(),
     ],

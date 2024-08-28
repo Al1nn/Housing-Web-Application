@@ -1,24 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using System.Net;
-using System.Reflection.Metadata.Ecma335;
 using WebAPI.Dtos;
 using WebAPI.Errors;
 using WebAPI.Interfaces;
 using WebAPI.Models;
-using System.Text.RegularExpressions;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using System.Runtime.InteropServices;
 using WebAPI.Extensions;
-using Microsoft.IdentityModel.Tokens;
-using System.Drawing.Printing;
-using System.ComponentModel;
+
 
 
 namespace WebAPI.Controllers

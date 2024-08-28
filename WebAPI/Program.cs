@@ -1,23 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Data;
-using WebAPI.Data.Repo;
 using WebAPI.Extensions;
 using WebAPI.Helpers;
 using WebAPI.Interfaces;
-using WebAPI.Middlewares;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureHostConfiguration(webBuilder => { webBuilder.AddEnvironmentVariables(prefix: "MYFIRSTAPP_"); });
+builder.Configuration.AddEnvironmentVariables(prefix: "MYFIRSTAPP_");
 
-// Add services to the container.
 string dbCredentials = "";
 if (builder.Environment.IsProduction())
 {
@@ -52,6 +48,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 );
 
 });
+
 builder.Services.AddDbContext<TreeContext>(options =>
 {
     options.UseSqlServer(treeConnectionString
@@ -62,8 +59,7 @@ builder.Services.AddDbContext<TreeContext>(options =>
          maxRetryDelay: TimeSpan.FromSeconds(30),
          errorNumbersToAdd: null);
     }
-);
-
+    );
 });
 
 builder.Services.AddControllers().AddNewtonsoftJson((x) =>
@@ -97,15 +93,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
-
-
-// Configure the HTTP request pipeline.
-
-
 app.ConfigureExceptionHandler(app.Environment);
-
-//app.ConfigureBuiltInExceptionHandler(app.Environment);
 
 app.UseSwagger();
 

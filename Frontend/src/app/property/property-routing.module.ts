@@ -15,32 +15,30 @@ import { PropertyDetailOwnerComponent } from './property-detail/property-detail-
 import { matchGuardAdmin, matchGuardOwner } from '../guards/match-guard.guard';
 import { PropertyStatsComponent } from './property-stats/property-stats.component';
 import { PropertyTreeComponent } from './property-tree/property-tree.component';
-import { PropertyNodeComponent } from './property-tree/property-node/property-node.component';
-
-
-
-
-
 
 
 const routes: Routes = [
   {
     path: '',
     component: PropertyListComponent,
-
   },
-
   {
     path: 'property-dashboard',
     component: PropertyDashboardComponent,
     resolve: {
       property: PropertyDashboardResolverService
+    },
+    data: {
+      breadcrumb: 'Dashboard'
     }
   },
   {
     path: 'property-stats',
     component: PropertyStatsComponent,
     canMatch: [matchGuardAdmin],
+    data: {
+      breadcrumb: 'Stats'
+    }
   },
   {
     path: 'property-tree',
@@ -48,51 +46,55 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Tree'
     },
-
-    children: [
-
-      {
-        path: '**',
-        component: PropertyNodeComponent,
-        data: {
-          breadcrumb: 'Node'
-        }
-      }
-    ]
-
   },
   {
     path: 'rent-property',
     component: PropertyListComponent,
-
+    data: {
+      breadcrumb: 'Rent'
+    }
   },
   {
     path: 'add-property', component: AddPropertyComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: {
+      breadcrumb: 'Add'
+    }
   },
-
   {
     path: 'property-detail/:id',
     component: PropertyDetailAdminComponent,
     resolve: { property: PropertyDetailResolverService },
-    canMatch: [matchGuardAdmin]
+    canMatch: [matchGuardAdmin],
+    data: {
+      breadcrumb: 'Details'
+    }
   },
   {
     path: 'property-detail/:id',
     component: PropertyDetailOwnerComponent,
     resolve: { property: PropertyDetailResolverService },
-    canMatch: [matchGuardOwner]
+    canMatch: [matchGuardOwner],
+    data: {
+      breadcrumb: 'Details'
+    }
   },
   {
     path: 'property-detail/:id',
     component: PropertyDetailReaderComponent,
     resolve: { property: PropertyDetailResolverService },
+    data: {
+      breadcrumb: 'Details'
+    }
   },
   {
     path: 'property-contacts/:id',
     component: PropertyContactsComponent,
     resolve: { property: PropertyContactsResolverService },
-    canActivate: [contactGuard]
+    canActivate: [contactGuard],
+    data: {
+      breadcrumb: 'Contacts'
+    }
   }
 ];
 

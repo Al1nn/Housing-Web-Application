@@ -35,17 +35,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { NgxApexchartsModule } from 'ngx-apexcharts';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
 import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/photo-editor-popup.component';
 import { PropertyStatsComponent } from './property-stats/property-stats.component';
-
 import { MatSelectModule } from '@angular/material/select';
 import { MatTreeModule } from '@angular/material/tree';
 import { PropertyTreeComponent } from './property-tree/property-tree.component';
-import { BreadcrumbComponent } from '../components/breadcrumb/breadcrumb.component';
+
 import { AngularOpenlayersModule } from 'ng-openlayers';
-
-
 
 @NgModule({
     declarations: [
@@ -59,7 +55,6 @@ import { AngularOpenlayersModule } from 'ng-openlayers';
         PropertyDetailAdminComponent,
         PropertyDetailOwnerComponent,
         PropertyDetailReaderComponent,
-        BreadcrumbComponent,
         PropertyStatsComponent,
         PropertyContactsComponent,
         HighlightPipe,

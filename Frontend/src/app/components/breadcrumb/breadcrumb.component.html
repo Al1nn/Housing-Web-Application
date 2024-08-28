@@ -1,10 +1,16 @@
-<nav>
-  <ng-container *ngFor="let breadcrumb of breadcrumbs; let last = last">
-    <ng-container *ngIf="!last">
-      <a [routerLink]="breadcrumb.url" >{{ breadcrumb.label }}</a> &gt;
+<nav *ngIf="showBreadcrumb" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <ng-container *ngFor="let breadcrumb of breadcrumbs$ | async; let last = last">
+      <ng-container *ngIf="!last">
+        <li class="breadcrumb-item">
+          <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="last">
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ breadcrumb.label }}
+        </li>
+      </ng-container>
     </ng-container>
-    <ng-container *ngIf="last">
-      <button [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</button> 
-    </ng-container>
-  </ng-container>
+  </ol>
 </nav>

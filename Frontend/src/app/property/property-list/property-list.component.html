@@ -1,28 +1,23 @@
-
 <div>
-<input type="text" 
-class="autocomplete-input"
-#autocompleteInput
-placeholder="Filter by City"
-(input)="keyPress($event)" autocomplete="off">
-<ul *ngIf="FilteredCityListOptions.length > 0" 
-  class="dropdown"
-  [class.show]="autocompleteInput.value !== ''"
-  [style.width.px]="autocompleteInput.offsetWidth" 
-  >
-  <li class="dropdown-item" *ngFor="let option of FilteredCityListOptions" > 
-    <button (click)="selectCity(option)">
-      <span [innerHTML]="option.city | highlight:autocompleteInput.value"></span>,
-      <span [innerHTML]="option.country | highlight:autocompleteInput.value"></span>
-      <span> ({{option.sellRentCount}} properties)</span>
-    </button>
-  </li>
-</ul>
-
+  <input type="text" 
+  class="autocomplete-input"
+  #autocompleteInput
+  placeholder="Filter by City"
+  (input)="keyPress($event)" autocomplete="off">
+  <ul *ngIf="FilteredCityListOptions.length > 0" 
+    class="dropdown"
+    [class.show]="autocompleteInput.value !== ''"
+    [style.width.px]="autocompleteInput.offsetWidth" 
+    >
+      <li class="dropdown-item" *ngFor="let option of FilteredCityListOptions" > 
+        <button (click)="selectCity(option)">
+          <span [innerHTML]="option.city | highlight:autocompleteInput.value"></span>,
+          <span [innerHTML]="option.country | highlight:autocompleteInput.value"></span>
+          <span> ({{option.sellRentCount}} properties)</span>
+        </button>
+      </li>
+  </ul>
 </div>
-
-
-
 
 <label>Filter Price & SqrArea : </label><br>
 
@@ -55,8 +50,7 @@ placeholder="Filter by City"
 <button type="button" (click)="clearFilters()">Clear</button>
 <br><br>
 
-<!-- Ensure both paginators call the same page change method -->
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-left">
   <mat-paginator
                 #paginator
                 [length]="PropertiesLength"
@@ -67,12 +61,20 @@ placeholder="Filter by City"
   </mat-paginator>
 </div>
 
-<div class="row" >
-  
+<div class="row">
   <div *ngFor="let property of Properties"
-    class="shadow-lg col-sm-4 p-3">
+    class="shadow-lg col-sm-3 p-3">
     <app-property-card [property_index]="property" ></app-property-card>
   </div>
 </div>
+
+<div class="row">
+  <footer class="bg-body-tertiary text-center text-lg-start">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+      Load More...
+    </div>
+  </footer>
+</div>
+
 
 

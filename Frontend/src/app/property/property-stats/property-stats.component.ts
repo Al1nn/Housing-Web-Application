@@ -37,19 +37,12 @@ export interface ChartOptions {
     styleUrls: ['./property-stats.component.css'],
 })
 export class PropertyStatsComponent implements OnInit {
-
-
-
-
-
     @ViewChild('chart') chart: ChartComponent;
     public chartOptions: ChartOptions;
     propertyStats: IPropertyStats[];
 
-
     constructor(private housingService: HousingService,
         @Inject(PLATFORM_ID) private platformId: Object) {
-        // Initialize chartOptions conditionally
         if (isPlatformBrowser(this.platformId)) {
             this.chartOptions = {
                 series: [
@@ -109,19 +102,19 @@ export class PropertyStatsComponent implements OnInit {
                     colors: ['#007bff', '#00C853']
                 },
                 legend: {
+                    width: 200,
+                    height: 50,
                     position: 'top',
                     fontSize: '20px',
                     fontFamily: 'Roboto',
                     horizontalAlign: 'center',
-                    width: 200,
-                    height: 50,
                 },
                 dataLabels: {
                     enabled: true,
                     formatter: function (val) {
                         return val.toString();
                     },
-                    style: { // Style for data labels, text on bars
+                    style: {
                         fontSize: '15px',
                         fontFamily: 'Roboto',
                         colors: ['#fff'],
@@ -134,22 +127,16 @@ export class PropertyStatsComponent implements OnInit {
 
     ngOnInit() {
         if (isPlatformBrowser(this.platformId)) {
-
             this.housingService.getAllPropertyStats().subscribe(data => {
                 this.propertyStats = data;
                 this.updateChartCategories();
             });
         }
-
-
     }
 
     updateChartCategories() {
         if (isPlatformBrowser(this.platformId)) {
             if (this.propertyStats && this.propertyStats.length > 0) {
-
-
-
                 this.chartOptions.xaxis = {
                     ...this.chartOptions.xaxis,
                     categories: this.propertyStats.map(stats => `${stats.city}, ${stats.country}`),
@@ -188,8 +175,6 @@ export class PropertyStatsComponent implements OnInit {
                         data: rentData
                     }
                 ];
-
-                // Force chart update
                 this.chartOptions = { ...this.chartOptions };
             }
         }
