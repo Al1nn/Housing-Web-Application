@@ -15,9 +15,6 @@ import { environment } from '../../../environments/environment';
     styleUrls: ['./property-tree.component.css']
 })
 export class PropertyTreeComponent implements OnInit {
-
-
-
     PropertyTree: ITree[] = [];
     Properties: Property[] = [];
     ResultProperties: Property[] = [];
