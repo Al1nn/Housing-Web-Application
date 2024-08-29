@@ -51,28 +51,42 @@
         <div class="tab-panel p-3">
           <tabset class="member-tabset">
             <tab heading="Contacts">
-                <strong>
-
-                    <i class="fa-regular fa-address-book fa-3x"></i> <h2>Address</h2> 
-                     
-                    {{property.address}}
-                </strong><br>
-                <strong>
-                    <i class="fa-solid fa-phone fa-3x mt-5"></i>  
-                    <h2>{{property.phoneNumber}}</h2>
-                </strong>
-              
-                
+              <strong>
+                <i class="fa-regular fa-address-book fa-3x"></i>
+                <h2>Address</h2>
+                {{property.address}}
+              </strong><br>
+              <strong>
+                <i class="fa-solid fa-phone fa-3x mt-5"></i>
+                <h2>{{property.phoneNumber}}</h2>
+              </strong>
             </tab>
             <tab heading="Location">
               <div style="height: 500px">
                 <aol-map>
-                  <aol-view [zoom]="2">
-                    <aol-coordinate [x]="5.795122" [y]="45.210225" [srid]="'EPSG:4326'"></aol-coordinate>
+                  <aol-view [zoom]="17">
+                    <aol-coordinate [x]="longitude" [y]="latitude" [srid]="'EPSG:4326'"></aol-coordinate>
                   </aol-view>
                   <aol-layer-tile>
                     <aol-source-osm></aol-source-osm>
                   </aol-layer-tile>
+                  <aol-layer-vector>
+                    <aol-source-vector>
+                      <aol-feature>
+                        <aol-geometry-point>
+                          <aol-coordinate [x]="longitude" [y]="latitude" [srid]="'EPSG:4326'"></aol-coordinate>
+                        </aol-geometry-point>
+                        <aol-style>
+                          <aol-style-icon
+                            [src]="'https://icon-library.com/images/pinpoint-icon/pinpoint-icon-12.jpg'"
+                            [scale]="0.1"
+                          
+                            >
+                          </aol-style-icon>
+                        </aol-style>
+                      </aol-feature>
+                    </aol-source-vector>
+                  </aol-layer-vector>
                   <aol-interaction-default></aol-interaction-default>
                   <aol-control-scaleline></aol-control-scaleline>
                   <aol-control-zoomslider></aol-control-zoomslider>

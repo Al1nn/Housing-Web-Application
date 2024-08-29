@@ -1,18 +1,3 @@
-
-<mat-form-field>
-  <mat-select placeholder="Choose Category Parent" (selectionChange)="onSelectionChange($event)">
-    <mat-option *ngFor="let parent of PropertyTree" [value]="parent.nodeID">
-      {{parent.nodeID}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
-<div class="row">
-  <div *ngFor="let property of ResultProperties" class="shadow-lg col-sm-4 p-3">
-    <app-property-card [property_index]="property" [hideIcons]="true"></app-property-card>
-  </div>
-</div>
-
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
   <!-- Leaf nodes -->
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
@@ -44,7 +29,7 @@
             <app-property-card [property_index]="getPropertyById(node.nodeID)"></app-property-card>
           </div>
           
-          <div style="margin-left: 200px;" [class.example-tree-invisible]="!treeControl.isExpanded(node)" role="group">
+          <div style="margin-left: 275px;" [class.example-tree-invisible]="!treeControl.isExpanded(node)" role="group">
             <ng-container matTreeNodeOutlet></ng-container>
           </div>
   
