@@ -162,10 +162,11 @@ namespace WebAPI.Controllers
 
         }
 
-        //api/account/updatePicture/{oldPictureName}
-        [HttpPut("updateAvatar/{oldPictureName}")]
+        //api/account/updateAvatar/{}
+        [Route("updateAvatar/{oldPictureName}")]
+        [HttpPut]
         [Authorize]
-        public async Task<IActionResult> UpdatePicture(string oldPictureName ,[FromForm] IFormFile file)
+        public async Task<IActionResult> UpdatePicture(  IFormFile file, [FromRoute] string oldPictureName)
         {
             ApiError apiError = new ApiError();
 
@@ -281,7 +282,7 @@ namespace WebAPI.Controllers
             apiError.ErrorCode = BadRequest().StatusCode;
             apiError.ErrorMessage = "Unknown Error Occured";
             apiError.ErrorDetails = "";
-            return BadRequest();
+            return BadRequest(apiError);
         }
 
         //api/account/register

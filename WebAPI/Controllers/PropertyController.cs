@@ -455,11 +455,11 @@ namespace WebAPI.Controllers
         //property/add/photo/1
         [HttpPost("add/photo/{propId}")]
         [Authorize]
-        public async Task<IActionResult> AddPropertyPhoto([FromForm] IFormFile file,  [FromForm] string? description, int propId)
+        public async Task<IActionResult> AddPropertyPhoto( IFormFile file,  [FromForm] string? description, int propId)
         {
             ApiError apiError = new ApiError();
 
-
+             
 
             await Console.Out.WriteLineAsync(description);
 
