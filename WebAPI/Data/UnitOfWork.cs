@@ -30,6 +30,8 @@ namespace WebAPI.Data
 
         public IFurnishingTypeRepository FurnishingTypeRepository => new FurnishingTypeRepository(dc);
 
+        public ICurrencyRepository CurrencyRepository => new CurrencyRepository(dc);  
+
         // Add more repos
         public ITreeRepository TreeRepository => new TreeRepository(tc);
 

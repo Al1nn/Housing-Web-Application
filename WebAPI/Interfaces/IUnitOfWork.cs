@@ -14,6 +14,8 @@
 
         ITreeRepository TreeRepository { get; }
 
+        ICurrencyRepository CurrencyRepository { get; }
+
         public Task<bool> SaveAsync();
 
         public Task<bool> SaveTreeAsync();

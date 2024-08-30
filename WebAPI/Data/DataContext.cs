@@ -28,12 +28,17 @@ namespace WebAPI.Data
 
         public DbSet<PropertyStatsDto> PropertyStatsView { get; set; }
 
-        
+        public DbSet<Currency> Currencies { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Currency>()
+                .Property(c => c.Value)
+                .HasColumnType("decimal(18,6)");
+
 
             modelBuilder.Entity<UserImage>().HasKey(i => new { i.UserId, i.ImageId});
 

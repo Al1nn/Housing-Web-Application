@@ -3,16 +3,19 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WebAPI;
 using WebAPI.Data;
 using WebAPI.Extensions;
 using WebAPI.Helpers;
 using WebAPI.Interfaces;
+using WebAPI.Services;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables(prefix: "MYFIRSTAPP_");
+
 
 string dbCredentials = "";
 if (builder.Environment.IsProduction())
@@ -33,8 +36,6 @@ connectionBuilder.Password = builder.Configuration.GetSection("DBPassword").Valu
 var connectionString = connectionBuilder.ConnectionString;
 
 var treeConnectionString = builder.Configuration.GetConnectionString("Tree");
-
-
 
 
 builder.Services.AddDbContext<DataContext>(options =>
@@ -73,7 +74,10 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddCors();
 
+builder.Services.AddHostedService<CurrentRatesService>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 
 var secretKey = builder.Configuration.GetSection("AppSettings:Key").Value;
@@ -92,6 +96,8 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 var app = builder.Build();
 
