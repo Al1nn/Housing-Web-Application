@@ -175,41 +175,55 @@
                 </div>
 
                 <div class="form-group col-12 mt-3">
-                  <label>Landmark</label>
-                  <input type="text" class="form-control m-2" formControlName="landMark">
-                  <div class="error-block" *ngIf="landMark.invalid && (nextClicked || landMark.touched)">
-                    Please insert a landmark
-                  </div>
-                </div>
-
-                <div class="form-group col-12 mt-3">
-                  <label>Address</label>
-                  <input #search type="text" class="form-control m-2" formControlName="address">
-
-                  <google-map
-                    height="500px"
-                    width="100%"
-                    [center]="center"
-                    [zoom]="zoom"
-                    (mapClick)="onMapClick($event)"
-                  >
-                    <map-marker [position]="center"></map-marker>
-                  </google-map>
-
-                  <div class="error-block" *ngIf="address.invalid && (nextClicked || address.touched)">
-                    Please insert a address
-                  </div>
-                </div>
-
-                
-
-                <div class="form-group col-12 mt-3">
                   <label>Phone Number</label>
                   <input type="text" class="form-control m-2" formControlName="phoneNumber">
                   <div class="error-block" *ngIf="phoneNumber.invalid && (nextClicked || phoneNumber.touched)">
                     Please insert a phone number
                   </div>
                 </div>
+
+                <div class="form-row mt-3 d-flex">
+                  <div class="form-group me-3"> 
+                    <label>Latitude</label>
+                    <input type="text" class="form-control" formControlName="latitude" readonly>
+                  </div>
+                
+                  <div class="form-group">
+                    <label>Longitude</label>
+                    <input type="text" class="form-control" formControlName="longitude" readonly>
+                  </div>
+                </div>
+
+                <div class="form-group col-12 mt-3">
+                  <label>Address</label>
+                  <input id="autocomplete" type="text" class="form-control m-2 padding-left" #addressField formControlName="address">
+                  
+                  <div class="error-block" *ngIf="address.invalid && (nextClicked || address.touched)">
+                    Please insert a address
+                  </div>
+
+                </div>
+
+              
+                <google-map
+                  height="400px"
+                  width="100%"
+                  [center]="mapCenter"
+                  [zoom]="mapZoom"
+                  (mapClick)="onMapClick($event)"
+                >
+                  <map-marker
+                    [position]="markerPosition"
+                    [options]="markerOptions"
+                  ></map-marker>
+                </google-map>
+                
+                
+                
+                
+                
+                
+                
 
                 <div class="form-group col-12 mt-3">
                   <button type="button" (click)="selectTab(1,AddressInfo.valid)"

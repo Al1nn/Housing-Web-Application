@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-shadow */
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
     FormBuilder,
     FormControl,
@@ -20,10 +21,6 @@ import { ICity } from '../../model/ICity.interface';
 
 
 
-
-
-
-
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
@@ -31,11 +28,7 @@ import { ICity } from '../../model/ICity.interface';
 })
 export class AddPropertyComponent implements OnInit {
 
-    @ViewChild('search', { static: false }) searchElementRef!: ElementRef;
     @ViewChild('formTabs', { static: false }) formTabs: TabsetComponent;
-    center = { lat: 37.7749, lng: -122.4194 };
-    zoom = 12;
-    autocomplete!: google.maps.places.Autocomplete;
     addPropertyForm: FormGroup;
     nextClicked: boolean;
     contactAdded = false;
@@ -48,10 +41,15 @@ export class AddPropertyComponent implements OnInit {
     originalSizes: IPhoto[];
     originalSizesString: string | null;
     thumbnailsString: string | null;
-
-    firstImageView: string | ArrayBuffer;
-
+    FilteredPlaces: string[] = [];
     photosToUpload: File[] = [];
+
+
+    mapCenter: google.maps.LatLngLiteral = { lat: 44.85454389856495, lng: 24.871015675879697 };
+    mapZoom = 10;
+    markerPosition: google.maps.LatLngLiteral = this.mapCenter;
+    markerOptions: google.maps.MarkerOptions = { draggable: true };
+    geocoder = new google.maps.Geocoder();
 
     propertyView: IPropertyBase = {
         id: 0,
@@ -74,7 +72,7 @@ export class AddPropertyComponent implements OnInit {
         private alertifyService: AlertifyService,
         private housingService: HousingService,
         private fb: FormBuilder,
-        private router: Router
+        private router: Router,
     ) { }
 
     get BasicInfo() {
@@ -149,13 +147,16 @@ export class AddPropertyComponent implements OnInit {
         return this.AddressInfo.controls['totalFloors'] as FormControl;
     }
 
-
-    get landMark() {
-        return this.AddressInfo.controls['landMark'] as FormControl;
-    }
-
     get address() {
         return this.AddressInfo.controls['address'] as FormControl;
+    }
+
+    get latitude() {
+        return this.AddressInfo.controls['latitude'] as FormControl;
+    }
+
+    get longitude() {
+        return this.AddressInfo.controls['longitude'] as FormControl;
     }
 
     get phoneNumber() {
@@ -201,6 +202,7 @@ export class AddPropertyComponent implements OnInit {
         this.housingService.getFurnishingTypes().subscribe((data) => {
             this.furnishTypes = data;
         });
+        this.initializeAutocomplete();
     }
 
     CreateAddPropertyForm() {
@@ -223,8 +225,9 @@ export class AddPropertyComponent implements OnInit {
             AddressInfo: this.fb.group({
                 floorNo: [null, Validators.required],
                 totalFloors: [null, Validators.required],
-                landMark: [null, Validators.required],
                 address: [null, Validators.required],
+                latitude: [null],
+                longitude: [null],
                 phoneNumber: [null, Validators.required],
             }),
 
@@ -238,49 +241,60 @@ export class AddPropertyComponent implements OnInit {
             }),
             PhotosInfo: ['', [Validators.required]]
         });
+    }
 
-        const autocompleteOptions = {
-            types: ['geocode'],
-            componentRestrictions: { country: 'us' }
-        };
-
-        this.autocomplete = new google.maps.places.Autocomplete(
-            this.address.value,
-            autocompleteOptions
+    initializeAutocomplete() {
+        const autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete') as HTMLInputElement,
+            {
+                types: ['geocode'],
+                componentRestrictions: { 'country': ['AU', 'RO', 'IN', 'US'] },
+                fields: ['place_id', 'geometry', 'name']
+            }
         );
-        this.autocomplete.addListener('place_changed', () => {
-            const place = this.autocomplete.getPlace();
-            if (place.geometry) {
-                this.center = {
-                    lat: place.geometry.location?.lat() as number,
-                    lng: place.geometry.location?.lng() as number
-                };
+        autocomplete.addListener('place_changed', () => {
+            const place = autocomplete.getPlace();
+            if (place.geometry && place.geometry.location) {
+                const lat = place.geometry.location.lat();
+                const lng = place.geometry.location.lng();
+                this.latitude.setValue(lat);
+                this.longitude.setValue(lng);
+                this.mapCenter = { lat, lng };
+                this.markerPosition = { lat, lng };
 
-                this.address?.setValue(place.formatted_address);
+                this.reverseGeocode(lat, lng);
             }
         });
     }
 
-    onMapClick($event: google.maps.MapMouseEvent | google.maps.IconMouseEvent) {
-        if ($event.latLng) {
-            this.center = {
-                lat: $event.latLng.lat(),
-                lng: $event.latLng.lng()
+    onMapClick(event: google.maps.MapMouseEvent | google.maps.IconMouseEvent) {
+        if (event.latLng) {
+            this.markerPosition = {
+                lat: event.latLng.lat(),
+                lng: event.latLng.lng(),
             };
-            this.getGeocodedAddress(this.center.lat, this.center.lng);
+            this.latitude.setValue(this.markerPosition.lat);
+            this.longitude.setValue(this.markerPosition.lng);
+            this.mapCenter = this.markerPosition;
+            this.reverseGeocode(event.latLng.lat(), event.latLng.lng());
         }
     }
 
-    getGeocodedAddress(lat: number, lng: number) {
-        const geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+    reverseGeocode(lat: number, lng: number) {
+        const latlng = new google.maps.LatLng(lat, lng);
+        this.geocoder.geocode({ location: latlng }, (results, status) => {
             if (status === 'OK' && results && results[0]) {
-                this.address.setValue(results[0].formatted_address);
+                const address = results[0].formatted_address;
+                this.address.setValue(address);
             } else {
-                console.error('Geocoder failed due to ' + status);
+                console.error('Geocoder failed due to: ' + status);
             }
         });
     }
+    updateMap() {
+        console.log('Method not implemented');
+    }
+
     onBack() {
         this.router.navigate(['/']);
     }
@@ -305,21 +319,9 @@ export class AddPropertyComponent implements OnInit {
                     } else {
                         this.router.navigate(['/']);
                     }
-
                     this.alertifyService.success('Congrats, your property listed successfully on our website');
-
-
-
-
-
-
-
                 }
             );
-
-
-
-
         } else {
             this.alertifyService.error('Please review the form and provide all valid entries');
         }
@@ -341,7 +343,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.carpetArea = +this.carpetArea.value;
         this.property.floorNo = this.floorNo.value;
         this.property.totalFloors = this.totalFloors.value;
-        this.property.landMark = this.landMark.value;
+        // this.property.landMark = this.landMark.value;
 
         this.property.address = this.address.value;
         this.property.phoneNumber = this.phoneNumber.value;
