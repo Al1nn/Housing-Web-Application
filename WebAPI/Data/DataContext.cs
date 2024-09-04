@@ -37,7 +37,7 @@ namespace WebAPI.Data
 
             modelBuilder.Entity<Currency>()
                 .Property(c => c.Value)
-                .HasColumnType("decimal(18,6)");
+                .HasColumnType("decimal(18,4)");
 
 
             modelBuilder.Entity<UserImage>().HasKey(i => new { i.UserId, i.ImageId});

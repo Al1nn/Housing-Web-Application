@@ -13,26 +13,9 @@ namespace WebAPI.Data.Repo
             this.dc = dc;
         }
 
-        public void UpdateCurrency(Currency currency)
+        public void AddCurrency(Currency currency)
         {
-            Console.WriteLine("Updating Currencies");
-
-
-            var existingCurrency = dc.Currencies.FirstOrDefault(c => c.Name == currency.Name);
-
-            if (existingCurrency != null)
-            {
-                existingCurrency.Value = currency.Value;
-                existingCurrency.LastUpdatedOn = currency.LastUpdatedOn;
-                existingCurrency.LastUpdatedBy = currency.LastUpdatedBy;
-                dc.Currencies.Update(existingCurrency);
-            }
-            else
-            {
-                dc.Currencies.Add(currency);
-            }
-
-
+           dc.Currencies.Add(currency);
         }
     }
 }

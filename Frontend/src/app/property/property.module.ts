@@ -40,8 +40,8 @@ import { PropertyStatsComponent } from './property-stats/property-stats.componen
 import { MatSelectModule } from '@angular/material/select';
 import { MatTreeModule } from '@angular/material/tree';
 import { PropertyTreeComponent } from './property-tree/property-tree.component';
-
 import { AngularOpenlayersModule } from 'ng-openlayers';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
     declarations: [
@@ -86,7 +86,8 @@ import { AngularOpenlayersModule } from 'ng-openlayers';
         ModalModule,
         LoadingBarHttpClientModule,
         LoadingBarModule,
-        ImageCropperModule
+        ImageCropperModule,
+        GoogleMapsModule
     ],
     providers: [
         BsModalService,

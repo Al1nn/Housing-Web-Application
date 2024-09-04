@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
     FormBuilder,
     FormControl,
@@ -31,12 +31,16 @@ import { ICity } from '../../model/ICity.interface';
 })
 export class AddPropertyComponent implements OnInit {
 
+    @ViewChild('search', { static: false }) searchElementRef!: ElementRef;
     @ViewChild('formTabs', { static: false }) formTabs: TabsetComponent;
+    center = { lat: 37.7749, lng: -122.4194 };
+    zoom = 12;
+    autocomplete!: google.maps.places.Autocomplete;
     addPropertyForm: FormGroup;
     nextClicked: boolean;
     contactAdded = false;
     property = new Property();
-    // This later will come from the database
+
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
     cityList: ICity[];
@@ -183,6 +187,7 @@ export class AddPropertyComponent implements OnInit {
     }
 
 
+
     ngOnInit() {
         this.CreateAddPropertyForm();
         this.housingService.getAllCities().subscribe((data) => {
@@ -233,8 +238,49 @@ export class AddPropertyComponent implements OnInit {
             }),
             PhotosInfo: ['', [Validators.required]]
         });
+
+        const autocompleteOptions = {
+            types: ['geocode'],
+            componentRestrictions: { country: 'us' }
+        };
+
+        this.autocomplete = new google.maps.places.Autocomplete(
+            this.address.value,
+            autocompleteOptions
+        );
+        this.autocomplete.addListener('place_changed', () => {
+            const place = this.autocomplete.getPlace();
+            if (place.geometry) {
+                this.center = {
+                    lat: place.geometry.location?.lat() as number,
+                    lng: place.geometry.location?.lng() as number
+                };
+
+                this.address?.setValue(place.formatted_address);
+            }
+        });
     }
 
+    onMapClick($event: google.maps.MapMouseEvent | google.maps.IconMouseEvent) {
+        if ($event.latLng) {
+            this.center = {
+                lat: $event.latLng.lat(),
+                lng: $event.latLng.lng()
+            };
+            this.getGeocodedAddress(this.center.lat, this.center.lng);
+        }
+    }
+
+    getGeocodedAddress(lat: number, lng: number) {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+            if (status === 'OK' && results && results[0]) {
+                this.address.setValue(results[0].formatted_address);
+            } else {
+                console.error('Geocoder failed due to ' + status);
+            }
+        });
+    }
     onBack() {
         this.router.navigate(['/']);
     }
@@ -280,8 +326,6 @@ export class AddPropertyComponent implements OnInit {
     }
 
     mapProperty(): void {
-
-
         this.property.id = this.housingService.newPropID();
         this.property.sellRent = +this.sellRent.value;
         this.property.bhk = this.bhk.value;
@@ -349,7 +393,6 @@ export class AddPropertyComponent implements OnInit {
     }
 
     async onPhotoSelected(event: any) {
-
         const files: FileList = event.target.files;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
@@ -360,9 +403,6 @@ export class AddPropertyComponent implements OnInit {
             }
 
         }
-
-
-
     }
 
     uploadPropertyPhotos(propertyId: number) {

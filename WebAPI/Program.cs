@@ -3,7 +3,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using WebAPI;
 using WebAPI.Data;
 using WebAPI.Extensions;
 using WebAPI.Helpers;
@@ -70,6 +69,7 @@ builder.Services.AddControllers().AddNewtonsoftJson((x) =>
     x.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
     x.SerializerSettings.MissingMemberHandling = Newtonsoft.Json.MissingMemberHandling.Ignore;
 });
+
 builder.Services.AddMemoryCache();
 
 builder.Services.AddCors();

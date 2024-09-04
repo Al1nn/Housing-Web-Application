@@ -4,6 +4,6 @@ namespace WebAPI.Interfaces
 {
     public interface ICurrencyRepository
     {
-        void UpdateCurrency(Currency currency);
+        void AddCurrency(Currency currency);
     }
 }

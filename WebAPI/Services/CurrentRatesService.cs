@@ -6,6 +6,10 @@ using WebAPI.XMLModels;
 using WebAPI.Models;
 using WebAPI.Interfaces;
 using WebAPI.Data;
+using System.Xml.XPath;
+using System.Xml.Linq;
+using System.Xml;
+using System.Reflection.PortableExecutable;
 
 namespace WebAPI.Services
 {
@@ -28,20 +32,18 @@ namespace WebAPI.Services
         {
             var scheduledHour = _configuration.GetSection("AppSettings:ScheduledHour").Value;
 
-            if (TimeSpan.TryParse(scheduledHour, out var parsedTime))
-            {
+            if (TimeSpan.TryParse(scheduledHour, out var parsedTime)){
                 _scheduledTime = parsedTime;
                 _logger.LogInformation($"Scheduled Time {_scheduledTime}");
             }
-            else
-            {
+            else{
                 _logger.LogError("Error Parsing Scheduled Time, scheduled Time will be set to 1 hour");
                 _scheduledTime = TimeSpan.FromHours(1);
             }
 
-            await FetchAndOutputXmlRatesAsync();
 
             ScheduleNextExecution();
+            
 
             await Task.Delay(Timeout.Infinite, stoppingToken);
             
@@ -63,7 +65,7 @@ namespace WebAPI.Services
 
             _timer = new Timer(async state =>
             {
-                await FetchAndOutputXmlRatesAsync();
+                await FetchXMLUsingXPathAsync();
                 ScheduleNextExecution();
             }, null, delay, Timeout.InfiniteTimeSpan); 
         }
@@ -101,21 +103,75 @@ namespace WebAPI.Services
                                 Currency currency = new Currency();
                                 currency.Name = rate.currency;
                                 currency.Value = rate.Value;
-                                currency.LastUpdatedOn = DateTime.Now;
-                                currency.LastUpdatedBy = 1;
-                                uow.CurrencyRepository.UpdateCurrency(currency);
+                                currency.AddedOn = DateTime.Now;
+                                uow.CurrencyRepository.AddCurrency(currency);
 
                                 await uow.SaveAsync();
                             }
-
-                            
-
-
-
                         }
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching or processing the XML rates.");
+            }
+        }
 
-                    
+
+        private async Task FetchXMLUsingXPathAsync()
+        {
+            string url = "https://www.bnr.ro/nbrfxrates.xml";
+            var desiredCurrencies = _configuration.GetSection("AppSettings:Currencies").Get<List<string>>();
+            Console.WriteLine(desiredCurrencies);
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var xmlContent =  await httpClient.GetStringAsync(url);
+                    XmlDocument xmlDoc;
+                    XmlNamespaceManager nsmgr;
+
+                    using(var reader = new XmlTextReader(new StringReader(xmlContent)))
+                    {
+                        xmlDoc = new XmlDocument();
+                        xmlDoc.Load(reader);
+
+                        nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+
+                        nsmgr.AddNamespace("ns", "http://www.bnr.ro/xsd");
+
+
+                    }
+
+                    Currency currency;
+
+                    foreach(var desiredCurrency in desiredCurrencies)
+                    {
+                        var rateNode = xmlDoc.SelectSingleNode($"//ns:Rate[@currency='{desiredCurrency}']",nsmgr);
+
+
+                        if(rateNode != null) { 
+                            var currencyValue = Convert.ToDecimal(rateNode.InnerText);
+
+                            currency = new Currency();
+                            currency.Name = desiredCurrency;
+                            currency.Value = currencyValue;
+                            currency.AddedOn = DateTime.Now;
+
+                            using (var scope = _serviceProvider.CreateScope())
+                            {
+                                IUnitOfWork uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                                uow.CurrencyRepository.AddCurrency(currency);
+                                await uow.SaveAsync();
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"The currency {desiredCurrency} not found in XML file");
+                        }
+
+                    } 
 
                 }
 

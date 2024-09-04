@@ -15,7 +15,7 @@ namespace WebAPI.Data.Repo
 
         public async Task<IEnumerable<PropertyType>> GetPropertyTypesAsync()
         {
-            return await dc.PropertyTypes.ToListAsync(); ;
+            return await dc.PropertyTypes.ToListAsync(); 
         }
     }
 }

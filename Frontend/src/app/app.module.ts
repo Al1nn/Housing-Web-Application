@@ -45,7 +45,7 @@ import { BreadcrumbService } from './services/breadcrumb.service';
         ReactiveFormsModule,
         HttpClientModule,
         TabsModule.forRoot(),
-        BsDropdownModule.forRoot(),
+        BsDropdownModule.forRoot()
     ],
     providers: [
         provideClientHydration(),
