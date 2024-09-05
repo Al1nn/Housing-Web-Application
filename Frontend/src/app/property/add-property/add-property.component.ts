@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
@@ -48,7 +49,7 @@ export class AddPropertyComponent implements OnInit {
     mapCenter: google.maps.LatLngLiteral = { lat: 44.85454389856495, lng: 24.871015675879697 };
     mapZoom = 10;
     markerPosition: google.maps.LatLngLiteral = this.mapCenter;
-    markerOptions: google.maps.MarkerOptions = { draggable: true };
+    advancedMarker: google.maps.marker.AdvancedMarkerElementOptions;
     geocoder = new google.maps.Geocoder();
 
     propertyView: IPropertyBase = {
@@ -264,6 +265,15 @@ export class AddPropertyComponent implements OnInit {
 
                 this.reverseGeocode(lat, lng);
             }
+        });
+    }
+
+    initializeAdvancedMarker() {
+        const { AdvancedMarkerElement } = google.maps.marker;
+        this.advancedMarker = new AdvancedMarkerElement({
+            map: null, // We'll set the map later
+            position: this.markerPosition,
+            gmpDraggable: true,
         });
     }
 
