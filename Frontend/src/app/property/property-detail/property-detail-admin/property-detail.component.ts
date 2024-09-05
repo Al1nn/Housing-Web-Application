@@ -18,7 +18,7 @@ import { environment } from '../../../../environments/environment';
     styleUrls: ['./property-detail.component.css'],
 })
 export class PropertyDetailAdminComponent implements OnInit {
-
+    @ViewChild('propAddress') propAddress: HTMLInputElement;
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
     editPropertyForm: FormGroup;
 
@@ -209,6 +209,26 @@ export class PropertyDetailAdminComponent implements OnInit {
         this.galleryImages = this.getPropertyPhotos();
     }
 
+    initializeAutocomplete() {
+
+
+        const autocomplete = new google.maps.places.Autocomplete(this.propAddress, {
+            types: ['geocode'],
+            componentRestrictions: { country: ['AU', 'RO', 'IN', 'US'] },
+            fields: ['place_id', 'geometry', 'name']
+        });
+
+        autocomplete.addListener('place_changed', () => {
+            const place = autocomplete.getPlace();
+            if (place.geometry && place.geometry.location) {
+                const lat = place.geometry.location.lat();
+                const lng = place.geometry.location.lng();
+                this.latitude.setValue(lat);
+                this.longitude.setValue(lng);
+            }
+        });
+
+    }
 
     handleLogic() {
         switch (this.property.propertyType) {
@@ -270,8 +290,8 @@ export class PropertyDetailAdminComponent implements OnInit {
                 floorNo: [this.property.floorNo, Validators.required],
                 totalFloors: [this.property.totalFloors, Validators.required],
                 address: [this.property.address, Validators.required],
-                latitude: [null],
-                longitude: [null],
+                latitude: [this.property.latitude],
+                longitude: [this.property.longitude],
                 phoneNumber: [this.property.phoneNumber, Validators.required]
             }),
             OtherInfo: this.fb.group({
@@ -319,8 +339,9 @@ export class PropertyDetailAdminComponent implements OnInit {
     openModal(modalName: string, template: TemplateRef<any>) {
         if (modalName === 'editModal') {
             console.log('In edit modal');
-
+            this.initializeAutocomplete();
             this.CreateEditForm();
+
             this.modalRefEditorDelete = this.modalService.show(template);
             return;
         }
@@ -410,7 +431,8 @@ export class PropertyDetailAdminComponent implements OnInit {
 
         this.propertyDetail.address = this.address.value;
         this.propertyDetail.description = this.description.value;
-        // this.propertyDetail.latitude = ;
+        this.propertyDetail.latitude = this.latitude.value;
+        this.propertyDetail.longitude = this.longitude.value;
         this.propertyDetail.mainEntrance = this.mainEntrance.value;
         this.propertyDetail.phoneNumber = this.phoneNumber.value;
 

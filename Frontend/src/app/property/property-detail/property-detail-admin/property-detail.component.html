@@ -358,7 +358,7 @@
         <tab heading="Address" formGroupName="AddressInfo">
           <div class="form-group col-12 mt-3">
             <label>Floor</label>
-            <input type="text" class="form-control m-2" formControlName="floorNo" #propFloor
+            <input  type="text" class="form-control m-2" formControlName="floorNo" #propFloor
             (keyup)="
             this.propertyDetail.floorNo = propFloor.value;
             this.property.floorNo = propFloor.value">
@@ -381,9 +381,9 @@
 
           <div class="form-row p-2 mt-3 d-flex align-items-end">
             <div class="form-group col-11 me-3">
-              <label for="autocomplete">Address</label>
+              <label>Address</label>
               <input 
-                id="autocomplete" 
+                id="sugestion" 
                 type="text" 
                 class="form-control" 
                 formControlName="address" 
