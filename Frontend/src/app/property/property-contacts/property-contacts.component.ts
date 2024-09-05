@@ -15,8 +15,6 @@ export class PropertyContactsComponent implements OnInit {
     property = new Property();
     public mainPhotoUrl: string;
     originalFolder: string = environment.originalPictureFolder;
-    longitude: number;
-    latitude: number;
 
     constructor(private route: ActivatedRoute) { }
 
