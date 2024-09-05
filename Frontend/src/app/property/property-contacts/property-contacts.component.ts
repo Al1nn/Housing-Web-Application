@@ -16,6 +16,15 @@ export class PropertyContactsComponent implements OnInit {
     public mainPhotoUrl: string;
     originalFolder: string = environment.originalPictureFolder;
 
+    mapCenter: google.maps.LatLngLiteral;
+    mapOptions: google.maps.MapOptions = {
+        disableDefaultUI: true,
+        zoomControl: true,
+        scrollwheel: false,
+        disableDoubleClickZoom: true,
+        draggable: true
+    }
+
     constructor(private route: ActivatedRoute) { }
 
     ngOnInit() {
@@ -23,7 +32,15 @@ export class PropertyContactsComponent implements OnInit {
         this.route.data.subscribe((data) => {
             this.property = data['property'];
         });
+        this.setMapCenter();
+    }
 
-
+    setMapCenter() {
+        if (this.property && this.property.latitude && this.property.longitude) {
+            this.mapCenter = {
+                lat: this.property.latitude,
+                lng: this.property.longitude
+            };
+        }
     }
 }

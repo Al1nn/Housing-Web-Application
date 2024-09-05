@@ -62,8 +62,12 @@
               </strong>
             </tab>
             <tab heading="Location">
-              <google-map width="100%">
-
+              <google-map 
+                width="100%" 
+                [center]="mapCenter" 
+                [zoom]="15" 
+                [options]="mapOptions">
+                <map-marker [position]="mapCenter"></map-marker>
               </google-map>
             </tab>
           </tabset>
