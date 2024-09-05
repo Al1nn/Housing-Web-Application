@@ -297,26 +297,7 @@ namespace WebAPI.Controllers
             return StatusCode(200);
         }
 
-        [HttpPost("add")]
-        [Authorize]
-        public async Task<IActionResult> AddProperty(PropertyDto propertyDto)
-        {
-            var property = mapper.Map<Property>(propertyDto);
-            var userId = GetUserId();
-           
-
-            // Set other properties
-            property.PostedBy = userId;
-            property.LastUpdatedBy = userId;
-            // Add property to repository
-            uow.PropertyRepository.AddProperty(property);
-
-            // Save changes to insert property
-            await uow.SaveAsync();
-
-            // Return success response
-            return StatusCode(201);
-        }
+        
 
         [HttpPut("update/{propId}")]
         [Authorize]
@@ -387,10 +368,11 @@ namespace WebAPI.Controllers
             existingProperty.Gated = newProperty.Gated;
             existingProperty.Maintenance = newProperty.Maintenance;
             existingProperty.EstPossessionOn = newProperty.EstPossessionOn;
-   
+
             existingProperty.Description = newProperty.Description;
-            existingProperty.LandMark = newProperty.LandMark;
             existingProperty.Address = newProperty.Address;
+            existingProperty.Latitude = newProperty.Latitude;
+            existingProperty.Longitude = newProperty.Longitude;
             existingProperty.PhoneNumber = newProperty.PhoneNumber;
            
             existingProperty.LastUpdatedOn = DateTime.Now;
@@ -450,20 +432,36 @@ namespace WebAPI.Controllers
             return Ok(photosDto);
         }
 
- 
+        [HttpPost("add")]
+        [Authorize]
+        public async Task<IActionResult> AddProperty(PropertyDto propertyDto)
+        {
+            var property = mapper.Map<Property>(propertyDto);
+            var userId = GetUserId();
+
+
+            // Set other properties
+            property.PostedBy = userId;
+            property.LastUpdatedBy = userId;
+            // Add property to repository
+            uow.PropertyRepository.AddProperty(property);
+
+
+            await uow.SaveAsync();
+
+            return Created();
+
+        }
 
         //property/add/photo/1
         [HttpPost("add/photo/{propId}")]
         [Authorize]
         public async Task<IActionResult> AddPropertyPhoto( IFormFile file,  [FromForm] string? description, int propId)
         {
+
             ApiError apiError = new ApiError();
 
-             
-
             await Console.Out.WriteLineAsync(description);
-
-
 
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
             int userId = GetUserId();
@@ -476,7 +474,7 @@ namespace WebAPI.Controllers
                 return NotFound(apiError);
             }
 
-            if(property.PostedBy != userId)
+            if (property.PostedBy != userId)
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
                 apiError.ErrorMessage = "You are not authorised to add photos";
@@ -488,8 +486,8 @@ namespace WebAPI.Controllers
             {
                 return NoContent();
             }
-           
-            string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","UPLOADS","originalSizes");
+
+            string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes");
             string thumbnailsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails");
 
             if (!Directory.Exists(originalSizesDirectory))
@@ -497,12 +495,12 @@ namespace WebAPI.Controllers
                 Directory.CreateDirectory(originalSizesDirectory);
             }
 
-            if(!Directory.Exists(thumbnailsDirectory))
+            if (!Directory.Exists(thumbnailsDirectory))
             {
                 Directory.CreateDirectory(thumbnailsDirectory);
             }
 
-                
+
 
             string uniqueId = Guid.NewGuid().ToString();
             var fileName = uniqueId + '-' + file.FileName;
@@ -515,13 +513,14 @@ namespace WebAPI.Controllers
                 await file.CopyToAsync(stream);
             }
 
-             
+
             using (var image = SixLabors.ImageSharp.Image.Load(originalPath))
             {
-                var resizeOptions = new ResizeOptions { 
-                   Mode = ResizeMode.Max,
-                   Size = new Size(800,800),
-                   Position = AnchorPositionMode.Center
+                var resizeOptions = new ResizeOptions
+                {
+                    Mode = ResizeMode.Max,
+                    Size = new Size(800, 800),
+                    Position = AnchorPositionMode.Center
                 };
 
                 image.Mutate(x => x.Resize(resizeOptions));
@@ -530,24 +529,27 @@ namespace WebAPI.Controllers
 
             var photo = new Photo
             {
-               FileName = fileName,
-               PropertyId = propId,
-               LastUpdatedOn = DateTime.Now,
-               LastUpdatedBy = userId
+                FileName = fileName,
+                PropertyId = propId,
+                LastUpdatedOn = DateTime.Now,
+                LastUpdatedBy = userId
             };
 
             property.Photos.Add(photo);
 
-             
+
             if (await uow.SaveAsync()) return Ok();
 
             apiError.ErrorCode = BadRequest().StatusCode;
             apiError.ErrorMessage = "Unknown Error Occured";
             apiError.ErrorDetails = "";
             return BadRequest(apiError);
+
+
+
         }
 
-      
+
 
 
 

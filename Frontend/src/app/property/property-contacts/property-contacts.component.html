@@ -65,7 +65,7 @@
               <div style="height: 500px">
                 <aol-map>
                   <aol-view [zoom]="17">
-                    <aol-coordinate [x]="longitude" [y]="latitude" [srid]="'EPSG:4326'"></aol-coordinate>
+                    <aol-coordinate [x]="property.longitude" [y]="property.latitude" [srid]="'EPSG:4326'"></aol-coordinate>
                   </aol-view>
                   <aol-layer-tile>
                     <aol-source-osm></aol-source-osm>
@@ -74,7 +74,7 @@
                     <aol-source-vector>
                       <aol-feature>
                         <aol-geometry-point>
-                          <aol-coordinate [x]="longitude" [y]="latitude" [srid]="'EPSG:4326'"></aol-coordinate>
+                          <aol-coordinate [x]="property.longitude" [y]="property.latitude" [srid]="'EPSG:4326'"></aol-coordinate>
                         </aol-geometry-point>
                         <aol-style>
                           <aol-style-icon

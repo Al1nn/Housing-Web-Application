@@ -19,8 +19,9 @@ namespace WebAPI.Models
         public City City { get; set; }
         public bool ReadyToMove { get; set; }
         public int CarpetArea { get; set; }
-        public string LandMark {  get; set; }
         public string Address {  get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public string PhoneNumber { get; set; }
         public int FloorNo { get; set; }
         public int TotalFloors { get; set; }

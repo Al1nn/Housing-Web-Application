@@ -8,7 +8,6 @@ export interface IProperty extends IPropertyBase {
     totalFloors: number | null,
     Gated: number | null,
     MainEntrance: string | null,
-    landMark: string | null;
     address: string | null;
     phoneNumber: string | null;
 }

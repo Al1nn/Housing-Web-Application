@@ -43,9 +43,6 @@ export class PropertyDetailAdminComponent implements OnInit {
     originalFolder: string = environment.originalPictureFolder;
     thumbnailFolder: string = environment.thumbnailFolder;
 
-
-
-
     constructor(private housingService: HousingService
         , private route: ActivatedRoute
         , private modalService: BsModalService
@@ -123,6 +120,14 @@ export class PropertyDetailAdminComponent implements OnInit {
 
     get address() {
         return this.AddressInfo.controls['address'] as FormControl;
+    }
+
+    get latitude() {
+        return this.AddressInfo.controls['latitude'] as FormControl;
+    }
+
+    get longitude() {
+        return this.AddressInfo.controls['longitude'] as FormControl;
     }
 
     get phoneNumber() {
@@ -405,7 +410,7 @@ export class PropertyDetailAdminComponent implements OnInit {
 
         this.propertyDetail.address = this.address.value;
         this.propertyDetail.description = this.description.value;
-        this.propertyDetail.landMark = '1';
+        // this.propertyDetail.latitude = ;
         this.propertyDetail.mainEntrance = this.mainEntrance.value;
         this.propertyDetail.phoneNumber = this.phoneNumber.value;
 
