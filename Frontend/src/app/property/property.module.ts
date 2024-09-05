@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { NgModule } from '@angular/core';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
 import { PropertyRoutingModule } from './property-routing.module';
@@ -42,6 +43,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { PropertyTreeComponent } from './property-tree/property-tree.component';
 import { AngularOpenlayersModule } from 'ng-openlayers';
 import { GoogleMapsModule } from '@angular/google-maps';
+
 
 @NgModule({
     declarations: [

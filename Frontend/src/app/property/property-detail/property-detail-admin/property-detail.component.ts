@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Property } from '../../../model/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { HousingService } from '../../../services/housing.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { AlertifyService } from '../../../services/alertify.service';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -12,19 +12,12 @@ import { DatePipe } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 
 
-
-
-
-
-
 @Component({
     selector: 'app-property-detail-admin',
     templateUrl: './property-detail.component.html',
     styleUrls: ['./property-detail.component.css'],
 })
 export class PropertyDetailAdminComponent implements OnInit {
-
-
 
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
     editPropertyForm: FormGroup;
@@ -45,11 +38,10 @@ export class PropertyDetailAdminComponent implements OnInit {
     estPossessionOnFormatted: string;
 
     galleryImages: GalleryItem[];
-    modalRef: BsModalRef;
-
+    modalRefMap: BsModalRef;
+    modalRefEditorDelete: BsModalRef;
     originalFolder: string = environment.originalPictureFolder;
     thumbnailFolder: string = environment.thumbnailFolder;
-
 
 
 
@@ -127,10 +119,6 @@ export class PropertyDetailAdminComponent implements OnInit {
 
     get totalFloors() {
         return this.AddressInfo.controls['totalFloors'] as FormControl;
-    }
-
-    get landMark() {
-        return this.AddressInfo.controls['landMark'] as FormControl;
     }
 
     get address() {
@@ -276,8 +264,9 @@ export class PropertyDetailAdminComponent implements OnInit {
             AddressInfo: this.fb.group({
                 floorNo: [this.property.floorNo, Validators.required],
                 totalFloors: [this.property.totalFloors, Validators.required],
-                landMark: [this.property.landMark, Validators.required],
                 address: [this.property.address, Validators.required],
+                latitude: [null],
+                longitude: [null],
                 phoneNumber: [this.property.phoneNumber, Validators.required]
             }),
             OtherInfo: this.fb.group({
@@ -298,7 +287,12 @@ export class PropertyDetailAdminComponent implements OnInit {
         this.galleryImages = this.getPropertyPhotos();
     }
 
-
+    openMapsModal(template: TemplateRef<any>) {
+        const config: ModalOptions = {
+            class: 'modal-lg'
+        };
+        this.modalRefMap = this.modalService.show(template, config);
+    }
 
     getPropertyPhotos(): GalleryItem[] {
         const photoUrls: GalleryItem[] = [];
@@ -322,12 +316,12 @@ export class PropertyDetailAdminComponent implements OnInit {
             console.log('In edit modal');
 
             this.CreateEditForm();
-            this.modalRef = this.modalService.show(template);
+            this.modalRefEditorDelete = this.modalService.show(template);
             return;
         }
 
         console.log('In delete modal');
-        this.modalRef = this.modalService.show(template);
+        this.modalRefEditorDelete = this.modalService.show(template);
     }
 
 
@@ -342,10 +336,10 @@ export class PropertyDetailAdminComponent implements OnInit {
 
                 if (this.property.sellRent === 2) {
                     this.router.navigate(['/rent-property']);
-                    this.modalRef.hide();
+                    this.modalRefEditorDelete.hide();
                 } else if (this.property.sellRent === 1) {
                     this.router.navigate(['/']);
-                    this.modalRef.hide();
+                    this.modalRefEditorDelete.hide();
                 }
                 this.alertifyService.success('Property Deleted !');
             },
@@ -411,7 +405,7 @@ export class PropertyDetailAdminComponent implements OnInit {
 
         this.propertyDetail.address = this.address.value;
         this.propertyDetail.description = this.description.value;
-        this.propertyDetail.landMark = this.landMark.value;
+        this.propertyDetail.landMark = '1';
         this.propertyDetail.mainEntrance = this.mainEntrance.value;
         this.propertyDetail.phoneNumber = this.phoneNumber.value;
 
@@ -441,7 +435,7 @@ export class PropertyDetailAdminComponent implements OnInit {
             this.housingService.updateProperty(this.propertyId, this.propertyDetail).subscribe(
                 () => {
                     console.log(this.property);
-                    this.modalRef.hide();
+                    this.modalRefEditorDelete.hide();
                     this.alertifyService.success('Property Updated Successfully');
                 }
             );

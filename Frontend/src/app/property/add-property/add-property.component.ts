@@ -262,18 +262,8 @@ export class AddPropertyComponent implements OnInit {
                 this.longitude.setValue(lng);
                 this.mapCenter = { lat, lng };
                 this.markerPosition = { lat, lng };
-
                 this.reverseGeocode(lat, lng);
             }
-        });
-    }
-
-    initializeAdvancedMarker() {
-        const { AdvancedMarkerElement } = google.maps.marker;
-        this.advancedMarker = new AdvancedMarkerElement({
-            map: null, // We'll set the map later
-            position: this.markerPosition,
-            gmpDraggable: true,
         });
     }
 
@@ -300,9 +290,6 @@ export class AddPropertyComponent implements OnInit {
                 console.error('Geocoder failed due to: ' + status);
             }
         });
-    }
-    updateMap() {
-        console.log('Method not implemented');
     }
 
     onBack() {

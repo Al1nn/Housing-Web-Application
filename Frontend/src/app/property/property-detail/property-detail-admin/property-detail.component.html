@@ -150,10 +150,12 @@
   </div>
 </div>
 
+
+<!--DELETE MODAL-->
 <ng-template #deleteModal>
   <div class="modal-header">
      <h4 class="modal-title pull-left">Deleting Property</h4>
-     <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">
+     <button type="button" class="btn btn-danger btn-sm" (click)="modalRefEditorDelete.hide()">
         <i class="fa-solid fa-x text-danger"></i>
      </button>
   </div>
@@ -165,15 +167,16 @@
   </div>
   <div class="modal-footer">
      <button type="button" class="btn btn-success" (click)="deleteProperty(propertyId)">Yes</button>
-     <button type="button" class="btn btn-danger" (click)="modalRef.hide()">No</button>
+     <button type="button" class="btn btn-danger" (click)="modalRefEditorDelete.hide()">No</button>
   </div>
 </ng-template>
 
 
+<!--EDIT MODAL-->
 <ng-template #editModal>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Editing Property</h4>
-     <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">
+     <button type="button" class="btn btn-danger btn-sm" (click)="modalRefEditorDelete.hide()">
         <i class="fa-solid fa-x text-danger"></i>
      </button>
   </div>
@@ -258,9 +261,6 @@
             <label>City</label>
             <select #City
               (ngModelChange)="onCityChange(City.options[City.options.selectedIndex].text, +City.value)"
-              
-
-              
               class="form-control m-2"
               formControlName="city"
             >
@@ -378,25 +378,44 @@
             </div>
           </div>
 
-          <div class="form-group col-12 mt-3">
-            <label>Landmark</label>
-            <input type="text" class="form-control m-2" formControlName="landMark" #propLandMark
-            (keyup)="
-            this.propertyDetail.landMark = propLandMark.value;
-            this.property.landMark = propLandMark.value">
-            <div class="error-block" *ngIf="landMark.invalid &&  landMark.touched">
-              You cannot leave landmark empty
+
+          <div class="form-row p-2 mt-3 d-flex align-items-end">
+            <div class="form-group col-11 me-3">
+              <label for="autocomplete">Address</label>
+              <input 
+                id="autocomplete" 
+                type="text" 
+                class="form-control" 
+                formControlName="address" 
+                #propAddress
+                (keyup)="
+                  this.propertyDetail.address = propAddress.value;
+                  this.property.address = propAddress.value;"
+              >
+              <div class="error-block" *ngIf="address.invalid && address.touched">
+                You cannot leave address empty
+              </div>
+            </div>
+          
+            <div class="form-group">
+              <button type="button" class="btn btn-primary w-100" (click)="openMapsModal(mapModal)">
+                <i class="fa-solid fa-location-pin"></i>
+              </button>
             </div>
           </div>
+        
+          
+        
 
-          <div class="form-group col-12 mt-3">
-            <label>Address</label>
-            <input type="text" class="form-control m-2" formControlName="address" #propAddress
-            (keyup)="
-            this.propertyDetail.address = propAddress.value;
-            this.property.address = propAddress.value;">
-            <div class="error-block" *ngIf="address.invalid &&  address.touched">
-              You cannot leave address empty
+          <div class="form-row p-2 mt-3 d-flex">
+            <div class="form-group me-3"> 
+              <label>Latitude</label>
+              <input type="text" class="form-control" formControlName="latitude" readonly>
+            </div>
+          
+            <div class="form-group me-3">
+              <label>Longitude</label>
+              <input type="text" class="form-control" formControlName="longitude" readonly>
             </div>
           </div>
 
@@ -505,9 +524,25 @@
 
   <div class="modal-footer">
     <button type="submit" class="btn btn-success">Save</button>
-     <button type="button" class="btn btn-danger" (click)="modalRef.hide()">No</button>
+     <button type="button" class="btn btn-danger" (click)="modalRefEditorDelete.hide()">No</button>
   </div>
   </form>
+</ng-template>
+
+<!--MAP MODAL-->
+<ng-template #mapModal>
+  <div class="modal-header">
+      <h4 class="modal-title pull-left">Property Location</h4>
+      <button type="button" class="btn btn-danger btn-sm" (click)="modalRefMap.hide()">
+        <i class="fa-solid fa-x text-danger"></i>
+     </button>
+  </div>
+  <div class="modal-body">
+    <google-map></google-map>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-sm" (click)="modalRefMap.hide()">Close</button>
+  </div>
 </ng-template>
 
 
