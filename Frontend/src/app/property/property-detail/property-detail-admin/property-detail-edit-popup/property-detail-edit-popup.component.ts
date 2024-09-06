@@ -3,7 +3,7 @@ import { Property } from '../../../../model/Property.interface';
 
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { IKeyValuePair } from '../../../../model/IKeyValuePair';
 import { HousingService } from '../../../../services/housing.service';
 
@@ -16,7 +16,7 @@ import { HousingService } from '../../../../services/housing.service';
 })
 export class PropertyDetailEditPopupComponent implements OnInit {
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
-
+    unmodifiedProperty: Property;
     property: Property;
     public propertyId: number;
     editPropertyForm: FormGroup;
@@ -57,10 +57,87 @@ export class PropertyDetailEditPopupComponent implements OnInit {
         return this.BasicInfo.controls['city'] as FormControl;
     }
 
+    get PriceInfo() {
+        return this.editPropertyForm.controls['PriceInfo'] as FormGroup;
+    }
+
+    get price() {
+        return this.PriceInfo.controls['price'] as FormControl;
+    }
+
+    get security() {
+        return this.PriceInfo.controls['security'] as FormControl;
+    }
+
+    get maintenance() {
+        return this.PriceInfo.controls['maintenance'] as FormControl;
+    }
+
+    get builtArea() {
+        return this.PriceInfo.controls['builtArea'] as FormControl;
+    }
+
+    get carpetArea() {
+        return this.PriceInfo.controls['carpetArea'] as FormControl;
+    }
+
+    get AddressInfo() {
+        return this.editPropertyForm.controls['AddressInfo'] as FormGroup;
+    }
+
+    get floorNo() {
+        return this.AddressInfo.controls['floorNo'] as FormControl;
+    }
+
+    get totalFloors() {
+        return this.AddressInfo.controls['totalFloors'] as FormControl;
+    }
+
+    get address() {
+        return this.AddressInfo.controls['address'] as FormControl;
+    }
+
+    get latitude() {
+        return this.AddressInfo.controls['latitude'] as FormControl;
+    }
+
+    get longitude() {
+        return this.AddressInfo.controls['longitude'] as FormControl;
+    }
+
+    get phoneNumber() {
+        return this.AddressInfo.controls['phoneNumber'] as FormControl;
+    }
+
+    get OtherInfo() {
+        return this.editPropertyForm.controls['OtherInfo'] as FormGroup;
+    }
+
+    get readyToMove() {
+        return this.OtherInfo.controls['readyToMove'] as FormControl;
+    }
+
+    get estPossessionOn() {
+        return this.OtherInfo.controls['estPossessionOn'] as FormControl;
+    }
+
+    get gated() {
+        return this.OtherInfo.controls['gated'] as FormControl;
+    }
+
+    get mainEntrance() {
+        return this.OtherInfo.controls['mainEntrance'] as FormControl;
+    }
+
+    get description() {
+        return this.OtherInfo.controls['description'] as FormControl;
+    }
+
+
     ngOnInit(): void {
         this.propertyId = this.data.propertyId;
         this.property = this.data.property;
-        console.log(typeof (this.property.propertyTypeId));
+
         this.housingService.getPropertyTypes().subscribe(data => {
             this.propertyTypes = data;
         });
@@ -73,12 +150,17 @@ export class PropertyDetailEditPopupComponent implements OnInit {
             this.cityList = data;
         });
 
-        console.log(this.property);
+        this.housingService.getPropertyDetailById(this.propertyId).subscribe(data => {
+            this.unmodifiedProperty = data;
+        })
+
         this.CreateEditForm();
     }
 
     closeEditModal() {
-        this.dialogRef.close();
+        if (this.editPropertyForm.valid) {
+            this.dialogRef.close(this.unmodifiedProperty);
+        }
     }
 
     CreateEditForm() {
@@ -88,10 +170,45 @@ export class PropertyDetailEditPopupComponent implements OnInit {
                 bhk: [this.property.bhk],
                 propertyType: [+this.property.propertyTypeId],
                 furnishingType: [+this.property.furnishingTypeId],
-                name: [this.property.name, Validators.required],
+                name: [this.property.name, [Validators.required, this.noDigitsOrNumbersValidator()]],
                 city: [this.property.cityId]
+            }),
+            PriceInfo: this.fb.group({
+                price: [this.property.price, [Validators.required, this.numericValidator()]],
+                security: [this.property.security, [Validators.required, this.numericValidator()]],
+                maintenance: [this.property.maintenance, [Validators.required, this.numericValidator()]],
+                builtArea: [this.property.builtArea, [Validators.required, this.numericValidator()]],
+                carpetArea: [this.property.carpetArea, [Validators.required, this.numericValidator()]]
+            }),
+            AddressInfo: this.fb.group({
+                floorNo: [this.property.floorNo, [Validators.required, this.numericValidator()]],
+                totalFloors: [this.property.totalFloors, [Validators.required, this.numericValidator()]],
+                address: [this.property.address, Validators.required],
+                latitude: [this.property.latitude],
+                longitude: [this.property.longitude],
+                phoneNumber: [this.property.phoneNumber, [Validators.required, this.numericValidator()]]
+            }),
+            OtherInfo: this.fb.group({
+                readyToMove: [this.property.readyToMove ? 'true' : 'false'],
+                estPossessionOn: [new Date(this.property.estPossessionOn), Validators.required],
+                gated: [this.property.gated ? 'true' : 'false'],
+                mainEntrance: [this.property.mainEntrance],
+                description: [this.property.description, Validators.required]
             })
         });
+    }
+
+    noDigitsOrNumbersValidator(): ValidatorFn {
+        return (control: AbstractControl): { [key: string]: any } | null => {
+            const hasDigitsOrNumbers = /[0-9]/.test(control.value);
+            return hasDigitsOrNumbers ? { 'noDigitsOrNumbers': true } : null;
+        };
+    }
+    numericValidator(): ValidatorFn {
+        return (control: AbstractControl): { [key: string]: any } | null => {
+            const valid = /^\d*\.?\d*$/.test(control.value);
+            return valid ? null : { 'numeric': true };
+        };
     }
 
     onSubmit() {
@@ -107,5 +224,13 @@ export class PropertyDetailEditPopupComponent implements OnInit {
         this.property.city = cityArray[0];
         this.property.country = cityArray[1];
         this.property.cityId = cityId;
+        console.log('Property : ');
+        console.log(this.property);
+        console.log('Unmodified Property : ');
+        console.log(this.unmodifiedProperty);
+    }
+
+    openMapsModal() {
+
     }
 }

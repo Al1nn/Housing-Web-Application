@@ -3,10 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../../model/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { HousingService } from '../../../services/housing.service';
-import { BsModalRef } from 'ngx-bootstrap/modal';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormGroup } from '@angular/forms';
-import { IKeyValuePair } from '../../../model/IKeyValuePair';
 import { environment } from '../../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { PropertyDetailDeletePopupComponent } from './property-detail-delete-popup/property-detail-delete-popup.component';
@@ -26,21 +24,9 @@ export class PropertyDetailAdminComponent implements OnInit {
 
     public mainPhotoUrl: string;
     property = new Property();
-    propertyDetail = new Property();
 
-    propertyTypes: IKeyValuePair[];
-    furnishTypes: IKeyValuePair[];
-    cityList: any[];
-
-    estPossessionOnDate: Date;
-    propertyTypeId = 0;
-    furnishTypeId = 0;
-    estPossessionOnFormatted: string;
 
     galleryImages: GalleryItem[];
-    modalRefMap: BsModalRef;
-    modalRefDelete: BsModalRef;
-    modalRefEdit?: BsModalRef;
     originalFolder: string = environment.originalPictureFolder;
     thumbnailFolder: string = environment.thumbnailFolder;
 
@@ -54,15 +40,7 @@ export class PropertyDetailAdminComponent implements OnInit {
 
         this.route.data.subscribe((data) => {
             this.property = data['property'];
-
         });
-
-        this.housingService.getPropertyById(this.propertyId).subscribe(
-            (data) => {
-                this.propertyDetail = data;
-
-            }
-        );
 
         this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
@@ -90,14 +68,17 @@ export class PropertyDetailAdminComponent implements OnInit {
     }
 
     openEditModal() {
-        this.dialogRef.open(PropertyDetailEditPopupComponent, {
+        const dialogRef = this.dialogRef.open(PropertyDetailEditPopupComponent, {
             width: '650px',
             height: '800px',
             data: {
                 propertyId: this.propertyId,
                 property: this.property,
-                propertyTypes: this.propertyTypes
             }
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            this.property = result;
+            this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
         });
     }
 
