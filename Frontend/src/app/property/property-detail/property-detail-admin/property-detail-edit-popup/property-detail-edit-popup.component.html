@@ -1,0 +1,106 @@
+
+<div class="modal-header p-3">
+    <h4 class="modal-title pull-left">Editing Property</h4>
+     <button type="button" class="btn btn-danger btn-sm" (click)="closeEditModal()">
+        <i class="fa-solid fa-x text-danger"></i>
+     </button>
+</div>
+<mat-dialog-content>
+  
+    <form (submit)="onSubmit()" [formGroup]="editPropertyForm">
+      <div class="top-panel">
+        <tabset class="member-tabset">
+
+          <tab heading="Basic Info" formGroupName="BasicInfo">
+
+            <div class="form-group col-12 mt-3">
+              <p class="mt-3">Purchase / Rent</p>
+
+              <div class="btn-group" btnRadioGroup formControlName="sellRent">
+
+                <label class="btn btn-outline-primary" btnRadio=1 tabindex=0 role="button"
+                  name="sellRent"(click)="this.property.sellRent = 1;">Sell</label>
+
+                <label class="btn btn-outline-primary mx-2" btnRadio=2 tabindex=0 role="button"
+                  name="sellRent" (click)="this.property.sellRent = 2">Rent</label>
+
+              </div>
+            </div>
+
+            <div class="form-group col-12 mt-3">
+              <p class="mt-3">BHK</p>
+  
+              <div class="btn-group" btnRadioGroup formControlName="bhk"  name="bhk">
+                <label *ngFor="let bhk of [1,2,3,4]" class="btn btn-outline-primary mx-2" [btnRadio]="bhk" 
+                  tabindex="0" role="button" name="BHK" (click)="this.property.bhk = bhk">{{bhk}}</label>
+              </div>
+            </div>
+
+            <div class="form-group col-12 mt-3">
+              <p class="mt-3">Property Type</p>
+  
+              <div class="btn-group" btnRadioGroup formControlName="propertyType">
+                <label *ngFor="let ptype of propertyTypes" class="btn btn-outline-primary mx-2" 
+                [btnRadio]="ptype.id"
+                  role="button" 
+                  name="propertyType"
+                  (click)="this.property.propertyTypeId = ptype.id; this.property.propertyType = ptype.name;">{{ptype.name}}</label>
+              </div>
+                    
+            </div>
+
+            <div class="form-group col-12 mt-3">
+              <p class="mt-3">Furnishing Type</p>
+  
+              <div class="btn-group" btnRadioGroup formControlName="furnishingType">
+                <label *ngFor="let ftype of furnishTypes" class="btn btn-outline-primary mx-2" [btnRadio]="ftype.id"
+                  role="button" name="sellRent" 
+                  (click)="this.property.furnishingTypeId = ftype.id; this.property.furnishingType = ftype.name;">{{ftype.name}}</label>
+              </div>
+  
+            </div>
+
+            <div class="form-group col-12 mt-3">
+              <label for="name">In Bulding/Society/Project</label>
+              <input type="text" class="form-control m-2" formControlName="name" #propName
+                (input)="this.property.name= propName.value">
+              <div class="error-block" *ngIf="name.invalid && name.touched">
+                You cannot leave name empty
+              </div>
+  
+            </div>
+
+            <div class="form-group col-12 mt-3">
+              <label>City</label>
+              <select #City
+                (ngModelChange)="onCityChange(City.options[City.options.selectedIndex].text, +City.value)"
+                class="form-control m-2"
+                formControlName="city"
+              >
+              <option *ngFor="let city of cityList"
+                value={{city.id}} >
+                {{city.name}}, {{city.country}}
+              </option>
+              
+              </select>
+            </div>
+
+          </tab>
+          
+          
+
+        </tabset>
+      </div>
+  
+    </form>
+  
+  
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button type="submit" class="btn btn-success me-3" (click)="onSubmit()">Save</button>
+    <button type="button" class="btn btn-danger" (click)="closeEditModal()">
+      Close
+  </button>
+  </mat-dialog-actions>
+
+

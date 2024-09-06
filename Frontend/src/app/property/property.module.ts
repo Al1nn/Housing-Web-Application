@@ -43,7 +43,11 @@ import { MatTreeModule } from '@angular/material/tree';
 import { PropertyTreeComponent } from './property-tree/property-tree.component';
 import { AngularOpenlayersModule } from 'ng-openlayers';
 import { GoogleMapsModule } from '@angular/google-maps';
-
+import { PropertyDetailEditPopupComponent } from './property-detail/property-detail-admin/property-detail-edit-popup/property-detail-edit-popup.component';
+import { PropertyDetailDeletePopupComponent } from './property-detail/property-detail-admin/property-detail-delete-popup/property-detail-delete-popup.component';
+import { PropertyDetailMapsPopupComponent } from './property-detail/property-detail-admin/property-detail-edit-popup/property-detail-maps-popup/property-detail-maps-popup.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
     declarations: [
@@ -54,6 +58,9 @@ import { GoogleMapsModule } from '@angular/google-maps';
         AddPropertyComponent,
         PhotoEditorComponent,
         PhotoEditorPopupComponent,
+        PropertyDetailDeletePopupComponent,
+        PropertyDetailEditPopupComponent,
+        PropertyDetailMapsPopupComponent,
         PropertyDetailAdminComponent,
         PropertyDetailOwnerComponent,
         PropertyDetailReaderComponent,
@@ -71,8 +78,10 @@ import { GoogleMapsModule } from '@angular/google-maps';
         MatProgressBarModule,
         AngularOpenlayersModule,
         MatButtonModule,
+        MatButtonToggleModule,
         MatDialogModule,
         MatFormFieldModule,
+        MatTabsModule,
         MatSelectModule,
         MatInputModule,
         MatTreeModule,
