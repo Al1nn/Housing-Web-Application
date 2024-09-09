@@ -199,6 +199,7 @@ export class PropertyDetailEditPopupComponent implements OnInit {
                 description: [this.property.description, Validators.required]
             })
         });
+        this.initializeAutocomplete();
     }
 
     noDigitsOrNumbersValidator(): ValidatorFn {
@@ -241,6 +242,26 @@ export class PropertyDetailEditPopupComponent implements OnInit {
                 latitude: this.latitude,
                 longitude: this.longitude,
                 address: this.address
+            }
+        });
+    }
+
+    initializeAutocomplete() {
+        const autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('placesAutocomplete') as HTMLInputElement,
+            {
+                types: ['geocode'],
+                componentRestrictions: { 'country': ['AU', 'RO', 'IN', 'US'] },
+                fields: ['place_id', 'geometry', 'name'],
+            }
+        );
+        autocomplete.addListener('place_changed', () => {
+            const place = autocomplete.getPlace();
+            if (place.geometry && place.geometry.location) {
+                const lat = place.geometry.location.lat();
+                const lng = place.geometry.location.lng();
+                this.latitude.setValue(lat);
+                this.longitude.setValue(lng);
             }
         });
     }
