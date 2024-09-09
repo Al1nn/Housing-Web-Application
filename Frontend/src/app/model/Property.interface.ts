@@ -23,7 +23,6 @@ export class Property implements IPropertyBase {
     floorNo?: string;
     totalFloors?: string;
     readyToMove: boolean;
-    age?: string;
     mainEntrance?: number;
     security?: number;
     gated?: boolean;

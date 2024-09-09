@@ -7,6 +7,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Vali
 import { IKeyValuePair } from '../../../../model/IKeyValuePair';
 import { HousingService } from '../../../../services/housing.service';
 import { PropertyDetailMapsPopupComponent } from './property-detail-maps-popup/property-detail-maps-popup.component';
+import { AlertifyService } from '../../../../services/alertify.service';
 
 
 // import { DatePipe } from '@angular/common';
@@ -31,6 +32,7 @@ export class PropertyDetailEditPopupComponent implements OnInit {
         , private dialogRef: MatDialogRef<PropertyDetailEditPopupComponent>
         , private dialogMaps: MatDialog
         , private housingService: HousingService
+        , private alertifyService: AlertifyService
         , @Inject(MAT_DIALOG_DATA) public data: any) { }
 
     get BasicInfo() {
@@ -217,9 +219,10 @@ export class PropertyDetailEditPopupComponent implements OnInit {
 
     onSubmit() {
         if (this.editPropertyForm.valid) {
-            console.log('Form Submitted');
-        } else {
-            console.log('Form NOT Submitted');
+            this.alertifyService.success('Property Updated');
+            this.housingService.updateProperty(this.propertyId, this.property).subscribe(data => {
+                this.dialogRef.close(data);
+            });
         }
     }
 

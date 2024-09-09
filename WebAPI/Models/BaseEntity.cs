@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
         
-        public DateTime LastUpdatedOn { get; set; } = DateTime.Now;
+        public DateTime LastUpdatedOn { get; set; }
 
-        public int LastUpdatedBy { get; set; } = 1;
+        public int LastUpdatedBy { get; set; } = 0;
 
     }
 

@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="form-group col-12 mt-3">
-                  <label for="name">In Bulding/Society/Project*</label>
+                  <label for="name">In Bulding/Society/Project</label>
                   <input type="text" class="form-control" formControlName="name" #propName
                   (ngModelChange)="propertyView.name = propName.value">
                   <div class="error-block" *ngIf="name.invalid && (nextClicked || name.touched)">

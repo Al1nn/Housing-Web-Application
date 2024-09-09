@@ -130,15 +130,7 @@ namespace WebAPI.Data.Repo
 
         public void UpdateProperty(Property property)
         {
-            dc.Properties.Attach(property);
-
-            dc.Entry(property).State = EntityState.Modified;
-
-
-            foreach(var photo in property.Photos)
-            {
-                dc.Entry(photo).State = EntityState.Modified;
-            }
+            dc.Properties.Update(property); 
         }
     }
 }

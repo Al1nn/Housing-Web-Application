@@ -43,7 +43,7 @@ namespace WebAPI.Middlewares
                 }
                 else
                 {
-                    statusCode = HttpStatusCode.InternalServerError;
+                     statusCode = HttpStatusCode.InternalServerError;
                     message = "Some unknown error occoured";
                 }
 

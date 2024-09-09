@@ -47,8 +47,6 @@ namespace WebAPI.Dtos
 
         public DateTime EstPossessionOn { get; set; }
 
-        public int Age { get; set; } = 0;
-
         public string Description { get; set; }
     }
 }

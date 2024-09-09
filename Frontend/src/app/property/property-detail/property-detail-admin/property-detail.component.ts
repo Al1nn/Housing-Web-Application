@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../../model/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
-import { HousingService } from '../../../services/housing.service';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormGroup } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { PropertyDetailDeletePopupComponent } from './property-detail-delete-popup/property-detail-delete-popup.component';
 import { PropertyDetailEditPopupComponent } from './property-detail-edit-popup/property-detail-edit-popup.component';
+import { HousingService } from '../../../services/housing.service';
 
 
 @Component({
@@ -29,8 +29,9 @@ export class PropertyDetailAdminComponent implements OnInit {
     galleryImages: GalleryItem[];
     originalFolder: string = environment.originalPictureFolder;
     thumbnailFolder: string = environment.thumbnailFolder;
-
-    constructor(private housingService: HousingService
+    age: string;
+    constructor(
+        private housingService: HousingService
         , private route: ActivatedRoute
         , private dialogRef: MatDialog
     ) { }
@@ -41,8 +42,7 @@ export class PropertyDetailAdminComponent implements OnInit {
         this.route.data.subscribe((data) => {
             this.property = data['property'];
         });
-
-        this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
+        this.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
     }
 
@@ -78,7 +78,6 @@ export class PropertyDetailAdminComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             this.property = result;
-            this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
         });
     }
 

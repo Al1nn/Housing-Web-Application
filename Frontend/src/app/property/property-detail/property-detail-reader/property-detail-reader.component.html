@@ -65,7 +65,9 @@
 
               <div class="heading">
                 <strong>Age Of Property</strong>
-                <p>{{property.age}}</p>
+                <!--DE IMPLEMENTAT AGE-->
+                <p *ngIf="age === '0'">Less than a year</p>
+                <p *ngIf="!(age === '0')">{{age}}</p>
               </div>
 
               <div class="heading">

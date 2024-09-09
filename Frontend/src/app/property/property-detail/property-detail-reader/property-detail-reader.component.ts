@@ -18,9 +18,8 @@ export class PropertyDetailReaderComponent implements OnInit {
     originalFolder: string = environment.originalPictureFolder;
     thumbnailFolder: string = environment.thumbnailFolder;
     galleryImages: GalleryItem[];
-
-    constructor(private route: ActivatedRoute
-        , private housingService: HousingService) { }
+    age: string;
+    constructor(private housingService: HousingService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -28,7 +27,7 @@ export class PropertyDetailReaderComponent implements OnInit {
         this.route.data.subscribe((data) => {
             this.property = data['property'];
         });
-        this.property.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
+        this.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
 
     }

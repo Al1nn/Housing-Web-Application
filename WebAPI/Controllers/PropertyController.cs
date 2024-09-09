@@ -8,6 +8,7 @@ using WebAPI.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using WebAPI.Extensions;
+using Castle.Components.DictionaryAdapter.Xml;
 
 
 
@@ -301,23 +302,11 @@ namespace WebAPI.Controllers
 
         [HttpPut("update/{propId}")]
         [Authorize]
-        public async Task<IActionResult> UpdateProperty(int propId,PropertyDto propertyDto)
+        public async Task<IActionResult> UpdateProperty(int propId,PropertyDetailDto propertyDetailDto)
         {
             ApiError apiError = new ApiError();
             
             int userId = GetUserId();
-          
-           
-            var newProperty = mapper.Map<Property>(propertyDto);
-            if (newProperty == null)
-            {
-                apiError.ErrorCode = BadRequest().StatusCode;
-                apiError.ErrorMessage = "Property sent from client is null";
-                apiError.ErrorDetails = "";
-                return BadRequest(apiError);
-            }
-         
-            
 
             var existingProperty = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
             
@@ -348,39 +337,37 @@ namespace WebAPI.Controllers
 
             
 
-            existingProperty.SellRent = newProperty.SellRent;
-            existingProperty.Name = newProperty.Name;
-            existingProperty.PropertyTypeId = newProperty.PropertyTypeId;
-            existingProperty.PropertyType = newProperty.PropertyType;
-            existingProperty.FurnishingTypeId = newProperty.FurnishingTypeId;
-            existingProperty.FurnishingType = newProperty.FurnishingType;
-            existingProperty.Price = newProperty.Price;
-            existingProperty.BHK = newProperty.BHK;
-            existingProperty.BuiltArea = newProperty.BuiltArea;
-            existingProperty.CityId = newProperty.CityId;
-            existingProperty.City = newProperty.City;
-            existingProperty.ReadyToMove = newProperty.ReadyToMove;
-            existingProperty.CarpetArea = newProperty.CarpetArea;
-            existingProperty.FloorNo = newProperty.FloorNo;
-            existingProperty.TotalFloors = newProperty.TotalFloors;
-            existingProperty.MainEntrance = newProperty.MainEntrance;
-            existingProperty.Security = newProperty.Security;
-            existingProperty.Gated = newProperty.Gated;
-            existingProperty.Maintenance = newProperty.Maintenance;
-            existingProperty.EstPossessionOn = newProperty.EstPossessionOn;
+            existingProperty.SellRent = propertyDetailDto.SellRent;
+            existingProperty.Name = propertyDetailDto.Name;
+            existingProperty.PropertyTypeId = propertyDetailDto.PropertyTypeId;
+            existingProperty.FurnishingTypeId = propertyDetailDto.FurnishingTypeId;
+            existingProperty.Price = propertyDetailDto.Price;
+            existingProperty.BHK = propertyDetailDto.BHK;
+            existingProperty.BuiltArea = propertyDetailDto.BuiltArea;
+            existingProperty.CityId = propertyDetailDto.CityId;
+            existingProperty.ReadyToMove = propertyDetailDto.ReadyToMove;
+            existingProperty.CarpetArea = propertyDetailDto.CarpetArea;
+            existingProperty.FloorNo = propertyDetailDto.FloorNo;
+            existingProperty.TotalFloors = propertyDetailDto.TotalFloors;
+            existingProperty.MainEntrance = propertyDetailDto.MainEntrance;
+            existingProperty.Security = propertyDetailDto.Security;
+            existingProperty.Gated = propertyDetailDto.Gated;
+            existingProperty.Maintenance = propertyDetailDto.Maintenance;
+            existingProperty.EstPossessionOn = propertyDetailDto.EstPossessionOn;
 
-            existingProperty.Description = newProperty.Description;
-            existingProperty.Address = newProperty.Address;
-            existingProperty.Latitude = newProperty.Latitude;
-            existingProperty.Longitude = newProperty.Longitude;
-            existingProperty.PhoneNumber = newProperty.PhoneNumber;
+            existingProperty.Description = propertyDetailDto.Description;
+            existingProperty.Address = propertyDetailDto.Address;
+            existingProperty.Latitude = propertyDetailDto.Latitude;
+            existingProperty.Longitude = propertyDetailDto.Longitude;
+            existingProperty.PhoneNumber = propertyDetailDto.PhoneNumber;
            
             existingProperty.LastUpdatedOn = DateTime.Now;
             existingProperty.LastUpdatedBy = userId;
             uow.PropertyRepository.UpdateProperty(existingProperty);
 
+
             await uow.SaveAsync();
-            return StatusCode(200);
+            return StatusCode(200); 
         }
 
         [HttpGet("get/first/photo/{propId}")]
