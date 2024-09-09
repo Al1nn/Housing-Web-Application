@@ -173,68 +173,75 @@
           </tab>
 
           <tab heading="Address" formGroupName="AddressInfo">
-
-            <div class="form-group col-12 mt-3">
-              <label>Floor</label>
-              <input type="text" class="form-control" formControlName="floorNo" #propFloor
-              (keyup)="this.property.floorNo = propFloor.value">
-              <div class="error-block" *ngIf="floorNo.invalid && floorNo.touched">
-                <div *ngIf="floorNo.errors?.['required']">
-                  You cannot leave Floor empty
-                </div>
-                <div *ngIf="floorNo.errors?.['numeric']">
-                  Please enter a valid number for Floor
-                </div>
-              </div> 
-            </div>
-
-            <div class="form-group col-12">
-              <label>Total Floor</label>
-              <input type="text" class="form-control" formControlName="totalFloors" #propTotalFloor
-              (keyup)="this.property.totalFloors = propTotalFloor.value">
-              <div class="error-block" *ngIf="totalFloors.invalid && totalFloors.touched">
-                <div *ngIf="totalFloors.errors?.['required']">
-                  You cannot leave Total Floors empty
-                </div>
-                <div *ngIf="totalFloors.errors?.['numeric']">
-                  Please enter a valid number for Total Floors
-                </div>
-              </div> 
-            </div>
-
-            <div class="form-row mt-3 d-flex align-items-end">
-                <div class="form-group col-11 me-3">
-                    <label>Address</label>
-                    <input id="placesAutocomplete" type="text" class="form-control m-2" formControlName="address" #propAddress
-                    (keyup)="this.property.address = propAddress.value;">
-                    
-                </div>
-
-                <div class="form-group p-2 col-1">
-                    <button type="button" class="btn btn-primary" (click)="openMapsModal()">
-                        <i class="fa-solid fa-location-pin"></i>
-                    </button>
+            
+              <div class="form-group col-12 mt-3">
+                <label>Floor</label>
+                <input type="text" class="form-control" formControlName="floorNo" #propFloor
+                (keyup)="this.property.floorNo = propFloor.value">
+                <div class="error-block" *ngIf="floorNo.invalid && floorNo.touched">
+                  <div *ngIf="floorNo.errors?.['required']">
+                    You cannot leave Floor empty
+                  </div>
+                  <div *ngIf="floorNo.errors?.['numeric']">
+                    Please enter a valid number for Floor
+                  </div>
                 </div> 
-            </div>
-            <div class="error-block" *ngIf="address.invalid &&  address.touched">
-              You cannot leave address empty
-            </div>
+              </div>
 
-            <div class="form-row p-2 mt-3 d-flex">
-              <div class="form-group col-6 me-3"> 
-                <label>Latitude</label>
-                <input type="text" class="form-control" formControlName="latitude" readonly>
+              <div class="form-group col-12 mt-3">
+                <label>Total Floor</label>
+                <input type="text" class="form-control " formControlName="totalFloors" #propTotalFloor
+                (keyup)="this.property.totalFloors = propTotalFloor.value">
+                <div class="error-block" *ngIf="totalFloors.invalid && totalFloors.touched">
+                  <div *ngIf="totalFloors.errors?.['required']">
+                    You cannot leave Total Floors empty
+                  </div>
+                  <div *ngIf="totalFloors.errors?.['numeric']">
+                    Please enter a valid number for Total Floors
+                  </div>
+                </div> 
+              </div>
+
+              <div class="form-row mt-3 d-flex align-items-end">
+                  <div class="form-group col-11">
+                      <label>Address</label>
+                      <input id="placesAutocomplete" type="text" class="form-control" formControlName="address" #propAddress
+                      (keyup)="this.property.address = propAddress.value;">
+                      
+                  </div>
+
+                  <div class="form-group col-1">
+                      <button type="button" class="btn btn-primary" style="margin-left: 12px;" (click)="openMapsModal()">
+                          <i class="fa-solid fa-location-pin"></i>
+                      </button>
+                  </div>                   
+              </div>
+
+
+              <div class="form-group col-12 error-block" *ngIf="address.invalid &&  address.touched">
+                You cannot leave address empty
+              </div>
+
+              <div class="d-flex justify-content-between mt-3">
+                  
+
+                <div class="form-group col-5"> 
+                  <label>Latitude</label>
+                  <input type="text" class="form-control" formControlName="latitude" readonly>
+                </div>
+                
+                <div class="form-group col-5">
+                  <label>Longitude</label>
+                  <input type="text" class="form-control" formControlName="longitude" readonly>
+                </div> 
+
+                  
+                  
               </div>
             
-              <div class="form-group col-6 me-3">
-                <label>Longitude</label>
-                <input type="text" class="form-control" formControlName="longitude" readonly>
-              </div>
-            </div>
-
             <div class="form-group col-12 mt-3">
               <label>Phone Number</label>
-              <input type="text" class="form-control m-2" formControlName="phoneNumber" #propPhoneNumber
+              <input type="text" class="form-control" formControlName="phoneNumber" #propPhoneNumber
               (keyup)="this.property.phoneNumber = propPhoneNumber.value;">
               <div class="error-block" *ngIf="phoneNumber.invalid && phoneNumber.touched">
                 <div *ngIf="phoneNumber.errors?.['required']">
@@ -245,6 +252,8 @@
                 </div>
               </div> 
             </div>
+            
+            
 
           </tab>
 
