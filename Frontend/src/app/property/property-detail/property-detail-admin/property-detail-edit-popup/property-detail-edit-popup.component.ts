@@ -2,10 +2,12 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Property } from '../../../../model/Property.interface';
 
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { IKeyValuePair } from '../../../../model/IKeyValuePair';
 import { HousingService } from '../../../../services/housing.service';
+import { PropertyDetailMapsPopupComponent } from './property-detail-maps-popup/property-detail-maps-popup.component';
+
 
 // import { DatePipe } from '@angular/common';
 
@@ -27,6 +29,7 @@ export class PropertyDetailEditPopupComponent implements OnInit {
     constructor(
         private fb: FormBuilder
         , private dialogRef: MatDialogRef<PropertyDetailEditPopupComponent>
+        , private dialogMaps: MatDialog
         , private housingService: HousingService
         , @Inject(MAT_DIALOG_DATA) public data: any) { }
 
@@ -231,6 +234,14 @@ export class PropertyDetailEditPopupComponent implements OnInit {
     }
 
     openMapsModal() {
-
+        this.dialogMaps.open(PropertyDetailMapsPopupComponent, {
+            width: '600px',
+            height: '600px',
+            data: {
+                latitude: this.latitude,
+                longitude: this.longitude,
+                address: this.address
+            }
+        });
     }
 }

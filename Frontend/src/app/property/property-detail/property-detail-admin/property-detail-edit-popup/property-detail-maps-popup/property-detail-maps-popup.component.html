@@ -1,3 +1,27 @@
-<p>
-  property-detail-maps-popup works!
-</p>
+<div class="modal-header p-3">
+  <h4 class="modal-title pull-left">Property Location</h4>
+   <button type="button" class="btn btn-danger btn-sm" (click)="closeMapsModal()">
+      <i class="fa-solid fa-x text-danger"></i>
+   </button>
+</div>
+<mat-dialog-content>
+  <google-map
+                  style="overflow-y: hidden;"
+                  height="435px"
+                  width="100%"
+                  [center]="mapCenter"
+                  [zoom]="mapZoom"
+                  (mapClick)="onMapClick($event)"
+                  
+                >
+                  <map-marker
+                    [position]="markerPosition"
+                    [options]="advancedMarker"
+                  ></map-marker>
+                </google-map>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="button" class="btn btn-danger" (click)="closeMapsModal()">
+    Close
+  </button>
+</mat-dialog-actions>
