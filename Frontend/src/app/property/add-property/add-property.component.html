@@ -75,7 +75,7 @@
                   </div>
                 </div>
 
-                <div class="form-group col-12">
+                <div class="form-group col-12 mt-3">
                   <label>City</label>
                   <select #City
                   (ngModelChange)="updateCityAndCountry(City.options[City.options.selectedIndex].text)"
@@ -326,7 +326,7 @@
                 </div>
               </tab>
 
-              <tab heading="Photos">
+              <tab heading="Photos" formGroupName="PhotosInfo">
                 <div class="form-group col-12 p-3">
 
                   <ngx-loading-bar color="#007bff" height="4px"></ngx-loading-bar>
@@ -337,12 +337,12 @@
                     <input id="fileInput" 
                     type="file"   
                     class="form-control"
-                    formControlName="PhotosInfo"
+                    formControlName="photos"
                     accept="image/jpeg" (change)="onPhotoSelected($event)" multiple #inputFile>
                     
           
 
-                    <div class="error-block" *ngIf="PhotosInfo.invalid && PhotosInfo.touched">
+                    <div class="error-block" *ngIf="photos.invalid && (nextClicked || photos.touched)">
                           Please insert a photo
                     </div>
                   </div>

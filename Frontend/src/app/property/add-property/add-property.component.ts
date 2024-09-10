@@ -93,7 +93,7 @@ export class AddPropertyComponent implements OnInit {
     }
 
     get PhotosInfo() {
-        return this.addPropertyForm.controls['PhotosInfo'] as FormControl;
+        return this.addPropertyForm.controls['PhotosInfo'] as FormGroup;
     }
 
     get sellRent() {
@@ -188,7 +188,9 @@ export class AddPropertyComponent implements OnInit {
         return this.OtherInfo.controls['description'] as FormControl;
     }
 
-
+    get photos() {
+        return this.PhotosInfo.controls['photos'] as FormControl;
+    }
 
     ngOnInit() {
         this.CreateAddPropertyForm();
@@ -240,7 +242,9 @@ export class AddPropertyComponent implements OnInit {
                 mainEntrance: [null, Validators.required],
                 description: [null],
             }),
-            PhotosInfo: ['', [Validators.required]]
+            PhotosInfo: this.fb.group({
+                photos: [null, Validators.required]
+            })
         });
     }
 

@@ -206,7 +206,7 @@
                   <div class="form-group col-11">
                       <label>Address</label>
                       <input id="placesAutocomplete" type="text" class="form-control" formControlName="address" #propAddress
-                      (keyup)="this.property.address = propAddress.value;">
+                      (ngModelChange)="this.property.address = propAddress.value;">
                       
                   </div>
 
@@ -227,12 +227,12 @@
 
                 <div class="form-group col-5"> 
                   <label>Latitude</label>
-                  <input type="text" class="form-control" formControlName="latitude" readonly>
+                  <input type="text" #propLatitude class="form-control"  formControlName="latitude" (ngModelChange)="this.property.latitude = +propLatitude.value" readonly>
                 </div>
                 
                 <div class="form-group col-5">
                   <label>Longitude</label>
-                  <input type="text" class="form-control" formControlName="longitude" readonly>
+                  <input type="text" #propLongitude class="form-control" formControlName="longitude" (ngModelChange)="this.property.longitude = +propLongitude.value" readonly>
                 </div> 
 
                   
