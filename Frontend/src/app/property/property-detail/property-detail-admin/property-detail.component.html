@@ -103,12 +103,12 @@
                 <p *ngIf="!property.gated">No</p>
               </div>
 
-              <div class="heading">
+              <div class="heading" *ngIf="this.property.sellRent === 2">
                 <strong>Security Deposit</strong>
                 <p>{{property.security}}</p>
               </div>
 
-              <div class="heading">
+              <div class="heading" *ngIf="this.property.sellRent === 2">
                 <strong>Maintenance</strong>
                 <p>{{property.maintenance}}</p>
               </div>

@@ -12,5 +12,5 @@ export interface IPropertyBase {
     country: string | null;
     readyToMove: boolean;
     estPossessionOn?: string;
-    photo?: string;
+    photo?: string | null;
 }

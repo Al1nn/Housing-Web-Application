@@ -20,8 +20,8 @@ export class PropertyContactsComponent implements OnInit {
     mapOptions: google.maps.MapOptions = {
         disableDefaultUI: true,
         zoomControl: true,
-        scrollwheel: false,
-        disableDoubleClickZoom: true,
+        scrollwheel: true,
+        disableDoubleClickZoom: false,
         draggable: true
     }
 

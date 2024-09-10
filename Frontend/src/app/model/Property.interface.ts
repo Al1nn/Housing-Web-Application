@@ -28,7 +28,7 @@ export class Property implements IPropertyBase {
     gated?: boolean;
     maintenance?: number;
     estPossessionOn: string;
-    photo?: string;
+    photo?: string | null;
     description?: string;
     photos?: IPhoto[];
 }

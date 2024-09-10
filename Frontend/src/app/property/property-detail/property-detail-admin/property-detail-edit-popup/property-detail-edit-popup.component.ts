@@ -19,8 +19,8 @@ import { AlertifyService } from '../../../../services/alertify.service';
 })
 export class PropertyDetailEditPopupComponent implements OnInit {
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
-    unmodifiedProperty: Property;
-    property: Property;
+    unmodifiedProperty: Property = {} as Property;
+    property: Property = {} as Property;
     public propertyId: number;
     editPropertyForm: FormGroup;
     propertyTypes: IKeyValuePair[];
@@ -220,8 +220,8 @@ export class PropertyDetailEditPopupComponent implements OnInit {
     onSubmit() {
         if (this.editPropertyForm.valid) {
             this.alertifyService.success('Property Updated');
-            this.housingService.updateProperty(this.propertyId, this.property).subscribe(data => {
-                this.dialogRef.close(data);
+            this.housingService.updateProperty(this.propertyId, this.property).subscribe(() => {
+                this.dialogRef.close(this.property);
             });
         }
     }
