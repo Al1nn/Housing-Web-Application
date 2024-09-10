@@ -273,7 +273,7 @@
                   (ngModelChange)="propertyView.estPossessionOn = PossessionOn.value"
                   bsDatepicker
                     [bsConfig]="{containerClass : 'theme-dark-blue', dateInputFormat : 'MMM DD, YYYY' }">
-
+                    
                     <div class="error-block" *ngIf="estPossessionOn.invalid && (nextClicked || estPossessionOn.touched)">
                       Please select a date
                     </div>

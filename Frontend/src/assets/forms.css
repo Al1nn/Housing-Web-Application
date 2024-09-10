@@ -88,4 +88,11 @@ input[type = "text"]:focus , input[type = "password"]:focus{
 }
 
 
+.bs-datepicker{
+  margin-left: 78px;
+  padding: 0px; 
+}
 
+.bs-datepicker-container{
+  padding: 0px;
+}
