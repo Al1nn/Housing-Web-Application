@@ -1,4 +1,4 @@
-<div class="modal-header p-3">
+<div class="modal-header p-3" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
   <h4 class="modal-title pull-left">Property Location</h4>
    <button type="button" class="btn btn-danger btn-sm" (click)="closeMapsModal()">
       <i class="fa-solid fa-x text-danger"></i>
@@ -12,7 +12,7 @@
                   [center]="mapCenter"
                   [zoom]="mapZoom"
                   (mapClick)="onMapClick($event)"
-                  
+                  cdkDrag="false"
                 >
                   <map-marker
                     [position]="markerPosition"
@@ -20,7 +20,7 @@
                   ></map-marker>
                 </google-map>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
+<mat-dialog-actions align="end" cdkDragHandle>
   <button type="button" class="btn btn-danger" (click)="closeMapsModal()">
     Close
   </button>

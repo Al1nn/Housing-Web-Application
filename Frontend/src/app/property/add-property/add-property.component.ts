@@ -253,7 +253,7 @@ export class AddPropertyComponent implements OnInit {
             document.getElementById('autocomplete') as HTMLInputElement,
             {
                 types: ['geocode'],
-                componentRestrictions: { 'country': ['AU', 'RO', 'IN', 'US'] },
+                componentRestrictions: { 'country': ['AU', 'RO', 'IN', 'US', 'DE'] },
                 fields: ['place_id', 'geometry', 'name']
             }
         );
@@ -266,6 +266,7 @@ export class AddPropertyComponent implements OnInit {
                 this.longitude.setValue(lng);
                 this.mapCenter = { lat, lng };
                 this.markerPosition = { lat, lng };
+                this.mapZoom = 17;
                 this.reverseGeocode(lat, lng);
             }
         });

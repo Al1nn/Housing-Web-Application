@@ -41,7 +41,7 @@ namespace WebAPI.Services
                 _scheduledTime = TimeSpan.FromHours(1);
             }
 
-
+            //await FetchXMLUsingXPathAsync();
             ScheduleNextExecution();
             
 

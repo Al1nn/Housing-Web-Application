@@ -48,7 +48,7 @@ import { PropertyDetailDeletePopupComponent } from './property-detail/property-d
 import { PropertyDetailMapsPopupComponent } from './property-detail/property-detail-admin/property-detail-edit-popup/property-detail-maps-popup/property-detail-maps-popup.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 @NgModule({
     declarations: [
         PropertyCardElement,
@@ -98,7 +98,8 @@ import { MatTabsModule } from '@angular/material/tabs';
         LoadingBarHttpClientModule,
         LoadingBarModule,
         ImageCropperModule,
-        GoogleMapsModule
+        GoogleMapsModule,
+        DragDropModule
     ],
     providers: [
         BsModalService,

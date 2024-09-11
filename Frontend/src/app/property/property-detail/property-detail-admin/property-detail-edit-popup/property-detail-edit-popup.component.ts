@@ -9,9 +9,6 @@ import { HousingService } from '../../../../services/housing.service';
 import { PropertyDetailMapsPopupComponent } from './property-detail-maps-popup/property-detail-maps-popup.component';
 import { AlertifyService } from '../../../../services/alertify.service';
 
-
-// import { DatePipe } from '@angular/common';
-
 @Component({
     selector: 'app-property-detail-edit-popup',
     templateUrl: './property-detail-edit-popup.component.html',
@@ -26,7 +23,7 @@ export class PropertyDetailEditPopupComponent implements OnInit {
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
     cityList: any[];
-
+    geocoder = new google.maps.Geocoder();
     constructor(
         private fb: FormBuilder
         , private dialogRef: MatDialogRef<PropertyDetailEditPopupComponent>
@@ -244,8 +241,9 @@ export class PropertyDetailEditPopupComponent implements OnInit {
             data: {
                 latitude: this.latitude,
                 longitude: this.longitude,
-                address: this.address
-            }
+                address: this.address,
+                mapZoom: 15
+            },
         });
     }
 
@@ -254,7 +252,7 @@ export class PropertyDetailEditPopupComponent implements OnInit {
             document.getElementById('placesAutocomplete') as HTMLInputElement,
             {
                 types: ['geocode'],
-                componentRestrictions: { 'country': ['AU', 'RO', 'IN', 'US'] },
+                componentRestrictions: { 'country': ['AU', 'RO', 'IN', 'US', 'DE'] },
                 fields: ['place_id', 'geometry', 'name'],
             }
         );
@@ -265,6 +263,20 @@ export class PropertyDetailEditPopupComponent implements OnInit {
                 const lng = place.geometry.location.lng();
                 this.latitude.setValue(lat);
                 this.longitude.setValue(lng);
+                this.reverseGeocode(lat, lng);
+            }
+        });
+    }
+
+    reverseGeocode(lat: number, lng: number) {
+        const latlng = new google.maps.LatLng(lat, lng);
+        this.geocoder.geocode({ location: latlng }, (results, status) => {
+            if (status === 'OK' && results && results[0]) {
+                const address = results[0].formatted_address;
+                this.address.setValue(address);
+                this.property.address = this.address.value;
+            } else {
+                console.error('Geocoder failed due to: ' + status);
             }
         });
     }

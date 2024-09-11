@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -6,10 +6,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
     templateUrl: './property-detail-maps-popup.component.html',
     styleUrls: ['./property-detail-maps-popup.component.css']
 })
-export class PropertyDetailMapsPopupComponent implements OnInit {
+export class PropertyDetailMapsPopupComponent {
 
     mapCenter: google.maps.LatLngLiteral = { lat: +this.data.latitude.value, lng: +this.data.longitude.value };
-    mapZoom = 10;
+    mapZoom = this.data.mapZoom;
     markerPosition: google.maps.LatLngLiteral = this.mapCenter;
     advancedMarker: google.maps.marker.AdvancedMarkerElementOptions;
     geocoder = new google.maps.Geocoder();
@@ -17,10 +17,6 @@ export class PropertyDetailMapsPopupComponent implements OnInit {
         private matDialogRef: MatDialogRef<PropertyDetailMapsPopupComponent>
         , @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
-
-    ngOnInit() {
-        console.log('nana');
-    }
 
     closeMapsModal() {
         this.matDialogRef.close();
