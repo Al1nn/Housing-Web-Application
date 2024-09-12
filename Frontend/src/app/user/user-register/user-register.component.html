@@ -6,18 +6,14 @@
     </div>
     <div class="card-body">
       <div class="avatar-container">
-        <div class="image-container"
-        [ngClass]="{'box-shadow-avatar': !!image}"
-        >
-          <img *ngIf="!image" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
-          <img *ngIf="image"[src]="image" class="img-fluid rounded-circle">
-        
-        </div> 
-        <div class="icon-wrapper">
-          <input type="file" id='avatar-input-file' accept="image/jpeg"  (change)="onFileChange($event)" #avatarInput />
-          
-          <button class="btn btn-primary rounded" (click)="avatarInput.click()"> <i class="fa-solid fa-pen fa-lg"></i> </button> 
-          
+        <div class="image-container" [ngClass]="{'has-image': !!image}">
+          <img [src]="image || '/assets/user_images/user_default.jpg'" alt="User avatar" class="avatar-image">
+          <div class="edit-overlay">
+            <input type="file" id="avatar-input-file" accept="image/jpeg" (change)="onFileChange($event)" #avatarInput hidden>
+            <button class="edit-button" (click)="avatarInput.click()">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+          </div>
         </div>
       </div>
 

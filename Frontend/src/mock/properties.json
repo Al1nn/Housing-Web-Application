@@ -1,0 +1,384 @@
+[
+  {
+    "Id":103,
+    "SellRent":1,
+    "Name":"Birla House",
+    "PType":"House",
+    "BHK":2,
+    "FType":"Fully",
+    "Price":12000,
+    "BuiltArea":500,
+    "CarpetArea":900,
+    "Image":"prop-1",
+    "City":"Atlanta",
+    "Description":"Well Maintained builder floor available for rent at prime location. # property features- - 5 mins away from metro station - Gated community - 24*7 security. # property includes- - Big rooms (Cross ventilation & proper sunlight) - Drawing and dining area - Washrooms - Balcony - Modular kitchen - Near gym, market, temple and park - Easy commuting to major destination. Feel free to call With Query.",
+    "FloorNo":"3",
+    "TotalFloor":"3",
+    "AOP":10,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+    "Contacts" : [
+    {
+      "Id" : 1,
+      "Phone" : "0723456636",
+      "Address" : "Str. Telesti Nr. 3"
+
+    },
+    {
+      "Id" : 2,
+      "Phone" : "0745345636",
+      "Address" : "Str. Vincent Nr. 3"
+
+    },
+    {
+      "Id" : 3,
+      "Phone" : "0765255636",
+      "Address" : "Str. Iuliu Maniu Nr. 3"
+
+    },
+    {
+      "Id" : 4,
+      "Phone" : "0725255636",
+      "Address" : "Str. Alba Iulia Nr. 3"
+
+    }
+  ]
+  },
+
+  {
+    "Id":104,
+    "SellRent":1,
+    "Name":"Erose Flat",
+    "PType":"Apartment",
+    "BHK":3,
+    "FType":"Unfurnished",
+    "Price":5000,
+    "BuiltArea":1200,
+    "CarpetArea":900,
+    "Image":"prop-2",
+    "City":"New York",
+    "Description":"2 BHK, 2 Bathroom, 1 Car Parking",
+    "FloorNo":"3",
+    "TotalFloor":"3",
+    "AOP":10,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+    "Contacts" : [
+      {
+        "Id" : 5,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3"
+
+      },
+      {
+        "Id" : 6,
+        "Phone" : "0745345636",
+        "Address" : "Str. Vincent Nr. 3"
+
+      }
+    ]
+  },
+  {
+    "Id":105,
+    "SellRent":1,
+    "Name":"Gun Hill",
+    "PType":"House",
+    "BHK":3,
+    "FType":"Fully",
+    "Price":12000,
+    "BuiltArea":600,
+    "CarpetArea":900,
+    "Image":"prop-3",
+    "City":"Canada",
+    "Description":"2 BHK, 2 Bathroom, 1 Car Parking",
+    "FloorNo":"2",
+    "TotalFloor":"3",
+    "AOP":5,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+    "Contacts" : [
+      {
+        "Id" : 7,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3"
+
+      },
+      {
+        "Id" : 8,
+        "Phone" : "0745345636",
+        "Address" : "Str. Vincent Nr. 3"
+
+      },
+      {
+        "Id" : 9,
+        "Phone" : "0765255636",
+        "Address" : "Str. Alba Iulia Nr. 3"
+
+      }
+    ]
+  },
+  {
+    "Id":106,
+    "SellRent":1,
+    "Name":"Macro Home",
+    "PType":"Duplex",
+    "BHK":4,
+    "FType":"Semi",
+    "Price":5000,
+    "BuiltArea":850,
+    "CarpetArea":900,
+    "Image":"prop-4",
+    "City":"Canada",
+    "Description":"2 BHK, 2 Bathroom, 1 Car Parking",
+    "FloorNo":"2",
+    "TotalFloor":"3",
+    "AOP":10,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+    "Contacts" : [
+      {
+        "Id" : 10,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3"
+
+      },
+      {
+        "Id" : 11,
+        "Phone" : "0745345636",
+        "Address" : "Str. Vincent Nr. 3"
+
+      }
+    ]
+  },
+  {
+    "Id":107,
+    "SellRent":1,
+    "Name":"Saint Church Villa",
+    "PType":"House",
+    "BHK":2,
+    "FType":"Semi",
+    "Price":12000,
+    "BuiltArea":120,
+    "CarpetArea":900,
+    "Image":"prop-5",
+    "City":"New York",
+    "Description":"2 BHK, 2 Bathroom, 1 Car Parking",
+    "FloorNo":"1",
+    "TotalFloor":"3",
+    "AOP":10,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+
+    "Contacts" : [
+      {
+        "Id" : 12,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3"
+
+      },
+      {
+        "Id" : 13,
+        "Phone" : "0745345636",
+        "Address" : "Str. Vincent Nr. 3"
+
+      }
+    ]
+
+  },
+  {
+    "Id":108,
+    "SellRent":2,
+    "Name":"Santa Clauss",
+    "PType":"Duplex",
+    "BHK":1,
+    "FType":"Fully",
+    "Price":5000,
+    "BuiltArea":120,
+    "CarpetArea":900,
+    "Image":"prop-6",
+    "City":"New York",
+    "Description":"2 BHK, 2 Bathroom, 1 Car Parking",
+    "FloorNo":"0",
+    "TotalFloor":"3",
+    "AOP":10,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+    "Contacts" : [
+      {
+        "Id" : 14,
+        "Phone" : "0723456636",
+        "Address" : "Str. Telesti Nr. 3"
+
+      }
+    ]
+
+  },
+  {
+    "Id":109,
+    "SellRent":2,
+    "Name":"Chicago Duplex",
+    "PType":"Duplex",
+    "BHK":2,
+    "FType":"Fully",
+    "Price":20000,
+    "BuiltArea":1200,
+    "CarpetArea":900,
+    "Image":"prop-7",
+    "City":"New York",
+    "Description":"2 BHK, 2 Bathroom, 1 Car Parking",
+    "FloorNo":"0",
+    "TotalFloor":"3",
+    "AOP":10,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+    "Contacts" : [
+      {
+        "Id" : 15,
+        "Phone" : "0725255636",
+        "Address" :"Str. Telesti Nr. 3"
+
+      }
+    ]
+  },
+  {
+    "Id":110,
+    "SellRent":2,
+    "Name":"Texas House",
+    "PType":"House",
+    "BHK":2,
+    "FType":"Fully",
+    "Price":30000,
+    "BuiltArea":1200,
+    "CarpetArea":900,
+    "Image":"prop-8",
+    "City":"New York",
+    "Description":"2 BHK, 2 Bathroom, 1 Car Parking",
+    "FloorNo":"0",
+    "TotalFloor":"3",
+    "AOP":10,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+    "Contacts" : [
+      {
+        "Id" : 16,
+        "Phone" : "0725255636",
+        "Address" :"Str. Telesti Nr. 3"
+
+      }
+    ]
+  },
+  {
+    "Id":111,
+    "SellRent":2,
+    "Name":"L.A Penthouse",
+    "PType":"Apartment",
+    "BHK":3,
+    "FType":"Fully",
+    "Price":150000,
+    "BuiltArea":1200,
+    "CarpetArea":900,
+    "Image":"prop-9",
+    "City":"New York",
+    "Description":"2 BHK, 2 Bathroom, 1 Car Parking",
+    "FloorNo":"0",
+    "TotalFloor":"3",
+    "AOP":10,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+    "Contacts" : [
+      {
+        "Id" : 15,
+        "Phone" : "0725255636",
+        "Address" :"Laureate Street Nr. 3"
+
+      }
+    ]
+  },
+  {
+    "Id":112,
+    "SellRent":2,
+    "Name":"Philadelphia Property",
+    "PType":"House",
+    "BHK":1,
+    "FType":"Fully",
+    "Price":15000,
+    "BuiltArea":1200,
+    "CarpetArea":900,
+    "Image":"prop-10",
+    "City":"Philadelphia",
+    "Description":"2 BHK, 2 Bathroom, 1 Car Parking",
+    "FloorNo":"0",
+    "TotalFloor":"3",
+    "AOP":10,
+    "Bathrooms":2,
+    "MainEntrance":"East",
+    "Gated":1,
+    "Security":0,
+    "Maintenance":300,
+    "RTM":1,
+    "Posession":"Ready to move",
+    "PostedOn":"01-Jan-2019",
+    "Contacts" : [
+      {
+        "Id" : 15,
+        "Phone" : "0725255636",
+        "Address" :"Str. Telesti Nr. 3"
+
+      }
+    ]
+  }
+]

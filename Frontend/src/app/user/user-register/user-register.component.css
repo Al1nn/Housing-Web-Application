@@ -1,0 +1,56 @@
+.avatar-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 0 4px #fff;
+  }
+  
+  .image-container.has-image {
+    box-shadow: 0 0 0 4px #007bff;
+  }
+  
+  .avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .edit-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #007bff;
+    border-radius: 50%;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .edit-overlay:hover {
+    background: #0056b3;
+  }
+  
+  .edit-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  .fa-pen {
+    display: block;
+  }
