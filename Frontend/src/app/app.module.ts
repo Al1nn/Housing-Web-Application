@@ -9,6 +9,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     ],
     imports: [
         AppRoutingModule,
+        CommonModule,
         BrowserModule,
         HttpClientModule,
         BsDropdownModule.forRoot()

@@ -1,5 +1,5 @@
 /* eslint-disable @angular-eslint/component-class-suffix */
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Property } from '../../model/Property.interface';
 
@@ -10,7 +10,8 @@ import { Property } from '../../model/Property.interface';
 @Component({
     selector: 'app-property-card',
     templateUrl: 'property-card.component.html',
-    styleUrls: ['property-card.component.css']
+    styleUrls: ['property-card.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PropertyCardComponent {
