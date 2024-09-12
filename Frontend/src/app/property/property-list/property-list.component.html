@@ -78,14 +78,14 @@
   </mat-paginator>
 </div>
 
-<div class="row" *ngIf="Properties.length > 0">
+<div class="row">
   <div *ngFor="let property of Properties"
     class="shadow-lg col-sm-3 p-3">
     <app-property-card [property_index]="property" ></app-property-card>
   </div>
 </div>
 
-<div class="row" *ngIf="Properties.length > 0">
+<div class="row">
   <footer class="bg-body-tertiary text-center text-lg-start">
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
       Load More...
@@ -93,9 +93,6 @@
   </footer>
 </div>
 
-<div class="text-center" *ngIf="Properties.length === 0">
-  <strong>No Properties To Show</strong>
-</div>
 
 
 

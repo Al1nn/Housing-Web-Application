@@ -14,6 +14,7 @@ import { UserProfileResolverService } from './user-profile/user-profile-resolver
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         HttpClientModule,
         ReactiveFormsModule,
         FormsModule,
+        TabsModule.forRoot()
     ],
     providers: [
         provideClientHydration(),

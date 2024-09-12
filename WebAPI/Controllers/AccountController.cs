@@ -91,7 +91,7 @@ namespace WebAPI.Controllers
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
                 apiError.ErrorMessage = "Invalid user name or password or selected roles";
-                apiError.ErrorDetails = "This error appear when provided user id or password does not exists";
+                apiError.ErrorDetails = "This error appear when provided user id or roles or password does not exists";
                 return Unauthorized(apiError);
             }
 

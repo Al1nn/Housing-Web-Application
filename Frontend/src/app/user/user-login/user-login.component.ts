@@ -79,6 +79,7 @@ export class UserLoginComponent implements OnInit {
             },
             (error) => {
                 this.onCancel();
+                this.alertifyService.error(error.error.errorMessage);
                 console.log(error);
             }
         );
