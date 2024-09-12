@@ -1,105 +1,19 @@
 /* eslint-disable max-len */
 import { NgModule } from '@angular/core';
-import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { PropertyRoutingModule } from './property-routing.module';
-import { PropertyCardElement } from './property-card/property-card.component';
-import { PropertyListComponent } from './property-list/property-list.component';
-import { PropertyDashboardComponent } from './property-dashboard/property-dashboard.component';
-import { PhotoEditorComponent } from './photo-editor/photo-editor.component';
-import { PropertyDetailAdminComponent } from './property-detail/property-detail-admin/property-detail.component';
-import { PropertyContactsComponent } from './property-contacts/property-contacts.component';
-import { AddPropertyComponent } from './add-property/add-property.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HighlightPipe } from '../pipes/highlight.pipe';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { ButtonsModule } from 'ngx-bootstrap/buttons';
-import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { GalleryComponent } from '@daelmaak/ngx-gallery';
-import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
-import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
-import { LoadingBarModule } from '@ngx-loading-bar/core';
-import { ImageCropperModule } from 'ngx-image-cropper';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { HousingService } from '../services/housing.service';
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { PropertyDetailResolverService } from './property-detail/property-detail-resolver.service';
 import { HttpErrorInterceptorService } from '../services/httperror-interceptor.service';
-import { PropertyDetailOwnerComponent } from './property-detail/property-detail-owner/property-detail-owner.component';
-import { PropertyDetailReaderComponent } from './property-detail/property-detail-reader/property-detail-reader.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatInputModule } from '@angular/material/input';
-import { NgxApexchartsModule } from 'ngx-apexcharts';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/photo-editor-popup.component';
-import { PropertyStatsComponent } from './property-stats/property-stats.component';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTreeModule } from '@angular/material/tree';
-import { PropertyTreeComponent } from './property-tree/property-tree.component';
-import { AngularOpenlayersModule } from 'ng-openlayers';
-import { GoogleMapsModule } from '@angular/google-maps';
-import { PropertyDetailEditPopupComponent } from './property-detail/property-detail-admin/property-detail-edit-popup/property-detail-edit-popup.component';
-import { PropertyDetailDeletePopupComponent } from './property-detail/property-detail-admin/property-detail-delete-popup/property-detail-delete-popup.component';
-import { PropertyDetailMapsPopupComponent } from './property-detail/property-detail-admin/property-detail-edit-popup/property-detail-maps-popup/property-detail-maps-popup.component';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatTabsModule } from '@angular/material/tabs';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+
 @NgModule({
     declarations: [
-        PropertyCardElement,
-        PropertyListComponent,
-        PropertyDashboardComponent,
-        PropertyTreeComponent,
-        AddPropertyComponent,
-        PhotoEditorComponent,
-        PhotoEditorPopupComponent,
-        PropertyDetailDeletePopupComponent,
-        PropertyDetailEditPopupComponent,
-        PropertyDetailMapsPopupComponent,
-        PropertyDetailAdminComponent,
-        PropertyDetailOwnerComponent,
-        PropertyDetailReaderComponent,
-        PropertyStatsComponent,
-        PropertyContactsComponent,
-        HighlightPipe,
+        PropertyRoutingModule.components
     ],
     imports: [
-        CommonModule,
-        FormsModule,
-        PropertyRoutingModule,
-        HttpClientModule,
-        MatCardModule,
-        MatIconModule,
-        MatProgressBarModule,
-        AngularOpenlayersModule,
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatTabsModule,
-        MatSelectModule,
-        MatInputModule,
-        MatTreeModule,
-        MatAutocompleteModule,
-        MatPaginatorModule,
-        ReactiveFormsModule,
-        NgxApexchartsModule,
-        ButtonsModule.forRoot(),
-        CarouselModule.forRoot(),
-        BsDatepickerModule.forRoot(),
-        TabsModule.forRoot(),
-        GalleryComponent,
-        ModalModule,
-        LoadingBarHttpClientModule,
-        LoadingBarModule,
-        ImageCropperModule,
-        GoogleMapsModule,
-        DragDropModule
+        PropertyRoutingModule.modules
     ],
     providers: [
         BsModalService,

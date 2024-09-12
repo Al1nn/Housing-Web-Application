@@ -6,7 +6,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
@@ -24,6 +24,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         BsDropdownModule.forRoot()
     ],
     providers: [
+        provideClientHydration(),
         provideHttpClient(withFetch()),
         provideAnimationsAsync()
     ],

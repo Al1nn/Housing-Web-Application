@@ -13,7 +13,7 @@ import { Property } from '../../model/Property.interface';
     styleUrls: ['property-card.component.css']
 })
 
-export class PropertyCardElement {
+export class PropertyCardComponent {
 
     @Input() property_index: Property; // Input, poate sa imprumute proprietatile obiectului Property
 

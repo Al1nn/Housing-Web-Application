@@ -6,6 +6,10 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserProfileResolverService } from './user-profile/user-profile-resolver.service';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { UserSettingsResolverService } from './user-settings/user-settings-resolver.service';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 const routes: Routes = [
     { path: 'login', component: UserLoginComponent, data: { breadcrumb: null } },
@@ -31,4 +35,19 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class UserRoutingModule { }
+export class UserRoutingModule {
+    static components: any = [
+        UserLoginComponent,
+        UserRegisterComponent,
+        UserProfileComponent,
+        UserSettingsComponent
+    ]
+    static modules: any = [
+        CommonModule,
+        UserRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TabsModule.forRoot()
+    ]
+}
