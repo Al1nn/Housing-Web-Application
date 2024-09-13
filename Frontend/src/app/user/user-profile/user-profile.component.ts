@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IUserCard } from '../../model/IUserCard.interface';
-import { AuthService } from '../../services/auth.service';
-import { HousingService } from '../../services/housing.service';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { StoreService } from '../../store_services/store.service';
 
 @Component({
     selector: 'app-user-profile',
@@ -20,8 +19,8 @@ export class UserProfileComponent implements OnInit {
     public originalFolder: string = environment.originalPictureFolder;
     public thumbnailFolder: string = environment.thumbnailFolder;
 
-    constructor(private authService: AuthService,
-        private housingService: HousingService,
+    constructor(
+        private store: StoreService,
         private route: ActivatedRoute) { }
 
     ngOnInit() {
@@ -29,12 +28,12 @@ export class UserProfileComponent implements OnInit {
             this.userCard = data['usercard'];
         });
 
-        this.authService.getUserCards().subscribe((data: IUserCard[]) => {
-            const decodedToken = this.authService.decodeToken();
+        this.store.authService.getUserCards().subscribe((data: IUserCard[]) => {
+            const decodedToken = this.store.authService.decodeToken();
             this.userCards = data.filter(card => card.username !== decodedToken?.unique_name);
         });
 
-        this.housingService.getPropertyCountByUser().subscribe((data: number) => {
+        this.store.housingService.getPropertyCountByUser().subscribe((data: number) => {
             this.propertiesListed = data;
         });
     }

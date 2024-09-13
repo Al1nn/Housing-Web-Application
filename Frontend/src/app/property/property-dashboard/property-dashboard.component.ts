@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
 
@@ -7,13 +7,17 @@ import { Property } from '../../model/Property.interface';
     templateUrl: './property-dashboard.component.html',
     styleUrls: ['./property-dashboard.component.css']
 })
-export class PropertyDashboardComponent implements OnInit {
+export class PropertyDashboardComponent implements OnInit, OnDestroy {
 
     Properties: Property[];
     PropertiesLength: number;
 
     constructor(
         private route: ActivatedRoute) { }
+    // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
+    ngOnDestroy(): void {
+
+    }
 
     ngOnInit() {
 

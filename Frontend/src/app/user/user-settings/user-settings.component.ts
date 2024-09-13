@@ -1,14 +1,10 @@
+/* eslint-disable @typescript-eslint/indent */
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IUserCard } from '../../model/IUserCard.interface';
-import { HousingService } from '../../services/housing.service';
-
 import { environment } from '../../../environments/environment';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { AlertifyService } from '../../services/alertify.service';
-
-
+import { StoreService } from '../../store_services/store.service';
 
 @Component({
     selector: 'app-user-settings',
@@ -26,11 +22,9 @@ export class UserSettingsComponent implements OnInit {
     public thumbnailFolder: string = environment.thumbnailFolder;
 
     constructor(
-        private fb: FormBuilder,
-        private route: ActivatedRoute
-        , private housingService: HousingService
-        , private authService: AuthService
-        , private alertifyService: AlertifyService
+        private fb: FormBuilder
+        , private route: ActivatedRoute
+        , private store: StoreService
     ) { }
 
     get oldPassword() {
@@ -48,7 +42,7 @@ export class UserSettingsComponent implements OnInit {
             this.userCard = data['usercard'];
         });
 
-        this.housingService.getPropertyCountByUser().subscribe((data) => {
+        this.store.housingService.getPropertyCountByUser().subscribe((data) => {
             this.propertiesListed = data;
         });
 
@@ -60,16 +54,16 @@ export class UserSettingsComponent implements OnInit {
             oldPassword: [null, Validators.required, this.oldPasswordValidator.bind(this)],
             newPassword: [null, Validators.required],
         },
-        {
-            validators: this.samePasswordValidator
-        }
+            {
+                validators: this.samePasswordValidator
+            }
 
         );
     }
 
     oldPasswordValidator(control: AbstractControl): Promise<ValidationErrors | null> {
         return new Promise((resolve) => {
-            this.authService.verifyOldPassword(control.value).subscribe(response => {
+            this.store.authService.verifyOldPassword(control.value).subscribe(response => {
                 if (response) {
                     resolve(null);
                 } else {
@@ -99,23 +93,23 @@ export class UserSettingsComponent implements OnInit {
 
     onSubmit() {
         if (this.passwordForm.valid) {
-            this.authService.updatePassword(this.newPassword.value).subscribe(
+            this.store.authService.updatePassword(this.newPassword.value).subscribe(
                 () => {
                     this.onReset();
-                    this.alertifyService.success('Your password has been updated !');
+                    this.store.alertifyService.success('Your password has been updated !');
                 },
                 (error) => {
                     console.error('Error updating password:', error);
-                    this.alertifyService.error('Failed to update password. Please try again later.');
+                    this.store.alertifyService.error('Failed to update password. Please try again later.');
                 }
             );
         } else {
-            this.alertifyService.error('Please review your fields');
+            this.store.alertifyService.error('Please review your fields');
         }
     }
 
     onReset() {
-    // this.userSubmitted = false;
+        // this.userSubmitted = false;
         this.passwordForm.reset();
     }
 
@@ -123,13 +117,13 @@ export class UserSettingsComponent implements OnInit {
         const selectedFile = event.target.files[0];
         const formData = new FormData();
         formData.append('file', selectedFile);
-        this.authService.updateAvatar(this.userCard.fileName, formData).subscribe(() => {
+        this.store.authService.updateAvatar(this.userCard.fileName, formData).subscribe(() => {
             formData.delete('file');
 
-            this.authService.getUserCard().subscribe((data) => {
+            this.store.authService.getUserCard().subscribe((data) => {
                 this.userCard = data;
                 localStorage.setItem('image', data.fileName);
-                this.alertifyService.success('Avatar Changed');
+                this.store.alertifyService.success('Avatar Changed');
             });
 
         });

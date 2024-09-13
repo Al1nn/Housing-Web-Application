@@ -1,12 +1,13 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { HousingService } from '../../services/housing.service';
+/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
+import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { IFilters } from '../../model/IFilters.interface';
 import { PaginatedProperties } from '../../model/PaginatedProperties.interface';
 import { ISugestion } from '../../model/ISugestion.interface';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { StoreService } from '../../store_services/store.service';
 
 
 
@@ -16,7 +17,8 @@ import { ISugestion } from '../../model/ISugestion.interface';
     templateUrl: './property-list.component.html',
     styleUrls: ['./property-list.component.css'],
 })
-export class PropertyListComponent implements OnInit {
+@AutoUnsubscribe()
+export class PropertyListComponent implements OnInit, OnDestroy {
     @ViewChild('paginator') paginator: MatPaginator;
     @ViewChild('autocompleteInput') autoCompleteInput: ElementRef;
     @Input() Properties: Property[];
@@ -46,7 +48,7 @@ export class PropertyListComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private housingService: HousingService
+        private store: StoreService
     ) { }
 
     @HostListener('document:click', ['$event'])
@@ -77,7 +79,7 @@ export class PropertyListComponent implements OnInit {
                         this.filters.pageNumber = this.PageNumber;
 
 
-                        this.housingService.getAllFilteredUserProperties(this.filters).subscribe(
+                        this.store.housingService.getAllFilteredUserProperties(this.filters).subscribe(
                             (data: PaginatedProperties) => {
 
                                 if (this.PageNumber <= Math.ceil(data.totalRecords / this.filters.pageSize)) {
@@ -97,7 +99,7 @@ export class PropertyListComponent implements OnInit {
                     }
 
 
-                    this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
+                    this.store.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
                         this.Properties.push(...data.properties);
                         this.isLoading = false;
                     }, error => {
@@ -119,7 +121,7 @@ export class PropertyListComponent implements OnInit {
 
 
 
-                    this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(
+                    this.store.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(
                         (data: PaginatedProperties) => {
                             if (this.PageNumber <= Math.ceil(data.totalRecords / this.filters.pageSize)) {
                                 this.Properties.push(...data.properties);
@@ -137,7 +139,7 @@ export class PropertyListComponent implements OnInit {
                     return;
                 }
 
-                this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
+                this.store.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
                     this.Properties.push(...data.properties);
                     this.isLoading = false;
                 }, error => {
@@ -171,12 +173,16 @@ export class PropertyListComponent implements OnInit {
         }
 
 
-        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
+        this.store.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
             this.PropertiesLength = data.totalRecords;
             this.Properties = data.properties;
         });
 
     }
+
+    ngOnDestroy(): void {
+    }
+
 
     selectCity(option: ISugestion) {
         this.autoCompleteInput.nativeElement.value = `${option.city}, ${option.country}`;
@@ -189,7 +195,7 @@ export class PropertyListComponent implements OnInit {
         this.paginator.pageIndex = 0;
 
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+            this.store.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
                 this.isFiltering = true;
@@ -197,7 +203,7 @@ export class PropertyListComponent implements OnInit {
             return;
         }
 
-        this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
+        this.store.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
             this.isFiltering = true;
@@ -226,14 +232,14 @@ export class PropertyListComponent implements OnInit {
                 this.paginator.pageIndex = 0;
 
                 if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-                    this.housingService.getUserPaginatedProperty(1, 2).subscribe(data => {
+                    this.store.housingService.getUserPaginatedProperty(1, 2).subscribe(data => {
                         this.paginator.length = data.totalRecords;
                         this.Properties = data.properties;
                     })
                     return;
                 }
 
-                this.housingService.getPaginatedProperty(this.SellRent, 1, 2).subscribe(data => {
+                this.store.housingService.getPaginatedProperty(this.SellRent, 1, 2).subscribe(data => {
                     this.paginator.length = data.totalRecords;
                     this.Properties = data.properties;
                 });
@@ -247,7 +253,7 @@ export class PropertyListComponent implements OnInit {
 
         if (inputValue.length >= 3) {
             this.filterTimeoutId = window.setTimeout(() => {
-                this.housingService.getAllCitiesFiltered(inputValue, 10, this.SellRent).subscribe(data => {
+                this.store.housingService.getAllCitiesFiltered(inputValue, 10, this.SellRent).subscribe(data => {
                     this.FilteredCityListOptions = data;
                 });
 
@@ -263,14 +269,14 @@ export class PropertyListComponent implements OnInit {
         if (this.isFiltering) {
 
             if (this.isPropertyDashboard()) {
-                this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+                this.store.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                     this.paginator.length = data.totalRecords;
                     this.Properties = data.properties;
                 });
                 return;
             }
 
-            this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
+            this.store.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
             });
@@ -279,14 +285,14 @@ export class PropertyListComponent implements OnInit {
         }
 
         if (this.isPropertyDashboard()) {
-            this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
+            this.store.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
             });
             return;
         }
 
-        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
+        this.store.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
         });
@@ -299,14 +305,14 @@ export class PropertyListComponent implements OnInit {
         this.filters.pageNumber = 1;
         this.paginator.pageIndex = 0;
         if (this.isPropertyDashboard()) {
-            this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+            this.store.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
                 this.isFiltering = true;
             });
             return;
         }
-        this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
+        this.store.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
             this.isFiltering = true;
@@ -319,14 +325,14 @@ export class PropertyListComponent implements OnInit {
         this.PageNumber = 1;
         this.filters.pageNumber = this.PageNumber;
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+            this.store.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
                 this.isFiltering = true;
             });
             return;
         }
-        this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
+        this.store.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
             this.isFiltering = true;
@@ -348,13 +354,13 @@ export class PropertyListComponent implements OnInit {
         this.paginator.pageIndex = 0;
         this.isFiltering = false;
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            this.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
+            this.store.housingService.getUserPaginatedProperty(this.PageNumber, 2).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
             });
             return;
         }
-        this.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
+        this.store.housingService.getPaginatedProperty(this.SellRent, this.PageNumber, 2).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
         });
@@ -373,14 +379,14 @@ export class PropertyListComponent implements OnInit {
         this.filters.pageNumber = this.PageNumber;
         this.paginator.pageIndex = 0;
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
-            this.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
+            this.store.housingService.getAllFilteredUserProperties(this.filters).subscribe(data => {
                 this.paginator.length = data.totalRecords;
                 this.Properties = data.properties;
                 this.isFiltering = true;
             });
             return;
         }
-        this.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
+        this.store.housingService.getAllFilteredProperties(this.SellRent, this.filters).subscribe(data => {
             this.paginator.length = data.totalRecords;
             this.Properties = data.properties;
             this.isFiltering = true;
@@ -390,4 +396,5 @@ export class PropertyListComponent implements OnInit {
     private isPropertyDashboard(): boolean {
         return this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard');
     }
+
 }

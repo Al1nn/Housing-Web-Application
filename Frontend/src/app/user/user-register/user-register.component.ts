@@ -7,8 +7,7 @@ import {
     ValidationErrors,
     Validators,
 } from '@angular/forms';
-import { AlertifyService } from '../../services/alertify.service';
-import { AuthService } from '../../services/auth.service';
+import { StoreService } from '../../store_services/store.service';
 
 
 
@@ -34,8 +33,7 @@ export class UserRegisterComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private authService: AuthService,
-        private alertifyService: AlertifyService
+        private store: StoreService
     ) { }
 
     get username() {
@@ -116,21 +114,17 @@ export class UserRegisterComponent implements OnInit {
 
     }
 
-
     passwordMatchingValidator(fc: AbstractControl): ValidationErrors | null {
         return fc.get('password')?.value === fc.get('confirmPassword')?.value
             ? null
             : { notmatched: true };
     }
 
-
-
     userData(): FormData {
         this.formData.append('username', this.username.value);
         this.formData.append('email', this.email.value);
         this.formData.append('password', this.password.value);
         this.formData.append('phoneNumber', this.mobile.value);
-
 
         if (this.admin.value) {
             this.formData.append('roles', 'Admin');
@@ -142,33 +136,17 @@ export class UserRegisterComponent implements OnInit {
             this.formData.append('roles', 'Reader');
         }
 
-
-
-
         return this.formData;
-
-
-
     }
-
-
-
-
     onSubmit() {
         console.log(this.registerationForm);
 
         this.userSubmitted = true;
         if (this.registerationForm.valid) {
-
-
-
-            this.authService.registerUser(this.userData()).subscribe(() => {
+            this.store.authService.registerUser(this.userData()).subscribe(() => {
                 this.onReset();
-                this.alertifyService.success('Congrats, you are now registered');
-
+                this.store.alertifyService.success('Congrats, you are now registered');
             });
-
-
         }
     }
 

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { HousingService } from '../../services/housing.service';
 import { ITree } from '../../model/ITree.interface';
 import { Property } from '../../model/Property.interface';
 import { MatSelectChange } from '@angular/material/select';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { environment } from '../../../environments/environment';
+import { StoreService } from '../../store_services/store.service';
 
 
 
@@ -27,21 +27,21 @@ export class PropertyTreeComponent implements OnInit {
     FoundProperty: Property = {} as Property;
     originalFolder: string = environment.originalPictureFolder;
 
-    constructor(private housingService: HousingService) { }
+    constructor(private store: StoreService) { }
 
     ngOnInit() {
-        this.housingService.getPropertyTree(0).subscribe(data => {
+        this.store.housingService.getPropertyTree(0).subscribe(data => {
             this.PropertyTree = data;
             this.dataSource.data = this.PropertyTree;
         });
 
 
 
-        this.housingService.getAllProperties(1).subscribe(data => {
+        this.store.housingService.getAllProperties(1).subscribe(data => {
             this.Properties.push(...data);
         });
 
-        this.housingService.getAllProperties(2).subscribe(data => {
+        this.store.housingService.getAllProperties(2).subscribe(data => {
             this.Properties.push(...data);
         })
 

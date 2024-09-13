@@ -1,13 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Property } from '../../../../model/Property.interface';
-
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { IKeyValuePair } from '../../../../model/IKeyValuePair';
-import { HousingService } from '../../../../services/housing.service';
 import { PropertyDetailMapsPopupComponent } from './property-detail-maps-popup/property-detail-maps-popup.component';
-import { AlertifyService } from '../../../../services/alertify.service';
+import { StoreService } from '../../../../store_services/store.service';
 
 @Component({
     selector: 'app-property-detail-edit-popup',
@@ -28,8 +26,7 @@ export class PropertyDetailEditPopupComponent implements OnInit {
         private fb: FormBuilder
         , private dialogRef: MatDialogRef<PropertyDetailEditPopupComponent>
         , private dialogMaps: MatDialog
-        , private housingService: HousingService
-        , private alertifyService: AlertifyService
+        , private store: StoreService
         , @Inject(MAT_DIALOG_DATA) public data: any) { }
 
     get BasicInfo() {
@@ -140,19 +137,19 @@ export class PropertyDetailEditPopupComponent implements OnInit {
         this.propertyId = this.data.propertyId;
         this.property = this.data.property;
 
-        this.housingService.getPropertyTypes().subscribe(data => {
+        this.store.housingService.getPropertyTypes().subscribe(data => {
             this.propertyTypes = data;
         });
 
-        this.housingService.getFurnishingTypes().subscribe(data => {
+        this.store.housingService.getFurnishingTypes().subscribe(data => {
             this.furnishTypes = data;
         });
 
-        this.housingService.getAllCities().subscribe((data) => {
+        this.store.housingService.getAllCities().subscribe((data) => {
             this.cityList = data;
         });
 
-        this.housingService.getPropertyDetailById(this.propertyId).subscribe(data => {
+        this.store.housingService.getPropertyDetailById(this.propertyId).subscribe(data => {
             this.unmodifiedProperty = data;
         })
 
@@ -216,8 +213,8 @@ export class PropertyDetailEditPopupComponent implements OnInit {
 
     onSubmit() {
         if (this.editPropertyForm.valid) {
-            this.alertifyService.success('Property Updated');
-            this.housingService.updateProperty(this.propertyId, this.property).subscribe(() => {
+            this.store.alertifyService.success('Property Updated');
+            this.store.housingService.updateProperty(this.propertyId, this.property).subscribe(() => {
                 this.dialogRef.close(this.property);
             });
         }

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../../model/Property.interface';
 import { environment } from '../../../../environments/environment';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
-import { HousingService } from '../../../services/housing.service';
+import { StoreService } from '../../../store_services/store.service';
 
 @Component({
     selector: 'app-property-detail-owner',
@@ -19,7 +19,7 @@ export class PropertyDetailOwnerComponent implements OnInit {
     thumbnailFolder: string = environment.thumbnailFolder;
     galleryImages: GalleryItem[];
     age: string;
-    constructor(private housingService: HousingService, private route: ActivatedRoute) { }
+    constructor(private store: StoreService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -28,7 +28,7 @@ export class PropertyDetailOwnerComponent implements OnInit {
             this.property = data['property'];
             console.log(data);
         });
-        this.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
+        this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
     }
 

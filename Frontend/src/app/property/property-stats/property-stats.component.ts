@@ -12,9 +12,9 @@ import {
     ApexFill,
     ApexLegend,
 } from 'ngx-apexcharts';
-import { HousingService } from '../../services/housing.service';
 import { IPropertyStats } from '../../model/IPropertyStats.interface';
 import { isPlatformBrowser } from '@angular/common';
+import { StoreService } from '../../store_services/store.service';
 
 
 
@@ -41,7 +41,7 @@ export class PropertyStatsComponent implements OnInit {
     public chartOptions: ChartOptions;
     propertyStats: IPropertyStats[];
 
-    constructor(private housingService: HousingService,
+    constructor(private store: StoreService,
         @Inject(PLATFORM_ID) private platformId: Object) {
         if (isPlatformBrowser(this.platformId)) {
             this.chartOptions = {
@@ -127,7 +127,7 @@ export class PropertyStatsComponent implements OnInit {
 
     ngOnInit() {
         if (isPlatformBrowser(this.platformId)) {
-            this.housingService.getAllPropertyStats().subscribe(data => {
+            this.store.housingService.getAllPropertyStats().subscribe(data => {
                 this.propertyStats = data;
                 this.updateChartCategories();
             });

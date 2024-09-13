@@ -1,15 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { IUserForRegister } from '../../model/IUser.interface';
-import { AlertifyService } from '../../services/alertify.service';
-import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { IUserForLogin } from '../../model/IUser.interface';
 import { IImage } from '../../model/IImage.interface';
-
-
-
-
+import { StoreService } from '../../store_services/store.service';
 
 @Component({
     selector: 'app-user-login',
@@ -36,8 +31,7 @@ export class UserLoginComponent implements OnInit {
     ]
 
     constructor(
-        private alertifyService: AlertifyService,
-        private authService: AuthService,
+        private store: StoreService,
         private router: Router,
     ) { }
 
@@ -62,24 +56,24 @@ export class UserLoginComponent implements OnInit {
             this.formData.append('roles', e);
         }
 
-        this.authService.authUser(this.formData).subscribe(
+        this.store.authService.authUser(this.formData).subscribe(
             (response: IUserForLogin) => {
                 const user = response;
                 localStorage.setItem('token', user.token);
 
 
-                this.authService.getProfileImage().subscribe((data: IImage) => {
+                this.store.authService.getProfileImage().subscribe((data: IImage) => {
                     if (data !== null) {
                         localStorage.setItem('image', data.fileName as string);
                     }
                 })
 
-                this.alertifyService.success('Login successful');
+                this.store.alertifyService.success('Login successful');
                 this.router.navigate(['/']);
             },
             (error) => {
                 this.onCancel();
-                this.alertifyService.error(error.error.errorMessage);
+                this.store.alertifyService.error(error.error.errorMessage);
                 console.log(error);
             }
         );

@@ -11,12 +11,11 @@ import { Router } from '@angular/router';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { IPropertyBase } from '../../model/IPropertyBase.interface';
 import { Property } from '../../model/Property.interface';
-import { HousingService } from '../../services/housing.service';
-import { AlertifyService } from '../../services/alertify.service';
 import { IKeyValuePair } from '../../model/IKeyValuePair';
 import { DatePipe } from '@angular/common';
 import { IPhoto } from '../../model/IPhoto';
 import { ICity } from '../../model/ICity.interface';
+import { StoreService } from '../../store_services/store.service';
 
 
 
@@ -70,8 +69,7 @@ export class AddPropertyComponent implements OnInit {
 
     constructor(
         private datePipe: DatePipe,
-        private alertifyService: AlertifyService,
-        private housingService: HousingService,
+        private store: StoreService,
         private fb: FormBuilder,
         private router: Router,
     ) { }
@@ -194,15 +192,15 @@ export class AddPropertyComponent implements OnInit {
 
     ngOnInit() {
         this.CreateAddPropertyForm();
-        this.housingService.getAllCities().subscribe((data) => {
+        this.store.housingService.getAllCities().subscribe((data) => {
             this.cityList = data;
         });
 
-        this.housingService.getPropertyTypes().subscribe((data) => {
+        this.store.housingService.getPropertyTypes().subscribe((data) => {
             this.propertyTypes = data;
         });
 
-        this.housingService.getFurnishingTypes().subscribe((data) => {
+        this.store.housingService.getFurnishingTypes().subscribe((data) => {
             this.furnishTypes = data;
         });
         this.initializeAutocomplete();
@@ -305,7 +303,7 @@ export class AddPropertyComponent implements OnInit {
         this.nextClicked = true;
         if (this.allTabsValid()) {
             this.mapProperty();
-            this.housingService.addProperty(this.property).subscribe(
+            this.store.housingService.addProperty(this.property).subscribe(
                 () => {
 
 
@@ -321,16 +319,16 @@ export class AddPropertyComponent implements OnInit {
                     } else {
                         this.router.navigate(['/']);
                     }
-                    this.alertifyService.success('Congrats, your property listed successfully on our website');
+                    this.store.alertifyService.success('Congrats, your property listed successfully on our website');
                 }
             );
         } else {
-            this.alertifyService.error('Please review the form and provide all valid entries');
+            this.store.alertifyService.error('Please review the form and provide all valid entries');
         }
     }
 
     mapProperty(): void {
-        this.property.id = this.housingService.newPropID();
+        this.property.id = this.store.housingService.newPropID();
         this.property.sellRent = +this.sellRent.value;
         this.property.bhk = this.bhk.value;
         this.property.propertyTypeId = this.propertyType.value;
@@ -414,7 +412,7 @@ export class AddPropertyComponent implements OnInit {
         this.photosToUpload.forEach((file) => {
             const formData = new FormData();
             formData.append('file', file);
-            this.housingService.addPropertyPhoto(propertyId, formData).subscribe(
+            this.store.housingService.addPropertyPhoto(propertyId, formData).subscribe(
                 () => {
 
                     console.log('Photo uploaded successfully');

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../../model/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
@@ -8,15 +8,16 @@ import { environment } from '../../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { PropertyDetailDeletePopupComponent } from './property-detail-delete-popup/property-detail-delete-popup.component';
 import { PropertyDetailEditPopupComponent } from './property-detail-edit-popup/property-detail-edit-popup.component';
-import { HousingService } from '../../../services/housing.service';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { StoreService } from '../../../store_services/store.service';
 
 @Component({
     selector: 'app-property-detail-admin',
     templateUrl: './property-detail.component.html',
     styleUrls: ['./property-detail.component.css'],
 })
-export class PropertyDetailAdminComponent implements OnInit {
+@AutoUnsubscribe()
+export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
     editPropertyForm: FormGroup;
 
@@ -31,10 +32,16 @@ export class PropertyDetailAdminComponent implements OnInit {
     thumbnailFolder: string = environment.thumbnailFolder;
     age: string;
     constructor(
-        private housingService: HousingService
+        private store: StoreService
         , private route: ActivatedRoute
         , private dialogRef: MatDialog
     ) { }
+
+    // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
+    ngOnDestroy(): void {
+
+    }
+
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -42,7 +49,7 @@ export class PropertyDetailAdminComponent implements OnInit {
         this.route.data.subscribe((data) => {
             this.property = data['property'];
         });
-        this.age = this.housingService.getPropertyAge(this.property.estPossessionOn);
+        this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
     }
 

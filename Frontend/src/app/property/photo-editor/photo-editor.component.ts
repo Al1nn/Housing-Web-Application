@@ -1,12 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Property } from '../../model/Property.interface';
-import { HousingService } from '../../services/housing.service';
-import { AlertifyService } from '../../services/alertify.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PhotoEditorPopupComponent } from './photo-editor-popup/photo-editor-popup.component';
 import { HttpEventType } from '@angular/common/http';
 import { IPhoto } from '../../model/IPhoto';
+import { StoreService } from '../../store_services/store.service';
 
 @Component({
     selector: 'app-photo-editor',
@@ -21,13 +20,13 @@ export class PhotoEditorComponent {
     uploadProgress = 0;
     photosToUpload: File[] = [];
 
-    constructor(private housingService: HousingService, private alertifyService: AlertifyService, private dialogRef: MatDialog) { }
+    constructor(private store: StoreService, private dialogRef: MatDialog) { }
 
     deletePhoto(propertyId: number, photo: IPhoto) {
 
-        this.housingService.deletePhoto(propertyId, photo.fileName).subscribe(() => {
+        this.store.housingService.deletePhoto(propertyId, photo.fileName).subscribe(() => {
             this.fileCount = 0;
-            this.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
+            this.store.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
 
                 if (event.type === HttpEventType.Response) {
                     const photos = event.body;
@@ -80,7 +79,7 @@ export class PhotoEditorComponent {
             this.fileCount = 0;
             this.uploadProgress = 0;
 
-            this.alertifyService.error('No file uploaded');
+            this.store.alertifyService.error('No file uploaded');
         }
     }
 
@@ -100,7 +99,7 @@ export class PhotoEditorComponent {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                this.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
+                this.store.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
                     console.log(event.type);
                     if (event.type === HttpEventType.DownloadProgress && event.total !== undefined) {
                         this.uploadProgress = Math.round(100 * (event.loaded / event.total));
