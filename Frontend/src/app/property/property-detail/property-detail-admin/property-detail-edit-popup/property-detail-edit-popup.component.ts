@@ -151,7 +151,7 @@ export class PropertyDetailEditPopupComponent implements OnInit {
 
         this.store.housingService.getPropertyDetailById(this.propertyId).subscribe(data => {
             this.unmodifiedProperty = data;
-        })
+        });
 
         this.CreateEditForm();
     }

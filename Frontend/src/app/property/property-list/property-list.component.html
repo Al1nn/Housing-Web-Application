@@ -1,5 +1,5 @@
-<div>
-  <input type="text" 
+<div class="filters">
+<input type="text" 
   class="autocomplete-input form-control mb-2"
   #autocompleteInput
   placeholder="Filter by City"
@@ -17,12 +17,10 @@
         </button>
       </li>
   </ul>
-</div>
-
-<mat-label>Filter SqrArea&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</mat-label>
 
 
 
+<!--Range Slider-->
 
 <mat-label>Min : </mat-label>
 <mat-form-field  style="width: 75px;">
@@ -46,7 +44,7 @@
 
 
 
-<mat-form-field style="height: 25px;" appearance="outline">
+<mat-form-field class="raised-select" style="height: 25px;" appearance="outline">
   <mat-select placeholder="Sort by" [(ngModel)]="SortbyParam"  (selectionChange)="onSortChange()">
     <mat-option value="City">
       City
@@ -61,13 +59,15 @@
 </mat-form-field>
 
 <button type="button" style="height: 57px;" mat-raised-button (click)="onSortDirection()">
-  <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down"></i>
-  <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up"></i>
+  <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down fa-xl"></i>
+  <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up fa-xl"></i>
 </button>
-<button type="button" style="height: 57px;" mat-raised-button (click)="clearFilters()">Clear</button>
+<button type="button" style="height: 57px;" mat-raised-button (click)="clearFilters()">
+  <i class="fa-solid fa-broom fa-xl"></i>
+</button>
 <br>
 
-<div class="d-flex justify-content-left">
+<div class="d-flex justify-content-left mt-3">
   <mat-paginator
                 #paginator
                 [length]="PropertiesLength"
@@ -77,6 +77,8 @@
                  (page)="onPageChange($event)">
   </mat-paginator>
 </div>
+</div>
+  
 
 <div class="row">
   <div *ngFor="let property of Properties"

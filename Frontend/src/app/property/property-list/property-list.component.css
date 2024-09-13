@@ -1,5 +1,5 @@
 .autocomplete-input{
-  width: 300px;
+  width: 350px;
 }
 
 .dropdown {
@@ -41,4 +41,9 @@
   display: block;
 }
 
+
+.filters{
+  margin-left: 5px;
+  margin-right: 5px;
+}
 

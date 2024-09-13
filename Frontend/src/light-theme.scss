@@ -35,5 +35,43 @@ $my-first-app-theme: mat.define-light-theme((
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
+
+
 @include mat.all-component-themes($my-first-app-theme);
+
+
+.mat-mdc-paginator {
+  min-width: 352px;
+  width: auto;
+  .mat-mdc-paginator-container {
+    min-height: 48px;
+    max-height: 48px;
+    
+    background-color: #007bff;
+    border-radius: 6px;
+  }
+
+  .mat-mdc-paginator-range-actions {
+    align-items: center;
+  }
+
+  .mat-mdc-paginator-icon {
+    fill: white;
+  }
+
+  .mat-mdc-paginator-range-label {
+    margin-left: 10px;
+    text-wrap: nowrap;
+    color: white;
+    font-size: 14px;
+  }
+
+  button {
+    color: red;
+  }
+}
+
+.mat-mdc-raised-button{
+  margin-left: 5px;
+}
 
