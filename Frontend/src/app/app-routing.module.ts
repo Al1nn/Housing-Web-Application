@@ -6,7 +6,7 @@ const routes: Routes = [
     {
         path: '',
         loadChildren: () => import('./property/property.module').then(m => m.PropertyModule),
-        data: { breadcrumb: 'Home' }
+        data: { breadcrumb: 'HSPA' }
     },
 
     {

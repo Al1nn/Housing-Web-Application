@@ -12,7 +12,6 @@ export class PropertyContactsResolverService implements Resolve<Property> {
     constructor(private router: Router, private store: StoreService) { }
     resolve(route: ActivatedRouteSnapshot): Observable<Property> | Property {
         const propId = route.params['id'];
-
         return this.store.housingService.getPropertyDetailById(+propId).pipe(
             catchError((error) => {
                 console.log(error);

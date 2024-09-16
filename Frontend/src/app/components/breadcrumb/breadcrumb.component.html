@@ -1,5 +1,5 @@
 <nav *ngIf="showBreadcrumb" aria-label="breadcrumb">
-  <ol class="breadcrumb">
+  <ol class="breadcrumb mb-3">
     <ng-container *ngFor="let breadcrumb of breadcrumbs$ | async; let last = last">
       <ng-container *ngIf="!last">
         <li class="breadcrumb-item">

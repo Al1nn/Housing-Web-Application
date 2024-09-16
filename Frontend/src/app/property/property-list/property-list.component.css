@@ -55,7 +55,7 @@
   width: 100%;
   max-width: 600px; /* Adjust as needed */
   /* background-color: green; */
-  margin: 0px 770px auto;
+  margin-left: 5px;
 }
 
 .filters mat-slider{

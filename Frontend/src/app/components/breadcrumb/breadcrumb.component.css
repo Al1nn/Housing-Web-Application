@@ -1,0 +1,39 @@
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  
+  .breadcrumb-item {
+    font-size: 16px;
+    color: #6c757d; /* Light grey for non-active items */
+  }
+  
+  .breadcrumb-item + .breadcrumb-item::before {
+    content: ">";
+    margin: 0 5px;
+    color: #6c757d; /* Light grey for the separator */
+  }
+  
+  .breadcrumb-item a {
+    text-decoration: none;
+    color: #6c757d; /* Links should also be grey */
+  }
+  
+  .breadcrumb-item a:hover {
+    color: #000; /* On hover, make links black */
+  }
+  
+  .breadcrumb-item.active {
+    font-weight: bold;
+    color: #000; /* Active breadcrumb should be black and bold */
+  }
+  
+  .breadcrumb-item.active::before {
+    content: ">";
+    margin: 0 5px;
+    color: #6c757d;
+  }
+  

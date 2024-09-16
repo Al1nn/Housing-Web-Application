@@ -57,6 +57,9 @@ const routes: Routes = [
   {
     path: '',
     component: PropertyListComponent,
+    data: {
+      breadcrumb: 'Buy'
+    },
   },
   {
     path: 'property-dashboard',

@@ -23,13 +23,15 @@
 
   <mat-label>Filter Built Area</mat-label>
   <div class="d-flex mt-3">
+
+    <div class="form-group col-sm-2" style="width: 75px;"> 
+      <input min="0" value="{{min}}" [(ngModel)]="min" (ngModelChange)="onMinMaxChange()" type="number" class="form-control">
+    </div>
     <mat-slider min="0" max="500">
       <input value="{{min}}" [(ngModel)]="min" (ngModelChange)="onMinMaxChange()" matSliderStartThumb>
       <input value="{{max}}" [(ngModel)]="max"  (ngModelChange)="onMinMaxChange()" matSliderEndThumb>
     </mat-slider>
-    <div class="form-group col-sm-2" style="width: 75px;"> 
-      <input min="0" value="{{min}}" [(ngModel)]="min" (ngModelChange)="onMinMaxChange()" type="number" class="form-control">
-    </div>
+    
     <div class="form-group col-sm-2" style="width: 75px;"> 
       <input min="0" value="{{max}}" [(ngModel)]="max" (ngModelChange)="onMinMaxChange()"  type="number" class="form-control">
     </div>   
@@ -39,7 +41,7 @@
   <br>
 
  
-  <div class="d-flex mt-3">
+  <div class="d-flex">
     <mat-form-field  style="height: 25px;" appearance="outline">
         <mat-select placeholder="Sort by" [(ngModel)]="SortbyParam"  (selectionChange)="onSortChange()">
           <mat-option value="City">
@@ -64,7 +66,7 @@
   
   <br>
 
-  <div class="d-flex justify-content-left mt-3">
+  <div class="d-flex justify-content-left">
     <mat-paginator 
                   #paginator
                   [length]="PropertiesLength"
