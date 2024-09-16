@@ -32,6 +32,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AngularOpenlayersModule } from 'ng-openlayers';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -170,6 +171,7 @@ export class PropertyRoutingModule {
     MatFormFieldModule,
     MatTabsModule,
     MatSelectModule,
+    MatSliderModule,
     MatInputModule,
     MatTreeModule,
     MatAutocompleteModule,

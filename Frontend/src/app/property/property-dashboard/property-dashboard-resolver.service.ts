@@ -11,7 +11,7 @@ export class PropertyDashboardResolverService implements Resolve<PaginatedProper
 
     constructor(private router: Router, private store: StoreService) { }
     resolve(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<PaginatedProperties> | PaginatedProperties {
-        return this.store.housingService.getUserPaginatedProperty(1, 2).pipe(
+        return this.store.housingService.getUserPaginatedProperty(1, 4).pipe(
             catchError((error) => {
                 console.log(error);
 
