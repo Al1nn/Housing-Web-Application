@@ -23,7 +23,7 @@ export class PropertyDetailReaderComponent implements OnInit {
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
-
+        console.log(this.route);
         this.route.data.subscribe((data) => {
             this.property = data['property'];
         });

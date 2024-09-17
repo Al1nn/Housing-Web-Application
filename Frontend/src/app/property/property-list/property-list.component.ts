@@ -38,7 +38,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     SortbyParam: string;
     SortDirection = 'asc';
     min = 0;
-    max = 0;
+    max = 500;
     filteredCities: string[];
     private filterTimeoutId: number;
     private propertyTimeoutId: number;
@@ -239,7 +239,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
     clearFilters() {
         this.min = 0;
-        this.max = 0;
+        this.max = 500;
         this.autoCompleteInput.nativeElement.value = '';
         this.SortbyParam = '';
         this.SortDirection = 'asc';

@@ -133,7 +133,7 @@
           <gallery *ngIf="galleryImages.length > 0" [items]="galleryImages" class="gallery-container"></gallery>
 
         </tab>
-        <tab heading="Upload/Edit Photos">
+        <tab heading="Upload/Edit Photos" *ngIf="+nameId === property.postedBy">
           <app-photo-editor  [property]="property"></app-photo-editor>
         </tab>
       </tabset>

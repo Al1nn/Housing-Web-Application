@@ -42,7 +42,7 @@
             Welcome {{loggedInUser}}
           </a>
           <div class="dropdown-menu" *dropdownMenu>
-            <a class="dropdown-item" routerLink="/property-dashboard">
+            <a class="dropdown-item" routerLink="/property-dashboard" *ngIf="!isOnlyReader()">
               <i class="fas fa-house"></i> View Dashboard</a>
             <a href="#" class="dropdown-item" routerLink="/user/profile" >
               <i class="fas fa-user-circle"></i> My Profile</a>

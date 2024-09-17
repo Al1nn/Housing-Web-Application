@@ -47,6 +47,19 @@ export class NavBarComponent {
         }
     }
 
+    isOnlyReader(): boolean {
+        const decodedToken = this.authService.decodeToken();
+        if (decodedToken && decodedToken.role) {
+            if (Array.isArray(decodedToken.role)) {
+                return decodedToken.role.includes('Reader') && decodedToken.role.length === 1;
+            } else {
+                return decodedToken.role === 'Reader';
+            }
+        } else {
+            return false;
+        }
+    }
+
     hasImage() {
         this.profilePicture =
             typeof localStorage !== 'undefined'

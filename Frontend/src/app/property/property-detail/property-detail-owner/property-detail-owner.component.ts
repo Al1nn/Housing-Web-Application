@@ -19,16 +19,16 @@ export class PropertyDetailOwnerComponent implements OnInit {
     thumbnailFolder: string = environment.thumbnailFolder;
     galleryImages: GalleryItem[];
     age: string;
+    nameId: string;
     constructor(private store: StoreService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
-
         this.route.data.subscribe((data) => {
             this.property = data['property'];
-            console.log(data);
         });
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
+        this.nameId = this.store.authService.decodeToken()?.nameid as string;
         this.galleryImages = this.getPropertyPhotos();
     }
 
