@@ -2,9 +2,11 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
+    AbstractControl,
     FormBuilder,
     FormControl,
     FormGroup,
+    ValidatorFn,
     Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -213,23 +215,23 @@ export class AddPropertyComponent implements OnInit {
                 bhk: [null, Validators.required],
                 propertyType: [null, Validators.required],
                 furnishingType: [null, Validators.required],
-                name: [null, Validators.required],
+                name: [null, [Validators.required, this.noDigitsOrNumbersValidator()]],
                 city: [null, Validators.required],
             }),
             PriceInfo: this.fb.group({
-                price: [null, Validators.required],
-                builtArea: [null, Validators.required],
-                carpetArea: [null, Validators.required],
-                security: [0],
-                maintenance: [0],
+                price: [null, [Validators.required, this.numericValidator()]],
+                builtArea: [null, [Validators.required, Validators.min(1), Validators.max(500), this.numericValidator()]],
+                carpetArea: [null, [Validators.required, Validators.min(1), Validators.max(500), this.numericValidator()]],
+                security: [null],
+                maintenance: [null],
             }),
             AddressInfo: this.fb.group({
-                floorNo: [null, Validators.required],
-                totalFloors: [null, Validators.required],
+                floorNo: [null, [Validators.required, this.numericValidator()]],
+                totalFloors: [null, [Validators.required, this.numericValidator()]],
                 address: [null, Validators.required],
                 latitude: [null],
                 longitude: [null],
-                phoneNumber: [null, Validators.required],
+                phoneNumber: [null, [Validators.required, this.numericValidator(), Validators.maxLength(15)]],
             }),
 
             OtherInfo: this.fb.group({
@@ -244,6 +246,34 @@ export class AddPropertyComponent implements OnInit {
                 photos: [null, Validators.required]
             })
         });
+
+
+    }
+
+    updateRentValidators() {
+        console.log('Rent validators called');
+        this.security.setValidators([Validators.required, this.numericValidator(), Validators.min(1)]);
+        this.maintenance.setValidators([Validators.required, this.numericValidator(), Validators.min(1)]);
+    }
+
+    updateSellValidators() {
+        console.log('Sell Validators Called');
+        this.security.clearValidators()
+        this.maintenance.clearValidators();
+    }
+
+    noDigitsOrNumbersValidator(): ValidatorFn {
+        return (control: AbstractControl): { [key: string]: any } | null => {
+            const hasDigitsOrNumbers = /[0-9]/.test(control.value);
+            return hasDigitsOrNumbers ? { 'noDigitsOrNumbers': true } : null;
+        };
+    }
+
+    numericValidator(): ValidatorFn {
+        return (control: AbstractControl): { [key: string]: any } | null => {
+            const valid = /^\d*\.?\d*$/.test(control.value);
+            return valid ? null : { 'numeric': true };
+        };
     }
 
     initializeAutocomplete() {

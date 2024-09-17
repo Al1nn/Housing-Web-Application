@@ -73,8 +73,8 @@
           (mobile.touched || userSubmitted)">
             Please provide a mobile
           </span>
-          <span class="error-block" *ngIf="mobile.value && mobile.value.length > 10">
-            Mobile number must be less than 10 digits
+          <span class="error-block" *ngIf="mobile.value && mobile.value.length > 15">
+            Mobile number must be less than 15 digits
           </span>
         </div>
 

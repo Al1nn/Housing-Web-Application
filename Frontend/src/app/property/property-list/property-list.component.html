@@ -42,8 +42,8 @@
 
  
   <div class="d-flex">
-    <mat-form-field  style="height: 25px;" appearance="outline">
-        <mat-select placeholder="Sort by" [(ngModel)]="SortbyParam"  (selectionChange)="onSortChange()">
+    <mat-form-field >
+        <mat-select placeholder="Sort by" [(ngModel)]="SortbyParam" (selectionChange)="onSortChange()">
           <mat-option value="City">
             City
           </mat-option>
@@ -55,11 +55,11 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-   <button type="button" style="height: 57px;" mat-raised-button (click)="onSortDirection()">
+   <button type="button" style="height: 55px;" mat-raised-button (click)="onSortDirection()">
       <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down fa-xl"></i>
       <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up fa-xl"></i>
     </button>
-    <button type="button" style="height: 57px;" mat-raised-button (click)="clearFilters()">
+    <button type="button" style="height: 55px;" mat-raised-button (click)="clearFilters()">
       <i class="fa-solid fa-x fa-lg"></i>
     </button> 
   </div>

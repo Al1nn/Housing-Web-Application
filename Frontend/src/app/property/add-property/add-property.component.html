@@ -17,9 +17,9 @@
 
                   <div class="btn-group" btnRadioGroup formControlName="sellRent">
                     <label class="btn btn-outline-primary" btnRadio=1 tabindex=0 role="button"
-                      name="sellRent">Sell</label>
+                      name="sellRent" (click)="updateSellValidators()">Sell</label>
                     <label class="btn btn-outline-primary" btnRadio=2 tabindex=0 role="button"
-                      name="sellRent">Rent</label>
+                      name="sellRent" (click)="updateRentValidators()">Rent</label>
                   </div>
                   <div class="error-block" *ngIf="sellRent.invalid && nextClicked">
                     Please select sell or rent
@@ -67,12 +67,13 @@
                 </div>
 
                 <div class="form-group col-12 mt-3">
-                  <label for="name">In Bulding/Society/Project</label>
+                  <label for="name">In Building/Society/Project</label>
                   <input type="text" class="form-control" formControlName="name" #propName
                   (ngModelChange)="propertyView.name = propName.value">
-                  <div class="error-block" *ngIf="name.invalid && (nextClicked || name.touched)">
-                    Please select building, society or project name
-                  </div>
+                  <span *ngIf="name.invalid && (name.touched || nextClicked)" class="error-block">
+                    <span *ngIf="name.hasError('required')">Please select building, society or project name</span>
+                    <span *ngIf="!name.errors?.['required'] && name.errors?.['noDigitsOrNumbers']">Must not contain numbers</span>
+                  </span>
                 </div>
 
                 <div class="form-group col-12 mt-3">
@@ -108,11 +109,17 @@
                   <label *ngIf="sellRent.value == 1">Price (in USD)</label>
                   <label *ngIf="sellRent.value == 2">Rent (in USD)</label>
                   <input type="text" class="form-control" formControlName="price" #propPrice
-                  (keyup)="propertyView.price = +propPrice.value">
+                         (keyup)="propertyView.price = +propPrice.value">
                   <div class="error-block" *ngIf="price.invalid && (nextClicked || price.touched)">
-                    Please select
-                    <span *ngIf="sellRent.value == 1; else ShowRent">Price</span>
-                    <ng-template #ShowRent> Rent</ng-template>
+                    <ng-container *ngIf="price.errors?.['required']">
+                      Please select
+                      <span *ngIf="sellRent.value == 1; else ShowRent">Price</span>
+                      <ng-template #ShowRent>Rent</ng-template>
+                    </ng-container>
+                    <ng-container *ngIf="!price.errors?.['required'] && price.errors?.['numeric']">
+                      <span *ngIf="sellRent.value == 1">Price must be a number</span>
+                      <span *ngIf="sellRent.value == 2">Rent must be a number</span>
+                    </ng-container>
                   </div>
                 </div>
                 <div *ngIf="sellRent.value == 2">
@@ -120,11 +127,21 @@
                   <div class="form-group col-12 mt-3">
                     <label>Security (in USD)</label>
                     <input type="text" class="form-control" formControlName="security">
+                    <span *ngIf="security.invalid && (security.touched || nextClicked)" class="error-block">
+                      <span *ngIf="security.errors?.['required']">Please insert Security</span>
+                      <span *ngIf="!security.errors?.['required'] && security.errors?.['numeric']">Security must be a number</span>
+                      <span *ngIf="!security.errors?.['required'] && !security.errors?.['numeric'] && security.errors?.['min']">Security must be 0 or greater</span>
+                    </span>
                   </div>
-
+                  
                   <div class="form-group col-12 mt-3">
                     <label>Maintenance (in USD)</label>
                     <input type="text" class="form-control" formControlName="maintenance">
+                    <span *ngIf="maintenance.invalid && (maintenance.touched || nextClicked)" class="error-block">
+                      <span *ngIf="maintenance.errors?.['required']">Please insert Maintenance</span>
+                      <span *ngIf="!maintenance.errors?.['required'] && maintenance.errors?.['numeric']">Maintenance must be a number</span>
+                      <span *ngIf="!maintenance.errors?.['required'] && !maintenance.errors?.['numeric'] && maintenance.errors?.['min']">Maintenance must be 0 or greater</span>
+                    </span>
                   </div>
 
                 </div>
@@ -135,17 +152,47 @@
                   <input type="text" class="form-control" formControlName="builtArea" #propBuiltArea
                   (keyup)="propertyView.builtArea = +propBuiltArea.value"
                   >
-                  <div class="error-block" *ngIf="builtArea.invalid && (nextClicked || builtArea.touched)">
-                    Please enter Built Area
-                  </div>
+                  <span *ngIf="builtArea.invalid && (builtArea.touched || nextClicked)" class="error-block">
+
+                    <span *ngIf="builtArea.hasError('required')">
+                      Please enter Built Area
+                    </span>
+
+                    <span *ngIf="!builtArea.hasError('required') && builtArea.hasError('numeric')">
+                      Built Area must be a number
+                    </span>
+        
+                    <span *ngIf="builtArea.hasError('min')">
+                      BuiltArea must be atleast 1 sqr
+                    </span>
+        
+                    <span *ngIf="builtArea.hasError('max')">
+                      BuiltArea must be lower than 500 sqr
+                    </span>
+                  </span>
                 </div>
 
                 <div class="form-group col-12 mt-3">
                   <label>Carpet Area(in Sqr Feet)</label>
                   <input type="text" class="form-control" formControlName="carpetArea">
-                  <div class="error-block" *ngIf="carpetArea.invalid && (nextClicked || carpetArea.touched)">
-                    Please enter Carpet Area
-                  </div>
+                  <span *ngIf="carpetArea.invalid && (carpetArea.touched || nextClicked)" class="error-block">
+
+                    <span *ngIf="carpetArea.hasError('required')">
+                      Please enter Carpet Area
+                    </span>
+
+                    <span *ngIf="!carpetArea.hasError('required') && carpetArea.hasError('numeric')">
+                      Carpet Area must be a number
+                    </span>
+        
+                    <span *ngIf="carpetArea.hasError('min')">
+                      Carpet Area must be atleast 1 sqr
+                    </span>
+        
+                    <span *ngIf="carpetArea.hasError('max')">
+                      Carpet Area must be lower than 500 sqr
+                    </span>
+                  </span>
                 </div>
 
                 <div class="form-group col-12">
@@ -161,25 +208,43 @@
                 <div class="form-group col-12 mt-3">
                   <label>Floor</label>
                   <input type="text" class="form-control" formControlName="floorNo">
-                  <div class="error-block" *ngIf="floorNo.invalid && (nextClicked || floorNo.touched)">
-                    Please insert a Floor
-                  </div>
+                  <span *ngIf="floorNo.invalid && (floorNo.touched || nextClicked)" class="error-block">
+                    <span *ngIf="floorNo.hasError('required')">
+                      Please enter Floor
+                    </span>
+                    <span *ngIf="!floorNo.hasError('required') && floorNo.hasError('numeric')">
+                      Floor must be a number
+                    </span>
+                  </span>
                 </div>
 
                 <div class="form-group col-12 mt-3">
                   <label>Total Floor</label>
                   <input type="text" class="form-control" formControlName="totalFloors">
-                  <div class="error-block" *ngIf="totalFloors.invalid && (nextClicked || totalFloors.touched)">
-                    Please insert Total Floors
-                  </div>
+                  <span *ngIf="totalFloors.invalid && (totalFloors.touched || nextClicked)" class="error-block">
+                    <span *ngIf="totalFloors.hasError('required')">
+                      Please enter Total Floors
+                    </span>
+                    <span *ngIf="!totalFloors.hasError('required') && totalFloors.hasError('numeric')">
+                      Total Floors must be a number
+                    </span>
+                  </span>
                 </div>
 
                 <div class="form-group col-12 mt-3">
                   <label>Phone Number</label>
                   <input type="text" class="form-control" formControlName="phoneNumber">
-                  <div class="error-block" *ngIf="phoneNumber.invalid && (nextClicked || phoneNumber.touched)">
-                    Please insert a phone number
-                  </div>
+                  <span *ngIf="phoneNumber.invalid && (phoneNumber.touched || nextClicked)" class="error-block">
+                    <span *ngIf="phoneNumber.hasError('required')">
+                      Please enter Phone Number
+                    </span>
+                    <span *ngIf="!phoneNumber.hasError('required') && phoneNumber.hasError('numeric')">
+                      Phone Number must be numeric format
+                    </span>
+                    <span *ngIf="!phoneNumber.hasError('required') && !phoneNumber.hasError('numeric') && phoneNumber.hasError('maxlength')">
+                      Phone Number cannot be longer than 15 digits
+                    </span>
+                  </span>
                 </div>
 
                 

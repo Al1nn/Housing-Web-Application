@@ -53,9 +53,10 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
         this.galleryImages = this.getPropertyPhotos();
     }
 
-    onMainPhotoChanged(_$event: string) {
+    onMainPhotoChanged($event: string) {
         this.galleryImages.length = this.getPropertyPhotos().length;
         this.galleryImages = this.getPropertyPhotos();
+        this.property.photo = $event;
     }
     getPropertyPhotos(): GalleryItem[] {
         const photoUrls: GalleryItem[] = [];

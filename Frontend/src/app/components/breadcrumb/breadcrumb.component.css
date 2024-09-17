@@ -8,32 +8,32 @@
   
   .breadcrumb-item {
     font-size: 16px;
-    color: #6c757d; /* Light grey for non-active items */
+    color: #6c757d;
   }
   
   .breadcrumb-item + .breadcrumb-item::before {
     content: ">";
     margin: 0 5px;
-    color: #6c757d; /* Light grey for the separator */
+    color: #6c757d; 
   }
   
   .breadcrumb-item a {
     text-decoration: none;
-    color: #6c757d; /* Links should also be grey */
+    color: #6c757d;
   }
   
   .breadcrumb-item a:hover {
-    color: #000; /* On hover, make links black */
+    color: #000;
   }
   
   .breadcrumb-item.active {
     font-weight: bold;
-    color: #000; /* Active breadcrumb should be black and bold */
+    color: #000;
   }
   
   .breadcrumb-item.active::before {
     content: ">";
     margin: 0 5px;
-    color: #6c757d;
+    color: #919191;
   }
   
