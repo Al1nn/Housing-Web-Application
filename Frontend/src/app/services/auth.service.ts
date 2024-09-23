@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { IUserForLogin } from '../model/IUser.interface';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { IImage } from '../model/IImage.interface';
-import { IUserCard } from '../model/IUserCard.interface';
 import { IToken } from '../model/IToken.interface';
 
 @Injectable({
@@ -23,32 +21,32 @@ export class AuthService {
         return this.http.post(this.baseUrl + '/account/register', user);
     }
 
-    verifyOldPassword(password: string): Observable<boolean> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.get<boolean>(this.baseUrl + '/account/verifyPassword/' + password, httpOptions);
+    isAdmin() {
+        const decodedToken = this.decodeToken();
+        if (decodedToken && decodedToken.role) {
+            if (Array.isArray(decodedToken.role)) {
+                return decodedToken.role.includes('Admin');
+            } else {
+                return decodedToken.role === 'Admin';
+            }
+        } else {
+            return false;
+        }
     }
 
-    updatePassword(newPassword: string) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.put(this.baseUrl + '/account/updatePassword/' + newPassword, {}, httpOptions);
+    isOnlyReader(): boolean {
+        const decodedToken = this.decodeToken();
+        if (decodedToken && decodedToken.role) {
+            if (Array.isArray(decodedToken.role)) {
+                return decodedToken.role.includes('Reader') && decodedToken.role.length === 1;
+            } else {
+                return decodedToken.role === 'Reader';
+            }
+        } else {
+            return false;
+        }
     }
 
-    updateAvatar(oldPictureName: string, file: FormData) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.put(this.baseUrl + '/account/updateAvatar/' + oldPictureName, file, httpOptions);
-    }
 
     decodeToken(): IToken | null {
         if (typeof localStorage !== 'undefined') {
@@ -68,31 +66,4 @@ export class AuthService {
 
     }
 
-
-    getProfileImage(): Observable<IImage> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.get<IImage>(this.baseUrl + '/account/image', httpOptions);
-    }
-
-    getUserCard(): Observable<IUserCard> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.get<IUserCard>(this.baseUrl + '/account/card', httpOptions);
-    }
-
-    getUserCards(): Observable<IUserCard[]> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.get<IUserCard[]>(this.baseUrl + '/account/cards', httpOptions);
-    }
 }

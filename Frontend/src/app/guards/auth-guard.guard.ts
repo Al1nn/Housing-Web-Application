@@ -8,24 +8,10 @@ const userExist = (): boolean => {
     return localStorage.getItem('token') ? true : false;
 }
 
-const getRoles = () => {
-    const store = inject(StoreService);
-    const token = store.authService.decodeToken();
-    return token?.role;
-}
 
 export const authGuard: CanActivateFn = () => {
     const router = inject(Router);
     const store = inject(StoreService);
-    const decodedRoles: string[] | string | undefined = getRoles();
-
-    if (!decodedRoles || decodedRoles.length === 0) {
-        return false;
-    }
-
-    const rolesArray = Array.isArray(decodedRoles) ? decodedRoles : [decodedRoles];
-    const normalizedRoles = rolesArray.map(role => role.toLowerCase());
-
 
     if (!userExist()) {
         router.navigate(['user/login']);
@@ -33,7 +19,7 @@ export const authGuard: CanActivateFn = () => {
         return false;
     }
 
-    if (normalizedRoles.includes('reader')) {
+    if (store.authService.isOnlyReader()) {
         store.alertifyService.error('You do not have privilegies');
         return false;
     }
@@ -54,6 +40,7 @@ export const contactGuard: CanActivateFn = () => {
 
     return true;
 }
+
 
 
 

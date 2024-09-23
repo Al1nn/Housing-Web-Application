@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { IUserCard } from '../../model/IUserCard.interface';
 import { Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from '../../services/auth.service';
+import { StoreService } from '../../store_services/store.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class UserSettingsResolverService implements Resolve<IUserCard>{
+export class UserSettingsResolverService implements Resolve<IUserCard> {
 
-    constructor(private authService: AuthService) { }
+    constructor(private store: StoreService) { }
     resolve(): Observable<IUserCard> | IUserCard {
-        return this.authService.getUserCard();
+        return this.store.usersService.getUserCard();
     }
 
 }

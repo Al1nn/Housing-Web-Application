@@ -110,7 +110,7 @@ export class PhotoEditorComponent {
                         const photos = event.body;
 
                         this.property.photos = photos as IPhoto[];
-                        this.mainPhotoChangedEvent.emit(this.property.photos[0].fileName);
+                        this.setMainPhoto(this.property.photos[0]);
                     }
 
                 });

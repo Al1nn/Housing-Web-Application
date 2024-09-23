@@ -63,7 +63,7 @@ export class UserSettingsComponent implements OnInit {
 
     oldPasswordValidator(control: AbstractControl): Promise<ValidationErrors | null> {
         return new Promise((resolve) => {
-            this.store.authService.verifyOldPassword(control.value).subscribe(response => {
+            this.store.usersService.verifyOldPassword(control.value).subscribe(response => {
                 if (response) {
                     resolve(null);
                 } else {
@@ -93,7 +93,7 @@ export class UserSettingsComponent implements OnInit {
 
     onSubmit() {
         if (this.passwordForm.valid) {
-            this.store.authService.updatePassword(this.newPassword.value).subscribe(
+            this.store.usersService.updatePassword(this.newPassword.value).subscribe(
                 () => {
                     this.onReset();
                     this.store.alertifyService.success('Your password has been updated !');
@@ -117,10 +117,10 @@ export class UserSettingsComponent implements OnInit {
         const selectedFile = event.target.files[0];
         const formData = new FormData();
         formData.append('file', selectedFile);
-        this.store.authService.updateAvatar(this.userCard.fileName, formData).subscribe(() => {
+        this.store.usersService.updateAvatar(this.userCard.fileName, formData).subscribe(() => {
             formData.delete('file');
 
-            this.store.authService.getUserCard().subscribe((data) => {
+            this.store.usersService.getUserCard().subscribe((data) => {
                 this.userCard = data;
                 localStorage.setItem('image', data.fileName);
                 this.store.alertifyService.success('Avatar Changed');

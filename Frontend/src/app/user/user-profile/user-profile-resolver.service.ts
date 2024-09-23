@@ -11,7 +11,7 @@ export class UserProfileResolverService implements Resolve<IUserCard> {
 
     constructor(private store: StoreService) { }
     resolve(): Observable<IUserCard> | IUserCard {
-        return this.store.authService.getUserCard();
+        return this.store.usersService.getUserCard();
     }
 
 }

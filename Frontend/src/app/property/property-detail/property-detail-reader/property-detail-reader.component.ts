@@ -23,7 +23,6 @@ export class PropertyDetailReaderComponent implements OnInit {
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
-        console.log(this.route);
         this.route.data.subscribe((data) => {
             this.property = data['property'];
         });
@@ -48,4 +47,13 @@ export class PropertyDetailReaderComponent implements OnInit {
         }
         return photoUrls;
     }
+
+    openMessagesModal() {
+        if (this.store.authService.isOnlyReader()) {
+            this.store.alertifyService.error('You do not have privilegies to send messages');
+            return;
+        }
+        console.log('Here');
+    }
+
 }

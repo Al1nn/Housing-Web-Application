@@ -51,6 +51,7 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { PropertyDetailPopupMessageComponent } from './property-detail-popup-message/property-detail-popup-message.component';
 
 
 const routes: Routes = [
@@ -157,6 +158,7 @@ export class PropertyRoutingModule {
     PropertyDetailReaderComponent,
     PropertyStatsComponent,
     PropertyContactsComponent,
+    PropertyDetailPopupMessageComponent,
     HighlightPipe,]
 
   static modules: any = [

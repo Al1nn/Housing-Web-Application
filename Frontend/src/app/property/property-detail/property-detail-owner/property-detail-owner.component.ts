@@ -11,7 +11,6 @@ import { StoreService } from '../../../store_services/store.service';
     styleUrls: ['../property-detail-admin/property-detail.component.css']
 })
 export class PropertyDetailOwnerComponent implements OnInit {
-
     public propertyId: number;
     property = new Property();
 
@@ -49,6 +48,20 @@ export class PropertyDetailOwnerComponent implements OnInit {
 
 
         return photoUrls;
+    }
+
+    onMainPhotoChanged($event: string) {
+        this.galleryImages.length = this.getPropertyPhotos().length;
+        this.galleryImages = this.getPropertyPhotos();
+        this.property.photo = $event;
+    }
+
+    openMessagesModal() {
+        if (this.store.authService.isOnlyReader()) {
+            this.store.alertifyService.error('You do not have privilegies to send messages');
+            return;
+        }
+        console.log('Here');
     }
 
 }

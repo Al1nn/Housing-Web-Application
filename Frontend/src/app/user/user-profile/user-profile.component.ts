@@ -28,7 +28,7 @@ export class UserProfileComponent implements OnInit {
             this.userCard = data['usercard'];
         });
 
-        this.store.authService.getUserCards().subscribe((data: IUserCard[]) => {
+        this.store.usersService.getUserCards().subscribe((data: IUserCard[]) => {
             const decodedToken = this.store.authService.decodeToken();
             this.userCards = data.filter(card => card.username !== decodedToken?.unique_name);
         });

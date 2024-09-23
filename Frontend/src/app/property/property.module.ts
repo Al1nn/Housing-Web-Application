@@ -15,7 +15,7 @@ import { EnsureModuleLoadedOnceGuard } from '../guards/ensure-module-loaded.guar
     providers: [
         DatePipe,
         AsyncPipe,
-        PropertyDetailResolverService
+        PropertyDetailResolverService,
     ]
 })
 export class PropertyModule extends EnsureModuleLoadedOnceGuard {

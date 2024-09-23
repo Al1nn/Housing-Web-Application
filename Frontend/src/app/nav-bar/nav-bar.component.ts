@@ -1,7 +1,6 @@
 
 import { environment } from '../../environments/environment';
-import { AuthService } from '../services/auth.service';
-import { AlertifyService } from './../services/alertify.service';
+import { StoreService } from '../store_services/store.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -15,8 +14,7 @@ export class NavBarComponent {
     thumbnailFolder: string = environment.thumbnailFolder;
     originalFolder: string = environment.originalPictureFolder;
     constructor(
-        private alertifyService: AlertifyService,
-        private authService: AuthService
+        private store: StoreService
     ) {
 
     }
@@ -25,7 +23,7 @@ export class NavBarComponent {
 
 
     loggedIn() {
-        const decodedToken = this.authService.decodeToken();
+        const decodedToken = this.store.authService.decodeToken();
         if (decodedToken) {
             this.loggedInUser = decodedToken.unique_name;
             return this.loggedInUser;
@@ -34,30 +32,12 @@ export class NavBarComponent {
         }
     }
 
-    isAdmin() {
-        const decodedToken = this.authService.decodeToken();
-        if (decodedToken && decodedToken.role) {
-            if (Array.isArray(decodedToken.role)) {
-                return decodedToken.role.includes('Admin');
-            } else {
-                return decodedToken.role === 'Admin';
-            }
-        } else {
-            return false;
-        }
+    isOnlyReader() {
+        return this.store.authService.isOnlyReader();
     }
 
-    isOnlyReader(): boolean {
-        const decodedToken = this.authService.decodeToken();
-        if (decodedToken && decodedToken.role) {
-            if (Array.isArray(decodedToken.role)) {
-                return decodedToken.role.includes('Reader') && decodedToken.role.length === 1;
-            } else {
-                return decodedToken.role === 'Reader';
-            }
-        } else {
-            return false;
-        }
+    isAdmin() {
+        return this.store.authService.isAdmin();
     }
 
     hasImage() {
@@ -71,7 +51,7 @@ export class NavBarComponent {
     onLogout() {
         localStorage.removeItem('token');
         localStorage.removeItem('image');
-        this.alertifyService.success('You are logged out !');
+        this.store.alertifyService.success('You are logged out !');
     }
 
 

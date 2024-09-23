@@ -38,7 +38,7 @@
         
         <div class="btn-group d-flex">
           <button class="btn btn-primary"><i class="fa-regular fa-heart"></i> Like</button>
-          <button class="btn btn-success"><i class="fa-regular fa-message"></i> Message</button>
+          <button class="btn btn-success" (click)="openMessagesModal()"><i class="fa-regular fa-message"></i> Message</button>
         </div>
 
       </div>
@@ -92,12 +92,12 @@
                 <p *ngIf="!property.gated">No</p>
               </div>
 
-              <div class="heading">
+              <div class="heading" *ngIf="this.property.sellRent === 2">
                 <strong>Security Deposit</strong>
                 <p>{{property.security}}</p>
               </div>
 
-              <div class="heading">
+              <div class="heading" *ngIf="this.property.sellRent === 2">
                 <strong>Maintenance</strong>
                 <p>{{property.maintenance}}</p>
               </div>

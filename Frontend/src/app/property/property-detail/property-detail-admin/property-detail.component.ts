@@ -18,6 +18,7 @@ import { StoreService } from '../../../store_services/store.service';
 })
 @AutoUnsubscribe()
 export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
+
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
     editPropertyForm: FormGroup;
 
@@ -31,6 +32,7 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
     originalFolder: string = environment.originalPictureFolder;
     thumbnailFolder: string = environment.thumbnailFolder;
     age: string;
+    nameId: string;
     constructor(
         private store: StoreService
         , private route: ActivatedRoute
@@ -51,6 +53,7 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
         });
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
+        this.nameId = this.store.authService.decodeToken()?.nameid as string;
     }
 
     onMainPhotoChanged($event: string) {
@@ -98,5 +101,14 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
                 sellRent: this.property.sellRent
             }
         });
+    }
+
+
+    openMessagesModal() {
+        if (this.store.authService.isOnlyReader()) {
+            this.store.alertifyService.error('You do not have privilegies to send messages');
+            return;
+        }
+        console.log('Here');
     }
 }
