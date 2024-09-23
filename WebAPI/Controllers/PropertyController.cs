@@ -326,17 +326,6 @@ namespace WebAPI.Controllers
                 return Unauthorized(apiError);
             }
 
-            //if (existingProperty.PostedBy != userId)
-            //{
-            //    apiError.ErrorCode = Unauthorized().StatusCode;
-            //    apiError.ErrorMessage = "You must be owner to update";
-            //    apiError.ErrorDetails = "";
-            //    return Unauthorized(apiError);
-            //}
-
-
-            
-
             existingProperty.SellRent = propertyDetailDto.SellRent;
             existingProperty.Name = propertyDetailDto.Name;
             existingProperty.PropertyTypeId = propertyDetailDto.PropertyTypeId;
@@ -369,34 +358,6 @@ namespace WebAPI.Controllers
             await uow.SaveAsync();
             return StatusCode(200); 
         }
-
-        [HttpGet("get/first/photo/{propId}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetFirstPropertyPhoto(int propId)
-        {
-            ApiError apiError = new ApiError();
-            var property = await uow.PropertyRepository.GetPropertyByIdAsync(propId);
-
-            if (property == null)
-            {
-                apiError.ErrorCode = NotFound().StatusCode;
-                apiError.ErrorMessage = "Property Not Found";
-                apiError.ErrorDetails = "Invalid propId";
-                return NotFound(apiError);
-            }
-
-            if (!property.Photos.Any()) 
-            {
-                apiError.ErrorCode = NotFound().StatusCode;
-                apiError.ErrorMessage = "Photos Not Found";
-                apiError.ErrorDetails = "No photos available for this property";
-                return NotFound(apiError);
-            }
-
-            var firstPhotoDto = mapper.Map<PhotoDto>(property.Photos.FirstOrDefault());
-            return Ok(firstPhotoDto);
-        }
-
 
         [HttpGet("get/photos/{propId}")]
         [AllowAnonymous]
@@ -557,11 +518,11 @@ namespace WebAPI.Controllers
                 return BadRequest(apiError);
             }
 
-            if(property.PostedBy != userId)
+            if (!IsAdmin())
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "You are not authorised to delete the photo";
-                apiError.ErrorDetails = "You must log in to owner account";
+                apiError.ErrorMessage = "You must be admin to delete";
+                apiError.ErrorDetails = "";
                 return Unauthorized(apiError);
             }
 

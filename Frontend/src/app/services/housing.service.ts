@@ -182,28 +182,11 @@ export class HousingService {
         });
     }
 
-
-
-
     getPropertyPhotos(propertyId: number): Observable<HttpEvent<IPhoto[]>> {
         return this.http.get<IPhoto[]>(this.baseUrl + '/property/get/photos/' + propertyId, {
             reportProgress: true,
             observe: 'events'
         });
-    }
-
-    getFirstPropertyPhoto(propertyId: number): Observable<IPhoto> {
-        return this.http.get<IPhoto>(this.baseUrl + '/property/get/first/photo/' + propertyId);
-    }
-
-    getLastIndex(): Observable<number> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-
-            })
-        };
-        return this.http.get<number>(this.baseUrl + '/property/last', httpOptions);
     }
 
 
