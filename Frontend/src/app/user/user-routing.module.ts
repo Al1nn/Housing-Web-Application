@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { UserMessagesComponent } from './user-messages/user-messages.component';
 
 const routes: Routes = [
     { path: 'login', component: UserLoginComponent, data: { breadcrumb: null } },
@@ -30,6 +31,13 @@ const routes: Routes = [
             breadcrumb: null
         }
     },
+    {
+        path: 'messages',
+        component: UserMessagesComponent,
+        data: {
+            breadcrumb: null
+        }
+    },
 ];
 @NgModule({
     imports: [RouterModule.forChild(routes)],
@@ -40,7 +48,8 @@ export class UserRoutingModule {
         UserLoginComponent,
         UserRegisterComponent,
         UserProfileComponent,
-        UserSettingsComponent
+        UserSettingsComponent,
+        UserMessagesComponent,
     ]
     static modules: any = [
         CommonModule,
