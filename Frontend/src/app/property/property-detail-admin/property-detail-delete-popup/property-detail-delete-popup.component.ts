@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { StoreService } from '../../../../store_services/store.service';
+import { StoreService } from '../../../store_services/store.service';
 
 
 @Component({

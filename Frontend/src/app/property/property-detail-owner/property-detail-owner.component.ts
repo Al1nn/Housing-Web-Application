@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Property } from '../../../model/Property.interface';
-import { environment } from '../../../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
+import { Property } from '../../model/Property.interface';
+import { environment } from '../../../environments/environment';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
-import { StoreService } from '../../../store_services/store.service';
+import { StoreService } from '../../store_services/store.service';
 
 @Component({
-    selector: 'app-property-detail-reader',
-    templateUrl: './property-detail-reader.component.html',
-    styleUrls: ['../property-detail-admin/property-detail.component.css']
+    selector: 'app-property-detail-owner',
+    templateUrl: './property-detail-owner.component.html',
+    styleUrls: ['../property-detail-admin/property-detail-admin.component.css']
 })
-export class PropertyDetailReaderComponent implements OnInit {
+export class PropertyDetailOwnerComponent implements OnInit {
 
     public propertyId: number;
     property = new Property();
@@ -19,6 +19,7 @@ export class PropertyDetailReaderComponent implements OnInit {
     thumbnailFolder: string = environment.thumbnailFolder;
     galleryImages: GalleryItem[];
     age: string;
+    nameId: string;
     constructor(private store: StoreService, private route: ActivatedRoute) { }
 
     ngOnInit() {
@@ -27,9 +28,8 @@ export class PropertyDetailReaderComponent implements OnInit {
             this.property = data['property'];
         });
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
+        this.nameId = this.store.authService.decodeToken()?.nameid as string;
         this.galleryImages = this.getPropertyPhotos();
-        console.log(this.store.authService.isAuthenticated());
-
     }
 
     getPropertyPhotos(): GalleryItem[] {
@@ -46,7 +46,19 @@ export class PropertyDetailReaderComponent implements OnInit {
                 });
             }
         }
+
+
         return photoUrls;
+    }
+
+    onMainPhotoChanged($event: string) {
+        this.galleryImages.length = this.getPropertyPhotos().length;
+        this.galleryImages = this.getPropertyPhotos();
+        this.property.photo = $event;
+    }
+
+    openMessagesModal() {
+        throw new Error('Method not implemented.');
     }
 
 }

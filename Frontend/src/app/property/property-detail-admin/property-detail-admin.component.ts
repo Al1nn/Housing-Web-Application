@@ -1,20 +1,20 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Property } from '../../../model/Property.interface';
+import { Property } from '../../model/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormGroup } from '@angular/forms';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { PropertyDetailDeletePopupComponent } from './property-detail-delete-popup/property-detail-delete-popup.component';
 import { PropertyDetailEditPopupComponent } from './property-detail-edit-popup/property-detail-edit-popup.component';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { StoreService } from '../../../store_services/store.service';
+import { StoreService } from '../../store_services/store.service';
 
 @Component({
     selector: 'app-property-detail-admin',
-    templateUrl: './property-detail.component.html',
-    styleUrls: ['./property-detail.component.css'],
+    templateUrl: './property-detail-admin.component.html',
+    styleUrls: ['./property-detail-admin.component.css'],
 })
 @AutoUnsubscribe()
 export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
@@ -47,7 +47,6 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
-        console.log(this.route);
         this.route.data.subscribe((data) => {
             this.property = data['property'];
         });
@@ -101,6 +100,10 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
                 sellRent: this.property.sellRent
             }
         });
+    }
+
+    openMessagesModal() {
+        throw new Error('Method not implemented.');
     }
 
 }

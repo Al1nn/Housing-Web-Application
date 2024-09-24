@@ -422,7 +422,7 @@ namespace WebAPI.Controllers
                 return NotFound(apiError);
             }
 
-            if (property.PostedBy != userId)
+            if (property.PostedBy != userId && !IsAdmin())
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
                 apiError.ErrorMessage = "You are not authorised to add photos";
@@ -518,11 +518,11 @@ namespace WebAPI.Controllers
                 return BadRequest(apiError);
             }
 
-            if (!IsAdmin())
+            if (property.PostedBy != userId && !IsAdmin())
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "You must be admin to delete";
-                apiError.ErrorDetails = "";
+                apiError.ErrorMessage = "You are not authorised to delete photos";
+                apiError.ErrorDetails = "Not the right role";
                 return Unauthorized(apiError);
             }
 

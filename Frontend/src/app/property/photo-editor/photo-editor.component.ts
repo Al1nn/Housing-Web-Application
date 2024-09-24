@@ -100,7 +100,6 @@ export class PhotoEditorComponent {
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
                 this.store.housingService.getPropertyPhotos(this.property.id).subscribe(event => {
-                    console.log(event.type);
                     if (event.type === HttpEventType.DownloadProgress && event.total !== undefined) {
                         this.uploadProgress = Math.round(100 * (event.loaded / event.total));
                     }

@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { Property } from '../../../../model/Property.interface';
+import { Property } from '../../../model/Property.interface';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { IKeyValuePair } from '../../../../model/IKeyValuePair';
+import { IKeyValuePair } from '../../../model/IKeyValuePair';
 import { PropertyDetailMapsPopupComponent } from './property-detail-maps-popup/property-detail-maps-popup.component';
-import { StoreService } from '../../../../store_services/store.service';
+import { StoreService } from '../../../store_services/store.service';
 
 @Component({
     selector: 'app-property-detail-edit-popup',

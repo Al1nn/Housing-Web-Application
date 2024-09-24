@@ -2,7 +2,7 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { PropertyRoutingModule } from './property-routing.module';
-import { PropertyDetailResolverService } from './property-detail/property-detail-resolver.service';
+import { PropertyDetailResolverService } from './property-detail-resolver.service';
 import { EnsureModuleLoadedOnceGuard } from '../guards/ensure-module-loaded.guard';
 
 @NgModule({
