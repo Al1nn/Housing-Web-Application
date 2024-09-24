@@ -28,8 +28,6 @@ export class PropertyDetailReaderComponent implements OnInit {
         });
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
-        console.log(this.store.authService.isAuthenticated());
-
     }
 
     getPropertyPhotos(): GalleryItem[] {
@@ -50,7 +48,7 @@ export class PropertyDetailReaderComponent implements OnInit {
     }
 
     openMessagesModal() {
-        throw new Error('Method not implemented.');
+        this.store.alertifyService.error('You do not have privilegies to send message');
     }
 
 }

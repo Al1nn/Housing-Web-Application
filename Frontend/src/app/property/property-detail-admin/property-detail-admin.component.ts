@@ -10,6 +10,7 @@ import { PropertyDetailDeletePopupComponent } from './property-detail-delete-pop
 import { PropertyDetailEditPopupComponent } from './property-detail-edit-popup/property-detail-edit-popup.component';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { StoreService } from '../../store_services/store.service';
+import { PropertyDetailPopupMessageComponent } from '../property-detail-popup-message/property-detail-popup-message.component';
 
 @Component({
     selector: 'app-property-detail-admin',
@@ -60,6 +61,7 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
         this.galleryImages = this.getPropertyPhotos();
         this.property.photo = $event;
     }
+
     getPropertyPhotos(): GalleryItem[] {
         const photoUrls: GalleryItem[] = [];
         if (this.property.photos !== undefined) {
@@ -103,7 +105,10 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
     }
 
     openMessagesModal() {
-        throw new Error('Method not implemented.');
+        this.dialogRef.open(PropertyDetailPopupMessageComponent, {
+            width: '600px',
+            height: '800px'
+        });
     }
 
 }

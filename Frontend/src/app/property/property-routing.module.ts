@@ -52,7 +52,7 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PropertyDetailPopupMessageComponent } from './property-detail-popup-message/property-detail-popup-message.component';
-
+import { MatDividerModule } from '@angular/material/divider';
 
 const routes: Routes = [
   {
@@ -179,6 +179,7 @@ export class PropertyRoutingModule {
     MatSliderModule,
     MatInputModule,
     MatTreeModule,
+    MatDividerModule,
     MatAutocompleteModule,
     MatPaginatorModule,
     ReactiveFormsModule,

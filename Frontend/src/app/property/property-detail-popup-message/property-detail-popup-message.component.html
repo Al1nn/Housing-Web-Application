@@ -1,3 +1,33 @@
-<p>
-  property-detail-popup-message works!
-</p>
+<div class="modal-header p-3">
+  <h4 class="modal-title pull-left">Send Message</h4>
+   <button type="button" class="btn btn-danger btn-sm" (click)="closeEditModal()">
+      <i class="fa-solid fa-x text-danger"></i>
+   </button>
+</div>
+<mat-dialog-content>
+  <div class="messages mat-elevation-z5">
+    <div class="messages-header">
+      <img width="50" height="50" class="rounded-circle mat-elevation-z5" src="../assets/user_images/user_default.jpg">
+      <h2>John Baiat Bun</h2>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="chat-area">
+
+    </div>
+    <mat-divider></mat-divider>
+    <div class="input-area">
+      <mat-form-field appearance="outline">
+        <input matInput [formControl]="messageControl" placeholder="Enter your message..." (keydown.enter)="sendMessage()"/>
+        <button mat-icon-button matSuffix (click)="sendMessage()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions  align="end" >
+  <button type="submit" class="btn btn-success me-3">Save</button>
+  <button type="button" class="btn btn-danger" (click)="closeEditModal()">
+    Close
+  </button>
+</mat-dialog-actions>

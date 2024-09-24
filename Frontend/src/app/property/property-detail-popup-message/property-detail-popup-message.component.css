@@ -1,0 +1,57 @@
+.messages{
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    background-color: #e5f1fd;
+}
+
+.messages-header{
+    display: flex;
+    margin-bottom: 8px;
+    padding: 10px;
+    
+}
+
+.messages-header > img{
+    object-fit: cover;
+    object-position: center;
+}
+
+.messages-header > h2 {
+    margin-top: auto;
+    margin-left: 5px;
+    font-size: 1.2rem;
+}
+
+.chat-area {
+    height: calc(60vh - 100px); /* Adjust to give chat area more space */
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+mat-dialog-content {
+    overflow-x: hidden;
+    overflow-y: auto; /* Ensure content scrolls if needed */
+    max-height: calc(100vh - 160px); /* Adjust the maximum height based on viewport */
+    padding: 16px;
+}
+
+.mat-dialog-actions {
+    padding: 8px 16px;
+    margin-top: 8px;
+    justify-content: flex-end; 
+    height: auto; 
+    min-height: 40px;
+}
+
+.input-area > mat-form-field{
+    width: 100%;
+}
+
+.input-area {
+    padding-top: 16px;
+    padding-bottom: 8px;
+    padding-right: 8px;
+    padding-left: 8px;
+}

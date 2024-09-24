@@ -4,6 +4,8 @@ import { Property } from '../../model/Property.interface';
 import { environment } from '../../../environments/environment';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { StoreService } from '../../store_services/store.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PropertyDetailPopupMessageComponent } from '../property-detail-popup-message/property-detail-popup-message.component';
 
 @Component({
     selector: 'app-property-detail-owner',
@@ -20,7 +22,7 @@ export class PropertyDetailOwnerComponent implements OnInit {
     galleryImages: GalleryItem[];
     age: string;
     nameId: string;
-    constructor(private store: StoreService, private route: ActivatedRoute) { }
+    constructor(private dialogRef: MatDialog, private store: StoreService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -46,8 +48,6 @@ export class PropertyDetailOwnerComponent implements OnInit {
                 });
             }
         }
-
-
         return photoUrls;
     }
 
@@ -58,7 +58,10 @@ export class PropertyDetailOwnerComponent implements OnInit {
     }
 
     openMessagesModal() {
-        throw new Error('Method not implemented.');
+        this.dialogRef.open(PropertyDetailPopupMessageComponent, {
+            width: '600px',
+            height: '800px'
+        });
     }
 
 }
