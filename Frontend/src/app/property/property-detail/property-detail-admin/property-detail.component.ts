@@ -103,12 +103,4 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
         });
     }
 
-
-    openMessagesModal() {
-        if (this.store.authService.isOnlyReader()) {
-            this.store.alertifyService.error('You do not have privilegies to send messages');
-            return;
-        }
-        console.log('Here');
-    }
 }

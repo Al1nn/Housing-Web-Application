@@ -43,4 +43,5 @@ export class PropertyContactsComponent implements OnInit {
             };
         }
     }
+
 }

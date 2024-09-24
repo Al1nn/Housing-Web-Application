@@ -36,6 +36,7 @@ export class AuthService {
 
     isOnlyReader(): boolean {
         const decodedToken = this.decodeToken();
+
         if (decodedToken && decodedToken.role) {
             if (Array.isArray(decodedToken.role)) {
                 return decodedToken.role.includes('Reader') && decodedToken.role.length === 1;
@@ -45,6 +46,8 @@ export class AuthService {
         } else {
             return false;
         }
+
+
     }
 
 
@@ -64,6 +67,10 @@ export class AuthService {
         }
 
 
+    }
+
+    isAuthenticated(): boolean {
+        return !!this.decodeToken();
     }
 
 }

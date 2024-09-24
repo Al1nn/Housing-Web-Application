@@ -56,12 +56,4 @@ export class PropertyDetailOwnerComponent implements OnInit {
         this.property.photo = $event;
     }
 
-    openMessagesModal() {
-        if (this.store.authService.isOnlyReader()) {
-            this.store.alertifyService.error('You do not have privilegies to send messages');
-            return;
-        }
-        console.log('Here');
-    }
-
 }
