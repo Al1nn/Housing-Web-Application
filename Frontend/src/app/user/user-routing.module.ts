@@ -11,7 +11,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { UserMessagesComponent } from './user-messages/user-messages.component';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatListModule } from '@angular/material/list';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 const routes: Routes = [
     { path: 'login', component: UserLoginComponent, data: { breadcrumb: null } },
     { path: 'register', component: UserRegisterComponent, data: { breadcrumb: null } },
@@ -56,7 +60,12 @@ export class UserRoutingModule {
         UserRoutingModule,
         HttpClientModule,
         ReactiveFormsModule,
+        MatFormFieldModule,
         FormsModule,
+        MatListModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
         TabsModule.forRoot()
     ]
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-user-messages',
@@ -7,8 +8,14 @@ import { Component } from '@angular/core';
 })
 export class UserMessagesComponent {
 
+    searchControl = new FormControl('');
+    chatListControl = new FormControl();
+    messageControl = new FormControl('');
+
     constructor() { }
 
-
+    sendMessage() {
+        throw new Error('Method not implemented.');
+    }
 
 }

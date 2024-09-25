@@ -4,6 +4,8 @@ import { environment } from '../../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { StoreService } from '../../store_services/store.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PropertyDetailPopupMessageComponent } from '../property-detail-popup-message/property-detail-popup-message.component';
 
 @Component({
     selector: 'app-property-detail-reader',
@@ -19,7 +21,7 @@ export class PropertyDetailReaderComponent implements OnInit {
     thumbnailFolder: string = environment.thumbnailFolder;
     galleryImages: GalleryItem[];
     age: string;
-    constructor(private store: StoreService, private route: ActivatedRoute) { }
+    constructor(private dialogRef: MatDialog, private store: StoreService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -48,7 +50,10 @@ export class PropertyDetailReaderComponent implements OnInit {
     }
 
     openMessagesModal() {
-        this.store.alertifyService.error('You do not have privilegies to send message');
+        this.dialogRef.open(PropertyDetailPopupMessageComponent, {
+            width: '600px',
+            height: '800px'
+        });
     }
 
 }
