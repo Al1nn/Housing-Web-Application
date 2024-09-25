@@ -8,16 +8,22 @@ export class AlertifyService {
 
     constructor() { }
 
-    success(message: string){
-        alertify.success(message);
+    success(message: string) {
+        if (alertify) {
+            alertify.success(message);
+        }
     }
 
-    warning(message: string){
-        alertify.warning(message);
+    warning(message: string) {
+        if (alertify) {
+            alertify.warning(message);
+        }
     }
 
-    error(message: string){
-        alertify.error(message);
+    error(message: string) {
+        if (alertify) {
+            alertify.error(message);
+        }
     }
 
 }
