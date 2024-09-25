@@ -15,7 +15,6 @@ import { PropertyDetailReaderComponent } from './property-detail-reader/property
 import { PropertyDetailOwnerComponent } from './property-detail-owner/property-detail-owner.component';
 import { matchGuardAdmin, matchGuardOwner } from '../guards/match-guard.guard';
 import { PropertyStatsComponent } from './property-stats/property-stats.component';
-import { PropertyTreeComponent } from './property-tree/property-tree.component';
 import { PropertyDetailEditPopupComponent } from './property-detail-admin/property-detail-edit-popup/property-detail-edit-popup.component';
 import { PropertyDetailDeletePopupComponent } from './property-detail-admin/property-detail-delete-popup/property-detail-delete-popup.component';
 import { PropertyDetailMapsPopupComponent } from './property-detail-admin/property-detail-edit-popup/property-detail-maps-popup/property-detail-maps-popup.component';
@@ -46,8 +45,6 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { GalleryComponent } from '@daelmaak/ngx-gallery';
-import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
-import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PropertyDetailPopupMessageComponent } from './property-detail-popup-message/property-detail-popup-message.component';
@@ -78,13 +75,6 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Stats'
     }
-  },
-  {
-    path: 'property-tree',
-    component: PropertyTreeComponent,
-    data: {
-      breadcrumb: 'Tree'
-    },
   },
   {
     path: 'rent-property',
@@ -145,7 +135,6 @@ export class PropertyRoutingModule {
   static components: any = [PropertyCardComponent,
     PropertyListComponent,
     PropertyDashboardComponent,
-    PropertyTreeComponent,
     AddPropertyComponent,
     PhotoEditorComponent,
     PhotoEditorPopupComponent,
@@ -187,8 +176,6 @@ export class PropertyRoutingModule {
     BsDatepickerModule.forRoot(),
     TabsModule.forRoot(),
     GalleryComponent,
-    LoadingBarHttpClientModule,
-    LoadingBarModule,
     GoogleMapsModule,
     DragDropModule
   ]

@@ -15,12 +15,6 @@ import { ISugestion } from '../model/ISugestion.interface';
 import { ITree } from '../model/ITree.interface';
 
 
-
-
-
-
-
-
 @Injectable({
     providedIn: 'root',
 })

@@ -19,10 +19,6 @@ import { IPhoto } from '../../model/IPhoto';
 import { ICity } from '../../model/ICity.interface';
 import { StoreService } from '../../store_services/store.service';
 
-
-
-
-
 @Component({
     selector: 'app-add-property',
     templateUrl: './add-property.component.html',
