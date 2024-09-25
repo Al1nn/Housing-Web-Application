@@ -25,7 +25,6 @@ import { PhotoEditorPopupComponent } from './photo-editor/photo-editor-popup/pho
 import { HighlightPipe } from '../pipes/highlight.pipe';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -165,7 +164,6 @@ export class PropertyRoutingModule {
     CommonModule,
     FormsModule,
     PropertyRoutingModule,
-    HttpClientModule,
     MatCardModule,
     MatIconModule,
     MatProgressBarModule,

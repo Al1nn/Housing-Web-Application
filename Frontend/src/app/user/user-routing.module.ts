@@ -7,7 +7,6 @@ import { UserProfileResolverService } from './user-profile/user-profile-resolver
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { UserSettingsResolverService } from './user-settings/user-settings-resolver.service';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { UserMessagesComponent } from './user-messages/user-messages.component';
@@ -58,7 +57,6 @@ export class UserRoutingModule {
     static modules: any = [
         CommonModule,
         UserRoutingModule,
-        HttpClientModule,
         ReactiveFormsModule,
         MatFormFieldModule,
         FormsModule,

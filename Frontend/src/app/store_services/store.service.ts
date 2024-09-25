@@ -1,4 +1,4 @@
-import { BreadcrumbService } from 'xng-breadcrumb';
+import { BreadcrumbService } from '../services/breadcrumb.service';
 import { AlertifyService } from '../services/alertify.service';
 import { AuthService } from '../services/auth.service';
 import { HousingService } from '../services/housing.service';
