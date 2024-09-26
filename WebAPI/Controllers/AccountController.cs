@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
 
         [HttpGet("others")]
         [Authorize]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetOtherUsers()
         {
             int userId = GetUserId();
 
