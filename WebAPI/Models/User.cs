@@ -18,7 +18,7 @@ namespace WebAPI.Models
 
         public string PhoneNumber { get; set; }
 
-        public ICollection<UserImage> Images { get; set; }
+        public string Photo {  get; set; }
 
         public ICollection<Role> Roles { get; set; }
     }

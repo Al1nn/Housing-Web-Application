@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IUserCard } from '../../model/IUserCard.interface';
 import { environment } from '../../../environments/environment';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { StoreService } from '../../store_services/store.service';
+import { IToken } from '../../model/IToken.interface';
 
 @Component({
     selector: 'app-user-settings',
@@ -13,8 +12,7 @@ import { StoreService } from '../../store_services/store.service';
 })
 export class UserSettingsComponent implements OnInit {
 
-    userCard: IUserCard;
-    propertiesListed: number;
+    userCard: IToken;
     // userSubmitted: boolean;
     passwordForm: FormGroup;
 
@@ -23,7 +21,6 @@ export class UserSettingsComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder
-        , private route: ActivatedRoute
         , private store: StoreService
     ) { }
 
@@ -37,16 +34,7 @@ export class UserSettingsComponent implements OnInit {
 
     ngOnInit() {
         this.CreateChangePasswordForm();
-
-        this.route.data.subscribe((data) => {
-            this.userCard = data['usercard'];
-        });
-
-        this.store.housingService.getPropertyCountByUser().subscribe((data) => {
-            this.propertiesListed = data;
-        });
-
-
+        this.userCard = this.store.authService.decodeToken() as IToken;
     }
 
     CreateChangePasswordForm() {
@@ -117,18 +105,7 @@ export class UserSettingsComponent implements OnInit {
         const selectedFile = event.target.files[0];
         const formData = new FormData();
         formData.append('file', selectedFile);
-        this.store.usersService.updateAvatar(this.userCard.fileName, formData).subscribe(() => {
-            formData.delete('file');
-
-            this.store.usersService.getUserCard().subscribe((data) => {
-                this.userCard = data;
-                localStorage.setItem('image', data.fileName);
-                this.store.alertifyService.success('Avatar Changed');
-            });
-
-        });
-
-
+        //Aici vine update-ul din UsersService
     }
 
     onAccountDelete() {

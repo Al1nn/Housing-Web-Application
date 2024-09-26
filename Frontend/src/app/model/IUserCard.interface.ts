@@ -1,8 +1,4 @@
-export interface IUserCard {
-    userId: number;
+export interface IOtherUsers {
     username: string;
-    email: string;
-    phoneNumber: string;
-    imageId: number;
-    fileName: string;
+    photo: string;
 }

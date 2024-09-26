@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { IUserForRegister } from '../../model/IUser.interface';
 import { Router } from '@angular/router';
 import { IUserForLogin } from '../../model/IUser.interface';
-import { IImage } from '../../model/IImage.interface';
+
 import { StoreService } from '../../store_services/store.service';
 
 @Component({
@@ -61,19 +61,12 @@ export class UserLoginComponent implements OnInit {
                 const user = response;
                 localStorage.setItem('token', user.token);
 
-
-                this.store.usersService.getProfileImage().subscribe((data: IImage) => {
-                    if (data !== null) {
-                        localStorage.setItem('image', data.fileName as string);
-                    }
-                })
-
                 this.store.alertifyService.success('Login successful');
                 this.router.navigate(['/']);
             },
             (error) => {
                 this.onCancel();
-                this.store.alertifyService.error(error.error.errorMessage);
+                this.store.alertifyService.error(error.errorMessage);
                 console.log(error);
             }
         );
@@ -96,14 +89,10 @@ export class UserLoginComponent implements OnInit {
         this.loginForm.resetForm();
     }
 
-
-
     ngOnInit() {
-
         this.formData.delete('username');
         this.formData.delete('password');
         this.formData.delete('roles');
     }
-
 
 }

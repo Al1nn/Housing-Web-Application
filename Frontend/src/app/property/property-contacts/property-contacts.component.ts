@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Property } from '../../model/Property.interface';
 import { environment } from '../../../environments/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { PropertyDetailPopupMessageComponent } from '../property-detail-popup-message/property-detail-popup-message.component';
 
 
 @Component({
@@ -25,7 +27,7 @@ export class PropertyContactsComponent implements OnInit {
         draggable: true
     }
 
-    constructor(private route: ActivatedRoute) { }
+    constructor(private route: ActivatedRoute, private dialogRef: MatDialog) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -42,6 +44,13 @@ export class PropertyContactsComponent implements OnInit {
                 lng: this.property.longitude
             };
         }
+    }
+
+    openMessagesModal() {
+        this.dialogRef.open(PropertyDetailPopupMessageComponent, {
+            width: '600px',
+            height: '800px'
+        });
     }
 
 }

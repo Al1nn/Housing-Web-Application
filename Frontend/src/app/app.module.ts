@@ -12,6 +12,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { CommonModule } from '@angular/common';
 import { HttpErrorInterceptorService } from './services/httperror-interceptor.service';
 import { StoreService } from './store_services/store.service';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -23,7 +25,12 @@ import { StoreService } from './store_services/store.service';
     bootstrap: [AppComponent], imports: [AppRoutingModule,
         CommonModule,
         BrowserModule,
-
+        BrowserAnimationsModule,
+        ToastrModule.forRoot({
+            timeOut: 2000,
+            positionClass: 'toast-bottom-right',
+            preventDuplicates: true,
+        }),
         BsDropdownModule.forRoot()], providers: [
             provideClientHydration(),
             provideHttpClient(withFetch()),

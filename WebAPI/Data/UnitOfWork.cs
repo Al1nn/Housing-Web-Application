@@ -19,7 +19,7 @@ namespace WebAPI.Data
         public ICityRepository CityRepository => new CityRepository(dc);
         
 
-        public IUserImageRepository UserImageRepository => new UserImageRepository(dc);
+        public IUserRepository UserRepository => new UserRepository(dc);
         
 
         public IPropertyRepository PropertyRepository => new PropertyRepository(dc);

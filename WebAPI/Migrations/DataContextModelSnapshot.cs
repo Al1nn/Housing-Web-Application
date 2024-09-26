@@ -121,29 +121,6 @@ namespace WebAPI.Migrations
                     b.ToTable("FurnishingTypes");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LastUpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastUpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("WebAPI.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -357,6 +334,10 @@ namespace WebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -364,21 +345,6 @@ namespace WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.UserImage", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "ImageId");
-
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("UserImages");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Photo", b =>
@@ -438,30 +404,6 @@ namespace WebAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.UserImage", b =>
-                {
-                    b.HasOne("WebAPI.Models.Image", "Image")
-                        .WithMany("Users")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebAPI.Models.User", "User")
-                        .WithMany("Images")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.Image", b =>
-                {
-                    b.Navigation("Users");
-                });
-
             modelBuilder.Entity("WebAPI.Models.Property", b =>
                 {
                     b.Navigation("Photos");
@@ -469,8 +411,6 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models.User", b =>
                 {
-                    b.Navigation("Images");
-
                     b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618

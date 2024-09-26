@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IUserCard } from '../model/IUserCard.interface';
-import { IImage } from '../model/IImage.interface';
+import { IOtherUsers } from '../model/IUserCard.interface';
+
 
 @Injectable({
     providedIn: 'root'
@@ -12,31 +12,20 @@ export class UsersService {
     baseUrl = environment.baseUrl;
     constructor(private http: HttpClient) { }
 
-    getProfileImage(): Observable<IImage> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.get<IImage>(this.baseUrl + '/account/image', httpOptions);
-    }
 
-    getUserCard(): Observable<IUserCard> {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            })
-        };
-        return this.http.get<IUserCard>(this.baseUrl + '/account/card', httpOptions);
-    }
+    getOtherUsers(): Observable<IOtherUsers[]> {
+        let token = '';
+        if (typeof window !== 'undefined' && window.localStorage) {
+            token = localStorage.getItem('token') || '';
+        }
 
-    getUserCards(): Observable<IUserCard[]> {
         const httpOptions = {
             headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
+                Authorization: 'Bearer ' + token
             })
         };
-        return this.http.get<IUserCard[]>(this.baseUrl + '/account/cards', httpOptions);
+
+        return this.http.get<IOtherUsers[]>(this.baseUrl + '/account/others', httpOptions);
     }
 
     verifyOldPassword(password: string): Observable<boolean> {

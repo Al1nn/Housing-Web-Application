@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 })
 export class NavBarComponent {
     loggedInUser: string;
-    profilePicture: string;
+    profilePicture: string | undefined;
     thumbnailFolder: string = environment.thumbnailFolder;
     originalFolder: string = environment.originalPictureFolder;
     constructor(
@@ -26,6 +26,7 @@ export class NavBarComponent {
         const decodedToken = this.store.authService.decodeToken();
         if (decodedToken) {
             this.loggedInUser = decodedToken.unique_name;
+            this.profilePicture = decodedToken.profile_picture;
             return this.loggedInUser;
         } else {
             return '';
@@ -40,17 +41,10 @@ export class NavBarComponent {
         return this.store.authService.isAdmin();
     }
 
-    hasImage() {
-        this.profilePicture =
-            typeof localStorage !== 'undefined'
-                ? (localStorage.getItem('image') as string)
-                : '';
-        return this.profilePicture;
-    }
+
 
     onLogout() {
         localStorage.removeItem('token');
-        localStorage.removeItem('image');
         this.store.alertifyService.success('You are logged out !');
     }
 

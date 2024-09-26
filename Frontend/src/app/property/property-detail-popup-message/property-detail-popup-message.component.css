@@ -1,8 +1,9 @@
 .messages{
     width: 100%;
-    height: 100%;
+    height: 98%;
     border-radius: 16px;
     background-color: #e5f1fd;
+    overflow-y: hidden;
 }
 
 .messages-header{

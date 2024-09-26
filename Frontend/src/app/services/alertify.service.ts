@@ -1,29 +1,23 @@
 import { Injectable } from '@angular/core';
-declare let alertify: any;
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AlertifyService {
 
-    constructor() { }
+    constructor(private toastr: ToastrService) { }
 
     success(message: string) {
-        if (alertify) {
-            alertify.success(message);
-        }
+        this.toastr.success(message, 'Success');
     }
 
     warning(message: string) {
-        if (alertify) {
-            alertify.warning(message);
-        }
+        this.toastr.warning(message, 'Warning');
     }
 
     error(message: string) {
-        if (alertify) {
-            alertify.error(message);
-        }
+        this.toastr.error(message, 'Error');
     }
 
 }

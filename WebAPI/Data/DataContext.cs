@@ -16,10 +16,6 @@ namespace WebAPI.Data
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Image> Images { get; set; }
-
-        public DbSet<UserImage> UserImages { get; set; }
-
         public DbSet<Property> Properties { get; set; }
 
         public DbSet<PropertyType> PropertyTypes { get; set; }
@@ -38,22 +34,6 @@ namespace WebAPI.Data
             modelBuilder.Entity<Currency>()
                 .Property(c => c.Value)
                 .HasColumnType("decimal(18,4)");
-
-
-            modelBuilder.Entity<UserImage>().HasKey(i => new { i.UserId, i.ImageId});
-
-
-            modelBuilder.Entity<UserImage>()
-                .HasOne(ui => ui.User)
-                .WithMany(u => u.Images)
-                .HasForeignKey(ui => ui.UserId)
-                .OnDelete(DeleteBehavior.Cascade); 
-
-            modelBuilder.Entity<UserImage>()
-                        .HasOne(ui => ui.Image)
-                        .WithMany(i => i.Users)
-                        .HasForeignKey(ui => ui.ImageId)
-                        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PropertyStatsDto>()
                 .ToView(nameof(PropertyStatsView))

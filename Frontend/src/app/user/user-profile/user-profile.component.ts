@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { IUserCard } from '../../model/IUserCard.interface';
+
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { StoreService } from '../../store_services/store.service';
+import { IOtherUsers } from '../../model/IUserCard.interface';
+import { IToken } from '../../model/IToken.interface';
 
 @Component({
     selector: 'app-user-profile',
@@ -11,31 +13,30 @@ import { StoreService } from '../../store_services/store.service';
 })
 export class UserProfileComponent implements OnInit {
 
-
-    public userCard: IUserCard;
-    public userCards: IUserCard[];
+    public userCards: IOtherUsers[];
     public propertiesListed: number;
 
     public originalFolder: string = environment.originalPictureFolder;
     public thumbnailFolder: string = environment.thumbnailFolder;
 
+    public userCard: IToken;
     constructor(
         private store: StoreService,
         private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.route.data.subscribe((data) => {
-            this.userCard = data['usercard'];
-        });
-
-        this.store.usersService.getUserCards().subscribe((data: IUserCard[]) => {
-            const decodedToken = this.store.authService.decodeToken();
-            this.userCards = data.filter(card => card.username !== decodedToken?.unique_name);
+            this.userCards = data['usercards'];
+            this.userCard = this.store.authService.decodeToken() as IToken;
         });
 
         this.store.housingService.getPropertyCountByUser().subscribe((data: number) => {
             this.propertiesListed = data;
         });
+    }
+
+    isOnlyReader(): boolean {
+        return this.store.authService.isOnlyReader();
     }
 
 }

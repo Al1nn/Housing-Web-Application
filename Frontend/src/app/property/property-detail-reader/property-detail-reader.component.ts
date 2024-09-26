@@ -52,7 +52,7 @@ export class PropertyDetailReaderComponent implements OnInit {
     openMessagesModal() {
         this.dialogRef.open(PropertyDetailPopupMessageComponent, {
             width: '600px',
-            height: '800px'
+            height: '810px'
         });
     }
 

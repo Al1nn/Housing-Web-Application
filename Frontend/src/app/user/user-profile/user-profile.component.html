@@ -6,12 +6,12 @@
         <div class="card-body">
           <div class="avatar-container">
             <div class="image-container">
-              <img *ngIf="!userCard.fileName" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
-              <img *ngIf="userCard.fileName" src="{{thumbnailFolder + userCard.fileName}}" class="img-fluid rounded-circle" >
+              <img *ngIf="!userCard.profile_picture" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
+              <img *ngIf="userCard.profile_picture" src="{{thumbnailFolder + userCard.profile_picture}}" class="img-fluid rounded-circle" >
             </div> 
           </div>
   
-          <h1 class="card-title">{{userCard.username}}</h1>
+          <h1 class="card-title">{{userCard.unique_name}}</h1>
   
           <div>
             <i class="fa-regular fa-envelope"></i>
@@ -19,14 +19,14 @@
           </div>
           <div>
             <i class="fa-solid fa-phone"></i>
-            <strong> Phone Number : {{userCard.phoneNumber}}</strong>
+            <strong> Phone Number : {{userCard.phone}}</strong>
           </div>
           <!-- <div>
             <i class="fa-regular fa-user"></i>
             <strong *ngIf="userCard.role === 1">  </strong>
             <strong *ngIf="userCard.role === 0"> Role : Reader </strong>
           </div> -->
-          <div>
+          <div *ngIf="!isOnlyReader()">
             <i class="fa-solid fa-house"></i>
             <strong *ngIf="propertiesListed === 0"> No Properties Listed</strong>
             <strong *ngIf="propertiesListed > 0"> Properties Listed : {{propertiesListed}} </strong>
@@ -43,8 +43,8 @@
       <div class="row">
           <div class="col-2 mb-3" *ngFor="let userCard of userCards">
             <div class="text-center">
-              <img *ngIf="!userCard.fileName" src="/assets/user_images/user_default.jpg" class="img-thumbnail rounded-circle">
-              <img *ngIf="userCard.fileName" src="{{thumbnailFolder + userCard.fileName}}" class="img-thumbnail rounded-circle">
+              <img *ngIf="!userCard.photo" src="/assets/user_images/user_default.jpg" class="img-thumbnail rounded-circle">
+              <img *ngIf="userCard.photo" src="{{thumbnailFolder + userCard.photo}}" class="img-thumbnail rounded-circle">
               <strong>{{userCard.username}}</strong>
             </div>
             

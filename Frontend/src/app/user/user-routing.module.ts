@@ -5,7 +5,6 @@ import { UserRegisterComponent } from './user-register/user-register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserProfileResolverService } from './user-profile/user-profile-resolver.service';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
-import { UserSettingsResolverService } from './user-settings/user-settings-resolver.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -21,7 +20,7 @@ const routes: Routes = [
     {
         path: 'profile',
         component: UserProfileComponent,
-        resolve: { usercard: UserProfileResolverService },
+        resolve: { usercards: UserProfileResolverService },
         data: {
             breadcrumb: null
         }
@@ -29,7 +28,6 @@ const routes: Routes = [
     {
         path: 'settings',
         component: UserSettingsComponent,
-        resolve: { usercard: UserSettingsResolverService },
         data: {
             breadcrumb: null
         }

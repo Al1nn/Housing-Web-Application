@@ -26,7 +26,6 @@
     "@angular/ssr": "^18.2.5",
     "@daelmaak/ngx-gallery": "^3.0.4",
     "@types/leaflet": "^1.9.12",
-    "alertifyjs": "^1.14.0",
     "bootstrap": "^5.3.3",
     "express": "^4.18.2",
     "leaflet": "^1.9.4",
@@ -34,6 +33,7 @@
     "ngx-apexcharts": "^0.6.9",
     "ngx-auto-unsubscribe": "^3.0.1",
     "ngx-bootstrap": "^18.0.2",
+    "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
