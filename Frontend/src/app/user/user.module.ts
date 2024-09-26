@@ -11,7 +11,7 @@ import { UserProfileResolverService } from './user-profile/user-profile-resolver
         UserRoutingModule.modules
     ],
     providers: [
-        UserProfileResolverService
+        UserProfileResolverService,
     ]
 })
 export class UserModule { }

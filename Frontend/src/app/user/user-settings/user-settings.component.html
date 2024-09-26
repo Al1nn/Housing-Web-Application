@@ -17,13 +17,13 @@
             </div>
           </div>
   
-          <h1 class="card-title">{{userCard.unique_name}}</h1>
+          <h1 *ngIf="userCard" class="card-title">{{userCard.unique_name}}</h1>
   
-          <div>
+          <div  *ngIf="userCard">
             <i class="fa-regular fa-envelope"></i>
             <strong> Email : {{userCard.email}}</strong>
           </div>
-          <div>
+          <div  *ngIf="userCard">
             <i class="fa-solid fa-phone"></i>
             <strong> Phone Number : {{userCard.phone}}</strong>
           </div>
