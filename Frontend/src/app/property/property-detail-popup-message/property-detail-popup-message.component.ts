@@ -32,7 +32,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
     initializeChat() {
         const nameId = this.store.authService.decodeToken()?.nameid as string;
         if (nameId) {
-            this.store.chatService.createChat(nameId, this.data.postedBy).subscribe(chatId => {
+            this.store.chatService.getOrCreateChat(nameId, this.data.postedBy).subscribe(chatId => {
                 this.chatId = chatId;
 
             })
