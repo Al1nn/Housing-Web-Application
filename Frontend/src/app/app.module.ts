@@ -14,6 +14,10 @@ import { HttpErrorInterceptorService } from './services/httperror-interceptor.se
 import { StoreService } from './store_services/store.service';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getDatabase, provideDatabase } from '@angular/fire/database';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AngularFireModule } from '@angular/fire/compat';
 
 
 @NgModule({
@@ -22,10 +26,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         BreadcrumbComponent,
         NavBarComponent
     ],
-    bootstrap: [AppComponent], imports: [AppRoutingModule,
+    bootstrap: [AppComponent],
+    imports: [AppRoutingModule,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
+        AngularFireModule.initializeApp({ "projectId": "myfirstapp-a15e1", "appId": "1:859208953616:web:f9a1026cb308c49963bf95", "databaseURL": "https://myfirstapp-a15e1-default-rtdb.europe-west1.firebasedatabase.app", "storageBucket": "myfirstapp-a15e1.appspot.com", "apiKey": "AIzaSyAN3_n0tOjV_tJ37vc33Xpa9Kbr5ERSRGE", "authDomain": "myfirstapp-a15e1.firebaseapp.com", "messagingSenderId": "859208953616" }),
+        AngularFireDatabaseModule,
         ToastrModule.forRoot({
             timeOut: 2000,
             positionClass: 'toast-bottom-right',
@@ -41,7 +48,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
                 useClass: HttpErrorInterceptorService,
                 multi: true
             },
-            provideHttpClient(withInterceptorsFromDi())
+            provideHttpClient(withInterceptorsFromDi()),
+            provideFirebaseApp(() => initializeApp({ "projectId": "myfirstapp-a15e1", "appId": "1:859208953616:web:f9a1026cb308c49963bf95", "databaseURL": "https://myfirstapp-a15e1-default-rtdb.europe-west1.firebasedatabase.app", "storageBucket": "myfirstapp-a15e1.appspot.com", "apiKey": "AIzaSyAN3_n0tOjV_tJ37vc33Xpa9Kbr5ERSRGE", "authDomain": "myfirstapp-a15e1.firebaseapp.com", "messagingSenderId": "859208953616" })),
+            provideDatabase(() => getDatabase())
         ]
 })
 export class AppModule { }

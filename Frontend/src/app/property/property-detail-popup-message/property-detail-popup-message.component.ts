@@ -15,19 +15,35 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
     messageControl = new FormControl('');
     thumbnailFolder: string = environment.thumbnailFolder;
     userCard: IUserCard = {} as IUserCard;
+    chatId: string | null = null;
     constructor(private store: StoreService, private dialogRef: MatDialogRef<PropertyDetailPopupMessageComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
     ngOnInit(): void {
         this.store.chatService.getPropertyOwner(this.data.postedBy).subscribe(data => {
             this.userCard = data;
-        })
+            this.initializeChat();
+        });
     }
 
     closeEditModal() {
         this.dialogRef.close();
     }
 
+    initializeChat() {
+        const nameId = this.store.authService.decodeToken()?.nameid as string;
+        if (nameId) {
+            this.store.chatService.createChat(nameId, this.data.postedBy).subscribe(chatId => {
+                this.chatId = chatId;
+
+            })
+        }
+    }
+
     sendMessage() {
-        throw new Error('Method not implemented.');
+        const input = this.messageControl.value;
+
+        console.log(input);
+
+        this.messageControl.patchValue('');
     }
 }

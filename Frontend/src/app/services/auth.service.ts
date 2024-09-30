@@ -52,7 +52,7 @@ export class AuthService {
 
 
     decodeToken(): IToken | null {
-        if (typeof localStorage !== 'undefined') {
+        if (typeof window !== 'undefined' && window.localStorage) {
             const jwt = localStorage.getItem('token') as string;
             if (jwt) {
                 const jwtData = jwt.split('.')[1]; // Payload
