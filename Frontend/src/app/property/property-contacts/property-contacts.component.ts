@@ -4,6 +4,7 @@ import { Property } from '../../model/Property.interface';
 import { environment } from '../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { PropertyDetailPopupMessageComponent } from '../property-detail-popup-message/property-detail-popup-message.component';
+import { StoreService } from '../../store_services/store.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class PropertyContactsComponent implements OnInit {
     property = new Property();
     public mainPhotoUrl: string;
     originalFolder: string = environment.originalPictureFolder;
-
+    nameId: string;
     mapCenter: google.maps.LatLngLiteral;
     mapOptions: google.maps.MapOptions = {
         disableDefaultUI: true,
@@ -27,7 +28,7 @@ export class PropertyContactsComponent implements OnInit {
         draggable: true
     }
 
-    constructor(private route: ActivatedRoute, private dialogRef: MatDialog) { }
+    constructor(private store: StoreService, private route: ActivatedRoute, private dialogRef: MatDialog) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -35,6 +36,7 @@ export class PropertyContactsComponent implements OnInit {
             this.property = data['property'];
         });
         this.setMapCenter();
+        this.nameId = this.store.authService.decodeToken()?.nameid as string;
     }
 
     setMapCenter() {
@@ -49,7 +51,10 @@ export class PropertyContactsComponent implements OnInit {
     openMessagesModal() {
         this.dialogRef.open(PropertyDetailPopupMessageComponent, {
             width: '600px',
-            height: '800px'
+            height: '800px',
+            data: {
+                'postedBy': this.property.postedBy
+            }
         });
     }
 

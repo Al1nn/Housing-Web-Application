@@ -14,6 +14,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { UserSettingsDeleteModalComponent } from './user-settings/user-settings-delete-modal/user-settings-delete-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
     { path: 'login', component: UserLoginComponent, data: { breadcrumb: null } },
@@ -52,12 +54,14 @@ export class UserRoutingModule {
         UserProfileComponent,
         UserSettingsComponent,
         UserMessagesComponent,
+        UserSettingsDeleteModalComponent,
     ]
     static modules: any = [
         CommonModule,
         UserRoutingModule,
         ReactiveFormsModule,
         MatFormFieldModule,
+        MatDialogModule,
         FormsModule,
         MatListModule,
         MatInputModule,

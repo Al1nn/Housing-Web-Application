@@ -21,6 +21,7 @@ export class PropertyDetailReaderComponent implements OnInit {
     thumbnailFolder: string = environment.thumbnailFolder;
     galleryImages: GalleryItem[];
     age: string;
+    nameId: string;
     constructor(private dialogRef: MatDialog, private store: StoreService, private route: ActivatedRoute) { }
 
     ngOnInit() {
@@ -30,6 +31,7 @@ export class PropertyDetailReaderComponent implements OnInit {
         });
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
+        this.nameId = this.store.authService.decodeToken()?.nameid as string;
     }
 
     getPropertyPhotos(): GalleryItem[] {
@@ -52,7 +54,10 @@ export class PropertyDetailReaderComponent implements OnInit {
     openMessagesModal() {
         this.dialogRef.open(PropertyDetailPopupMessageComponent, {
             width: '600px',
-            height: '810px'
+            height: '800px',
+            data: {
+                'postedBy': this.property.postedBy
+            }
         });
     }
 

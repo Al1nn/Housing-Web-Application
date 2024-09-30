@@ -107,7 +107,7 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
     openMessagesModal() {
         this.dialogRef.open(PropertyDetailPopupMessageComponent, {
             width: '600px',
-            height: '810px',
+            height: '800px',
             data: {
                 'postedBy': this.property.postedBy
             }

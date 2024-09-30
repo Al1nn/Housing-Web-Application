@@ -44,6 +44,8 @@ namespace WebAPI.Controllers
             return Ok(stats);
         }
 
+        //[HttpGet("property/owner/{id}")]
+        //[Authorize]
 
 
         [HttpGet("list/{sellRent}/{pageNumber}/{pageSize}")]

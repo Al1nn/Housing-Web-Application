@@ -4,7 +4,8 @@ import { environment } from '../../../environments/environment';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { StoreService } from '../../store_services/store.service';
 import { IToken } from '../../model/IToken.interface';
-import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { UserSettingsDeleteModalComponent } from './user-settings-delete-modal/user-settings-delete-modal.component';
 
 @Component({
     selector: 'app-user-settings',
@@ -23,7 +24,7 @@ export class UserSettingsComponent implements OnInit {
     constructor(
         private fb: FormBuilder
         , private store: StoreService
-        , private router: Router
+        , private dialogRef: MatDialog
     ) { }
 
     get oldPassword() {
@@ -118,14 +119,9 @@ export class UserSettingsComponent implements OnInit {
     }
 
     onAccountDelete() {
-        console.log('Account Deleted');
-
-        this.store.usersService.deleteAccount().subscribe(() => {
-            if (localStorage) {
-                localStorage.removeItem('token');
-            }
-            this.store.alertifyService.success("Account Deleted");
-            this.router.navigate(['/']);
+        this.dialogRef.open(UserSettingsDeleteModalComponent, {
+            width: '300px',
+            height: '350px',
         });
     }
 

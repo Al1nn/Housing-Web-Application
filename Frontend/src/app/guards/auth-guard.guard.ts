@@ -5,15 +5,19 @@ import { Router } from '@angular/router';
 import { StoreService } from '../store_services/store.service';
 
 const userExist = (): boolean => {
-    return localStorage.getItem('token') ? true : false;
-}
+    if (typeof window !== 'undefined' && window.localStorage) {
+        return !!localStorage.getItem('token');
+    }
+    return false;
+};
+
 
 
 export const authGuard: CanActivateFn = () => {
     const router = inject(Router);
     const store = inject(StoreService);
 
-    if (!userExist()) {
+    if (localStorage && !userExist()) {
         router.navigate(['user/login']);
         store.alertifyService.error('You must be logged in to add a property');
         return false;
@@ -32,6 +36,11 @@ export const contactGuard: CanActivateFn = () => {
     const router = inject(Router);
     const store = inject(StoreService);
 
+    if (typeof window === 'undefined') {
+        // Server-side rendering, allow the route to activate
+        return true;
+    }
+
     if (!userExist()) {
         router.navigate(['/']);
         store.alertifyService.error('You must be logged in to access property contacts');
@@ -39,7 +48,7 @@ export const contactGuard: CanActivateFn = () => {
     }
 
     return true;
-}
+};
 
 
 
