@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Property } from '../../model/Property.interface';
+import { Property } from '../../models/Property.interface';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormGroup } from '@angular/forms';

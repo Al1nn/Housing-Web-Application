@@ -7,8 +7,9 @@
 <mat-dialog-content>
   <div class="messages mat-elevation-z5">
     <div class="messages-header">
-      <img width="50" height="50" class="rounded-circle mat-elevation-z5" src="../assets/user_images/user_default.jpg">
-      <h2>John Baiat Bun</h2>
+      <img width="50" height="50" class="rounded-circle mat-elevation-z5" *ngIf="!userCard.photo" src="/assets/user_images/user_default.jpg">
+      <img width="50" height="50" class="rounded-circle mat-elevation-z5" *ngIf="userCard.photo" src="{{thumbnailFolder + userCard.photo}}">
+      <h2>{{userCard.username}}</h2>
     </div>
     <mat-divider></mat-divider>
     <div class="chat-area">

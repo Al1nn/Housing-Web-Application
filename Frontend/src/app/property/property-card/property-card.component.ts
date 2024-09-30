@@ -1,7 +1,7 @@
 /* eslint-disable @angular-eslint/component-class-suffix */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Property } from '../../model/Property.interface';
+import { Property } from '../../models/Property.interface';
 
 
 

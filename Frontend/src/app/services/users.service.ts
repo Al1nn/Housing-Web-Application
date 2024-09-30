@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IOtherUsers } from '../model/IUserCard.interface';
+import { IUserCard } from '../models/IUserCard.interface';
 
 
 @Injectable({
@@ -13,7 +13,7 @@ export class UsersService {
     constructor(private http: HttpClient) { }
 
 
-    getOtherUsers(): Observable<IOtherUsers[]> {
+    getOtherUsers(): Observable<IUserCard[]> {
         let token = '';
         if (typeof window !== 'undefined' && window.localStorage) {
             token = localStorage.getItem('token') || '';
@@ -25,7 +25,7 @@ export class UsersService {
             })
         };
 
-        return this.http.get<IOtherUsers[]>(this.baseUrl + '/account/others', httpOptions);
+        return this.http.get<IUserCard[]>(this.baseUrl + '/account/others', httpOptions);
     }
 
     verifyOldPassword(password: string): Observable<boolean> {

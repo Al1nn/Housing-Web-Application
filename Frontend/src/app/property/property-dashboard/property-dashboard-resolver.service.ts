@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { EMPTY, Observable, catchError } from 'rxjs';
-import { PaginatedProperties } from '../../model/PaginatedProperties.interface';
+import { PaginatedProperties } from '../../models/PaginatedProperties.interface';
 import { StoreService } from '../../store_services/store.service';
 
 @Injectable({

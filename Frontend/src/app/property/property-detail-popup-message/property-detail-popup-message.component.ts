@@ -1,6 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { IUserCard } from '../../models/IUserCard.interface';
+import { StoreService } from '../../store_services/store.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-property-detail-popup-message',
@@ -10,12 +13,14 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class PropertyDetailPopupMessageComponent implements OnInit {
 
     messageControl = new FormControl('');
-
-    constructor(private dialogRef: MatDialogRef<PropertyDetailPopupMessageComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
+    thumbnailFolder: string = environment.thumbnailFolder;
+    userCard: IUserCard = {} as IUserCard;
+    constructor(private store: StoreService, private dialogRef: MatDialogRef<PropertyDetailPopupMessageComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
     ngOnInit(): void {
-        console.log(this.data.postedBy);
-
+        this.store.chatService.getPropertyOwner(this.data.postedBy).subscribe(data => {
+            this.userCard = data;
+        })
     }
 
     closeEditModal() {

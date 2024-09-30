@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Property } from '../../model/Property.interface';
+import { Property } from '../../models/Property.interface';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { StoreService } from '../../store_services/store.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,7 +22,7 @@ export class PropertyDetailReaderComponent implements OnInit {
     galleryImages: GalleryItem[];
     age: string;
     nameId: string;
-    constructor(private dialogRef: MatDialog, private store: StoreService, private route: ActivatedRoute) { }
+    constructor(private dialogRef: MatDialog, private store: StoreService, private route: ActivatedRoute, private router: Router) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -52,6 +52,12 @@ export class PropertyDetailReaderComponent implements OnInit {
     }
 
     openMessagesModal() {
+        if (localStorage && !localStorage.getItem('token')) {
+            this.router.navigate(['user/login']);
+            this.store.alertifyService.error("You must log in before sending messages");
+            return;
+        }
+
         this.dialogRef.open(PropertyDetailPopupMessageComponent, {
             width: '600px',
             height: '800px',

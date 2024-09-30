@@ -11,12 +11,12 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { IPropertyBase } from '../../model/IPropertyBase.interface';
-import { Property } from '../../model/Property.interface';
-import { IKeyValuePair } from '../../model/IKeyValuePair';
+import { IPropertyBase } from '../../models/IPropertyBase.interface';
+import { Property } from '../../models/Property.interface';
+import { IKeyValuePair } from '../../models/IKeyValuePair';
 import { DatePipe } from '@angular/common';
-import { IPhoto } from '../../model/IPhoto';
-import { ICity } from '../../model/ICity.interface';
+import { IPhoto } from '../../models/IPhoto';
+import { ICity } from '../../models/ICity.interface';
 import { StoreService } from '../../store_services/store.service';
 
 @Component({

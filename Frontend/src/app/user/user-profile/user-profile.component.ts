@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { StoreService } from '../../store_services/store.service';
-import { IOtherUsers } from '../../model/IUserCard.interface';
-import { IToken } from '../../model/IToken.interface';
+import { IUserCard } from '../../models/IUserCard.interface';
+import { IToken } from '../../models/IToken.interface';
 
 @Component({
     selector: 'app-user-profile',
@@ -13,7 +13,7 @@ import { IToken } from '../../model/IToken.interface';
 })
 export class UserProfileComponent implements OnInit {
 
-    public userCards: IOtherUsers[];
+    public userCards: IUserCard[];
     public propertiesListed: number;
 
     public originalFolder: string = environment.originalPictureFolder;

@@ -2,11 +2,11 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Property } from '../../model/Property.interface';
+import { Property } from '../../models/Property.interface';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { IFilters } from '../../model/IFilters.interface';
-import { PaginatedProperties } from '../../model/PaginatedProperties.interface';
-import { ISugestion } from '../../model/ISugestion.interface';
+import { IFilters } from '../../models/IFilters.interface';
+import { PaginatedProperties } from '../../models/PaginatedProperties.interface';
+import { ISugestion } from '../../models/ISugestion.interface';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { StoreService } from '../../store_services/store.service';
 

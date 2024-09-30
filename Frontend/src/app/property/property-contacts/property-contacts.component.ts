@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Property } from '../../model/Property.interface';
+import { Property } from '../../models/Property.interface';
 import { environment } from '../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { PropertyDetailPopupMessageComponent } from '../property-detail-popup-message/property-detail-popup-message.component';

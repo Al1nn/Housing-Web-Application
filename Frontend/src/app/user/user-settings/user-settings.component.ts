@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { StoreService } from '../../store_services/store.service';
-import { IToken } from '../../model/IToken.interface';
+import { IToken } from '../../models/IToken.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { UserSettingsDeleteModalComponent } from './user-settings-delete-modal/user-settings-delete-modal.component';
 

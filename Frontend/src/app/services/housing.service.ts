@@ -3,16 +3,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Property } from '../model/Property.interface';
+import { Property } from '../models/Property.interface';
 import { environment } from '../../environments/environment';
-import { IKeyValuePair } from '../model/IKeyValuePair';
-import { IPhoto } from '../model/IPhoto';
-import { ICity } from '../model/ICity.interface';
-import { IFilters } from '../model/IFilters.interface';
-import { PaginatedProperties } from '../model/PaginatedProperties.interface';
-import { IPropertyStats } from '../model/IPropertyStats.interface';
-import { ISugestion } from '../model/ISugestion.interface';
-import { ITree } from '../model/ITree.interface';
+import { IKeyValuePair } from '../models/IKeyValuePair';
+import { IPhoto } from '../models/IPhoto';
+import { ICity } from '../models/ICity.interface';
+import { IFilters } from '../models/IFilters.interface';
+import { PaginatedProperties } from '../models/PaginatedProperties.interface';
+import { IPropertyStats } from '../models/IPropertyStats.interface';
+import { ISugestion } from '../models/ISugestion.interface';
+import { ITree } from '../models/ITree.interface';
 
 
 @Injectable({

@@ -44,9 +44,37 @@ namespace WebAPI.Controllers
             return Ok(stats);
         }
 
-        //[HttpGet("property/owner/{id}")]
-        //[Authorize]
+        [HttpGet("owner/{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetPropertyOwner(int id)
+        {   
+            ApiError apiError = new ApiError();
+            
+            int userId = GetUserId();
 
+            if (id == userId)
+            {
+                
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "Same logged user and owner";
+                apiError.ErrorDetails = "";
+                return BadRequest(apiError);
+            }
+
+            var propertyOwner = await uow.UserRepository.GetUserById(id);
+
+            if(propertyOwner == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "User not found";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
+            var propertyOwnerDto = mapper.Map<UserDto>(propertyOwner);
+
+            return Ok(propertyOwnerDto);
+        }
 
         [HttpGet("list/{sellRent}/{pageNumber}/{pageSize}")]
         [AllowAnonymous]

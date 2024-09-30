@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { IUserForRegister } from '../../model/IUser.interface';
+import { IUserForRegister } from '../../models/IUser.interface';
 import { Router } from '@angular/router';
-import { IUserForLogin } from '../../model/IUser.interface';
+import { IUserForLogin } from '../../models/IUser.interface';
 
 import { StoreService } from '../../store_services/store.service';
 

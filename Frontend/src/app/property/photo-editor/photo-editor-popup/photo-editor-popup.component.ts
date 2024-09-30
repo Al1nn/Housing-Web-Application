@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
-import { Property } from '../../../model/Property.interface';
+import { Property } from '../../../models/Property.interface';
 import { StoreService } from '../../../store_services/store.service';
 
 @Component({

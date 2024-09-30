@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { IUserForLogin } from '../model/IUser.interface';
+import { IUserForLogin } from '../models/IUser.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { IToken } from '../model/IToken.interface';
+import { IToken } from '../models/IToken.interface';
 
 @Injectable({
     providedIn: 'root',

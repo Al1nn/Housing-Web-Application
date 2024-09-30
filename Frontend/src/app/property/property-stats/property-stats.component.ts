@@ -12,7 +12,7 @@ import {
     ApexFill,
     ApexLegend,
 } from 'ngx-apexcharts';
-import { IPropertyStats } from '../../model/IPropertyStats.interface';
+import { IPropertyStats } from '../../models/IPropertyStats.interface';
 import { isPlatformBrowser } from '@angular/common';
 import { StoreService } from '../../store_services/store.service';
 

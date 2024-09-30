@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Property } from '../../model/Property.interface';
+import { Property } from '../../models/Property.interface';
 import { environment } from '../../../environments/environment';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { StoreService } from '../../store_services/store.service';

@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Property } from '../../model/Property.interface';
+import { Property } from '../../models/Property.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { PhotoEditorPopupComponent } from './photo-editor-popup/photo-editor-popup.component';
 import { HttpEventType } from '@angular/common/http';
-import { IPhoto } from '../../model/IPhoto';
+import { IPhoto } from '../../models/IPhoto';
 import { StoreService } from '../../store_services/store.service';
 
 @Component({
