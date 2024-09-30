@@ -208,6 +208,53 @@ namespace WebAPI.Controllers
             return BadRequest(apiError);
         }
 
+        [HttpDelete("delete")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUser()
+        {
+            ApiError apiError = new ApiError();
+            
+            int userId = GetUserId();
+
+            var user = await uow.UserRepository.GetUserById(userId);
+
+            if (user == null)
+            {
+                
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorMessage = "User not found";
+                apiError.ErrorDetails = "User has been deleted";
+                return NotFound(apiError);
+            }
+
+            if (!user.Photo.IsEmpty())
+            {
+                var oldThumbnailPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails", user.Photo);
+                var oldOriginalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes", user.Photo);
+
+                if (System.IO.File.Exists(oldThumbnailPath))
+                {
+                    System.IO.File.Delete(oldThumbnailPath);
+                }
+                if (System.IO.File.Exists(oldOriginalPath))
+                {
+                    System.IO.File.Delete(oldOriginalPath);
+                }
+            }
+
+            uow.UserRepository.DeleteUser(user);
+
+            if(await uow.SaveAsync())
+            {
+                return Ok();
+            }
+
+            apiError.ErrorCode = BadRequest().StatusCode;
+            apiError.ErrorMessage = "Unknown error occured";
+            apiError.ErrorDetails = "";
+            return BadRequest(apiError);
+        }
+
         //api/account/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] LoginReqDto loginReq)

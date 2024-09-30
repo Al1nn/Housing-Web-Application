@@ -69,4 +69,19 @@ export class UsersService {
         };
         return this.http.put(this.baseUrl + '/account/updateAvatar', file, httpOptions);
     }
+
+
+    deleteAccount() {
+        let token = '';
+        if (typeof window !== 'undefined' && window.localStorage) {
+            token = localStorage.getItem('token') || '';
+        }
+
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + token
+            })
+        };
+        return this.http.delete(this.baseUrl + '/account/delete', httpOptions);
+    }
 }

@@ -108,6 +108,11 @@ namespace WebAPI.Data.Repo
             dc.Users.Update(user);
         }
 
+        public void DeleteUser(User user)
+        {
+            dc.Users.Remove(user);
+        }
+
         public void Register(string username, string password, string email, string phoneNumber, List<string> roles ,IFormFile file)
         {
             byte[] passwordHash, passwordKey;
@@ -185,6 +190,5 @@ namespace WebAPI.Data.Repo
             return await dc.Users.AnyAsync( data => data.Username == username );
         }
 
-        
     }
 }

@@ -105,10 +105,10 @@ export class UserSettingsComponent implements OnInit {
         const selectedFile = event.target.files[0];
         const formData = new FormData();
         formData.append('file', selectedFile);
-        //Aici vine update-ul din UsersService
+
         this.store.usersService.updateAvatar(formData).subscribe((data: any) => {
             if (localStorage) {
-                localStorage.setItem('token', data.token); // THIS PUTS IT LIKE [object Object] PLEASE FIX
+                localStorage.setItem('token', data.token);
                 this.userCard = this.store.authService.decodeToken() as IToken;
             }
             this.store.alertifyService.success("Profile Picture Successfully Updated");

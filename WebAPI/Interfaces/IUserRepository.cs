@@ -19,6 +19,8 @@ namespace WebAPI.Interfaces
 
         void UpdateUser(User user);
 
+        void DeleteUser(User user);
+
         Task<IEnumerable<User>> GetOtherUsersAsync(int currentId);
         
        

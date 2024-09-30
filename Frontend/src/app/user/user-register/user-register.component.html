@@ -69,8 +69,7 @@
         <div class="form-group col-12 mb-3">
           <label for="mobile" class="form-label">Mobile</label>
           <input type="text" class="form-control" formControlName="mobile">
-          <span class="error-block" *ngIf="mobile.hasError('required') &&
-          (mobile.touched || userSubmitted)">
+          <span class="error-block" *ngIf="!mobile.valid && (mobile.touched || userSubmitted)">
             Please provide a mobile
           </span>
           <span class="error-block" *ngIf="mobile.value && mobile.value.length > 15">
