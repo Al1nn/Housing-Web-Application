@@ -29,29 +29,44 @@ export class UsersService {
     }
 
     verifyOldPassword(password: string): Observable<boolean> {
+        let token = '';
+        if (typeof window !== 'undefined' && window.localStorage) {
+            token = localStorage.getItem('token') || '';
+        }
+
         const httpOptions = {
             headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
+                Authorization: 'Bearer ' + token
             })
         };
         return this.http.get<boolean>(this.baseUrl + '/account/verifyPassword/' + password, httpOptions);
     }
 
     updatePassword(newPassword: string) {
+        let token = '';
+        if (typeof window !== 'undefined' && window.localStorage) {
+            token = localStorage.getItem('token') || '';
+        }
+
         const httpOptions = {
             headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
+                Authorization: 'Bearer ' + token
             })
         };
         return this.http.put(this.baseUrl + '/account/updatePassword/' + newPassword, {}, httpOptions);
     }
 
-    updateAvatar(oldPictureName: string, file: FormData) {
+    updateAvatar(file: FormData) {
+        let token = '';
+        if (typeof window !== 'undefined' && window.localStorage) {
+            token = localStorage.getItem('token') || '';
+        }
+
         const httpOptions = {
             headers: new HttpHeaders({
-                Authorization: 'Bearer ' + localStorage.getItem('token')
+                Authorization: 'Bearer ' + token
             })
         };
-        return this.http.put(this.baseUrl + '/account/updateAvatar/' + oldPictureName, file, httpOptions);
+        return this.http.put(this.baseUrl + '/account/updateAvatar', file, httpOptions);
     }
 }

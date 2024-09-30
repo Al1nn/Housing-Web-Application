@@ -54,7 +54,9 @@ namespace WebAPI.Data.Repo
 
         public async Task<User> GetUserById(int id)
         {
-            return await dc.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await dc.Users
+                .Include(r => r.Roles)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<IEnumerable<User>> GetOtherUsersAsync(int currentId)
@@ -101,7 +103,7 @@ namespace WebAPI.Data.Repo
         }
 
 
-        public void UpdatePassword(User user)
+        public void UpdateUser(User user)
         {
             dc.Users.Update(user);
         }

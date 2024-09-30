@@ -99,12 +99,7 @@ namespace WebAPI.Controllers
             }
 
             int userId = GetUserId();
-
-
-
             var user = await uow.UserRepository.GetUserById(userId);
-
-
             if (user == null)//For safety 
             {
                 apiError.ErrorCode = NotFound().StatusCode;
@@ -112,18 +107,13 @@ namespace WebAPI.Controllers
                 apiError.ErrorDetails = "";
                 return NotFound(apiError);
             }
-
             byte[] passwordHash, passwordKey;
             uow.UserRepository.EncryptPassword(newPassword, out passwordHash, out passwordKey);
-
 
             user.Password = passwordHash;
             user.PasswordKey = passwordKey;
 
-
-
-
-            uow.UserRepository.UpdatePassword(user);
+            uow.UserRepository.UpdateUser(user);
 
             await uow.SaveAsync();
             return StatusCode(200);
@@ -131,11 +121,11 @@ namespace WebAPI.Controllers
         }
 
         //api/account/updateAvatar/{}
-        [Route("updateAvatar/{oldPictureName}")]
+        [Route("updateAvatar")]
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> UpdatePicture(IFormFile file, [FromRoute] string oldPictureName)
-        {
+        public async Task<IActionResult> UpdatePicture(IFormFile file)
+            {
             ApiError apiError = new ApiError();
 
             int userId = GetUserId();
@@ -146,6 +136,31 @@ namespace WebAPI.Controllers
                 apiError.ErrorMessage = "You didnt selected any file";
                 apiError.ErrorDetails = "";
                 return BadRequest(apiError);
+            }
+
+            var user = await uow.UserRepository.GetUserById(userId);
+
+            if (user == null)
+            {
+                apiError.ErrorCode = NotFound().StatusCode;
+                apiError.ErrorDetails = "User not found";
+                apiError.ErrorDetails = "";
+                return NotFound(apiError);
+            }
+
+            if(!user.Photo.IsEmpty())
+            {
+                var oldThumbnailPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails", user.Photo);
+                var oldOriginalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes", user.Photo);
+
+                if (System.IO.File.Exists(oldThumbnailPath))
+                {
+                    System.IO.File.Delete(oldThumbnailPath);
+                }
+                if (System.IO.File.Exists(oldOriginalPath))
+                {
+                    System.IO.File.Delete(oldOriginalPath);
+                }
             }
 
             string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes");
@@ -175,15 +190,16 @@ namespace WebAPI.Controllers
                 await thumbnail.SaveAsync(thumbnailPath);
             }
 
+            user.Photo = fileName;
+            uow.UserRepository.UpdateUser(user);
 
 
-
-
-            if (await uow.SaveAsync()) return Ok();
-
-
-
-
+            var token = CreateJWT(user);
+            if (await uow.SaveAsync())
+            {
+                
+                return Ok(new { token = token });
+            }
 
 
             apiError.ErrorCode = BadRequest().StatusCode;

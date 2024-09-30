@@ -17,8 +17,10 @@ namespace WebAPI.Interfaces
 
         void EncryptPassword(string password, out byte[] passwordHash, out byte[] passwordKey);
 
-        void UpdatePassword(User user);
+        void UpdateUser(User user);
 
-        Task<IEnumerable<User>> GetOtherUsersAsync(int currentId);  
+        Task<IEnumerable<User>> GetOtherUsersAsync(int currentId);
+        
+       
     }
 }
