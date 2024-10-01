@@ -28,6 +28,7 @@ export class UsersService {
         return this.http.get<IUserCard[]>(this.baseUrl + '/account/others', httpOptions);
     }
 
+
     verifyOldPassword(password: string): Observable<boolean> {
         let token = '';
         if (typeof window !== 'undefined' && window.localStorage) {

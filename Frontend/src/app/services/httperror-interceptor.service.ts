@@ -21,7 +21,7 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
             catchError((error: HttpErrorResponse) => {
                 const errorMessage = this.setError(error);
                 console.error('HTTP Error:', error);
-                this.alertifyService.error(errorMessage);
+                this.alertifyService.error(errorMessage); // WHY IT GETS ME HERE , AFTER RELOADING THE PAGE ? ? ? ? ?  I DO HAVE THE TOKEN , RETAAARD
                 return throwError(() => new Error(errorMessage));
             })
         );
