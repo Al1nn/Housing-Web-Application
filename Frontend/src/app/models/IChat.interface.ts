@@ -2,7 +2,7 @@
 
 export interface IChat {
     lastMessage: string;
-    lastMessageDate: Date;
+    lastMessageDate: string;
     senderID: string;
     receiverID: string;
     messages: IMessage[];
@@ -11,6 +11,6 @@ export interface IChat {
 
 export interface IMessage {
     senderId: string;
-    sentDate: Date;
+    sentDate: string;
     text: string;
 }

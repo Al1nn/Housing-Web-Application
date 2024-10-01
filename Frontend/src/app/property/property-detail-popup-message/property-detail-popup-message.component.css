@@ -3,7 +3,6 @@
     height: 98%;
     border-radius: 16px;
     background-color: #e5f1fd;
-    overflow-y: hidden;
 }
 
 .messages-header{
@@ -31,11 +30,63 @@
     overflow: auto;
 }
 
+.chat-bubble-container{
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.chat-area > :first-child{
+    margin-top: auto;
+}
+
+.chat-bubble-container.sender{
+    justify-content: flex-end;
+}
+
+.chat-bubble-container.sender > .chat-bubble{
+    background: #007bff;
+    color: white;
+}
+
+
+.chat-date.sender{
+    position: absolute;
+    bottom: 2px;
+    right: 8px;
+    font-size: 0.7rem;
+    color: #ffffff;
+}
+
+.chat-date{
+    position: absolute;
+    bottom: 2px;
+    right: 8px;
+    font-size: 0.7rem;
+    color: #000000;
+}
+
+.chat-bubble{
+    background: #c5d6e9;
+    padding-top: 8px;
+    padding-bottom: 18px;
+    padding-left: 8px;
+    padding-right: 100px;
+    margin-bottom: 16px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 8px;
+    width: fit-content;
+    min-width: 150px;
+    position: relative;
+}
+
+ 
+
 mat-dialog-content {
-    overflow-x: hidden;
-    overflow-y: auto; /* Ensure content scrolls if needed */
     max-height: calc(100vh - 160px); /* Adjust the maximum height based on viewport */
     padding: 16px;
+    overflow: hidden;
 }
 
 .mat-dialog-actions {

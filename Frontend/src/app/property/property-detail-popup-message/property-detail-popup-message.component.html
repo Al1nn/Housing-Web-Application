@@ -1,4 +1,4 @@
-<div class="modal-header p-3 justify-content-between">
+<div class="modal-header p-3 justify-content-between" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
   <h4 class="modal-title pull-left">Send Message</h4>
    <button type="button" class="btn btn-danger btn-sm" (click)="closeEditModal()">
       <i class="fa-solid fa-x text-danger"></i>
@@ -13,7 +13,16 @@
     </div>
     <mat-divider></mat-divider>
     <div class="chat-area">
-
+      <ng-container>
+        <div *ngFor="let message of messages"  class="chat-bubble-container" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">
+          <div class="chat-bubble">
+            {{message.text}}
+            <span class="chat-date" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">{{message.sentDate}}</span>
+          </div>
+        </div>
+     <div #endOfChat></div> 
+    </ng-container>
+      
     </div>
     <mat-divider></mat-divider>
     <div class="input-area">

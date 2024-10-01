@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { from, map, Observable, switchMap } from 'rxjs';
 import { IUserCard } from '../models/IUserCard.interface';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
-import { IChat } from '../models/IChat.interface';
+import { IChat, IMessage } from '../models/IChat.interface';
 @Injectable({
     providedIn: 'root'
 })
@@ -51,7 +51,7 @@ export class ChatService {
     private createNewChat(senderId: string, receiverId: string): Observable<string> {
         const newChat: IChat = {
             lastMessage: '',
-            lastMessageDate: new Date(),
+            lastMessageDate: new Date().toLocaleString(), //This must be present time
             senderID: senderId,
             receiverID: receiverId,
             messages: []
@@ -82,5 +82,30 @@ export class ChatService {
                 return chat;
             })
         );
+    }
+
+    getChatMessages(chatId: string): Observable<IMessage[]> {
+        return this.db.list<IMessage>(`${this.chatPath}/${chatId}/messages`, ref =>
+            ref.orderByChild('sentDate')
+        ).snapshotChanges().pipe(
+            map(changes =>
+                changes.map(c => ({
+                    id: c.payload.key,
+                    ...c.payload.val() as IMessage
+                }))
+            ),
+            map(messages => messages.sort((a, b) => a.sentDate.localeCompare(b.sentDate)))
+        );
+    }
+
+    sendMessage(chatId: string, message: IMessage): Promise<void> {
+        return this.db.list(`${this.chatPath}/${chatId}/messages`).push(message)
+            .then(() => this.updateLastMessage(chatId, message));
+    }
+    private updateLastMessage(chatId: string, message: IMessage): Promise<void> {
+        return this.db.object(`${this.chatPath}/${chatId}`).update({
+            lastMessage: message.text,
+            lastMessageDate: message.sentDate
+        });
     }
 }
