@@ -72,17 +72,18 @@ export class ChatService {
         );
     }
 
-    getChat(chatId: string): Observable<IChat | null> {
-        return this.db.object<IChat>(`${this.chatPath}/${chatId}`).valueChanges().pipe(
-            map(chat => {
-                if (chat === null) {
-                    console.log(`Chat with ID ${chatId} not found`);
-                    return null;
-                }
-                return chat;
-            })
+
+    getChats(receiverId: string): Observable<IChat[]> {
+        return this.db.list<IChat>(this.chatPath, ref =>
+            ref.orderByChild('receiverID').equalTo(receiverId)
+        ).snapshotChanges().pipe(
+            map(changes => changes.map(c => ({
+                id: c.payload.key,
+                ...c.payload.val() as IChat
+            })))
         );
     }
+
 
     getChatMessages(chatId: string): Observable<IMessage[]> {
         return this.db.list<IMessage>(`${this.chatPath}/${chatId}/messages`, ref =>
@@ -102,6 +103,7 @@ export class ChatService {
         return this.db.list(`${this.chatPath}/${chatId}/messages`).push(message)
             .then(() => this.updateLastMessage(chatId, message));
     }
+
     private updateLastMessage(chatId: string, message: IMessage): Promise<void> {
         return this.db.object(`${this.chatPath}/${chatId}`).update({
             lastMessage: message.text,

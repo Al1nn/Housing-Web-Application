@@ -2,32 +2,49 @@
   <div class="chat-list mat-elevation-z5">
     <div class="search-input">
       <mat-form-field color="primary">
-        <input matInput placeholder="Search for property owners and start a chat" 
-        [formControl]="searchControl"
-        
+        <input
+          matInput
+          placeholder="Search for property owners and start a chat"
+          [formControl]="searchControl"
+          [matAutocomplete]="auto"
         />
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="onUserSelected($event)"
+        >
+        
+            <mat-option *ngFor="let user of filteredUsers$ | async" [value]="user.username">
+              <img
+                width="50"
+                height="50"
+                class="rounded-circle"
+                *ngIf="!user.photo"
+                src="/assets/user_images/user_default.jpg"
+              />
+              <img
+                width="50"
+                height="50"
+                class="rounded-circle"
+                *ngIf="user.photo"
+                [src]="thumbnailFolder + user.photo"
+              />
+              {{ user.username }}
+            </mat-option>
+        
+      
+          <!-- Template to show when no users are found -->
+          <ng-template #noUsersFound>
+            <mat-option disabled>
+              No property owner found
+            </mat-option>
+          </ng-template>
+        </mat-autocomplete>
       </mat-form-field>
-      <!--mat-autocomplete-->
+      
+      
     </div>
+
     <mat-selection-list [multiple]="false" [formControl]="chatListControl" class="chat-selection-list">
-      <mat-list-option  class="chat-list-option">
-        <img
-            width="50"
-            height="50"
-            class="rounded-circle mat-elevation-z1 chat-avatar"
-            matListItemAvatar
-            src="../../assets/user_images/user_default.jpg"
-          />
-          <div class="chat-info">
-            <div class="chat-header">
-              <span class="chat-name">John Baiat Bun</span>
-              <span class="chat-date">20/02/24 12:20 PM</span>
-            </div>
-            <div class="chat-last-message">Hello Mami Que Guapa</div>
-          </div>
-          
-      </mat-list-option>
-      <mat-divider></mat-divider>
       <mat-list-option  class="chat-list-option">
         <img
             width="50"
@@ -46,7 +63,10 @@
       </mat-list-option>
       <mat-divider></mat-divider>
     </mat-selection-list>
+
   </div>
+
+
   <div class="messages mat-elevation-z5">
     <div class="messages-header">
       <img  class="mat-elevation-z5" src="../../assets/user_images/user_default.jpg">
