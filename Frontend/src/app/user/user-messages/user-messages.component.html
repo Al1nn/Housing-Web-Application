@@ -2,14 +2,14 @@
   <div class="chat-list mat-elevation-z5">
     <div class="search-input">
       <mat-form-field color="primary">
-        <input matInput placeholder="Search for users and start a chat" 
+        <input matInput placeholder="Search for property owners and start a chat" 
         [formControl]="searchControl"
         
         />
       </mat-form-field>
       <!--mat-autocomplete-->
     </div>
-    <mat-selection-list  [multiple]="false" [formControl]="chatListControl" class="chat-selection-list no-radio-button">
+    <mat-selection-list [multiple]="false" [formControl]="chatListControl" class="chat-selection-list">
       <mat-list-option  class="chat-list-option">
         <img
             width="50"

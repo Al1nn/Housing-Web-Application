@@ -8,7 +8,7 @@
     margin: 5px;
     background-color: #c5d6e9;
     border-radius: 16px;
-    min-width: 260px;
+    min-width: 300px;
    
 }
 
@@ -21,7 +21,7 @@
 .search-input {
     width: 100%;
     padding: 15px;
-    max-width: 350px;
+    max-width: 400px;
   }
   
   .search-input mat-form-field {
@@ -120,3 +120,4 @@ mat-list-option > img{
     padding-top: 16px;
     padding-bottom: 8px;
 }
+

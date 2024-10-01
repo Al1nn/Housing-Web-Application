@@ -90,3 +90,10 @@ $my-first-app-theme: mat.define-theme((
 }
 
 
+.mat-mdc-list-option .mdc-radio__outer-circle {
+  display: none;
+}
+
+.mat-mdc-list-option .mdc-radio__inner-circle {
+  display: none;
+}
