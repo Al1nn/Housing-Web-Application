@@ -10,7 +10,7 @@
         />
         <mat-autocomplete
           #auto="matAutocomplete"
-          (optionSelected)="onUserSelected($event)"
+          
         >
         
             <mat-option *ngFor="let user of filteredUsers$ | async" [value]="user.username">
@@ -47,7 +47,28 @@
     <mat-selection-list [multiple]="false" [formControl]="chatListControl" class="chat-selection-list">
    
       <mat-list-option *ngFor="let chat of chats$ | async" class="chat-list-option" (click)="onOptionSelected(chat)">
-        <img
+        
+        <div class="d-flex"  *ngIf="token.nameid !== chat.receiverID; else showSender">
+          <img
+            width="50"
+            height="50"
+            class="rounded-circle mat-elevation-z1 chat-avatar"
+            matListItemAvatar
+            [src]="chat.receiverPhoto ? thumbnailFolder + chat.receiverPhoto : '../../assets/user_images/user_default.jpg'"
+          />
+          <div class="chat-info">
+            <div class="chat-header">
+              <span class="chat-name">{{ chat.receiverName }}</span>
+              <span class="chat-date">{{ chat.lastMessageDate }}</span>
+            </div>
+            <div class="chat-last-message">{{ chat.lastMessage }}</div>
+          </div>
+        </div>
+        
+        
+        <ng-template #showSender>
+          <div class="d-flex">
+            <img
             width="50"
             height="50"
             class="rounded-circle mat-elevation-z1 chat-avatar"
@@ -56,11 +77,16 @@
           />
           <div class="chat-info">
             <div class="chat-header">
-              <span class="chat-name">{{chat.senderName}}</span>
-              <span class="chat-date">{{chat.lastMessageDate}}</span>
+              <span class="chat-name">{{ chat.senderName }}</span>
+              <span class="chat-date">{{ chat.lastMessageDate }}</span>
             </div>
-            <div class="chat-last-message">{{chat.lastMessage}}</div>
+            <div class="chat-last-message">{{ chat.lastMessage }}</div>
           </div>
+          </div>
+          
+        </ng-template>
+        
+        
           
       </mat-list-option>
      

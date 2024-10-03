@@ -56,7 +56,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     }
 
     createChat() {
-        this.store.chatService.createChat(this.token.nameid, this.token.profile_picture as string, this.token.unique_name, this.data.postedBy.toString()).subscribe(data => {
+        this.store.chatService.createChat(this.token.nameid, this.token.profile_picture as string, this.token.unique_name, this.data.postedBy.toString(), this.userCard.photo || '', this.userCard.username).subscribe(data => {
             this.chatId = data;
         });
     }

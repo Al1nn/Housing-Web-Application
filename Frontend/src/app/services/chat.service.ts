@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { from, map, Observable, take } from 'rxjs';
+import { combineLatest, from, map, Observable, take } from 'rxjs';
 import { IUserCard } from '../models/IUserCard.interface';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
 import { IChat, IMessage } from '../models/IChat.interface';
@@ -48,7 +48,7 @@ export class ChatService {
     }
 
 
-    createChat(senderID: string, senderPhoto: string, senderName: string, receiverId: string): Observable<string> {
+    createChat(senderID: string, senderPhoto: string, senderName: string, receiverId: string, receiverPhoto: string, receiverName: string): Observable<string> {
         const newChat: IChat = {
             lastMessage: '',
             lastMessageDate: new Date().toLocaleString(),
@@ -56,6 +56,8 @@ export class ChatService {
             senderPhoto: senderPhoto,
             senderName: senderName,
             receiverID: receiverId,
+            receiverName: receiverName,
+            receiverPhoto: receiverPhoto,
             messages: []
         };
         return new Observable(observer => {
@@ -75,6 +77,39 @@ export class ChatService {
                 } else {
                     return null;
                 }
+            })
+        );
+    }
+
+    getAllChatsByUser(nameId: string): Observable<IChat[]> {
+        // Query where receiverID is equal to nameId
+        const receiverChats$ = this.db.list<IChat>(this.chatPath, ref =>
+            ref.orderByChild('receiverID').equalTo(nameId)
+        ).snapshotChanges().pipe(
+            map(changes => changes.map(c => ({
+                id: c.payload.key,
+                ...c.payload.val() as IChat
+            })))
+        );
+
+        // Query where senderID is equal to nameId
+        const senderChats$ = this.db.list<IChat>(this.chatPath, ref =>
+            ref.orderByChild('senderID').equalTo(nameId)
+        ).snapshotChanges().pipe(
+            map(changes => changes.map(c => ({
+                id: c.payload.key,
+                ...c.payload.val() as IChat
+            })))
+        );
+
+        // Combine the two streams and remove potential duplicates
+        return combineLatest([receiverChats$, senderChats$]).pipe(
+            map(([receiverChats, senderChats]) => {
+                // Merge and remove duplicates based on chat ID
+                const allChats = [...receiverChats, ...senderChats];
+                const uniqueChats = Array.from(new Set(allChats.map(chat => chat.id)))
+                    .map(id => allChats.find(chat => chat.id === id)!);
+                return uniqueChats;
             })
         );
     }

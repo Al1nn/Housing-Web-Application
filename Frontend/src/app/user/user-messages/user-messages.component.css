@@ -41,6 +41,7 @@ mat-list-option > img{
 
 .chat-info {
     flex: 1;
+    margin-left: 10px;
 }
 
 .chat-header {
