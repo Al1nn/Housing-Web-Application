@@ -20,8 +20,8 @@
             <span class="chat-date" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">{{message.sentDate}}</span>
           </div>
         </div>
-     <div #endOfChat></div> 
-    </ng-container>
+          <div #endOfChat></div> 
+      </ng-container>
       
     </div>
     <mat-divider></mat-divider>

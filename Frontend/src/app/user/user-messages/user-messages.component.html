@@ -32,7 +32,7 @@
             </mat-option>
         
       
-          <!-- Template to show when no users are found -->
+          
           <ng-template #noUsersFound>
             <mat-option disabled>
               No property owner found
@@ -45,51 +45,55 @@
     </div>
 
     <mat-selection-list [multiple]="false" [formControl]="chatListControl" class="chat-selection-list">
-      <mat-list-option  class="chat-list-option">
+   
+      <mat-list-option *ngFor="let chat of chats$ | async" class="chat-list-option" (click)="onOptionSelected(chat)">
         <img
             width="50"
             height="50"
             class="rounded-circle mat-elevation-z1 chat-avatar"
             matListItemAvatar
-            src="../../assets/user_images/user_default.jpg"
+            [src]="chat.senderPhoto ? thumbnailFolder + chat.senderPhoto : '../../assets/user_images/user_default.jpg'"
           />
           <div class="chat-info">
             <div class="chat-header">
-              <span class="chat-name">John Baiat Bun</span>
-              <span class="chat-date">20/02/24 12:20 PM</span>
+              <span class="chat-name">{{chat.senderName}}</span>
+              <span class="chat-date">{{chat.lastMessageDate}}</span>
             </div>
-            <div class="chat-last-message">Hello Mami Que Guapa</div>
+            <div class="chat-last-message">{{chat.lastMessage}}</div>
           </div>
+          
       </mat-list-option>
-      <mat-divider></mat-divider>
+     
     </mat-selection-list>
 
   </div>
 
 
   <div class="messages mat-elevation-z5">
-    <div class="messages-header">
-      <img  class="mat-elevation-z5" src="../../assets/user_images/user_default.jpg">
-      <h2>John Baiat Bun</h2>
+    <div class="messages-header" *ngIf="displayName ; else noMessages">
+      <img  class="mat-elevation-z5" [src]=" displayPicture ? thumbnailFolder + displayPicture : '../../assets/user_images/user_default.jpg' ">
+      <h2>{{displayName}}</h2>
     </div>
-    <mat-divider></mat-divider>
     <ng-template #noMessages>
       <div class="messages-header">
         <h2>Messages</h2>
       </div>
     </ng-template>
+    <mat-divider></mat-divider>
+    
     <div class="chat-area">
       <!--Aici vine API-UL DIN FIREBASE CU MESAJELE (GET)-->
       <ng-container>
-        <div  class="chat-bubble-container">
+        <div *ngFor="let message of messages"  class="chat-bubble-container" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">
           <div class="chat-bubble">
-            Hello Mami Que Guapa
-            <span class="chat-date">20/02/24 12:20 PM</span>
+            {{message.text}}
+            <span class="chat-date" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">{{message.sentDate}}</span>
           </div>
         </div>
-        <div #endOfChat></div>
+        <div #endOfChat></div> 
       </ng-container>
     </div>
+
     <div class="input-area">
       <mat-form-field appearance="outline">
         <input matInput [formControl]="messageControl" placeholder="Enter your message..." (keydown.enter)="sendMessage()"/>

@@ -5,7 +5,8 @@ import { IUserCard } from '../../models/IUserCard.interface';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { StoreService } from '../../store_services/store.service';
 import { environment } from '../../../environments/environment';
-import { IChat } from '../../models/IChat.interface';
+import { IChat, IMessage } from '../../models/IChat.interface';
+import { IToken } from '../../models/IToken.interface';
 
 @Component({
     selector: 'app-user-messages',
@@ -14,30 +15,34 @@ import { IChat } from '../../models/IChat.interface';
 })
 export class UserMessagesComponent implements OnInit {
 
-
-
     searchControl = new FormControl('');
     chatListControl = new FormControl();
     messageControl = new FormControl('');
     filteredUsers$: Observable<IUserCard[]>;
     thumbnailFolder: string = environment.thumbnailFolder;
-
+    chatId: string;
     chats$: Observable<IChat[]>;
+    token: IToken;
+    messages: IMessage[] = [];
 
-    constructor(private store: StoreService) { }
+    //For frontend
+    displayPicture: string;
+    displayName: string;
+    constructor(public store: StoreService) { }
 
     ngOnInit(): void {
+        this.token = this.store.authService.decodeToken() as IToken;
 
         this.filteredUsers$ = this.searchControl.valueChanges.pipe(
             debounceTime(300),
             distinctUntilChanged(),
             switchMap(value => this.filterUsers(value as string))
         );
-
     }
 
     sendMessage() {
-        throw new Error('Method not implemented.');
+        const input = this.messageControl.value;
+        console.log(input);
     }
 
 
@@ -45,6 +50,12 @@ export class UserMessagesComponent implements OnInit {
         const selectedUser: IUserCard = event.option.value;
         console.log('Selected user: ', selectedUser);
 
+    }
+
+    onOptionSelected(chat: IChat) {
+        this.displayPicture = chat.senderPhoto;
+        this.displayName = chat.senderName;
+        console.log(this.messages);
     }
 
     private filterUsers(value: string | IUserCard): Observable<IUserCard[]> {

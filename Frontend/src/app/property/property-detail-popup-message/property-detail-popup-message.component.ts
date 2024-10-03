@@ -5,6 +5,7 @@ import { IUserCard } from '../../models/IUserCard.interface';
 import { StoreService } from '../../store_services/store.service';
 import { environment } from '../../../environments/environment';
 import { IMessage } from '../../models/IChat.interface';
+import { IToken } from '../../models/IToken.interface';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -18,23 +19,56 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     thumbnailFolder: string = environment.thumbnailFolder;
     userCard: IUserCard = {} as IUserCard;
     chatId: string | null = null;
-    messages: IMessage[] = [];
+    token: IToken = {} as IToken;
+    messages: IMessage[];
     @ViewChild('endOfChat') endOfChat!: ElementRef;
-    private messagesSubscription: Subscription | null = null;
+    private chatSubscription: Subscription | null = null;
 
     constructor(public store: StoreService, private dialogRef: MatDialogRef<PropertyDetailPopupMessageComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
 
+    ngOnDestroy(): void {
+        if (this.chatSubscription) {
+            this.chatSubscription.unsubscribe();
+        }
+    }
+
+
     ngOnInit(): void {
+        this.token = this.store.authService.decodeToken() as IToken;
         this.store.chatService.getPropertyOwner(this.data.postedBy).subscribe(data => {
             this.userCard = data;
             this.initializeChat();
         });
+
+
     }
 
-    ngOnDestroy(): void {
-        if (this.messagesSubscription) {
-            this.messagesSubscription.unsubscribe();
+    initializeChat() {
+        this.store.chatService.findExistingChat(this.token.nameid, this.data.postedBy.toString()).subscribe(existingChatId => {
+            if (existingChatId) {
+                this.chatId = existingChatId;
+                this.loadChat();
+            } else {
+                this.createChat();
+            }
+        });
+    }
+
+    createChat() {
+        this.store.chatService.createChat(this.token.nameid, this.token.profile_picture as string, this.token.unique_name, this.data.postedBy.toString()).subscribe(data => {
+            this.chatId = data;
+        });
+    }
+
+    loadChat() {
+        if (this.chatId) {
+            this.chatSubscription = this.store.chatService.getChatById(this.chatId).subscribe(chat => {
+                if (chat) {
+                    this.messages = Object.values(chat.messages);
+                    this.scrollToBottom();
+                }
+            });
         }
     }
 
@@ -42,48 +76,26 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
         this.dialogRef.close();
     }
 
-    initializeChat() {
-        const nameId = this.store.authService.decodeToken()?.nameid as string;
-        if (nameId) {
-            this.store.chatService.getOrCreateChat(nameId, this.data.postedBy).subscribe(chatId => {
-                this.chatId = chatId;
-                this.loadMessages();
-            })
-        }
-    }
-
-    loadMessages() {
-        if (this.chatId) {
-            this.messagesSubscription = this.store.chatService.getChatMessages(this.chatId)
-                .subscribe(messages => {
-                    this.messages = messages;
-
-                });
-        }
-        this.scrollToBottom();
-    }
-
-
     sendMessage() {
         const input = this.messageControl.value;
+
         if (input && this.chatId) {
-            const nameId = this.store.authService.decodeToken()?.nameid as string;
-            if (nameId) {
-                const newMessage: IMessage = {
-                    senderId: nameId,
-                    sentDate: new Date().toLocaleString(), //sentDate must be the present time
-                    text: input
-                };
+            const message: IMessage = {
+                senderId: this.token.nameid,
+                sentDate: new Date().toLocaleString(),
+                text: input
+            };
 
-                this.store.chatService.sendMessage(this.chatId, newMessage)
-                    .then(() => {
-                        this.messageControl.setValue('');
-                        this.scrollToBottom();
-                    })
-                    .catch(error => console.error('Error sending message:', error));
-            }
+            this.store.chatService.sendMessage(this.chatId, message).subscribe(
+                () => {
+                    this.messageControl.reset();
+                    this.scrollToBottom();
+                },
+                error => {
+                    console.error('Error sending message:', error);
+                }
+            );
         }
-
     }
 
     scrollToBottom() {
@@ -92,6 +104,5 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
                 this.endOfChat.nativeElement.scrollIntoView({ behavior: 'smooth' });
             }
         }, 100);
-
     }
 }
