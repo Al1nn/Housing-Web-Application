@@ -20,7 +20,6 @@ export class UserMessagesComponent implements OnInit {
     messageControl = new FormControl('');
     filteredUsers$: Observable<IUserCard[]>;
     thumbnailFolder: string = environment.thumbnailFolder;
-    chatId: string;
     chats$: Observable<IChat[]>;
     token: IToken;
     messages: IMessage[] = [];
@@ -28,6 +27,8 @@ export class UserMessagesComponent implements OnInit {
     //For frontend
     displayPicture: string;
     displayName: string;
+
+
     constructor(public store: StoreService) { }
 
     ngOnInit(): void {
@@ -40,8 +41,14 @@ export class UserMessagesComponent implements OnInit {
         );
     }
 
+
+
+
     sendMessage() {
         const input = this.messageControl.value;
+        if (input) {
+            this.messageControl.reset();
+        }
         console.log(input);
     }
 

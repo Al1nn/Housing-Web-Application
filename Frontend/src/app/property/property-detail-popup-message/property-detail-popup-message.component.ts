@@ -88,8 +88,15 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
 
             this.store.chatService.sendMessage(this.chatId, message).subscribe(
                 () => {
+
+                    this.chatSubscription = this.store.chatService.getChatById(this.chatId as string).subscribe(chat => {
+                        if (chat) {
+                            this.messages = Object.values(chat.messages);
+                            this.scrollToBottom();
+                        }
+                    });
                     this.messageControl.reset();
-                    this.scrollToBottom();
+
                 },
                 error => {
                     console.error('Error sending message:', error);
