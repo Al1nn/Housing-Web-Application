@@ -66,7 +66,8 @@ mat-list-option:last-child{
     white-space: nowrap; /* Prevent text from wrapping */
     text-overflow: ellipsis; /* Show ellipsis (...) when text overflows */
     font-size: 14px; /* Adjust font size if needed */
-    color: #131313; /* Optional: adjust color to your preference */
+    color: #131313; /* Adjust color to your preference */
+    margin-bottom: 5px; /* Margin to separate from the date */
 }
 
 .chat-header {
@@ -90,7 +91,7 @@ mat-list-option:last-child{
     /* background-color: green; */
     display: flex;
     flex-direction: column;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 /* Scrollbar styles for WebKit browsers */
@@ -125,16 +126,18 @@ mat-list-option:last-child{
     display: flex;
     width: 100%;
     justify-content: flex-start;
+    text-wrap: wrap;
 }
 
 .chat-bubble {
     background: #c5d6e9;
-    padding: 8px 8px 18px 8px; 
-    margin-bottom: 16px;
+    padding: 8px 10px;
+    margin-top: 10px;
     border-radius: 8px;
-    width: fit-content;
-    min-width: 200px;
-    max-width: 320px;
+    max-width: 70%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
     position: relative;
     display: flex;
     flex-direction: column;
