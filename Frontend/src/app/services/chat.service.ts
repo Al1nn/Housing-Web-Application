@@ -33,15 +33,16 @@ export class ChatService {
     }
 
     findExistingChat(userId1: string, userId2: string): Observable<string | null> {
-        return this.db.list<IChat>(this.chatPath, ref =>
-            ref.orderByChild('senderID').equalTo(userId1)
-        ).snapshotChanges().pipe(
+        return this.db.list<IChat>(this.chatPath).snapshotChanges().pipe(
             take(1),
             map(chats => {
-                const chat = chats.find(c =>
-                    c.payload.val()?.receiverID === userId2 ||
-                    (c.payload.val()?.senderID === userId2 && c.payload.val()?.receiverID === userId1)
-                );
+                const chat = chats.find(c => {
+                    const chatData = c.payload.val();
+                    return (
+                        (chatData?.senderID === userId1 && chatData?.receiverID === userId2) ||
+                        (chatData?.senderID === userId2 && chatData?.receiverID === userId1)
+                    );
+                });
                 return chat ? chat.key : null;
             })
         );
