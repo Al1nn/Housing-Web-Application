@@ -132,7 +132,12 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
                     }
                 });
             } else {
-                console.log('Chat doesnt exist');
+                this.store.chatService.createChat(user.id.toString()
+                    , user.photo || '', user.username, this.token.nameid
+                    , this.token.profile_picture || '', this.token.unique_name).subscribe(() => {
+                        this.displayName = user.username;
+                        this.displayPicture = user.photo || '';
+                    })
             }
         });
     }

@@ -1,42 +1,34 @@
-<div class="modal-header p-3 justify-content-between" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
-  <h4 class="modal-title pull-left">Send Message</h4>
-   <button type="button" class="btn btn-danger btn-sm" (click)="closeEditModal()">
-      <i class="fa-solid fa-x text-danger"></i>
-   </button>
+<div class="modal-header p-3" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+  <div class="modal-header-content">
+    <img width="50" height="50" class="rounded-circle mat-elevation-z5" *ngIf="!userCard.photo" src="/assets/user_images/user_default.jpg">
+    <img width="50" height="50" class="rounded-circle mat-elevation-z5" *ngIf="userCard.photo" src="{{thumbnailFolder + userCard.photo}}">
+    <h4 class="modal-title">{{userCard.username}}</h4>
+  </div>
+  <button type="button" class="btn btn-danger btn-sm" (click)="closeEditModal()">
+    <i class="fa-solid fa-x text-danger"></i>
+  </button>
 </div>
 <mat-dialog-content>
-  <div class="messages mat-elevation-z5">
-    <div class="messages-header">
-      <img width="50" height="50" class="rounded-circle mat-elevation-z5" *ngIf="!userCard.photo" src="/assets/user_images/user_default.jpg">
-      <img width="50" height="50" class="rounded-circle mat-elevation-z5" *ngIf="userCard.photo" src="{{thumbnailFolder + userCard.photo}}">
-      <h2>{{userCard.username}}</h2>
-    </div>
-    <mat-divider></mat-divider>
+  
     <div class="chat-area">
-      <ng-container>
-        <div *ngFor="let message of messages"  class="chat-bubble-container" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">
-          <div class="chat-bubble">
-            {{message.text}}
-            <span class="chat-date" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">{{message.sentDate}}</span>
-          </div>
+      <div *ngFor="let message of messages"  class="chat-bubble-container" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">
+        <div class="chat-bubble">
+          {{message.text}}
+          <span class="chat-date" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">{{message.sentDate}}</span>
         </div>
-          <div #endOfChat></div> 
-      </ng-container>
-      
+      </div>
+      <div #endOfChat></div> 
     </div>
-    <mat-divider></mat-divider>
-    <div class="input-area">
-      <mat-form-field appearance="outline">
-        <input matInput [formControl]="messageControl" placeholder="Enter your message..." (keydown.enter)="sendMessage()"/>
-        <button mat-icon-button matSuffix (click)="sendMessage()">
-          <mat-icon>send</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
-  </div>
+    
+ 
+  
 </mat-dialog-content>
-<mat-dialog-actions  align="end" >
-  <button type="button" class="btn btn-danger" (click)="closeEditModal()">
-    Close
-  </button>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <mat-form-field appearance="outline">
+    <input matInput [formControl]="messageControl" placeholder="Enter your message..." (keydown.enter)="sendMessage()"/>
+    <button mat-icon-button matSuffix (click)="sendMessage()">
+      <mat-icon>send</mat-icon>
+    </button>
+  </mat-form-field>
 </mat-dialog-actions>
