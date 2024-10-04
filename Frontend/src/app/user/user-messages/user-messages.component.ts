@@ -61,7 +61,7 @@ export class UserMessagesComponent implements OnInit {
                     if (chat) {
                         this.messages = Object.values(chat.messages);
                         this.scrollToBottom();
-                        this.cd.detectChanges(); // Manually trigger change detection here
+                        this.cd.detectChanges();
                     }
                 })
             ).subscribe({
@@ -89,7 +89,7 @@ export class UserMessagesComponent implements OnInit {
                 } else {
                     this.messages = [];
                 }
-                this.cd.detectChanges(); // Manually trigger change detection after updating the chat
+                this.cd.detectChanges();
             });
         }
     }
@@ -100,6 +100,7 @@ export class UserMessagesComponent implements OnInit {
                 if (chatId) {
                     return this.store.chatService.getChatById(chatId);
                 } else {
+                    this.messages = [];
                     return this.store.chatService.createChat(user.id.toString(), user.photo || '', user.username,
                         this.token.nameid, this.token.profile_picture || '', this.token.unique_name).pipe(
                             switchMap(newChatId => this.store.chatService.getChatById(newChatId))
@@ -111,9 +112,12 @@ export class UserMessagesComponent implements OnInit {
                 this.chatId = chat.id as string;
                 this.displayName = chat.senderName;
                 this.displayPicture = chat.senderPhoto;
-                this.messages = Object.values(chat.messages);
+                if (chat.messages) {
+                    this.messages = Object.values(chat.messages);
+                }
+
                 this.scrollToBottom();
-                this.cd.detectChanges(); // Trigger change detection after the chat selection
+                this.cd.detectChanges();
             }
         });
     }

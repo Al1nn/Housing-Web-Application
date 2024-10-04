@@ -68,13 +68,38 @@ mat-list-option > img{
     color: #888;
 }
 
-.chat-area{
+.chat-area {
     height: calc(100vh - 280px);
     /* background-color: green; */
     display: flex;
     flex-direction: column;
     overflow: auto;
 }
+
+/* Scrollbar styles for WebKit browsers */
+.chat-area::-webkit-scrollbar {
+    width: 10px; /* width of the scrollbar */
+}
+
+.chat-area::-webkit-scrollbar-track {
+    background: #f1f1f1; /* track color */
+}
+
+.chat-area::-webkit-scrollbar-thumb {
+    background: #b7bde4; /* scrollbar color */
+    border-radius: 5px; /* round corners */
+}
+
+.chat-area::-webkit-scrollbar-thumb:hover {
+    background: #a1a8b3; /* color on hover */
+}
+
+/* Firefox scrollbar styles */
+.chat-area {
+    scrollbar-width: thin; /* makes the scrollbar thinner */
+    scrollbar-color: #b7bde4 #f1f1f1; /* thumb color and track color */
+}
+
 
 .chat-area > :first-child{
     margin-top: auto;
