@@ -1,6 +1,12 @@
-<app-nav-bar></app-nav-bar>
-
-<div class="container-fluid" style="margin-top: 70px; ">
-    <app-breadcrumb></app-breadcrumb>
-    <router-outlet></router-outlet>
+<div class="app-wrapper">
+    <app-nav-bar></app-nav-bar>
+    <div class="main-content">
+        <div class="container-fluid">
+            <app-breadcrumb></app-breadcrumb> 
+            <router-outlet></router-outlet>
+        </div>
+    </div>
 </div>
+
+
+

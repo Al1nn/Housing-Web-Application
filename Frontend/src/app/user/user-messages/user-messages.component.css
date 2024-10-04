@@ -1,6 +1,14 @@
-.container-fluid{
+.container{
     display: flex;
-    height: calc(100vh - 100px);
+    height: calc( 100vh - 100px);
+}
+
+.messages{
+    width: 60%;
+    margin: 5px;
+    border-radius: 16px;
+    padding: 25px;
+    background: rgba(14, 97, 145, 0.05);
 }
 
 .chat-list{
@@ -98,13 +106,7 @@ mat-list-option > img{
     background: #b7bde4;
   }
 
-.messages{
-    width: 60%;
-    margin: 5px;
-    border-radius: 16px;
-    padding: 25px;
-    background: rgba(14, 97, 145, 0.05);
-}
+
 
 .messages-header{
     display: flex;

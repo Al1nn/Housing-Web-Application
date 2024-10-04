@@ -123,8 +123,11 @@ export class ChatService {
                 lastMessageDate: message.sentDate
             })
         ])).pipe(
-            map(() => void 0)
+            map(() => {
+                return void 0;
+            })
         );
     }
+
 
 }

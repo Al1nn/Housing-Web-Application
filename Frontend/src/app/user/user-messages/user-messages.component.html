@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container">
   <div class="chat-list mat-elevation-z5">
     <div class="search-input">
       <mat-form-field color="primary">
@@ -8,10 +8,7 @@
           [formControl]="searchControl"
           [matAutocomplete]="auto"
         />
-        <mat-autocomplete
-          #auto="matAutocomplete"
-          
-        >
+        <mat-autocomplete #auto="matAutocomplete">
         
             <mat-option *ngFor="let user of filteredUsers$ | async" [value]="user.username" (onSelectionChange)="onSuggestionSelected(user)">
               <img
@@ -93,8 +90,6 @@
     </mat-selection-list>
 
   </div>
-
-
   <div class="messages mat-elevation-z5">
     <div class="messages-header" *ngIf="displayName ; else noMessages">
       <img  class="mat-elevation-z5" [src]=" displayPicture ? thumbnailFolder + displayPicture : '../../assets/user_images/user_default.jpg' ">
@@ -116,8 +111,9 @@
             <span class="chat-date" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">{{message.sentDate}}</span>
           </div>
         </div>
-        <div #endOfChat></div> 
+       
       </ng-container>
+       <div #endOfChat></div> 
     </div>
 
     <div class="input-area">
@@ -129,7 +125,9 @@
       </mat-form-field>
     </div>
   </div>
-</div>
 
+
+</div>
+  
 
 

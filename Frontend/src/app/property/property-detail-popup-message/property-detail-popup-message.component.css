@@ -1,11 +1,46 @@
-
-
 mat-dialog-content {
-    /* Adjust the maximum height based on viewport */
+    /* Existing styles */
     height: calc(100vh - 400px);
     display: flex;
     flex-direction: column;
     overflow: auto;
+    background-color: rgba(14, 97, 145, 0.05);
+
+    /* Scrollbar styles for WebKit browsers (Chrome, Safari, newer versions of Edge) */
+    &::-webkit-scrollbar {
+        width: 8px; /* Slightly thinner */
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent; /* Invisible track */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2); /* Dark gray with high transparency */
+        border-radius: 4px;
+    }
+
+    /* Hover state for the thumb */
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(0, 0, 0, 0.3); /* Slightly darker on hover */
+    }
+
+    /* Scrollbar styles for Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* Ensure the scrollbar is only visible when scrolling */
+mat-dialog-content:not(:hover)::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+mat-dialog-content:not(:hover) {
+    scrollbar-color: transparent transparent;
+}
+
+mat-dialog-actions{
+    background-color: rgba(14, 97, 145, 0.05);;
 }
 
 .chat-area:first-child{

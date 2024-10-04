@@ -6,8 +6,8 @@
         <div class="card-body">
           <div class="avatar-container">
             <div class="image-container">
-              <img *ngIf="!userCard.profile_picture" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
-              <img *ngIf="userCard.profile_picture" src="{{thumbnailFolder + userCard.profile_picture}}" class="img-fluid rounded-circle" >
+              <img *ngIf="!userCard.profile_picture" src="/assets/user_images/user_default.jpg" class="img-thumbnail rounded-circle">
+              <img *ngIf="userCard.profile_picture" src="{{thumbnailFolder + userCard.profile_picture}}" class="img-thumbnail rounded-circle" >
             </div> 
           </div>
   
@@ -21,11 +21,7 @@
             <i class="fa-solid fa-phone"></i>
             <strong> Phone Number : {{userCard.phone}}</strong>
           </div>
-          <!-- <div>
-            <i class="fa-regular fa-user"></i>
-            <strong *ngIf="userCard.role === 1">  </strong>
-            <strong *ngIf="userCard.role === 0"> Role : Reader </strong>
-          </div> -->
+       
           <div *ngIf="!isOnlyReader()">
             <i class="fa-solid fa-house"></i>
             <strong *ngIf="propertiesListed === 0"> No Properties Listed</strong>
@@ -47,32 +43,9 @@
               <img *ngIf="userCard.photo" src="{{thumbnailFolder + userCard.photo}}" class="img-thumbnail rounded-circle">
               <strong>{{userCard.username}}</strong>
             </div>
-            
-            
           </div>
         </div>
     </div>
   </div>
   
 </div>
-<!-- <div class="col-sm-8 p-0">
-    <div class="container text-center">
-      <div class="row align-items-start">
-        <div class="col">
-          <div class="card-header"><h3>Other Users</h3></div>
-        </div>
-        <div class="row">
-          <div class="col-2 mb-3" *ngFor="let userCard of userCards">
-            <div class="text-center">
-              <img *ngIf="!userCard.url" src="/assets/user_images/user_default.jpg" class="img-fluid rounded-circle">
-              <img *ngIf="userCard.url"[src]="userCard.url" class="img-fluid rounded-circle">
-              {{userCard.username}}
-            </div>
-            
-            
-          </div>
-        </div>
-        
-      </div>
-    </div>
-  </div> -->

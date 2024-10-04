@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, map, Observable, Subscription, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, Observable, switchMap } from 'rxjs';
 import { IUserCard } from '../../models/IUserCard.interface';
 import { StoreService } from '../../store_services/store.service';
 import { environment } from '../../../environments/environment';
@@ -10,10 +10,10 @@ import { IToken } from '../../models/IToken.interface';
 @Component({
     selector: 'app-user-messages',
     templateUrl: './user-messages.component.html',
-    styleUrls: ['./user-messages.component.css']
+    styleUrls: ['./user-messages.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserMessagesComponent implements OnInit, OnDestroy {
-
+export class UserMessagesComponent implements OnInit {
 
     searchControl = new FormControl('');
     chatListControl = new FormControl();
@@ -25,19 +25,11 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
     token: IToken;
     messages: IMessage[] = [];
     @ViewChild('endOfChat') endOfChat!: ElementRef;
-    //For frontend
+
     displayPicture: string;
     displayName: string;
 
-    private chatSubscription: Subscription | null = null;
-
-
-    constructor(public store: StoreService) { }
-    ngOnDestroy(): void {
-        if (this.chatSubscription) {
-            this.chatSubscription.unsubscribe();
-        }
-    }
+    constructor(public store: StoreService, private cd: ChangeDetectorRef) { }
 
     ngOnInit(): void {
         this.token = this.store.authService.decodeToken() as IToken;
@@ -53,11 +45,8 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
         }
     }
 
-
-
-
     sendMessage() {
-        const input = this.messageControl.value;
+        const input = this.messageControl.value?.trim();
 
         if (input && this.chatId) {
             const message: IMessage = {
@@ -66,22 +55,19 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
                 text: input
             };
 
-            this.store.chatService.sendMessage(this.chatId, message).subscribe(
-                () => {
-
-                    this.chatSubscription = this.store.chatService.getChatById(this.chatId as string).subscribe(chat => {
-                        if (chat) {
-                            this.messages = Object.values(chat.messages);
-                            this.scrollToBottom();
-                        }
-                    });
-                    this.messageControl.reset();
-
-                },
-                error => {
-                    console.error('Error sending message:', error);
-                }
-            );
+            this.store.chatService.sendMessage(this.chatId, message).pipe(
+                switchMap(() => this.store.chatService.getChatById(this.chatId as string)),
+                map(chat => {
+                    if (chat) {
+                        this.messages = Object.values(chat.messages);
+                        this.scrollToBottom();
+                        this.cd.detectChanges(); // Manually trigger change detection here
+                    }
+                })
+            ).subscribe({
+                next: () => this.messageControl.reset(),
+                error: (error) => console.error('Error sending message:', error)
+            });
         }
     }
 
@@ -94,50 +80,40 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             this.displayName = chat.senderName;
         }
 
-
-
         this.chatId = chat.id as string;
         if (chat.id) {
-            this.chatSubscription = this.store.chatService.getChatById(chat.id).subscribe((data: any) => {
-
+            this.store.chatService.getChatById(chat.id).subscribe((data: any) => {
                 if (data.messages) {
                     this.messages = Object.values(data.messages);
                     this.scrollToBottom();
                 } else {
                     this.messages = [];
                 }
-
-
+                this.cd.detectChanges(); // Manually trigger change detection after updating the chat
             });
         }
-
     }
 
-
     onSuggestionSelected(user: IUserCard) {
-        console.log(user);
-        console.log(this.token.nameid);
-        console.log(this.token.unique_name);
-        console.log(this.token.profile_picture);
-
-        this.chatSubscription = this.store.chatService.findExistingChat(user.id.toString(), this.token.nameid).subscribe(chatId => {
-            if (chatId) {
-                console.log('Chat exists');
-                this.store.chatService.getChatById(chatId).subscribe(data => {
-                    if (data) {
-                        this.displayName = data.senderName;
-                        this.displayPicture = data.senderPhoto;
-                        this.messages = Object.values(data.messages);
-                        this.scrollToBottom();
-                    }
-                });
-            } else {
-                this.store.chatService.createChat(user.id.toString()
-                    , user.photo || '', user.username, this.token.nameid
-                    , this.token.profile_picture || '', this.token.unique_name).subscribe(() => {
-                        this.displayName = user.username;
-                        this.displayPicture = user.photo || '';
-                    })
+        this.store.chatService.findExistingChat(user.id.toString(), this.token.nameid).pipe(
+            switchMap(chatId => {
+                if (chatId) {
+                    return this.store.chatService.getChatById(chatId);
+                } else {
+                    return this.store.chatService.createChat(user.id.toString(), user.photo || '', user.username,
+                        this.token.nameid, this.token.profile_picture || '', this.token.unique_name).pipe(
+                            switchMap(newChatId => this.store.chatService.getChatById(newChatId))
+                        );
+                }
+            })
+        ).subscribe(chat => {
+            if (chat) {
+                this.chatId = chat.id as string;
+                this.displayName = chat.senderName;
+                this.displayPicture = chat.senderPhoto;
+                this.messages = Object.values(chat.messages);
+                this.scrollToBottom();
+                this.cd.detectChanges(); // Trigger change detection after the chat selection
             }
         });
     }
@@ -151,13 +127,11 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
         );
     }
 
-
     scrollToBottom() {
         setTimeout(() => {
             if (this.endOfChat) {
                 this.endOfChat.nativeElement.scrollIntoView({ behavior: 'smooth' });
             }
-        }, 100);
+        }, 300);
     }
-
 }
