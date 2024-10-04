@@ -13,7 +13,7 @@
           
         >
         
-            <mat-option *ngFor="let user of filteredUsers$ | async" [value]="user.username">
+            <mat-option *ngFor="let user of filteredUsers$ | async" [value]="user.username" (onSelectionChange)="onSuggestionSelected(user)">
               <img
                 width="50"
                 height="50"

@@ -11,7 +11,10 @@ namespace WebAPI.Helpers
             CreateMap<City, CityDto>().ReverseMap();
             CreateMap<City, CityUpdateDto>().ReverseMap();
 
-            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserDto>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(d => d.Username, opt => opt.MapFrom(src => src.Username))
+                .ForMember(d => d.Photo, opt => opt.MapFrom(src => src.Photo));
 
             CreateMap<Property, PropertyDto>().ReverseMap();
 

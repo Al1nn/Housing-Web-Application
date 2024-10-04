@@ -14,6 +14,7 @@ import { IToken } from '../../models/IToken.interface';
 })
 export class UserMessagesComponent implements OnInit, OnDestroy {
 
+
     searchControl = new FormControl('');
     chatListControl = new FormControl();
     messageControl = new FormControl('');
@@ -110,6 +111,30 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             });
         }
 
+    }
+
+
+    onSuggestionSelected(user: IUserCard) {
+        console.log(user);
+        console.log(this.token.nameid);
+        console.log(this.token.unique_name);
+        console.log(this.token.profile_picture);
+
+        this.chatSubscription = this.store.chatService.findExistingChat(user.id.toString(), this.token.nameid).subscribe(chatId => {
+            if (chatId) {
+                console.log('Chat exists');
+                this.store.chatService.getChatById(chatId).subscribe(data => {
+                    if (data) {
+                        this.displayName = data.senderName;
+                        this.displayPicture = data.senderPhoto;
+                        this.messages = Object.values(data.messages);
+                        this.scrollToBottom();
+                    }
+                });
+            } else {
+                console.log('Chat doesnt exist');
+            }
+        });
     }
 
     private filterUsers(value: string | IUserCard): Observable<IUserCard[]> {

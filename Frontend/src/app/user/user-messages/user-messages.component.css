@@ -20,6 +20,7 @@
     display: flex;
     align-items: center;
     padding: 8px 16px;
+    margin-top: 5px;
 }
 
 
@@ -28,11 +29,11 @@
     width: 100%;
     padding: 15px;
     max-width: 400px;
-  }
+}
   
-  .search-input mat-form-field {
+.search-input mat-form-field {
     width: 100%;
-  }
+}
 
 mat-list-option > img{
     object-fit: cover;
