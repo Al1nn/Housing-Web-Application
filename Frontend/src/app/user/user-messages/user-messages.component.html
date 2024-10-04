@@ -103,7 +103,6 @@
     <mat-divider></mat-divider>
     
     <div class="chat-area">
-      <!--Aici vine API-UL DIN FIREBASE CU MESAJELE (GET)-->
       <ng-container>
         <div *ngFor="let message of messages"  class="chat-bubble-container" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">
           <div class="chat-bubble">
