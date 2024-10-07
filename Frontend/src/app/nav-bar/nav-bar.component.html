@@ -32,36 +32,45 @@
           >Login</a>
         </li>
 
-        <div *ngIf="loggedIn()" class="dropdown" style="margin-right: 65px;" dropdown>
-          <img class="img-fluid rounded-circle user-image" *ngIf="this.profilePicture ; else noPicture" src="{{thumbnailFolder + this.profilePicture}}">
+        <div *ngIf="loggedIn()" class="dropdown user-dropdown" style="margin-right: 65px;" dropdown>
+          <img class="img-fluid rounded-circle user-image" *ngIf="this.profilePicture; else noPicture" 
+               [src]="thumbnailFolder + this.profilePicture" alt="User Profile Picture">
           <ng-template #noPicture>
-            <img class="img-fluid rounded-circle user-image" src="/assets/user_images/user_default.jpg">
+            <img class="img-fluid rounded-circle user-image" src="/assets/user_images/user_default.jpg" alt="Default User Image">
           </ng-template>
           <a href="#" class="dropdown-toggle text-light" dropdownToggle (click)="false">
             Welcome {{loggedInUser}}
           </a>
           <div class="dropdown-menu" *dropdownMenu>
             <a class="dropdown-item" routerLink="/property-dashboard" *ngIf="!isOnlyReader()">
-              <i class="fas fa-house"></i> View Dashboard</a>
-            <a href="#" class="dropdown-item" routerLink="/user/profile" >
-              <i class="fas fa-user-circle"></i> My Profile</a>
-              <a class="dropdown-item" routerLink="/user/messages">
-                <i class="fas fa-house"></i> Messages</a>  
-            <a href="#" class="dropdown-item" *ngIf="isAdmin()" routerLink="/property-stats" >
-            <i class="fas fa-chart-simple"></i> View Stats</a>  
-            <a href="#" class="dropdown-item" routerLink="/user/settings">
-              <i class="fas fa-key"></i> Account Settings</a>
-            <a href="#" class="dropdown-item" (click)="onLogout()">
-              <i class="fas fa-sign-out-alt"></i> Logout</a>
-
+              <mat-icon>home</mat-icon>
+              <span>View Dashboard</span>
+            </a>
+            <a class="dropdown-item" routerLink="/user/profile">
+              <mat-icon>account_circle</mat-icon>
+              <span>My Profile</span>
+            </a>
+            <a class="dropdown-item" routerLink="/user/messages">
+              <mat-icon matBadge="4">notifications</mat-icon>
+              <span>Messages</span>
+            </a>
+            <a class="dropdown-item" *ngIf="isAdmin()" routerLink="/property-stats">
+              <mat-icon>bar_chart</mat-icon>
+              <span>View Stats</span>
+            </a>
+            <a class="dropdown-item" routerLink="/user/settings">
+              <mat-icon>settings</mat-icon>
+              <span>Account Settings</span>
+            </a>
+            <a class="dropdown-item" (click)="onLogout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </a>
           </div>
         </div>
+        
 
-        <!-- <li *ngIf="loggedIn()" class="nav-item">
-          <a class="nav-link"
-          (click)="onLogout()"
-          >Logout</a>
-        </li> -->
+        
 
 
 

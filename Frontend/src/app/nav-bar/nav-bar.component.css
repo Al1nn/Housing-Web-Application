@@ -1,5 +1,36 @@
+.user-dropdown {
+  position: relative;
+}
+
 .user-image {
-    max-width: 40px; 
-    max-height: 40px; 
-    margin-right: 10px;
-  }
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+
+
+
+.dropdown-item {
+  display: flex;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-item mat-icon {
+  margin-right: 10px;
+  font-size: 20px;
+  color: #555;
+}
+
+.dropdown-item span {
+  font-size: 14px;
+  color: #333;
+  font-weight: 400;
+}

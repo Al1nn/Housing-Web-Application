@@ -25,7 +25,6 @@ import { HighlightPipe } from '../pipes/highlight.pipe';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AngularOpenlayersModule } from 'ng-openlayers';
 import { MatButtonModule } from '@angular/material/button';
@@ -49,7 +48,6 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PropertyDetailPopupMessageComponent } from './property-detail-popup-message/property-detail-popup-message.component';
 import { MatDividerModule } from '@angular/material/divider';
-
 const routes: Routes = [
   {
     path: '',
@@ -154,7 +152,6 @@ export class PropertyRoutingModule {
     FormsModule,
     PropertyRoutingModule,
     MatCardModule,
-    MatIconModule,
     MatProgressBarModule,
     AngularOpenlayersModule,
     MatButtonModule,
