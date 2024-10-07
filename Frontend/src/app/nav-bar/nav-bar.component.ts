@@ -9,10 +9,13 @@ import { Component } from '@angular/core';
     styleUrls: ['./nav-bar.component.css'],
 })
 export class NavBarComponent {
+
     loggedInUser: string;
     profilePicture: string | undefined;
     thumbnailFolder: string = environment.thumbnailFolder;
     originalFolder: string = environment.originalPictureFolder;
+
+
     constructor(
         private store: StoreService
     ) {
@@ -23,6 +26,7 @@ export class NavBarComponent {
 
 
     loggedIn() {
+
         const decodedToken = this.store.authService.decodeToken();
         if (decodedToken) {
             this.loggedInUser = decodedToken.unique_name;
@@ -46,6 +50,10 @@ export class NavBarComponent {
     onLogout() {
         localStorage.removeItem('token');
         this.store.alertifyService.success('You are logged out !');
+    }
+
+    onNotificationClick() {
+        throw new Error('Method not implemented.');
     }
 
 

@@ -34,3 +34,19 @@
   color: #333;
   font-weight: 400;
 }
+
+.notification-dropdown >  button:hover{
+  background-color: #555;
+  justify-content: center;
+  align-self: center;
+  
+}
+
+.notification-dropdown .notification-menu {
+  width: 400px;
+  height: 300px;
+  right: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  overflow-y: auto;
+}

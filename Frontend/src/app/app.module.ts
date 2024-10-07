@@ -20,7 +20,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AngularFireModule } from '@angular/fire/compat';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [
@@ -37,6 +37,7 @@ import { MatIconModule } from '@angular/material/icon';
         AngularFireDatabaseModule,
         MatBadgeModule,
         MatIconModule,
+        MatButtonModule,
         ToastrModule.forRoot({
             timeOut: 2000,
             positionClass: 'toast-bottom-right',

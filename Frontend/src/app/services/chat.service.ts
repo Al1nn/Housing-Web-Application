@@ -14,6 +14,8 @@ export class ChatService {
     private chatPath: string = '/chats';
     chatsRef: AngularFireList<IChat>;
 
+    notificationsCount: number = 0;
+
     constructor(private http: HttpClient, private db: AngularFireDatabase) {
         this.chatsRef = this.db.list<IChat>(this.chatPath);
     }

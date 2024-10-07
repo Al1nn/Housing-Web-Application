@@ -48,6 +48,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PropertyDetailPopupMessageComponent } from './property-detail-popup-message/property-detail-popup-message.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+
 const routes: Routes = [
   {
     path: '',
@@ -160,6 +162,7 @@ export class PropertyRoutingModule {
     MatFormFieldModule,
     MatTabsModule,
     MatSelectModule,
+    MatIconModule,
     MatSliderModule,
     MatInputModule,
     MatTreeModule,

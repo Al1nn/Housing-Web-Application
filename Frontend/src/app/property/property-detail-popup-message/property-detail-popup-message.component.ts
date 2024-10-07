@@ -58,6 +58,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     createChat() {
         this.store.chatService.createChat(this.token.nameid, this.token.profile_picture as string, this.token.unique_name, this.data.postedBy.toString(), this.userCard.photo || '', this.userCard.username).subscribe(data => {
             this.chatId = data;
+
         });
     }
 
@@ -92,6 +93,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
                     this.chatSubscription = this.store.chatService.getChatById(this.chatId as string).subscribe(chat => {
                         if (chat) {
                             this.messages = Object.values(chat.messages);
+                            this.store.chatService.notificationsCount += 1;
                             this.scrollToBottom();
                         }
                     });
