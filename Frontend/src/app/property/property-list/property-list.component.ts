@@ -75,19 +75,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
             this.Properties = data.properties;
         });
 
-        this.store.notificationService.requestPermissionAndGetToken().subscribe(
-            (token: string | null) => {
-                if (token) {
-                    console.log('FCM Token:', token);
-                    localStorage.setItem('fcmToken', token);
-                } else {
-                    console.warn('FCM Token is null.');
-                }
-            },
-            (error) => {
-                console.error('Error getting permission or FCM token', error);
-            }
-        );
+
 
 
     }

@@ -12,10 +12,15 @@ namespace WebAPI.Services
 
         public NotificationService()
         {
-            FirebaseApp.Create(new AppOptions
+            if(FirebaseApp.DefaultInstance == null)
             {
-                Credential = GoogleCredential.FromFile("myfirstapp-a15e1-firebase-adminsdk-f5aua-db7a2fac1b.json")
-            });
+                FirebaseApp.Create(new AppOptions
+                {
+                    Credential = GoogleCredential.FromFile("myfirstapp-a15e1-firebase-adminsdk-f5aua-db7a2fac1b.json")
+                });
+            }
+
+         
 
             _firebaseMessaging = FirebaseMessaging.DefaultInstance;
         }

@@ -51,6 +51,7 @@ export class NavBarComponent {
 
     onLogout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('fcmToken');
         this.store.alertifyService.success('You are logged out !');
     }
 
