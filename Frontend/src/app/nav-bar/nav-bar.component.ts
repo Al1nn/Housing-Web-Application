@@ -27,6 +27,8 @@ export class NavBarComponent {
 
     loggedIn() {
 
+
+
         const decodedToken = this.store.authService.decodeToken();
         if (decodedToken) {
             this.loggedInUser = decodedToken.unique_name;

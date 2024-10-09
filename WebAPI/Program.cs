@@ -76,6 +76,7 @@ builder.Services.AddCors();
 
 builder.Services.AddHostedService<CurrentRatesService>();
 
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 

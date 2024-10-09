@@ -37,23 +37,16 @@
             <mat-icon style="color: white;"  [matBadge]="4" aria-hidden="false" >notifications</mat-icon>
           </button>
           <div class="dropdown-menu notification-menu"  *dropdownMenu>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
-              <button mat-mini-fab (click)="onNotificationClick()">classic</button><br>
+              <div *ngFor="let item of [0,1,2,3,4,5,6,7,8,9,10]" class="dropdown-item" (click)="onNotificationClick()">
+                <img class="img-fluid rounded-circle user-image" *ngIf="this.profilePicture; else noPicture" 
+                    [src]="thumbnailFolder + this.profilePicture" alt="User Profile Picture">
+                <ng-template #noPicture>
+                  <img class="img-fluid rounded-circle user-image" src="/assets/user_images/user_default.jpg" alt="Default User Image">
+                </ng-template>
+                <p>{{loggedInUser}}</p>
+               
+              </div>
+             
           </div>
         </div>
         <div *ngIf="loggedIn()" class="dropdown user-dropdown" style="margin-right: 65px;" dropdown>
@@ -78,6 +71,10 @@
             <a class="dropdown-item" *ngIf="isAdmin()" routerLink="/property-stats">
               <mat-icon>bar_chart</mat-icon>
               <span>View Stats</span>
+            </a>
+            <a class="dropdown-item" routerLink="/user/messages">
+              <mat-icon>message</mat-icon>
+              <span>Messages</span>
             </a>
             <a class="dropdown-item" routerLink="/user/settings">
               <mat-icon>settings</mat-icon>

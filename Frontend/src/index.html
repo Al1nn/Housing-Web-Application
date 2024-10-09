@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <script src="https://kit.fontawesome.com/727244bb06.js" crossorigin="anonymous"></script>
-  <script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKFmgA1A2pb2c-4S3Idr65xrhlBH47mmA&loading=async&libraries=places">
+  <script async="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKFmgA1A2pb2c-4S3Idr65xrhlBH47mmA&amp;loading=async&amp;libraries=places">
   </script>
   <script>
     var alertify = window.alertify;
@@ -14,10 +13,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://unpkg.com/ngx-bootstrap/datepicker/bs-datepicker.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta name="theme-color" content="#1976d2">
+
+  <meta name="theme-color" content="#1976d2">
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then(function(registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        }).catch(function(error) {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+  </script>
 </head>
 <body class="mat-typography">
   <app-root></app-root>
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>
 </html>

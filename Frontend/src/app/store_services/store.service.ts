@@ -5,6 +5,8 @@ import { HousingService } from '../services/housing.service';
 import { Injectable } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { ChatService } from '../services/chat.service';
+import { NotificationService } from '../services/notification.service';
+
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +18,8 @@ export class StoreService {
         public authService: AuthService,
         public usersService: UsersService,
         public breadcrumbService: BreadcrumbService,
-        public chatService: ChatService
+        public chatService: ChatService,
+        public notificationService: NotificationService
     ) {
 
     }

@@ -9,8 +9,7 @@ import { PaginatedProperties } from '../../models/PaginatedProperties.interface'
 import { ISugestion } from '../../models/ISugestion.interface';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { StoreService } from '../../store_services/store.service';
-
-
+import { INotification } from '../../models/INotification.interface';
 
 
 @Component({
@@ -44,6 +43,8 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     private propertyTimeoutId: number;
     private debounceTimer: number;
 
+    notification: INotification;
+
     constructor(
         private route: ActivatedRoute,
         private store: StoreService
@@ -74,10 +75,28 @@ export class PropertyListComponent implements OnInit, OnDestroy {
             this.Properties = data.properties;
         });
 
+        this.store.notificationService.requestPermissionAndGetToken().subscribe(
+            (token: string | null) => {
+                if (token) {
+                    console.log('FCM Token:', token);
+                    localStorage.setItem('fcmToken', token);
+                } else {
+                    console.warn('FCM Token is null.');
+                }
+            },
+            (error) => {
+                console.error('Error getting permission or FCM token', error);
+            }
+        );
+
+
     }
 
+
     ngOnDestroy(): void {
+
     }
+
 
 
     selectCity(option: ISugestion) {
@@ -128,7 +147,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
                     this.store.housingService.getUserPaginatedProperty(this.filters.pageNumber, this.filters.pageSize).subscribe(data => {
                         this.paginator.length = data.totalRecords;
                         this.Properties = data.properties;
-                    })
+                    });
                     return;
                 }
 
@@ -138,9 +157,6 @@ export class PropertyListComponent implements OnInit, OnDestroy {
                 });
             }, 400);
 
-
-
-
             return;
         }
 
@@ -149,8 +165,6 @@ export class PropertyListComponent implements OnInit, OnDestroy {
                 this.store.housingService.getAllCitiesFiltered(inputValue, 10, this.SellRent).subscribe(data => {
                     this.FilteredCityListOptions = data;
                 });
-
-
             }, 400);
         }
     }

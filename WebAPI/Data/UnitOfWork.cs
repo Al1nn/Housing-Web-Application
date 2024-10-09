@@ -1,6 +1,7 @@
 ﻿
 using WebAPI.Data.Repo;
 using WebAPI.Interfaces;
+using WebAPI.Services;
 
 namespace WebAPI.Data
 {
@@ -34,6 +35,8 @@ namespace WebAPI.Data
 
         // Add more repos
         public ITreeRepository TreeRepository => new TreeRepository(tc);
+
+        public INotificationService NotificationService => new NotificationService();
 
         public async Task<bool> SaveAsync()
         {
