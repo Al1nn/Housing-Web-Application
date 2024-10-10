@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,7 +23,17 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { NotificationService } from './services/notification.service';
 
+
+export function runBackground(notificationService: NotificationService): () => Promise<void> {
+    return () => {
+        return new Promise<void>((resolve) => {
+            notificationService.listenForMessages().subscribe();
+            resolve();
+        });
+    };
+}
 
 @NgModule({
     declarations: [
@@ -57,6 +67,12 @@ import { MatButtonModule } from '@angular/material/button';
         {
             provide: HTTP_INTERCEPTORS,
             useClass: HttpErrorInterceptorService,
+            multi: true
+        },
+        {
+            provide: APP_INITIALIZER,
+            useFactory: runBackground,
+            deps: [NotificationService],
             multi: true
         },
         provideHttpClient(withInterceptorsFromDi()),

@@ -84,6 +84,7 @@ export class UserLoginComponent implements OnInit {
                 console.error('Error getting permission or FCM token', error);
             }
         );
+
     }
 
     onCancel() {

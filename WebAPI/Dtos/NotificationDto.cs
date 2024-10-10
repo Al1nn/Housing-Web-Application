@@ -2,12 +2,14 @@
 {
     public class NotificationDto
     {
-        public string registrationToken { get; set; }
+        public string Token { get; set; }
 
-        public string senderName { get; set; }
+        public string SenderId { get; set; }
 
-        public string senderPhoto { get; set; }
+        public string SenderName { get; set; }
 
-        public string lastMessage { get; set; }
+        public string SenderPhoto { get; set; }
+
+        public string LastMessage { get; set; }
     }
 }

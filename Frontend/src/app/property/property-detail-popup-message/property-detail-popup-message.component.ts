@@ -95,7 +95,8 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
             }
 
             const notification: INotification = {
-                registrationToken: this.fcmToken,
+                token: this.fcmToken,
+                senderId: this.token.nameid,
                 senderName: this.token.unique_name,
                 senderPhoto: this.token.profile_picture as string,
                 lastMessage: message.text
@@ -122,6 +123,8 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
                     console.error('Error sending message:', error);
                 }
             );
+
+
         }
     }
 

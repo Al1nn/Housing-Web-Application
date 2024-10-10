@@ -77,7 +77,6 @@ export class PropertyListComponent implements OnInit, OnDestroy {
 
 
 
-
     }
 
 

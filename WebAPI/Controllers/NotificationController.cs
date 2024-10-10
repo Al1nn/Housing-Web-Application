@@ -21,12 +21,19 @@ namespace WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> SendNotification(NotificationDto notification)
         {
-  
-            await uow.NotificationService.SendNotificationAsync(notification.registrationToken, notification.lastMessage, notification.senderName, notification.senderPhoto);
-
+            await uow.NotificationService.SendNotificationAsync(notification.Token, notification.SenderId, notification.LastMessage, notification.SenderName, notification.SenderPhoto);
             return Created();
         }
 
+       
+
+
+        //[HttpGet("notifications")]
+        //[Authorize]
+        //public async Task<IActionResult> GetAllNotifications()
+        //{
+
+        //}
 
     }
 }

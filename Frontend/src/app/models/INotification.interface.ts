@@ -1,6 +1,8 @@
 export interface INotification {
-    registrationToken: string;
-    lastMessage: string;
+    token: string;
+    senderId: string;
     senderName: string;
     senderPhoto: string;
+    lastMessage: string;
+
 }
