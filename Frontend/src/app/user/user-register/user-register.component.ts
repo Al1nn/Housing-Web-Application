@@ -126,6 +126,8 @@ export class UserRegisterComponent implements OnInit {
         this.formData.append('password', this.password.value);
         this.formData.append('phoneNumber', this.mobile.value);
 
+
+
         if (this.admin.value) {
             this.formData.append('roles', 'Admin');
         }
@@ -136,12 +138,19 @@ export class UserRegisterComponent implements OnInit {
             this.formData.append('roles', 'Reader');
         }
 
+
+
+        const fcmToken = localStorage.getItem('fcmToken') as string;
+        this.formData.append('fcmToken', fcmToken);
         return this.formData;
     }
     onSubmit() {
         console.log(this.registerationForm);
 
+
+
         this.userSubmitted = true;
+
         if (this.registerationForm.valid) {
             this.store.authService.registerUser(this.userData()).subscribe(() => {
                 this.onReset();
@@ -157,6 +166,7 @@ export class UserRegisterComponent implements OnInit {
         this.formData.delete('password');
         this.formData.delete('phoneNumber');
         this.formData.delete('roles');
+        this.formData.delete('fcmToken');
         this.image = '';
         this.registerationForm.reset();
     }

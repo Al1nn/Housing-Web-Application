@@ -54,6 +54,8 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
         this.nameId = this.store.authService.decodeToken()?.nameid as string;
+
+
     }
 
     onMainPhotoChanged($event: string) {

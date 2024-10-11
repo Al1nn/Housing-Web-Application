@@ -32,6 +32,8 @@ export class PropertyDetailOwnerComponent implements OnInit {
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.nameId = this.store.authService.decodeToken()?.nameid as string;
         this.galleryImages = this.getPropertyPhotos();
+
+
     }
 
     getPropertyPhotos(): GalleryItem[] {

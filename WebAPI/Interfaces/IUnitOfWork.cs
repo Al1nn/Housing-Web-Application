@@ -16,8 +16,6 @@
 
         ICurrencyRepository CurrencyRepository { get; }
 
-        INotificationService NotificationService { get; }
-
         public Task<bool> SaveAsync();
 
         public Task<bool> SaveTreeAsync();

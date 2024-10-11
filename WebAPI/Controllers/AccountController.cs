@@ -278,7 +278,7 @@ namespace WebAPI.Controllers
 
 
 
-            uow.UserRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber, loginReq.Roles, loginReq.file);
+            uow.UserRepository.Register(loginReq.Username, loginReq.Password, loginReq.Email, loginReq.PhoneNumber,loginReq.Roles, loginReq.file);
 
             await uow.SaveAsync();
 
@@ -322,5 +322,7 @@ namespace WebAPI.Controllers
 
 
         }
+
+       
     }
 }

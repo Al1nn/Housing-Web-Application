@@ -1,9 +1,7 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
-
+import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
@@ -17,23 +15,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
-import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
-import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { AngularFireModule } from '@angular/fire/compat';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { NotificationService } from './services/notification.service';
-
-
-export function runBackground(notificationService: NotificationService): () => Promise<void> {
-    return () => {
-        return new Promise<void>((resolve) => {
-            notificationService.listenForMessages().subscribe();
-            resolve();
-        });
-    };
-}
 
 @NgModule({
     declarations: [
@@ -48,7 +33,6 @@ export function runBackground(notificationService: NotificationService): () => P
         BrowserAnimationsModule,
         AngularFireModule.initializeApp({ "projectId": "myfirstapp-a15e1", "appId": "1:859208953616:web:f9a1026cb308c49963bf95", "databaseURL": "https://myfirstapp-a15e1-default-rtdb.europe-west1.firebasedatabase.app", "storageBucket": "myfirstapp-a15e1.appspot.com", "apiKey": "AIzaSyAN3_n0tOjV_tJ37vc33Xpa9Kbr5ERSRGE", "authDomain": "myfirstapp-a15e1.firebaseapp.com", "messagingSenderId": "859208953616" }),
         AngularFireDatabaseModule,
-        AngularFireMessagingModule,
         MatBadgeModule,
         MatIconModule,
         MatButtonModule,
@@ -69,16 +53,9 @@ export function runBackground(notificationService: NotificationService): () => P
             useClass: HttpErrorInterceptorService,
             multi: true
         },
-        {
-            provide: APP_INITIALIZER,
-            useFactory: runBackground,
-            deps: [NotificationService],
-            multi: true
-        },
         provideHttpClient(withInterceptorsFromDi()),
         provideFirebaseApp(() => initializeApp({ "projectId": "myfirstapp-a15e1", "appId": "1:859208953616:web:f9a1026cb308c49963bf95", "databaseURL": "https://myfirstapp-a15e1-default-rtdb.europe-west1.firebasedatabase.app", "storageBucket": "myfirstapp-a15e1.appspot.com", "apiKey": "AIzaSyAN3_n0tOjV_tJ37vc33Xpa9Kbr5ERSRGE", "authDomain": "myfirstapp-a15e1.firebaseapp.com", "messagingSenderId": "859208953616" })),
         provideDatabase(() => getDatabase()),
-        provideMessaging(() => getMessaging()),
     ]
 })
 export class AppModule { }

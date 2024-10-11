@@ -132,6 +132,7 @@ export class PropertyStatsComponent implements OnInit {
                 this.updateChartCategories();
             });
         }
+
     }
 
     updateChartCategories() {

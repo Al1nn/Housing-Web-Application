@@ -153,6 +153,7 @@ export class PropertyDetailEditPopupComponent implements OnInit {
             this.unmodifiedProperty = data;
         });
 
+
         this.CreateEditForm();
     }
 

@@ -9,8 +9,6 @@ import { PaginatedProperties } from '../../models/PaginatedProperties.interface'
 import { ISugestion } from '../../models/ISugestion.interface';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { StoreService } from '../../store_services/store.service';
-import { INotification } from '../../models/INotification.interface';
-
 
 @Component({
     selector: 'app-property-list',
@@ -43,7 +41,6 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     private propertyTimeoutId: number;
     private debounceTimer: number;
 
-    notification: INotification;
 
     constructor(
         private route: ActivatedRoute,

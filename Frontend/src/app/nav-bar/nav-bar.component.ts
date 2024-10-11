@@ -26,9 +26,6 @@ export class NavBarComponent {
 
 
     loggedIn() {
-
-
-
         const decodedToken = this.store.authService.decodeToken();
         if (decodedToken) {
             this.loggedInUser = decodedToken.unique_name;
@@ -51,7 +48,6 @@ export class NavBarComponent {
 
     onLogout() {
         localStorage.removeItem('token');
-        localStorage.removeItem('fcmToken');
         this.store.alertifyService.success('You are logged out !');
     }
 

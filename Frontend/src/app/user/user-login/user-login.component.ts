@@ -6,6 +6,7 @@ import { IUserForLogin } from '../../models/IUser.interface';
 
 import { StoreService } from '../../store_services/store.service';
 
+
 @Component({
     selector: 'app-user-login',
     templateUrl: './user-login.component.html',
@@ -49,7 +50,6 @@ export class UserLoginComponent implements OnInit {
         this.formData.append('username', this.loginRequest.username);
         this.formData.append('password', this.loginRequest.password);
 
-
         this.loginRequest.roles = this.getSelectedRoles();
 
         for (const e of this.loginRequest.roles) {
@@ -60,7 +60,6 @@ export class UserLoginComponent implements OnInit {
             (response: IUserForLogin) => {
                 const user = response;
                 localStorage.setItem('token', user.token);
-
                 this.store.alertifyService.success('Login successful');
                 this.router.navigate(['/']);
             },
@@ -71,19 +70,7 @@ export class UserLoginComponent implements OnInit {
             }
         );
 
-        this.store.notificationService.requestPermissionAndGetToken().subscribe(
-            (token: string | null) => {
-                if (token) {
-                    console.log('FCM Token:', token);
-                    localStorage.setItem('fcmToken', token);
-                } else {
-                    console.warn('FCM Token is null.');
-                }
-            },
-            (error) => {
-                console.error('Error getting permission or FCM token', error);
-            }
-        );
+
 
     }
 

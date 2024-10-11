@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 import { IMessage } from '../../models/IChat.interface';
 import { IToken } from '../../models/IToken.interface';
 import { Subscription } from 'rxjs';
-import { INotification } from '../../models/INotification.interface';
+
 
 @Component({
     selector: 'app-property-detail-popup-message',
@@ -22,7 +22,6 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     chatId: string | null = null;
     token: IToken = {} as IToken;
     messages: IMessage[];
-    notification: INotification;
     fcmToken: string;
     @ViewChild('endOfChat') endOfChat!: ElementRef;
     private chatSubscription: Subscription | null = null;
@@ -79,7 +78,6 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     closeEditModal() {
         this.dialogRef.close();
     }
-
     sendMessage() {
         const input = this.messageControl.value;
 
@@ -94,13 +92,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
                 this.fcmToken = localStorage.getItem('fcmToken') as string;
             }
 
-            const notification: INotification = {
-                token: this.fcmToken,
-                senderId: this.token.nameid,
-                senderName: this.token.unique_name,
-                senderPhoto: this.token.profile_picture as string,
-                lastMessage: message.text
-            };
+
 
             this.store.chatService.sendMessage(this.chatId, message).subscribe(
                 () => {
@@ -112,9 +104,6 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
                         }
                     });
 
-                    this.chatSubscription = this.store.notificationService.sendNotification(notification).subscribe(() => {
-                        this.store.alertifyService.success("Message Notification Sent !");
-                    })
 
                     this.messageControl.reset();
 

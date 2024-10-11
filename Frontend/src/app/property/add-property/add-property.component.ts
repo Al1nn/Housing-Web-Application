@@ -201,6 +201,7 @@ export class AddPropertyComponent implements OnInit {
         this.store.housingService.getFurnishingTypes().subscribe((data) => {
             this.furnishTypes = data;
         });
+
         this.initializeAutocomplete();
     }
 

@@ -33,6 +33,8 @@ export class UserProfileComponent implements OnInit {
         this.store.housingService.getPropertyCountByUser().subscribe((data: number) => {
             this.propertiesListed = data;
         });
+
+
     }
 
     isOnlyReader(): boolean {

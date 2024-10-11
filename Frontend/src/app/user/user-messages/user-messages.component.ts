@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, map, Observable, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, Observable, Subscription, switchMap } from 'rxjs';
 import { IUserCard } from '../../models/IUserCard.interface';
 import { StoreService } from '../../store_services/store.service';
 import { environment } from '../../../environments/environment';
 import { IChat, IMessage } from '../../models/IChat.interface';
 import { IToken } from '../../models/IToken.interface';
+
 
 @Component({
     selector: 'app-user-messages',
@@ -13,7 +14,7 @@ import { IToken } from '../../models/IToken.interface';
     styleUrls: ['./user-messages.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserMessagesComponent implements OnInit {
+export class UserMessagesComponent implements OnInit, OnDestroy {
 
     searchControl = new FormControl('');
     chatListControl = new FormControl();
@@ -29,7 +30,16 @@ export class UserMessagesComponent implements OnInit {
     displayPicture: string;
     displayName: string;
 
+    fcmToken: string;
+    chatSubscription: Subscription;
+
     constructor(public store: StoreService, private cd: ChangeDetectorRef) { }
+
+    ngOnDestroy(): void {
+        if (this.chatSubscription) {
+            this.chatSubscription.unsubscribe();
+        }
+    }
 
     ngOnInit(): void {
         this.token = this.store.authService.decodeToken() as IToken;
@@ -46,7 +56,7 @@ export class UserMessagesComponent implements OnInit {
     }
 
     sendMessage() {
-        const input = this.messageControl.value?.trim();
+        const input = this.messageControl.value;
 
         if (input && this.chatId) {
             const message: IMessage = {
@@ -55,19 +65,27 @@ export class UserMessagesComponent implements OnInit {
                 text: input
             };
 
-            this.store.chatService.sendMessage(this.chatId, message).pipe(
-                switchMap(() => this.store.chatService.getChatById(this.chatId as string)),
-                map(chat => {
-                    if (chat) {
-                        this.messages = Object.values(chat.messages);
-                        this.scrollToBottom();
-                        this.cd.detectChanges();
-                    }
-                })
-            ).subscribe({
-                next: () => this.messageControl.reset(),
-                error: (error) => console.error('Error sending message:', error)
-            });
+
+
+            this.store.chatService.sendMessage(this.chatId, message).subscribe(
+                () => {
+
+                    this.chatSubscription = this.store.chatService.getChatById(this.chatId as string).subscribe(chat => {
+                        if (chat) {
+                            this.messages = Object.values(chat.messages);
+                            this.scrollToBottom();
+                        }
+                    });
+
+                    this.messageControl.reset();
+
+                },
+                error => {
+                    console.error('Error sending message:', error);
+                }
+            );
+
+
         }
     }
 

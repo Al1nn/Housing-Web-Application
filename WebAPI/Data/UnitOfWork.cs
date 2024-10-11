@@ -36,7 +36,6 @@ namespace WebAPI.Data
         // Add more repos
         public ITreeRepository TreeRepository => new TreeRepository(tc);
 
-        public INotificationService NotificationService => new NotificationService();
 
         public async Task<bool> SaveAsync()
         {

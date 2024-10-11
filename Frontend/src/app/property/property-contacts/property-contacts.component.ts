@@ -37,6 +37,7 @@ export class PropertyContactsComponent implements OnInit {
         });
         this.setMapCenter();
         this.nameId = this.store.authService.decodeToken()?.nameid as string;
+
     }
 
     setMapCenter() {
