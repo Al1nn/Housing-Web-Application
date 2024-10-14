@@ -95,12 +95,12 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
     }
 
     onOptionSelected(chat: IChat) {
-        if (!(this.token.nameid === chat.receiverID)) {
-            this.displayPicture = chat.receiverPhoto;
-            this.displayName = chat.receiverName;
+        if (!(this.token.nameid === chat.userID_first)) {
+            this.displayPicture = chat.userPhoto_first;
+            this.displayName = chat.userName_first;
         } else {
-            this.displayPicture = chat.senderPhoto;
-            this.displayName = chat.senderName;
+            this.displayPicture = chat.userPhoto_other;
+            this.displayName = chat.userName_other;
         }
 
         this.chatId = chat.id as string;
@@ -136,8 +136,8 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
         ).subscribe(chat => {
             if (chat) {
                 this.chatId = chat.id as string;
-                this.displayName = chat.senderName;
-                this.displayPicture = chat.senderPhoto;
+                this.displayName = chat.userName_other;
+                this.displayPicture = chat.userPhoto_other;
                 if (chat.messages) {
                     this.messages = Object.values(chat.messages);
 

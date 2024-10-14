@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { combineLatest, from, map, Observable, of, take } from 'rxjs';
+import { combineLatest, from, map, Observable, switchMap, take } from 'rxjs';
 import { IUserCard } from '../models/IUserCard.interface';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
 import { IChat, IMessage } from '../models/IChat.interface';
@@ -39,8 +39,8 @@ export class ChatService {
                 const chat = chats.find(c => {
                     const chatData = c.payload.val();
                     return (
-                        (chatData?.senderID === userId1 && chatData?.receiverID === userId2) ||
-                        (chatData?.senderID === userId2 && chatData?.receiverID === userId1)
+                        (chatData?.userID_other === userId1 && chatData?.userID_first === userId2) ||
+                        (chatData?.userID_other === userId2 && chatData?.userID_first === userId1)
                     );
                 });
                 return chat ? chat.key : null;
@@ -49,17 +49,19 @@ export class ChatService {
     }
 
 
-    createChat(seenCount: number, senderID: string, senderPhoto: string, senderName: string, receiverId: string, receiverPhoto: string, receiverName: string): Observable<string> {
+    createChat(messagesCount: number
+        , userID_first: string, userName_first: string, userPhoto_first: string
+        , userID_other: string, userName_other: string, userPhoto_other: string): Observable<string> {
         const newChat: IChat = {
             lastMessage: '',
             lastMessageDate: new Date().toLocaleString(),
-            senderID: senderID,
-            senderPhoto: senderPhoto,
-            senderName: senderName,
-            receiverID: receiverId,
-            receiverName: receiverName,
-            receiverPhoto: receiverPhoto,
-            seenCount: seenCount,
+            userID_first: userID_first,
+            userName_first: userName_first,
+            userPhoto_first: userPhoto_first,
+            userID_other: userID_other,
+            userName_other: userName_other,
+            userPhoto_other: userPhoto_other,
+            messagesCount: messagesCount,
             messages: [],
         };
         return new Observable(observer => {
@@ -115,53 +117,50 @@ export class ChatService {
     }
 
     sendMessage(chatId: string, message: IMessage): Observable<void> {
-        return from(Promise.all([
-            this.db.list(`${this.chatPath}/${chatId}/messages`).push(message),
-            this.db.object(`${this.chatPath}/${chatId}`).update({
-                lastMessage: message.text,
-                lastMessageDate: message.sentDate
+        return from(this.db.object(`${this.chatPath}/${chatId}`).valueChanges().pipe(
+            take(1),
+            switchMap((chat: any) => {
+                const currentCount = chat.messagesCount || 0;
+                const updates = {
+                    [`${this.chatPath}/${chatId}/messages/${this.db.createPushId()}`]: message,
+                    [`${this.chatPath}/${chatId}/lastMessage`]: message.text,
+                    [`${this.chatPath}/${chatId}/lastMessageDate`]: message.sentDate,
+                    [`${this.chatPath}/${chatId}/messagesCount`]: currentCount + 1
+                };
+                return from(this.db.object('/').update(updates));
             })
-        ])).pipe(
-            map(() => {
-                return void 0;
-            })
+        )).pipe(
+            map(() => void 0)
         );
     }
 
-    //Update every message from the chat (seen = true), also update the seenCount.
-    // seenAllMessages(chatId: string) {
 
-    // }
-
-    seenAllMessages(chatId: string, receiverId: string): Observable<void> {
-        return this.getChatById(chatId).pipe(
+    setFlag(chatId: string): Observable<void> { // Setez flagul seen = true, de la mesaj, si recalculez messagesCount
+        return this.db.object(`${this.chatPath}/${chatId}`).valueChanges().pipe(
             take(1),
-            map(chat => {
-                if (chat && chat.messages) {
-                    let seenCount = chat.seenCount;
-                    const updatedMessages = Object.entries(chat.messages).reduce((acc, [key, message]) => {
-                        if (message.senderId !== receiverId) {
-                            acc[key] = { ...message, seen: true };
-                            seenCount += 1;
-                        } else {
-                            seenCount = chat.seenCount;
-                            acc[key] = message;
+            switchMap((chat: any) => {
+                const updates: { [key: string]: any } = {};
+                let unseenCount = 0;
+                if (chat.messages) {
+                    Object.keys(chat.messages).forEach(messageKey => {
+                        if (chat.messages[messageKey].seen === false) {
+                            updates[`${this.chatPath}/${chatId}/messages/${messageKey}/seen`] = true;
+                            unseenCount++;
                         }
-                        return acc;
-                    }, {} as Record<string, IMessage>);
-
-                    return from(Promise.all([
-                        this.db.object(`${this.chatPath}/${chatId}/messages`).set(updatedMessages),
-                        this.db.object(`${this.chatPath}/${chatId}`).update({ seenCount: seenCount })
-                    ]));
+                    });
                 }
-                return of(null);
+
+                const newMessagesCount = Math.max(0, (chat.messagesCount || 0) - unseenCount);
+                updates[`${this.chatPath}/${chatId}/messagesCount`] = newMessagesCount;
+
+                return from(this.db.object('/').update(updates));
             }),
             map(() => void 0)
         );
     }
 
-    //For notifications I need a getter THAT GETS ALL THE MESSAGES FROM CHATS WITH RECEIVER ID = CURRENT USER ID FROM TOKEN SENT TO THE CURRENT USER (TOKEN) WHERE SEEN = FALSE.
-    //  GetSentMessages(receiverId: string ){
-    //  }
+
+
+
+
 }

@@ -2,13 +2,13 @@ export interface IChat {
     id?: string | null;
     lastMessage: string;
     lastMessageDate: string;
-    receiverID: string;
-    receiverName: string;
-    receiverPhoto: string;
-    senderID: string;
-    senderName: string;
-    senderPhoto: string;
-    seenCount: number;
+    userID_first: string;
+    userName_first: string;
+    userPhoto_first: string;
+    userID_other: string;
+    userName_other: string;
+    userPhoto_other: string;
+    messagesCount: number;
     messages: IMessage[];
 }
 

@@ -27,6 +27,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     @ViewChild('endOfChat') endOfChat!: ElementRef;
     private chatSubscription: Subscription | null = null;
 
+
     constructor(public store: StoreService, private dialogRef: MatDialogRef<PropertyDetailPopupMessageComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
 
@@ -43,7 +44,10 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
             this.userCard = data;
             this.initializeChat();
         });
+
     }
+
+
 
     initializeChat() {
         this.store.chatService.findExistingChat(this.token.nameid, this.data.postedBy.toString()).subscribe(existingChatId => {
@@ -57,24 +61,23 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     }
 
     createChat() {
-        this.store.chatService.createChat(0, this.token.nameid, this.token.profile_picture as string, this.token.unique_name, this.data.postedBy.toString(), this.userCard.photo || '', this.userCard.username).subscribe(data => {
+        this.store.chatService.createChat(0, this.token.nameid, this.token.unique_name, this.token.profile_picture || '', this.userCard.id.toString(), this.userCard.username, this.userCard.photo || '').subscribe(data => {
             this.chatId = data;
         });
     }
 
     loadChat() {
         if (this.chatId) {
-            this.chatSubscription = this.store.chatService.seenAllMessages(this.chatId, this.token.nameid).subscribe((data) => {
-                console.log(data);
+            this.chatSubscription = this.store.chatService.setFlag(this.chatId).subscribe(() => {
+
             });
             this.chatSubscription = this.store.chatService.getChatById(this.chatId).subscribe(chat => {
                 if (chat) {
                     this.messages = Object.values(chat.messages);
+
                     this.scrollToBottom();
                 }
             });
-
-
         }
     }
 
@@ -93,10 +96,6 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
                 seen: false,
                 text: input
             };
-
-
-
-
 
             this.store.chatService.sendMessage(this.chatId, message).subscribe(
                 () => {

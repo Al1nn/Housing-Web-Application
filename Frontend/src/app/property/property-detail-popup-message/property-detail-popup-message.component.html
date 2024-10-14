@@ -11,12 +11,14 @@
 <mat-dialog-content>
   
     <div class="chat-area">
-      <div *ngFor="let message of messages"  class="chat-bubble-container" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">
+      <div *ngFor="let message of messages; last as isLast"  class="chat-bubble-container" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">
         <div class="chat-bubble">
           {{message.text}}
           <span class="chat-date" [ngClass]="{ 'sender': message.senderId === store.authService.decodeToken()?.nameid }">{{message.sentDate}}</span>
         </div>
+
       </div>
+
       <div #endOfChat></div> 
     </div>
     

@@ -45,17 +45,17 @@
    
       <mat-list-option *ngFor="let chat of chats$ | async" class="chat-list-option" (click)="onOptionSelected(chat)">
         
-        <div class="d-flex"  *ngIf="token.nameid !== chat.receiverID; else showSender">
+        <div class="d-flex"  *ngIf="token.nameid !== chat.userID_first; else showSender">
           <img
             width="50"
             height="50"
             class="rounded-circle mat-elevation-z1 chat-avatar"
             matListItemAvatar
-            [src]="chat.receiverPhoto ? thumbnailFolder + chat.receiverPhoto : '../../assets/user_images/user_default.jpg'"
+            [src]="chat.userPhoto_first ? thumbnailFolder + chat.userPhoto_first : '../../assets/user_images/user_default.jpg'"
           />
           <div class="chat-info">
             <div class="chat-header">
-              <span class="chat-name">{{ chat.receiverName }}</span>
+              <span class="chat-name">{{ chat.userName_first }}</span>
               <span class="chat-date">{{ chat.lastMessageDate }}</span>
             </div>
             <div class="chat-last-message">{{ chat.lastMessage }}</div>
@@ -70,11 +70,11 @@
             height="50"
             class="rounded-circle mat-elevation-z1 chat-avatar"
             matListItemAvatar
-            [src]="chat.senderPhoto ? thumbnailFolder + chat.senderPhoto : '../../assets/user_images/user_default.jpg'"
+            [src]="chat.userPhoto_other ? thumbnailFolder + chat.userPhoto_other : '../../assets/user_images/user_default.jpg'"
           />
           <div class="chat-info">
             <div class="chat-header">
-              <span class="chat-name">{{ chat.senderName }}</span>
+              <span class="chat-name">{{ chat.userName_other }}</span>
               <span class="chat-date">{{ chat.lastMessageDate }}</span>
             </div>
             <div class="chat-last-message">{{ chat.lastMessage }}</div>
