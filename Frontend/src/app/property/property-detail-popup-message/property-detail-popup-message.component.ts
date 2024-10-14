@@ -22,7 +22,8 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     chatId: string | null = null;
     token: IToken = {} as IToken;
     messages: IMessage[];
-    fcmToken: string;
+
+
     @ViewChild('endOfChat') endOfChat!: ElementRef;
     private chatSubscription: Subscription | null = null;
 
@@ -42,8 +43,6 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
             this.userCard = data;
             this.initializeChat();
         });
-
-
     }
 
     initializeChat() {
@@ -58,20 +57,24 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     }
 
     createChat() {
-        this.store.chatService.createChat(this.token.nameid, this.token.profile_picture as string, this.token.unique_name, this.data.postedBy.toString(), this.userCard.photo || '', this.userCard.username).subscribe(data => {
+        this.store.chatService.createChat(0, this.token.nameid, this.token.profile_picture as string, this.token.unique_name, this.data.postedBy.toString(), this.userCard.photo || '', this.userCard.username).subscribe(data => {
             this.chatId = data;
-
         });
     }
 
     loadChat() {
         if (this.chatId) {
+            this.chatSubscription = this.store.chatService.seenAllMessages(this.chatId, this.token.nameid).subscribe((data) => {
+                console.log(data);
+            });
             this.chatSubscription = this.store.chatService.getChatById(this.chatId).subscribe(chat => {
                 if (chat) {
                     this.messages = Object.values(chat.messages);
                     this.scrollToBottom();
                 }
             });
+
+
         }
     }
 
@@ -84,13 +87,14 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
         if (input && this.chatId) {
             const message: IMessage = {
                 senderId: this.token.nameid,
+                senderName: this.token.unique_name,
+                senderPhoto: this.token.profile_picture || '',
                 sentDate: new Date().toLocaleString(),
+                seen: false,
                 text: input
             };
 
-            if (localStorage) {
-                this.fcmToken = localStorage.getItem('fcmToken') as string;
-            }
+
 
 
 

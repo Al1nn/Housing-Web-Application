@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { combineLatest, from, map, Observable, take } from 'rxjs';
+import { combineLatest, from, map, Observable, of, take } from 'rxjs';
 import { IUserCard } from '../models/IUserCard.interface';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
 import { IChat, IMessage } from '../models/IChat.interface';
@@ -49,7 +49,7 @@ export class ChatService {
     }
 
 
-    createChat(senderID: string, senderPhoto: string, senderName: string, receiverId: string, receiverPhoto: string, receiverName: string): Observable<string> {
+    createChat(seenCount: number, senderID: string, senderPhoto: string, senderName: string, receiverId: string, receiverPhoto: string, receiverName: string): Observable<string> {
         const newChat: IChat = {
             lastMessage: '',
             lastMessageDate: new Date().toLocaleString(),
@@ -59,7 +59,8 @@ export class ChatService {
             receiverID: receiverId,
             receiverName: receiverName,
             receiverPhoto: receiverPhoto,
-            messages: []
+            seenCount: seenCount,
+            messages: [],
         };
         return new Observable(observer => {
             this.chatsRef.push(newChat).then(ref => {
@@ -83,7 +84,7 @@ export class ChatService {
     }
 
     getAllChatsByUser(nameId: string): Observable<IChat[]> {
-        // Query where receiverID is equal to nameId
+
         const receiverChats$ = this.db.list<IChat>(this.chatPath, ref =>
             ref.orderByChild('receiverID').equalTo(nameId)
         ).snapshotChanges().pipe(
@@ -93,7 +94,6 @@ export class ChatService {
             })))
         );
 
-        // Query where senderID is equal to nameId
         const senderChats$ = this.db.list<IChat>(this.chatPath, ref =>
             ref.orderByChild('senderID').equalTo(nameId)
         ).snapshotChanges().pipe(
@@ -103,10 +103,9 @@ export class ChatService {
             })))
         );
 
-        // Combine the two streams and remove potential duplicates
+
         return combineLatest([receiverChats$, senderChats$]).pipe(
             map(([receiverChats, senderChats]) => {
-                // Merge and remove duplicates based on chat ID
                 const allChats = [...receiverChats, ...senderChats];
                 const uniqueChats = Array.from(new Set(allChats.map(chat => chat.id)))
                     .map(id => allChats.find(chat => chat.id === id)!);
@@ -129,5 +128,40 @@ export class ChatService {
         );
     }
 
+    //Update every message from the chat (seen = true), also update the seenCount.
+    // seenAllMessages(chatId: string) {
 
+    // }
+
+    seenAllMessages(chatId: string, receiverId: string): Observable<void> {
+        return this.getChatById(chatId).pipe(
+            take(1),
+            map(chat => {
+                if (chat && chat.messages) {
+                    let seenCount = chat.seenCount;
+                    const updatedMessages = Object.entries(chat.messages).reduce((acc, [key, message]) => {
+                        if (message.senderId !== receiverId) {
+                            acc[key] = { ...message, seen: true };
+                            seenCount += 1;
+                        } else {
+                            seenCount = chat.seenCount;
+                            acc[key] = message;
+                        }
+                        return acc;
+                    }, {} as Record<string, IMessage>);
+
+                    return from(Promise.all([
+                        this.db.object(`${this.chatPath}/${chatId}/messages`).set(updatedMessages),
+                        this.db.object(`${this.chatPath}/${chatId}`).update({ seenCount: seenCount })
+                    ]));
+                }
+                return of(null);
+            }),
+            map(() => void 0)
+        );
+    }
+
+    //For notifications I need a getter THAT GETS ALL THE MESSAGES FROM CHATS WITH RECEIVER ID = CURRENT USER ID FROM TOKEN SENT TO THE CURRENT USER (TOKEN) WHERE SEEN = FALSE.
+    //  GetSentMessages(receiverId: string ){
+    //  }
 }

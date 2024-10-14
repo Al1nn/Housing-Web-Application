@@ -61,7 +61,10 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
         if (input && this.chatId) {
             const message: IMessage = {
                 senderId: this.token.nameid,
+                senderName: this.token.unique_name,
+                senderPhoto: this.token.profile_picture || '',
                 sentDate: new Date().toLocaleString(),
+                seen: false,
                 text: input
             };
 
@@ -73,6 +76,8 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
                     this.chatSubscription = this.store.chatService.getChatById(this.chatId as string).subscribe(chat => {
                         if (chat) {
                             this.messages = Object.values(chat.messages);
+
+
                             this.scrollToBottom();
                         }
                     });
@@ -103,6 +108,9 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             this.store.chatService.getChatById(chat.id).subscribe((data: any) => {
                 if (data.messages) {
                     this.messages = Object.values(data.messages);
+
+                    //Aici de facut TOATE mesajele seen: boolean = true 
+
                     this.scrollToBottom();
                 } else {
                     this.messages = [];
@@ -119,7 +127,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
                     return this.store.chatService.getChatById(chatId);
                 } else {
                     this.messages = [];
-                    return this.store.chatService.createChat(user.id.toString(), user.photo || '', user.username,
+                    return this.store.chatService.createChat(0, user.id.toString(), user.photo || '', user.username,
                         this.token.nameid, this.token.profile_picture || '', this.token.unique_name).pipe(
                             switchMap(newChatId => this.store.chatService.getChatById(newChatId))
                         );
@@ -132,6 +140,10 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
                 this.displayPicture = chat.senderPhoto;
                 if (chat.messages) {
                     this.messages = Object.values(chat.messages);
+
+                    //Aici de facut TOATE mesajele seen: boolean = true 
+
+
                 }
 
                 this.scrollToBottom();
