@@ -8,6 +8,7 @@ import { IChat, IMessage } from '../../models/IChat.interface';
 import { IToken } from '../../models/IToken.interface';
 
 
+
 @Component({
     selector: 'app-user-messages',
     templateUrl: './user-messages.component.html',
@@ -39,9 +40,14 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
 
 
     constructor(public store: StoreService) { }
-    async ngOnDestroy() {
-        await this.setUserOffline();
+    ngOnDestroy(): void {
+        console.log({ arguments });
+        this.setUserOffline();
     }
+
+
+
+
 
 
 
