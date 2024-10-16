@@ -39,8 +39,8 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
 
 
     constructor(public store: StoreService) { }
-    ngOnDestroy(): void {
-        throw new Error('Method not implemented.');
+    async ngOnDestroy() {
+        await this.setUserOffline();
     }
 
 
