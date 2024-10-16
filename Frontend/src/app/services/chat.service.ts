@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { combineLatest, from, map, Observable, switchMap, take } from 'rxjs';
+import { combineLatest, from, map, Observable, of, switchMap, take } from 'rxjs';
 import { IUserCard } from '../models/IUserCard.interface';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
 import { IChat, IMessage } from '../models/IChat.interface';
@@ -142,18 +142,37 @@ export class ChatService {
             take(1),
             switchMap((chat: any) => {
                 const currentCount = chat.messagesCount || 0;
+                const messageKey = this.db.createPushId(); // Create the message key once
+
                 const updates = {
-                    [`${this.chatPath}/${chatId}/messages/${this.db.createPushId()}`]: message,
+                    [`${this.chatPath}/${chatId}/messages/${messageKey}`]: message,
                     [`${this.chatPath}/${chatId}/lastMessage`]: message.text,
                     [`${this.chatPath}/${chatId}/lastMessageDate`]: message.sentDate,
                     [`${this.chatPath}/${chatId}/messagesCount`]: currentCount + 1
                 };
-                return from(this.db.object('/').update(updates));
+
+                // First update the new message
+                return from(this.db.object('/').update(updates)).pipe(
+                    switchMap(() => {
+                        // Check if both users are online to update the 'seen' flag
+                        if (chat.userOnline_first && chat.userOnline_other) {
+                            const seenUpdate = {
+                                [`${this.chatPath}/${chatId}/messages/${messageKey}/seen`]: true,
+                                [`${this.chatPath}/${chatId}/messagesCount`]: 0 // Reset unseen message count
+                            };
+                            return from(this.db.object('/').update(seenUpdate));
+                        } else {
+                            return of(void 0); // No need to update 'seen' flag if users are not online
+                        }
+                    })
+                );
             })
         )).pipe(
             map(() => void 0)
         );
     }
+
+
 
 
     setFlag(chatId: string, userId: string): Observable<void> { // Setez flagul seen = true, de la mesaj, si recalculez messagesCount
@@ -179,6 +198,9 @@ export class ChatService {
             map(() => void 0)
         );
     }
+
+
+
 
 
     setUserOffline(chatId: string, userId: string): Observable<void> {

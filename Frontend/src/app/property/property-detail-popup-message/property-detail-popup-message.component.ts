@@ -140,7 +140,8 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
             this.store.chatService.sendMessage(this.chatId, message).subscribe(() => {
 
                 this.messageControl.reset();
-            })
+            });
+
             await this.listenForMessages();
         }
     }
