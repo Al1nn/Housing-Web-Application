@@ -62,7 +62,7 @@ export class ChatService {
             userID_other: userID_other,
             userName_other: userName_other,
             userPhoto_other: userPhoto_other,
-            userOnline_first: true,
+            userOnline_first: false,
             userOnline_other: false,
             messagesCount: messagesCount,
             messages: [],

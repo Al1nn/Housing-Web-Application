@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, firstValueFrom, map, Observable, switchMap } from 'rxjs';
 import { IUserCard } from '../../models/IUserCard.interface';
@@ -14,7 +14,7 @@ import { IToken } from '../../models/IToken.interface';
     styleUrls: ['./user-messages.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserMessagesComponent implements OnInit {
+export class UserMessagesComponent implements OnInit, OnDestroy {
 
     searchControl = new FormControl('');
     chatListControl = new FormControl();
@@ -39,6 +39,9 @@ export class UserMessagesComponent implements OnInit {
 
 
     constructor(public store: StoreService) { }
+    ngOnDestroy(): void {
+        throw new Error('Method not implemented.');
+    }
 
 
 
@@ -126,7 +129,39 @@ export class UserMessagesComponent implements OnInit {
         }
     }
 
+    private async setFlags() {
+        if (this.chatId) {
+            this.store.chatService.setFlag(this.chatId, this.token.nameid).subscribe(() => {
+                console.log("Flag set successfully");
+            });
+        }
+    }
+
+    private async setUserOffline() {
+        if (this.chatId) {
+            this.store.chatService.setUserOffline(this.chatId, this.token.nameid).subscribe(() => {
+                console.log("Current user set offline");
+            })
+        }
+    }
+
+    private async setUserOnline() {
+        if (this.chatId) {
+            this.store.chatService.setUserOnline(this.chatId, this.token.nameid).subscribe(() => {
+                console.log("Current user set ONLINE");
+            })
+        }
+    }
+
     async onOptionSelected(chat: IChat) {
+        console.log("Previous Chat ID :", this.chatId);
+
+        if (this.chatId !== null) {
+            this.setUserOffline();
+        }
+
+
+
         if (!(this.token.nameid === chat.userID_first)) {
             this.displayPicture = chat.userPhoto_first;
             this.displayName = chat.userName_first;
@@ -136,13 +171,17 @@ export class UserMessagesComponent implements OnInit {
         }
 
         this.chatId = chat.id as string;
+        await this.setUserOnline();
+        await this.setFlags();
         await this.listenForMessages();
-        console.log(this.chatId);
+        console.log("Current chat id : ", this.chatId);
 
 
     }
 
     async onSuggestionSelected(user: IUserCard) {
+        console.log(this.chatId)
+        await this.setUserOffline();
         await this.checkForExistingChat(user);
     }
 

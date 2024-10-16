@@ -57,9 +57,9 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
                 await this.createNewChat(other_id);
             } else {
                 await this.setFlags();
-                await this.setUserOnline();
                 await this.listenForMessages();
             }
+            await this.setUserOnline();
         } catch (error) {
             console.error('Error fetching chat ID:', error);
         }
