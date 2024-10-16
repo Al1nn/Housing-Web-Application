@@ -156,7 +156,7 @@ export class ChatService {
     }
 
 
-    setFlag(chatId: string): Observable<void> { // Setez flagul seen = true, de la mesaj, si recalculez messagesCount
+    setFlag(chatId: string, userId: string): Observable<void> { // Setez flagul seen = true, de la mesaj, si recalculez messagesCount
         return this.db.object(`${this.chatPath}/${chatId}`).valueChanges().pipe(
             take(1),
             switchMap((chat: any) => {
@@ -164,7 +164,7 @@ export class ChatService {
                 let unseenCount = 0;
                 if (chat.messages) {
                     Object.keys(chat.messages).forEach(messageKey => {
-                        if (chat.messages[messageKey].seen === false) {
+                        if (chat.messages[messageKey].seen === false && chat.messages[messageKey].senderId !== userId) {
                             updates[`${this.chatPath}/${chatId}/messages/${messageKey}/seen`] = true;
                             unseenCount++;
                         }
@@ -202,7 +202,24 @@ export class ChatService {
 
 
 
+    setUserOnline(chatId: string, userId: string): Observable<void> {
+        return this.db.object(`chats/${chatId}`).valueChanges().pipe(
+            take(1),
+            switchMap((chat: any) => {
+                if (!chat) {
+                    throw new Error('Chat not found');
+                }
 
+                if (chat.userID_first === userId) {
+                    return from(this.db.object(`chats/${chatId}`).update({ userOnline_first: true }));
+                } else if (chat.userID_other === userId) {
+                    return from(this.db.object(`chats/${chatId}`).update({ userOnline_other: true }));
+                } else {
+                    throw new Error('User not found in this chat');
+                }
+            })
+        );
+    }
 
 
 }

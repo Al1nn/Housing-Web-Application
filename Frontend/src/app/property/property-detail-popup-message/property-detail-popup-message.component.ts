@@ -39,6 +39,11 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
             this.userCard = data;
             this.checkForExistingChat(this.userCard.id.toString())
         });
+
+        this.dialogRef.backdropClick().subscribe(async () => {
+            await this.setUserOffline();
+            this.dialogRef.close();
+        });
     }
 
 
@@ -51,6 +56,8 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
             if (this.chatId === null) {
                 await this.createNewChat(other_id);
             } else {
+                await this.setFlags();
+                await this.setUserOnline();
                 await this.listenForMessages();
             }
         } catch (error) {
@@ -65,6 +72,30 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
                 this.messages = messages;
                 this.scrollToBottom();
             });
+        }
+    }
+
+    private async setFlags() {
+        if (this.chatId) {
+            this.store.chatService.setFlag(this.chatId, this.token.nameid).subscribe(() => {
+                console.log("Flag set successfully");
+            });
+        }
+    }
+
+    private async setUserOffline() {
+        if (this.chatId) {
+            this.store.chatService.setUserOffline(this.chatId, this.token.nameid).subscribe(() => {
+                console.log("Current user set offline");
+            })
+        }
+    }
+
+    private async setUserOnline() {
+        if (this.chatId) {
+            this.store.chatService.setUserOnline(this.chatId, this.token.nameid).subscribe(() => {
+                console.log("Current user set ONLINE");
+            })
         }
     }
 
@@ -122,8 +153,12 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
         }, 100);
     }
 
-    closeEditModal() {
-
+    async closeEditModal() {
+        await this.setUserOffline();
         this.dialogRef.close();
     }
+
+
+
+    //Also If I click outside the modal I want to await this.setUserOffline()
 }
