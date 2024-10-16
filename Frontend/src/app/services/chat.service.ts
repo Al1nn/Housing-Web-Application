@@ -52,6 +52,7 @@ export class ChatService {
     createChat(messagesCount: number
         , userID_first: string, userName_first: string, userPhoto_first: string
         , userID_other: string, userName_other: string, userPhoto_other: string): Observable<string> {
+
         const newChat: IChat = {
             lastMessage: '',
             lastMessageDate: new Date().toLocaleString(),
@@ -61,6 +62,8 @@ export class ChatService {
             userID_other: userID_other,
             userName_other: userName_other,
             userPhoto_other: userPhoto_other,
+            userOnline_first: true,
+            userOnline_other: false,
             messagesCount: messagesCount,
             messages: [],
         };
@@ -73,14 +76,32 @@ export class ChatService {
     }
 
 
-    getChatById(chatId: string): Observable<IChat | null> {
+    getChatById(chatId: string, userId: string): Observable<IChat | null> {
         return this.db.object<IChat>(`${this.chatPath}/${chatId}`).valueChanges().pipe(
-            map(chat => {
+            take(1),
+            switchMap(chat => {
                 if (chat) {
-                    return { ...chat, id: chatId };
-                } else {
-                    return null;
+                    const updateObj = chat.userID_first === userId
+                        ? { userOnline_first: true }
+                        : { userOnline_other: true };
+
+                    return this.db.object(`${this.chatPath}/${chatId}`).update(updateObj).then(() => chat);
                 }
+                return Promise.resolve(null);
+            }),
+            map(chat => chat ? { ...chat, id: chatId } : null)
+        );
+    }
+
+
+    getMessagesFromChat(chatId: string): Observable<IMessage[]> {
+        return this.db.object<IChat>(`${this.chatPath}/${chatId}`).valueChanges().pipe(
+            map((chat: IChat | null) => {
+                if (!chat || !chat.messages) {
+                    return [];
+                }
+                // Convert the messages object into an array
+                return Object.values(chat.messages);
             })
         );
     }
@@ -88,7 +109,7 @@ export class ChatService {
     getAllChatsByUser(nameId: string): Observable<IChat[]> {
 
         const receiverChats$ = this.db.list<IChat>(this.chatPath, ref =>
-            ref.orderByChild('receiverID').equalTo(nameId)
+            ref.orderByChild('userID_first').equalTo(nameId)
         ).snapshotChanges().pipe(
             map(changes => changes.map(c => ({
                 id: c.payload.key,
@@ -97,7 +118,7 @@ export class ChatService {
         );
 
         const senderChats$ = this.db.list<IChat>(this.chatPath, ref =>
-            ref.orderByChild('senderID').equalTo(nameId)
+            ref.orderByChild('userID_other').equalTo(nameId)
         ).snapshotChanges().pipe(
             map(changes => changes.map(c => ({
                 id: c.payload.key,
@@ -158,6 +179,27 @@ export class ChatService {
             map(() => void 0)
         );
     }
+
+
+    setUserOffline(chatId: string, userId: string): Observable<void> {
+        return this.db.object(`chats/${chatId}`).valueChanges().pipe(
+            take(1),
+            switchMap((chat: any) => {
+                if (!chat) {
+                    throw new Error('Chat not found');
+                }
+
+                if (chat.userID_first === userId) {
+                    return from(this.db.object(`chats/${chatId}`).update({ userOnline_first: false }));
+                } else if (chat.userID_other === userId) {
+                    return from(this.db.object(`chats/${chatId}`).update({ userOnline_other: false }));
+                } else {
+                    throw new Error('User not found in this chat');
+                }
+            })
+        );
+    }
+
 
 
 

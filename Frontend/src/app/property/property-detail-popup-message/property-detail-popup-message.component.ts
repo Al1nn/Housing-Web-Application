@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IUserCard } from '../../models/IUserCard.interface';
@@ -6,7 +6,7 @@ import { StoreService } from '../../store_services/store.service';
 import { environment } from '../../../environments/environment';
 import { IMessage } from '../../models/IChat.interface';
 import { IToken } from '../../models/IToken.interface';
-import { Subscription } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -14,80 +14,89 @@ import { Subscription } from 'rxjs';
     templateUrl: './property-detail-popup-message.component.html',
     styleUrls: ['./property-detail-popup-message.component.css']
 })
-export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
+export class PropertyDetailPopupMessageComponent implements OnInit {
 
     messageControl = new FormControl('');
     thumbnailFolder: string = environment.thumbnailFolder;
+
+    token: IToken = this.store.authService.decodeToken() as IToken;
+
+
     userCard: IUserCard = {} as IUserCard;
-    chatId: string | null = null;
-    token: IToken = {} as IToken;
+
+
+
     messages: IMessage[];
 
 
     @ViewChild('endOfChat') endOfChat!: ElementRef;
-    private chatSubscription: Subscription | null = null;
-
+    chatId: string | null;
 
     constructor(public store: StoreService, private dialogRef: MatDialogRef<PropertyDetailPopupMessageComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-
-    ngOnDestroy(): void {
-        if (this.chatSubscription) {
-            this.chatSubscription.unsubscribe();
-        }
-    }
-
-
     ngOnInit(): void {
-        this.token = this.store.authService.decodeToken() as IToken;
         this.store.chatService.getPropertyOwner(this.data.postedBy).subscribe(data => {
             this.userCard = data;
-            this.initializeChat();
+            this.checkForExistingChat(this.userCard.id.toString())
         });
-
     }
 
 
-
-    initializeChat() {
-        this.store.chatService.findExistingChat(this.token.nameid, this.data.postedBy.toString()).subscribe(existingChatId => {
-            if (existingChatId) {
-                this.chatId = existingChatId;
-                this.loadChat();
+    private async checkForExistingChat(other_id: string) {
+        try {
+            this.chatId = await firstValueFrom(
+                this.store.chatService.findExistingChat(this.token.nameid, other_id)
+            );
+            console.log('Chat ID:', this.chatId);
+            if (this.chatId === null) {
+                await this.createNewChat(other_id);
             } else {
-                this.createChat();
+                await this.listenForMessages();
             }
-        });
+        } catch (error) {
+            console.error('Error fetching chat ID:', error);
+        }
     }
 
-    createChat() {
-        this.store.chatService.createChat(0, this.token.nameid, this.token.unique_name, this.token.profile_picture || '', this.userCard.id.toString(), this.userCard.username, this.userCard.photo || '').subscribe(data => {
-            this.chatId = data;
-        });
-    }
 
-    loadChat() {
+    private async listenForMessages() {
         if (this.chatId) {
-            this.chatSubscription = this.store.chatService.setFlag(this.chatId).subscribe(() => {
-
-            });
-            this.chatSubscription = this.store.chatService.getChatById(this.chatId).subscribe(chat => {
-                if (chat) {
-                    this.messages = Object.values(chat.messages);
-
-                    this.scrollToBottom();
-                }
+            this.store.chatService.getMessagesFromChat(this.chatId).subscribe(messages => {
+                this.messages = messages;
+                this.scrollToBottom();
             });
         }
     }
 
-    closeEditModal() {
-        this.dialogRef.close();
-    }
-    sendMessage() {
-        const input = this.messageControl.value;
+    private async createNewChat(other_id: string) {
+        const messageCount = 0;
+        const userNameOther = this.userCard.username;
+        const userPhotoOther = this.userCard.photo || '';
 
+        try {
+            this.chatId = await firstValueFrom(
+                this.store.chatService.createChat(
+                    messageCount,
+                    this.token.nameid,
+                    this.token.unique_name,
+                    this.token.profile_picture || '',
+                    other_id,
+                    userNameOther,
+                    userPhotoOther
+                )
+            );
+            console.log('New Chat Created with ID:', this.chatId);
+        } catch (error) {
+            console.error('Error creating new chat:', error);
+        }
+
+    }
+
+
+    async sendMessage() {
+        const input = this.messageControl.value;
         if (input && this.chatId) {
+
             const message: IMessage = {
                 senderId: this.token.nameid,
                 senderName: this.token.unique_name,
@@ -97,26 +106,11 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
                 text: input
             };
 
-            this.store.chatService.sendMessage(this.chatId, message).subscribe(
-                () => {
+            this.store.chatService.sendMessage(this.chatId, message).subscribe(() => {
 
-                    this.chatSubscription = this.store.chatService.getChatById(this.chatId as string).subscribe(chat => {
-                        if (chat) {
-                            this.messages = Object.values(chat.messages);
-                            this.scrollToBottom();
-                        }
-                    });
-
-
-                    this.messageControl.reset();
-
-                },
-                error => {
-                    console.error('Error sending message:', error);
-                }
-            );
-
-
+                this.messageControl.reset();
+            })
+            await this.listenForMessages();
         }
     }
 
@@ -126,5 +120,10 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
                 this.endOfChat.nativeElement.scrollIntoView({ behavior: 'smooth' });
             }
         }, 100);
+    }
+
+    closeEditModal() {
+
+        this.dialogRef.close();
     }
 }

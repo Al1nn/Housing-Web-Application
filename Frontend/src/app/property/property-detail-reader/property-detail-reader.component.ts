@@ -66,6 +66,8 @@ export class PropertyDetailReaderComponent implements OnInit {
                 'postedBy': this.property.postedBy
             }
         });
+
+
     }
 
 }

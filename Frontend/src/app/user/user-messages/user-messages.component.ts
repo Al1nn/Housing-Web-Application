@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, map, Observable, Subscription, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, firstValueFrom, map, Observable, switchMap } from 'rxjs';
 import { IUserCard } from '../../models/IUserCard.interface';
 import { StoreService } from '../../store_services/store.service';
 import { environment } from '../../../environments/environment';
@@ -14,35 +14,36 @@ import { IToken } from '../../models/IToken.interface';
     styleUrls: ['./user-messages.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserMessagesComponent implements OnInit, OnDestroy {
+export class UserMessagesComponent implements OnInit {
 
     searchControl = new FormControl('');
     chatListControl = new FormControl();
     messageControl = new FormControl('');
     filteredUsers$: Observable<IUserCard[]>;
     thumbnailFolder: string = environment.thumbnailFolder;
-    chatId: string | null = null;
-    chats$: Observable<IChat[]>;
-    token: IToken;
-    messages: IMessage[] = [];
+
+
+    token: IToken = this.store.authService.decodeToken() as IToken;
+
+    chats$: Observable<IChat[]> = this.store.chatService.getAllChatsByUser(this.token.nameid);
+
     @ViewChild('endOfChat') endOfChat!: ElementRef;
 
     displayPicture: string;
     displayName: string;
 
-    fcmToken: string;
-    chatSubscription: Subscription;
 
-    constructor(public store: StoreService, private cd: ChangeDetectorRef) { }
 
-    ngOnDestroy(): void {
-        if (this.chatSubscription) {
-            this.chatSubscription.unsubscribe();
-        }
-    }
+    chatId: string | null = null;
+    messages$: Observable<IMessage[]>;
+
+
+    constructor(public store: StoreService) { }
+
+
 
     ngOnInit(): void {
-        this.token = this.store.authService.decodeToken() as IToken;
+
 
         this.filteredUsers$ = this.searchControl.valueChanges.pipe(
             debounceTime(300),
@@ -50,12 +51,61 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             switchMap(value => this.filterUsers(value as string))
         );
 
-        if (this.token) {
-            this.chats$ = this.store.chatService.getAllChatsByUser(this.token.nameid);
+
+    }
+
+    private async checkForExistingChat(userCard: IUserCard) {
+
+        const userIdOther = userCard.id.toString();
+        try {
+            this.chatId = await firstValueFrom(
+                this.store.chatService.findExistingChat(this.token.nameid, userIdOther)
+            );
+            console.log('Chat ID:', this.chatId);
+            if (this.chatId === null) {
+                await this.createNewChat(userCard);
+            } else {
+                await this.listenForMessages();
+            }
+        } catch (error) {
+            console.error('Error fetching chat ID:', error);
         }
     }
 
-    sendMessage() {
+    private async listenForMessages() {
+        if (this.chatId) {
+            this.messages$ = this.store.chatService.getMessagesFromChat(this.chatId);
+        }
+    }
+
+
+
+    private async createNewChat(userCard: IUserCard) {
+        const messageCount = 0;
+        const userIdOther = userCard.id.toString();
+        const userNameOther = userCard.username;
+        const userPhotoOther = userCard.photo || '';
+
+        try {
+            this.chatId = await firstValueFrom(
+                this.store.chatService.createChat(
+                    messageCount,
+                    this.token.nameid,
+                    this.token.unique_name,
+                    this.token.profile_picture || '',
+                    userIdOther,
+                    userNameOther,
+                    userPhotoOther
+                )
+            );
+            console.log('New Chat Created with ID:', this.chatId);
+        } catch (error) {
+            console.error('Error creating new chat:', error);
+        }
+
+    }
+
+    async sendMessage() {
         const input = this.messageControl.value;
 
         if (input && this.chatId) {
@@ -68,33 +118,15 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
                 text: input
             };
 
+            this.store.chatService.sendMessage(this.chatId, message).subscribe(() => {
+                this.messageControl.reset();
+            });
 
-
-            this.store.chatService.sendMessage(this.chatId, message).subscribe(
-                () => {
-
-                    this.chatSubscription = this.store.chatService.getChatById(this.chatId as string).subscribe(chat => {
-                        if (chat) {
-                            this.messages = Object.values(chat.messages);
-
-
-                            this.scrollToBottom();
-                        }
-                    });
-
-                    this.messageControl.reset();
-
-                },
-                error => {
-                    console.error('Error sending message:', error);
-                }
-            );
-
-
+            await this.listenForMessages();
         }
     }
 
-    onOptionSelected(chat: IChat) {
+    async onOptionSelected(chat: IChat) {
         if (!(this.token.nameid === chat.userID_first)) {
             this.displayPicture = chat.userPhoto_first;
             this.displayName = chat.userName_first;
@@ -104,52 +136,14 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
         }
 
         this.chatId = chat.id as string;
-        if (chat.id) {
-            this.store.chatService.getChatById(chat.id).subscribe((data: any) => {
-                if (data.messages) {
-                    this.messages = Object.values(data.messages);
+        await this.listenForMessages();
+        console.log(this.chatId);
 
-                    //Aici de facut TOATE mesajele seen: boolean = true 
 
-                    this.scrollToBottom();
-                } else {
-                    this.messages = [];
-                }
-                this.cd.detectChanges();
-            });
-        }
     }
 
-    onSuggestionSelected(user: IUserCard) {
-        this.store.chatService.findExistingChat(user.id.toString(), this.token.nameid).pipe(
-            switchMap(chatId => {
-                if (chatId) {
-                    return this.store.chatService.getChatById(chatId);
-                } else {
-                    this.messages = [];
-                    return this.store.chatService.createChat(0, user.id.toString(), user.photo || '', user.username,
-                        this.token.nameid, this.token.profile_picture || '', this.token.unique_name).pipe(
-                            switchMap(newChatId => this.store.chatService.getChatById(newChatId))
-                        );
-                }
-            })
-        ).subscribe(chat => {
-            if (chat) {
-                this.chatId = chat.id as string;
-                this.displayName = chat.userName_other;
-                this.displayPicture = chat.userPhoto_other;
-                if (chat.messages) {
-                    this.messages = Object.values(chat.messages);
-
-                    //Aici de facut TOATE mesajele seen: boolean = true 
-
-
-                }
-
-                this.scrollToBottom();
-                this.cd.detectChanges();
-            }
-        });
+    async onSuggestionSelected(user: IUserCard) {
+        await this.checkForExistingChat(user);
     }
 
     private filterUsers(value: string | IUserCard): Observable<IUserCard[]> {

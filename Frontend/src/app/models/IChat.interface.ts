@@ -8,6 +8,8 @@ export interface IChat {
     userID_other: string;
     userName_other: string;
     userPhoto_other: string;
+    userOnline_first: boolean;
+    userOnline_other: boolean;
     messagesCount: number;
     messages: IMessage[];
 }

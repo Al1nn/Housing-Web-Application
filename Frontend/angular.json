@@ -32,8 +32,7 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              "src/firebase-messaging-sw.js" 
+              "src/assets"
             ],
             "styles": [
               "node_modules/ngx-toastr/toastr.css",
@@ -118,8 +117,7 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              "src/firebase-messaging-sw.js" 
+              "src/assets"
             ],
             "styles": [
               "node_modules/ngx-toastr/toastr.css",
