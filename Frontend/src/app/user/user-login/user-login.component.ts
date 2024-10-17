@@ -33,7 +33,7 @@ export class UserLoginComponent implements OnInit {
 
     constructor(
         private store: StoreService,
-        private router: Router,
+        private router: Router
     ) { }
 
     getSelectedRoles(): string[] {
@@ -60,6 +60,7 @@ export class UserLoginComponent implements OnInit {
             (response: IUserForLogin) => {
                 const user = response;
                 localStorage.setItem('token', user.token);
+                this.store.setLoggedIn(true);
                 this.store.alertifyService.success('Login successful');
                 this.router.navigate(['/']);
             },

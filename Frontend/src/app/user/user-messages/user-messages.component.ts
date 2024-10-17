@@ -24,9 +24,9 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
     thumbnailFolder: string = environment.thumbnailFolder;
 
 
-    token: IToken = this.store.authService.decodeToken() as IToken;
+    token: IToken;
 
-    chats$: Observable<IChat[]> = this.store.chatService.getAllChatsByUser(this.token.nameid);
+    chats$: Observable<IChat[]>;
 
     @ViewChild('endOfChat') endOfChat!: ElementRef;
 
@@ -41,7 +41,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
 
     constructor(public store: StoreService) { }
     ngOnDestroy(): void {
-        console.log({ arguments });
+
         this.setUserOffline();
     }
 
@@ -53,14 +53,14 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-
+        this.token = this.store.authService.decodeToken() as IToken;
         this.filteredUsers$ = this.searchControl.valueChanges.pipe(
             debounceTime(300),
             distinctUntilChanged(),
             switchMap(value => this.filterUsers(value as string))
         );
 
-
+        this.chats$ = this.store.chatService.getAllChatsByUser(this.token.nameid);
     }
 
     private async checkForExistingChat(userCard: IUserCard) {
@@ -130,8 +130,17 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             this.store.chatService.sendMessage(this.chatId, message).subscribe(() => {
                 this.messageControl.reset();
             });
-
+            await this.notify();
             await this.listenForMessages();
+        }
+    }
+
+    private async notify() {
+        if (this.token) {
+            this.store.chatService.getAllNotifications(this.token.nameid).subscribe(data => {
+                this.store.updateNotifications(data); // Implement this in your chat service
+                this.store.setMatBadger(data.length);
+            });
         }
     }
 

@@ -5,6 +5,7 @@ import { combineLatest, from, map, Observable, of, switchMap, take } from 'rxjs'
 import { IUserCard } from '../models/IUserCard.interface';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
 import { IChat, IMessage } from '../models/IChat.interface';
+import { INotification } from '../models/INotification.interface';
 @Injectable({
     providedIn: 'root'
 })
@@ -243,5 +244,39 @@ export class ChatService {
         );
     }
 
+    getAllNotifications(userId: string): Observable<INotification[]> {
+        return this.db.list('chats').snapshotChanges().pipe(
+            map(changes =>
+                changes
+                    .map(c => ({ key: c.payload.key, ...c.payload.val() as any }))
+                    .filter(chat =>
+                        (chat['userID_first'] === userId || chat['userID_other'] === userId) &&
+                        chat['messagesCount'] > 0 // Chat must have messages
+                    )
+                    .map(chat => {
+                        // Get the last message in the chat
+                        const messages = Object.values(chat.messages);
+                        const lastMessage: IMessage = messages[messages.length - 1] as IMessage;
+
+                        // Ensure the last message was sent by the other user and is not seen yet
+                        if (lastMessage.senderId !== userId && !lastMessage.seen) {
+                            // Create a notification based on the sender's details
+                            const notification: INotification = {
+                                notification: `New message from ${lastMessage.senderName}`,
+                                userName: lastMessage.senderName,
+                                userPicture: lastMessage.senderPhoto || '/assets/user_images/user_default.jpg'
+                            };
+
+                            return notification;
+                        } else {
+                            // Return null for messages that don't meet the condition
+                            return null;
+                        }
+                    })
+                    // Filter out any null results where no notification is required
+                    .filter(notification => notification !== null)
+            )
+        );
+    }
 
 }

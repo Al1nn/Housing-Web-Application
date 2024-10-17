@@ -141,8 +141,17 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
 
                 this.messageControl.reset();
             });
-
+            await this.notify();
             await this.listenForMessages();
+        }
+    }
+
+    private async notify() {
+        if (this.token) {
+            this.store.chatService.getAllNotifications(this.token.nameid).subscribe(data => {
+                this.store.updateNotifications(data);
+                this.store.setMatBadger(data.length);
+            });
         }
     }
 
