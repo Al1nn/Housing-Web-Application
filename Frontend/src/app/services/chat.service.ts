@@ -246,37 +246,32 @@ export class ChatService {
 
     getAllNotifications(userId: string): Observable<INotification[]> {
         return this.db.list('chats').snapshotChanges().pipe(
-            map(changes =>
-                changes
+            map(changes => {
+                const notifications = changes
                     .map(c => ({ key: c.payload.key, ...c.payload.val() as any }))
                     .filter(chat =>
                         (chat['userID_first'] === userId || chat['userID_other'] === userId) &&
-                        chat['messagesCount'] > 0 // Chat must have messages
+                        chat['messagesCount'] > 0
                     )
                     .map(chat => {
-                        // Get the last message in the chat
-                        const messages = Object.values(chat.messages);
+                        const messages = Object.values(chat.messages || {});
                         const lastMessage: IMessage = messages[messages.length - 1] as IMessage;
 
-                        // Ensure the last message was sent by the other user and is not seen yet
-                        if (lastMessage.senderId !== userId && !lastMessage.seen) {
-                            // Create a notification based on the sender's details
-                            const notification: INotification = {
+                        if (!lastMessage.seen) {
+                            return {
                                 notification: `New message from ${lastMessage.senderName}`,
                                 userName: lastMessage.senderName,
                                 userPicture: lastMessage.senderPhoto || '/assets/user_images/user_default.jpg'
                             };
-
-                            return notification;
-                        } else {
-                            // Return null for messages that don't meet the condition
-                            return null;
                         }
+                        return null;
                     })
-                    // Filter out any null results where no notification is required
-                    .filter(notification => notification !== null)
-            )
+                    .filter(notification => notification !== null);
+
+                return notifications;
+            })
         );
     }
+
 
 }

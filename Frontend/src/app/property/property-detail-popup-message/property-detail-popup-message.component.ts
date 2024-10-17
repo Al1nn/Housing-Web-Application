@@ -150,7 +150,10 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
         if (this.token) {
             this.store.chatService.getAllNotifications(this.token.nameid).subscribe(data => {
                 this.store.updateNotifications(data);
+                console.log("Notifications : ", data);
+
                 this.store.setMatBadger(data.length);
+                console.log("Notifications Length : ", data.length);
             });
         }
     }

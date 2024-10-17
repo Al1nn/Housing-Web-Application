@@ -44,7 +44,6 @@ export class NavBarComponent implements OnInit {
         }));
 
 
-
         this.checkForLoggedIn();
     }
 
@@ -52,12 +51,14 @@ export class NavBarComponent implements OnInit {
     hasNotification(): Boolean {
         this.subscription.add(this.store.matBadger$.subscribe(data => {
             this.matBadger = data;
+            console.log(data);
         }))
 
         this.subscription.add(this.store.notifications$.subscribe(data => {
             this.newNotifications = data;
+            console.log(data);
         }))
-        console.log({ arguments })
+
         return this.matBadger !== 0;
     }
 
