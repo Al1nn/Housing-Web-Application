@@ -130,22 +130,12 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             this.store.chatService.sendMessage(this.chatId, message).subscribe(() => {
                 this.messageControl.reset();
             });
-            await this.notify();
+
             await this.listenForMessages();
         }
     }
 
-    private async notify() {
-        if (this.token) {
-            this.store.chatService.getAllNotifications(this.token.nameid).subscribe(data => {
-                this.store.updateNotifications(data);
-                console.log("Notifications : ", data);
 
-                this.store.setMatBadger(data.length);
-                console.log("Notifications Length : ", data.length);
-            });
-        }
-    }
 
     private async setFlags() {
         if (this.chatId) {

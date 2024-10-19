@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { IUserCard } from '../../models/IUserCard.interface';
@@ -14,7 +14,7 @@ import { firstValueFrom } from 'rxjs';
     templateUrl: './property-detail-popup-message.component.html',
     styleUrls: ['./property-detail-popup-message.component.css']
 })
-export class PropertyDetailPopupMessageComponent implements OnInit {
+export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
 
     messageControl = new FormControl('');
     thumbnailFolder: string = environment.thumbnailFolder;
@@ -33,6 +33,9 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
     chatId: string | null;
 
     constructor(public store: StoreService, private dialogRef: MatDialogRef<PropertyDetailPopupMessageComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
+    ngOnDestroy(): void {
+        this.setUserOffline();
+    }
 
     ngOnInit(): void {
         this.store.chatService.getPropertyOwner(this.data.postedBy).subscribe(data => {
@@ -57,6 +60,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
                 await this.createNewChat(other_id);
             } else {
                 await this.setFlags();
+                await this.deleteNotifications();
                 await this.listenForMessages();
             }
             await this.setUserOnline();
@@ -71,6 +75,14 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
             this.store.chatService.getMessagesFromChat(this.chatId).subscribe(messages => {
                 this.messages = messages;
                 this.scrollToBottom();
+            });
+        }
+    }
+
+    private async deleteNotifications() {
+        if (this.token) {
+            this.store.chatService.deleteNotifications(this.token.nameid, this.data.postedBy).subscribe(() => {
+                console.log("Notification deleted successfully");
             });
         }
     }
@@ -141,22 +153,12 @@ export class PropertyDetailPopupMessageComponent implements OnInit {
 
                 this.messageControl.reset();
             });
-            await this.notify();
+
             await this.listenForMessages();
         }
     }
 
-    private async notify() {
-        if (this.token) {
-            this.store.chatService.getAllNotifications(this.token.nameid).subscribe(data => {
-                this.store.updateNotifications(data);
-                console.log("Notifications : ", data);
 
-                this.store.setMatBadger(data.length);
-                console.log("Notifications Length : ", data.length);
-            });
-        }
-    }
 
     scrollToBottom() {
         setTimeout(() => {

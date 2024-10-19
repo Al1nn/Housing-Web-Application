@@ -23,10 +23,10 @@
 
     <div class="dropdown notification-dropdown" dropdown>
       <button mat-icon-button class="me-2"   aria-label="Notifications" dropdownToggle (click)="false">
-        <mat-icon style="color: white;"  [matBadge]="matBadger$ | async" aria-hidden="false" >notifications</mat-icon>
+        <mat-icon style="color: white;"  [matBadge]="0" aria-hidden="false" >notifications</mat-icon>
       </button>
       <div class="dropdown-menu notification-menu"  *dropdownMenu>
-          <div *ngFor="let notification of notifications$ | async" class="dropdown-item">
+          <div *ngFor="let notification of newNotifications" class="dropdown-item">
             <img class="img-fluid rounded-circle user-image" *ngIf="notification.userPicture; else noPicture" 
                 [src]="thumbnailFolder + notification.userPicture" alt="User Profile Picture">
             <ng-template #noPicture>

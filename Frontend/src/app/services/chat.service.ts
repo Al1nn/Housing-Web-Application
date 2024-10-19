@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { combineLatest, from, map, Observable, of, switchMap, take } from 'rxjs';
+import { catchError, combineLatest, forkJoin, from, map, Observable, of, switchMap, take, throwError } from 'rxjs';
 import { IUserCard } from '../models/IUserCard.interface';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
 import { IChat, IMessage } from '../models/IChat.interface';
-import { INotification } from '../models/INotification.interface';
+import { INotification, IUser } from '../models/INotification.interface';
 @Injectable({
     providedIn: 'root'
 })
@@ -143,7 +143,7 @@ export class ChatService {
             take(1),
             switchMap((chat: any) => {
                 const currentCount = chat.messagesCount || 0;
-                const messageKey = this.db.createPushId(); // Create the message key once
+                const messageKey = this.db.createPushId(); // Create the message key once 
 
                 const updates = {
                     [`${this.chatPath}/${chatId}/messages/${messageKey}`]: message,
@@ -163,15 +163,24 @@ export class ChatService {
                             };
                             return from(this.db.object('/').update(seenUpdate));
                         } else {
-                            return of(void 0); // No need to update 'seen' flag if users are not online
+                            // Call sendNotification when either user is offline
+                            const notifyObservable = message.senderId !== chat.userID_first
+                                ? this.sendNotification(chat.userID_first, chat.userName_first, message)
+                                : this.sendNotification(chat.userID_other, chat.userName_other, message);
+
+                            // Make sure the notification is properly subscribed to
+                            return notifyObservable.pipe(
+                                map(() => void 0)  // Ensure this doesn't break the observable chain
+                            );
                         }
                     })
                 );
             })
         )).pipe(
-            map(() => void 0)
+            map(() => void 0) // Ensure the final return is void
         );
     }
+
 
 
 
@@ -244,34 +253,101 @@ export class ChatService {
         );
     }
 
-    getAllNotifications(userId: string): Observable<INotification[]> {
-        return this.db.list('chats').snapshotChanges().pipe(
-            map(changes => {
-                const notifications = changes
-                    .map(c => ({ key: c.payload.key, ...c.payload.val() as any }))
-                    .filter(chat =>
-                        (chat['userID_first'] === userId || chat['userID_other'] === userId) &&
-                        chat['messagesCount'] > 0
-                    )
-                    .map(chat => {
-                        const messages = Object.values(chat.messages || {});
-                        const lastMessage: IMessage = messages[messages.length - 1] as IMessage;
+    private sendNotification(other_id: string, userName_other: string, message: IMessage) {
+        const notification: INotification = {
+            userId: message.senderId,
+            userName: message.senderName,
+            userPicture: message.senderPhoto,
+            notification: `New message from ${message.senderName}`,
+            dateTime: new Date().toLocaleString()
+        };
 
-                        if (!lastMessage.seen) {
-                            return {
-                                notification: `New message from ${lastMessage.senderName}`,
-                                userName: lastMessage.senderName,
-                                userPicture: lastMessage.senderPhoto || '/assets/user_images/user_default.jpg'
-                            };
-                        }
-                        return null;
+        const userRef = this.db.object<IUser>(`users/${other_id}`);
+
+        return userRef.valueChanges().pipe(
+            take(1),
+            switchMap((existingUser: IUser | null) => {
+                if (existingUser) {
+                    console.log("Existing doc User");
+
+                    // Change: Use object reference instead of list
+                    const notificationsRef = this.db.object<{ [key: number]: INotification }>(`users/${other_id}/notifications`);
+
+                    return notificationsRef.valueChanges().pipe(
+                        take(1),
+                        switchMap((notifications: { [key: number]: INotification } | null) => {
+                            const notificationArray = notifications ? Object.values(notifications) : [];
+                            const isDuplicate = notificationArray.some((n: INotification) =>
+                                n.userName === notification.userName &&
+                                n.notification === notification.notification
+                            );
+
+                            if (!isDuplicate) {
+                                // Change: Use set with numeric index instead of push
+                                const newIndex = notificationArray.length;
+                                return from(notificationsRef.update({ [newIndex]: notification }));
+                            } else {
+                                console.log("Duplicate notification found, skipping.");
+                                return of(null);
+                            }
+                        })
+                    );
+                } else {
+                    console.log("Creating doc USER");
+
+                    const newUser: IUser = {
+                        userId: other_id,
+                        userName: userName_other,
+                        notifications: [notification]
+                    };
+                    return from(userRef.set(newUser));
+                }
+            }),
+            map(() => void 0) // Return void once the operation is complete
+        );
+    }
+
+    deleteNotifications(currentUserID: string, otherUserID: string): Observable<void> {
+        const notificationsRef = this.db.list(`users/${currentUserID}/notifications`);
+
+        return notificationsRef.snapshotChanges().pipe(
+            take(1),
+            switchMap((notifications) => {
+                const deletionObservables = notifications
+                    .filter(notification => {
+                        const value = notification.payload.val();
+                        return value && typeof value === 'object' && 'userId' in value && value.userId === otherUserID;
                     })
-                    .filter(notification => notification !== null);
+                    .map(notification => {
+                        console.log(`Deleting notification with key: ${notification.key}`);
+                        return from(notificationsRef.remove(notification.key!));
+                    });
 
-                return notifications;
+                return forkJoin(deletionObservables.length ? deletionObservables : [of(null)]);
+            }),
+            switchMap(() => {
+                // Check if notifications were actually deleted
+                return notificationsRef.valueChanges().pipe(
+                    take(1),
+                    map(remainingNotifications => {
+                        console.log("Remaining notifications:", remainingNotifications);
+                        if (remainingNotifications.length > 0) {
+                            console.warn("Notifications still exist after deletion attempt");
+                        } else {
+                            console.log("All notifications successfully deleted");
+                        }
+                    })
+                );
+            }),
+            catchError(error => {
+                console.error("Error in deletion process:", error);
+                return throwError(error);
             })
         );
     }
+
+
+
 
 
 }

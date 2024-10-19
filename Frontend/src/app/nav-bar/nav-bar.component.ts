@@ -3,7 +3,7 @@ import { environment } from '../../environments/environment';
 import { StoreService } from '../store_services/store.service';
 import { INotification } from '../models/INotification.interface';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-nav-bar',
@@ -19,8 +19,7 @@ export class NavBarComponent implements OnInit {
     originalFolder: string = environment.originalPictureFolder;
 
 
-    notifications$: Observable<INotification[]> = this.store.notifications$;
-    matBadger$: Observable<number> = this.store.matBadger$;
+
 
     matBadger: number;
     newNotifications: INotification[];
@@ -48,19 +47,6 @@ export class NavBarComponent implements OnInit {
     }
 
 
-    hasNotification(): Boolean {
-        this.subscription.add(this.store.matBadger$.subscribe(data => {
-            this.matBadger = data;
-            console.log(data);
-        }))
-
-        this.subscription.add(this.store.notifications$.subscribe(data => {
-            this.newNotifications = data;
-            console.log(data);
-        }))
-
-        return this.matBadger !== 0;
-    }
 
     ngOnDestroy(): void {
         this.subscription.unsubscribe();
