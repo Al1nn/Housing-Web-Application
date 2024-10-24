@@ -21,23 +21,34 @@
 
   
 
-    <div class="dropdown notification-dropdown" dropdown>
+    <div class="dropdown notification-dropdown" dropdown *ngIf="matBadger > 0 ; else noNotifications">
       <button mat-icon-button class="me-2"   aria-label="Notifications" dropdownToggle (click)="false">
-        <mat-icon style="color: white;"  [matBadge]="0" aria-hidden="false" >notifications</mat-icon>
+        <mat-icon style="color: white;"  [matBadge]="matBadger" aria-hidden="false" >notifications</mat-icon>
       </button>
-      <div class="dropdown-menu notification-menu"  *dropdownMenu>
-          <div *ngFor="let notification of newNotifications" class="dropdown-item">
-            <img class="img-fluid rounded-circle user-image" *ngIf="notification.userPicture; else noPicture" 
-                [src]="thumbnailFolder + notification.userPicture" alt="User Profile Picture">
+      <div class="dropdown-menu notification-menu" *dropdownMenu>
+        <div *ngFor="let notification of newNotifications; let i = index;" class="dropdown-item" routerLink="/user/messages">
+          <div class="notification-avatar">
+            <img class="user-image" *ngIf="notification.userPicture; else noPicture" 
+              [src]="thumbnailFolder + notification.userPicture" 
+              alt="User Profile Picture">
             <ng-template #noPicture>
-              <img class="img-fluid rounded-circle user-image" src="/assets/user_images/user_default.jpg" alt="Default User Image">
+              <img class="user-image" src="/assets/user_images/user_default.jpg" alt="Default User Image">
             </ng-template>
-            <div class="d-grid">
-              <p>{{notification.userName}}</p>
-              <strong >{{notification.notification}}</strong>
-            </div>
-            
           </div>
+          <div class="notification-content">
+            <div class="notification-header">
+              <span class="user-name">{{notification.userName}}</span>
+              <div class="notification-actions">
+                <span class="notification-time">{{notification.dateTime | date:'shortTime'}}</span>
+               
+              </div>
+            </div>
+            <p class="notification-message">{{notification.notification}}</p>
+          </div>
+          <!-- <button mat-icon-button class="delete-button" (click)="deleteNotification(i); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button> -->
+        </div>
       </div>
     </div>
 
@@ -90,6 +101,11 @@
       <button mat-icon-button class="me-2"   aria-label="Notifications" dropdownToggle (click)="false">
         <mat-icon style="color: white;"  aria-hidden="false" >notifications</mat-icon>
       </button>
+      <div class="dropdown-menu notification-menu"  style="height: 60px; overflow-y: unset;"  *dropdownMenu>
+        <div class="dropdown-item">
+          <strong>No New Notifications</strong>
+        </div>
+      </div>
     </div>  
   </ng-template>
 

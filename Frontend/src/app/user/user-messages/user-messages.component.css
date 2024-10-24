@@ -70,6 +70,36 @@ mat-list-option:last-child{
     margin-bottom: 5px; /* Margin to separate from the date */
 }
 
+.message-count {
+    position: absolute;
+    right: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #1976d2; 
+    color: white;
+    border-radius: 50%;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 0 6px;
+  }
+  
+ 
+  .message-count {
+    min-width: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+  }
+  
+  
+  .message-count {
+    transition: all 0.2s ease;
+  }
+
 .chat-header {
     display: flex;
     justify-content: space-between;

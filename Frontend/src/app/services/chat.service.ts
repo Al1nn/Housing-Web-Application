@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, combineLatest, forkJoin, from, map, Observable, of, switchMap, take, throwError } from 'rxjs';
+import { catchError, combineLatest, from, map, Observable, of, switchMap, take, throwError } from 'rxjs';
 import { IUserCard } from '../models/IUserCard.interface';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
+import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
 import { IChat, IMessage } from '../models/IChat.interface';
 import { INotification, IUser } from '../models/INotification.interface';
 @Injectable({
@@ -101,7 +101,7 @@ export class ChatService {
                 if (!chat || !chat.messages) {
                     return [];
                 }
-                // Convert the messages object into an array
+
                 return Object.values(chat.messages);
             })
         );
@@ -143,7 +143,7 @@ export class ChatService {
             take(1),
             switchMap((chat: any) => {
                 const currentCount = chat.messagesCount || 0;
-                const messageKey = this.db.createPushId(); // Create the message key once 
+                const messageKey = this.db.createPushId();
 
                 const updates = {
                     [`${this.chatPath}/${chatId}/messages/${messageKey}`]: message,
@@ -152,32 +152,32 @@ export class ChatService {
                     [`${this.chatPath}/${chatId}/messagesCount`]: currentCount + 1
                 };
 
-                // First update the new message
+
                 return from(this.db.object('/').update(updates)).pipe(
                     switchMap(() => {
-                        // Check if both users are online to update the 'seen' flag
+
                         if (chat.userOnline_first && chat.userOnline_other) {
                             const seenUpdate = {
                                 [`${this.chatPath}/${chatId}/messages/${messageKey}/seen`]: true,
-                                [`${this.chatPath}/${chatId}/messagesCount`]: 0 // Reset unseen message count
+                                [`${this.chatPath}/${chatId}/messagesCount`]: 0
                             };
                             return from(this.db.object('/').update(seenUpdate));
                         } else {
-                            // Call sendNotification when either user is offline
+
                             const notifyObservable = message.senderId !== chat.userID_first
                                 ? this.sendNotification(chat.userID_first, chat.userName_first, message)
                                 : this.sendNotification(chat.userID_other, chat.userName_other, message);
 
-                            // Make sure the notification is properly subscribed to
+
                             return notifyObservable.pipe(
-                                map(() => void 0)  // Ensure this doesn't break the observable chain
+                                map(() => void 0)
                             );
                         }
                     })
                 );
             })
         )).pipe(
-            map(() => void 0) // Ensure the final return is void
+            map(() => void 0)
         );
     }
 
@@ -270,8 +270,8 @@ export class ChatService {
                 if (existingUser) {
                     console.log("Existing doc User");
 
-                    // Change: Use object reference instead of list
-                    const notificationsRef = this.db.object<{ [key: number]: INotification }>(`users/${other_id}/notifications`);
+
+                    const notificationsRef = this.db.list<INotification>(`users/${other_id}/notifications`);
 
                     return notificationsRef.valueChanges().pipe(
                         take(1),
@@ -283,9 +283,9 @@ export class ChatService {
                             );
 
                             if (!isDuplicate) {
-                                // Change: Use set with numeric index instead of push
-                                const newIndex = notificationArray.length;
-                                return from(notificationsRef.update({ [newIndex]: notification }));
+
+
+                                return from(notificationsRef.push(notification));
                             } else {
                                 console.log("Duplicate notification found, skipping.");
                                 return of(null);
@@ -293,61 +293,76 @@ export class ChatService {
                         })
                     );
                 } else {
-                    console.log("Creating doc USER");
+                    console.log("Creating new user document");
 
-                    const newUser: IUser = {
-                        userId: other_id,
-                        userName: userName_other,
-                        notifications: [notification]
-                    };
-                    return from(userRef.set(newUser));
+
+                    const newUserRef = this.db.object<IUser>(`users/${other_id}`);
+                    const notificationsListRef = this.db.list<INotification>(`users/${other_id}/notifications`);
+
+                    return from(newUserRef.set({ userId: other_id, userName: userName_other, notifications: [] })).pipe(
+                        switchMap(() => notificationsListRef.push(notification))
+                    );
                 }
             }),
-            map(() => void 0) // Return void once the operation is complete
+            map(() => void 0)
         );
     }
 
-    deleteNotifications(currentUserID: string, otherUserID: string): Observable<void> {
-        const notificationsRef = this.db.list(`users/${currentUserID}/notifications`);
+    deleteNotification(currentUserID: string, otherUserID: string): Observable<void> {
+        const notificationsRef: AngularFireObject<{ [key: string]: any }> = this.db.object(`users/${currentUserID}/notifications`);
 
-        return notificationsRef.snapshotChanges().pipe(
+        return notificationsRef.valueChanges().pipe(
             take(1),
-            switchMap((notifications) => {
-                const deletionObservables = notifications
-                    .filter(notification => {
-                        const value = notification.payload.val();
-                        return value && typeof value === 'object' && 'userId' in value && value.userId === otherUserID;
-                    })
-                    .map(notification => {
-                        console.log(`Deleting notification with key: ${notification.key}`);
-                        return from(notificationsRef.remove(notification.key!));
-                    });
+            switchMap((notifications: { [key: string]: any } | null) => {
+                if (!notifications) {
+                    console.log("No notifications found");
+                    return of(void 0);
+                }
 
-                return forkJoin(deletionObservables.length ? deletionObservables : [of(null)]);
+                const updatedNotifications: { [key: string]: any } = {};
+                let hasChanges = false;
+
+                Object.entries(notifications).forEach(([key, value]) => {
+                    if (typeof value === 'object' && value.userId !== otherUserID) {
+                        updatedNotifications[key] = value;
+                    } else {
+                        hasChanges = true;
+                        console.log(`Removing notification with key: ${key}`);
+                    }
+                });
+
+                if (hasChanges) {
+                    return from(notificationsRef.set(updatedNotifications));
+                } else {
+                    console.log("No notifications to remove");
+                    return of(void 0);
+                }
             }),
-            switchMap(() => {
-                // Check if notifications were actually deleted
-                return notificationsRef.valueChanges().pipe(
-                    take(1),
-                    map(remainingNotifications => {
-                        console.log("Remaining notifications:", remainingNotifications);
-                        if (remainingNotifications.length > 0) {
-                            console.warn("Notifications still exist after deletion attempt");
-                        } else {
-                            console.log("All notifications successfully deleted");
-                        }
-                    })
-                );
+            map(() => {
+                console.log("Notifications update process completed");
             }),
             catchError(error => {
-                console.error("Error in deletion process:", error);
-                return throwError(error);
+                console.error("Error in notification removal process:", error);
+                return throwError(() => new Error("Failed to remove notifications"));
             })
         );
     }
 
+    deleteNotificationAtIndex(userId: string, notificationIndex: number): Promise<void> {
+        return this.db.object(`users/${userId}/notifications/${notificationIndex}`).remove();
+    }
 
-
-
+    listenToNotifications(userId: string): Observable<INotification[]> {
+        return this.db.object<{ [key: string]: INotification }>(`users/${userId}/notifications`)
+            .valueChanges()
+            .pipe(
+                map(notifications => {
+                    if (!notifications) {
+                        return [];
+                    }
+                    return Object.values(notifications);
+                })
+            );
+    }
 
 }

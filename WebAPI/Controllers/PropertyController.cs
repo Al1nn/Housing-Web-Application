@@ -287,7 +287,7 @@ namespace WebAPI.Controllers
             return Ok(propertyCount);
         }
 
-        //property/add
+        //property/detail
         [HttpGet("detail/{id}")]
         [AllowAnonymous]
 
@@ -421,6 +421,8 @@ namespace WebAPI.Controllers
             // Set other properties
             property.PostedBy = userId;
             property.LastUpdatedBy = userId;
+
+            Console.WriteLine(property.Photos);
             // Add property to repository
             uow.PropertyRepository.AddProperty(property);
 

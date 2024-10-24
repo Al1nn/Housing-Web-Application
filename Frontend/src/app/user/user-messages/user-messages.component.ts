@@ -41,15 +41,8 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
 
     constructor(public store: StoreService) { }
     ngOnDestroy(): void {
-
         this.setUserOffline();
     }
-
-
-
-
-
-
 
     ngOnInit(): void {
 
@@ -67,9 +60,13 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
 
         const userIdOther = userCard.id.toString();
         try {
+
             this.chatId = await firstValueFrom(
                 this.store.chatService.findExistingChat(this.token.nameid, userIdOther)
             );
+            this.store.chatService.deleteNotification(this.token.nameid, userCard.id.toString()).subscribe(() => {
+                console.log("Notifications Deleted Successfully");
+            });
             console.log('Chat ID:', this.chatId);
             if (this.chatId === null) {
                 await this.createNewChat(userCard);
@@ -169,16 +166,22 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
         }
 
 
-
         if (!(this.token.nameid === chat.userID_first)) {
+            this.store.chatService.deleteNotification(chat.userID_other, chat.userID_first).subscribe(() => {
+                console.log("Notification deleted succesfully");
+            });
             this.displayPicture = chat.userPhoto_first;
             this.displayName = chat.userName_first;
         } else {
+            this.store.chatService.deleteNotification(chat.userID_first, chat.userID_other).subscribe(() => {
+                console.log("Notification deleted succesfully");
+            });
             this.displayPicture = chat.userPhoto_other;
             this.displayName = chat.userName_other;
         }
 
         this.chatId = chat.id as string;
+
         await this.setUserOnline();
         await this.setFlags();
         await this.listenForMessages();
@@ -192,6 +195,9 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
         await this.setUserOffline();
         await this.checkForExistingChat(user);
     }
+
+
+
 
     private filterUsers(value: string | IUserCard): Observable<IUserCard[]> {
         const filterValue = typeof value === 'string' ? value.toLowerCase() : '';

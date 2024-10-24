@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { StoreService } from '../store_services/store.service';
 import { INotification } from '../models/INotification.interface';
@@ -12,6 +12,9 @@ import { Subscription } from 'rxjs';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavBarComponent implements OnInit {
+
+
+
     loggedIn: boolean = false;
     loggedInUser: string | undefined;
     profilePicture: string | undefined;
@@ -21,7 +24,7 @@ export class NavBarComponent implements OnInit {
 
 
 
-    matBadger: number;
+    matBadger: number = 0;
     newNotifications: INotification[];
 
     private subscription: Subscription = new Subscription();
@@ -29,6 +32,7 @@ export class NavBarComponent implements OnInit {
     constructor(
         public store: StoreService,
         private router: Router,
+        private cdr: ChangeDetectorRef
     ) { }
 
     ngOnInit(): void {
@@ -36,6 +40,7 @@ export class NavBarComponent implements OnInit {
             this.loggedIn = loggedIn;
             if (this.loggedIn) {
                 this.checkUserDetails();
+
             } else {
                 this.loggedInUser = undefined;
                 this.profilePicture = undefined;
@@ -62,6 +67,17 @@ export class NavBarComponent implements OnInit {
         if (token) {
             this.loggedInUser = token.unique_name;
             this.profilePicture = token.profile_picture;
+
+            this.subscription.add(
+                this.store.chatService.listenToNotifications(token.nameid).subscribe(
+                    notifications => {
+                        this.newNotifications = notifications;
+                        this.matBadger = notifications.length;
+
+                        this.cdr.detectChanges();
+                    }
+                )
+            );
         }
     }
 
@@ -80,7 +96,17 @@ export class NavBarComponent implements OnInit {
         this.router.navigate(['/']);
     }
 
-    onNotificationClick() {
-        throw new Error('Method not implemented.');
-    }
+    // async deleteNotification(index: number) {
+    //     try {
+    //         const token = this.store.authService.decodeToken();
+    //         if (token) {
+    //             await this.store.chatService.deleteNotificationAtIndex(token.nameid, index);
+    //             // The notification list will automatically update through the existing subscription
+    //             this.cdr.detectChanges();
+    //         }
+    //     } catch (error) {
+    //         console.error('Error deleting notification:', error);
+    //         this.store.alertifyService.error('Failed to delete notification');
+    //     }
+    // }
 }

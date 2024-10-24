@@ -1,5 +1,5 @@
 import { IPropertyBase } from './IPropertyBase.interface';
-import { IPhoto } from './IPhoto';
+import { IPhoto } from './IPhoto.interface';
 
 export class Property implements IPropertyBase {
     id: number;

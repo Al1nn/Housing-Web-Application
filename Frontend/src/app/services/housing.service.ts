@@ -6,7 +6,7 @@ import { Observable, map } from 'rxjs';
 import { Property } from '../models/Property.interface';
 import { environment } from '../../environments/environment';
 import { IKeyValuePair } from '../models/IKeyValuePair';
-import { IPhoto } from '../models/IPhoto';
+import { IPhoto } from '../models/IPhoto.interface';
 import { ICity } from '../models/ICity.interface';
 import { IFilters } from '../models/IFilters.interface';
 import { PaginatedProperties } from '../models/PaginatedProperties.interface';

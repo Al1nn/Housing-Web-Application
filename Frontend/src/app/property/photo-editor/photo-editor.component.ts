@@ -4,7 +4,7 @@ import { Property } from '../../models/Property.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { PhotoEditorPopupComponent } from './photo-editor-popup/photo-editor-popup.component';
 import { HttpEventType } from '@angular/common/http';
-import { IPhoto } from '../../models/IPhoto';
+import { IPhoto } from '../../models/IPhoto.interface';
 import { StoreService } from '../../store_services/store.service';
 
 @Component({

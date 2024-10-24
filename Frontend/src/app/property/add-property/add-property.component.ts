@@ -15,7 +15,7 @@ import { IPropertyBase } from '../../models/IPropertyBase.interface';
 import { Property } from '../../models/Property.interface';
 import { IKeyValuePair } from '../../models/IKeyValuePair';
 import { DatePipe } from '@angular/common';
-import { IPhoto } from '../../models/IPhoto';
+import { IPhoto } from '../../models/IPhoto.interface';
 import { ICity } from '../../models/ICity.interface';
 import { StoreService } from '../../store_services/store.service';
 
@@ -335,7 +335,7 @@ export class AddPropertyComponent implements OnInit {
 
 
                     if (this.photosToUpload.length > 0) {
-                        this.uploadPropertyPhotos(this.property.id);
+
 
                     }
 
@@ -355,7 +355,7 @@ export class AddPropertyComponent implements OnInit {
     }
 
     mapProperty(): void {
-        this.property.id = this.store.housingService.newPropID();
+        this.property.id = 0;
         this.property.sellRent = +this.sellRent.value;
         this.property.bhk = this.bhk.value;
         this.property.propertyTypeId = this.propertyType.value;
@@ -425,7 +425,8 @@ export class AddPropertyComponent implements OnInit {
         const files: FileList = event.target.files;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            this.photosToUpload.push(file);
+
+
             const originalUrl = await this.getDataURL(file);
             if (i === 0) {
                 this.propertyView.photo = originalUrl;
@@ -434,23 +435,7 @@ export class AddPropertyComponent implements OnInit {
         }
     }
 
-    uploadPropertyPhotos(propertyId: number) {
-
-        this.photosToUpload.forEach((file) => {
-            const formData = new FormData();
-            formData.append('file', file);
-            this.store.housingService.addPropertyPhoto(propertyId, formData).subscribe(
-                () => {
-
-                    console.log('Photo uploaded successfully');
-
-                },
-                error => {
-                    console.error('Error uploading photo : ', error);
-                }
-            );
-
-        });
+    uploadPropertyPhotos() {
 
     }
 

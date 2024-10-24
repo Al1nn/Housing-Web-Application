@@ -33,6 +33,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     chatId: string | null;
 
     constructor(public store: StoreService, private dialogRef: MatDialogRef<PropertyDetailPopupMessageComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
+
     ngOnDestroy(): void {
         this.setUserOffline();
     }
@@ -69,20 +70,19 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
         }
     }
 
+    private async deleteNotifications() {
+        if (this.token) {
+            this.store.chatService.deleteNotification(this.token.nameid, this.data.postedBy.toString()).subscribe(() => {
+                console.log("Notification deleted successfully");
+            });
+        }
+    }
 
     private async listenForMessages() {
         if (this.chatId) {
             this.store.chatService.getMessagesFromChat(this.chatId).subscribe(messages => {
                 this.messages = messages;
                 this.scrollToBottom();
-            });
-        }
-    }
-
-    private async deleteNotifications() {
-        if (this.token) {
-            this.store.chatService.deleteNotifications(this.token.nameid, this.data.postedBy).subscribe(() => {
-                console.log("Notification deleted successfully");
             });
         }
     }
