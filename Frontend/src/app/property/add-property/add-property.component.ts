@@ -15,6 +15,7 @@ import { IPropertyBase } from '../../models/IPropertyBase.interface';
 import { IKeyValuePair } from '../../models/IKeyValuePair';
 import { ICity } from '../../models/ICity.interface';
 import { StoreService } from '../../store_services/store.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-add-property',
@@ -65,6 +66,7 @@ export class AddPropertyComponent implements OnInit {
         private store: StoreService,
         private fb: FormBuilder,
         private router: Router,
+        private datePipe: DatePipe
     ) { }
 
     get BasicInfo() {
@@ -250,9 +252,9 @@ export class AddPropertyComponent implements OnInit {
 
     updateSellValidators() {
         console.log('Sell Validators Called');
-        this.security.setValue(null);
-        this.maintenance.setValue(null);
-        this.security.clearValidators()
+        this.security.setValue(1);
+        this.maintenance.setValue(1);
+        this.security.clearValidators();
         this.maintenance.clearValidators();
 
     }
@@ -376,7 +378,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.set("address", address);
         const { readyToMove, estPossessionOn, gated, mainEntrance, description } = this.OtherInfo.value;
         this.property.set("readyToMove", readyToMove);
-        this.property.set("estPossessionOn", estPossessionOn);
+        this.property.set("estPossessionOn", this.datePipe.transform(estPossessionOn, 'MM/dd/yyyy') as string);
         this.property.set("gated", gated);
         this.property.set("mainEntrance", mainEntrance);
         this.property.set("description", description);
