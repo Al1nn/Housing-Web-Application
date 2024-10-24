@@ -412,18 +412,79 @@ namespace WebAPI.Controllers
 
         [HttpPost("add")]
         [Authorize]
-        public async Task<IActionResult> AddProperty(PropertyDto propertyDto)
+        public async Task<IActionResult> AddProperty([FromForm] PropertyDto propertyDto, [FromForm] IFormFile[] files)
         {
+
+           
             var property = mapper.Map<Property>(propertyDto);
             var userId = GetUserId();
 
 
-            // Set other properties
+            if(files.Length > 0)
+            {
+                //Pe aici se intra cu poze
+                property.Photos = new List<Photo>();
+                
+                string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes");
+                string thumbnailsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails");
+
+                if (!Directory.Exists(originalSizesDirectory))
+                {
+                    Directory.CreateDirectory(originalSizesDirectory);
+                }
+
+                if (!Directory.Exists(thumbnailsDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailsDirectory);
+                }
+
+                foreach (var file in files)
+                {
+                    string uniqueId = Guid.NewGuid().ToString();
+                    var fileName = uniqueId + '-' + file.FileName;
+                    var originalPath = Path.Combine(originalSizesDirectory, fileName);
+                    var thumbnailPath = Path.Combine(thumbnailsDirectory, fileName);
+
+                    using (var stream = new FileStream(originalPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+
+                    using (var image = SixLabors.ImageSharp.Image.Load(originalPath))
+                    {
+                        var resizeOptions = new ResizeOptions
+                        {
+                            Mode = ResizeMode.Max,
+                            Size = new Size(800, 800),
+                            Position = AnchorPositionMode.Center
+                        };
+
+                        image.Mutate(x => x.Resize(resizeOptions));
+                        image.Save(thumbnailPath);
+                    }
+
+                    var photo = new Photo
+                    {
+                        FileName = fileName,
+                        PropertyId = property.Id,
+                        LastUpdatedOn = DateTime.Now,
+                        LastUpdatedBy = userId
+                    };
+
+                    property.Photos.Add(photo);
+                }
+
+            }
+
+            
+
+            
             property.PostedBy = userId;
             property.LastUpdatedBy = userId;
 
-            Console.WriteLine(property.Photos);
-            // Add property to repository
+            
+            
             uow.PropertyRepository.AddProperty(property);
 
 

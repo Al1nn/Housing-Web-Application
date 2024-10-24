@@ -133,7 +133,7 @@ export class HousingService {
 
 
 
-    addProperty(property: Property): Observable<Property> {
+    addProperty(property: FormData): Observable<Property> {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: 'Bearer ' + localStorage.getItem('token')

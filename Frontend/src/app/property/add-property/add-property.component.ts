@@ -12,10 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { IPropertyBase } from '../../models/IPropertyBase.interface';
-import { Property } from '../../models/Property.interface';
 import { IKeyValuePair } from '../../models/IKeyValuePair';
-import { DatePipe } from '@angular/common';
-import { IPhoto } from '../../models/IPhoto.interface';
 import { ICity } from '../../models/ICity.interface';
 import { StoreService } from '../../store_services/store.service';
 
@@ -28,19 +25,17 @@ export class AddPropertyComponent implements OnInit {
 
     @ViewChild('formTabs', { static: false }) formTabs: TabsetComponent;
     addPropertyForm: FormGroup;
+    property: FormData = new FormData();
+
     nextClicked: boolean;
-    contactAdded = false;
-    property = new Property();
+
 
     propertyTypes: IKeyValuePair[];
     furnishTypes: IKeyValuePair[];
     cityList: ICity[];
-    thumbnails: IPhoto[];
-    originalSizes: IPhoto[];
-    originalSizesString: string | null;
-    thumbnailsString: string | null;
+
+
     FilteredPlaces: string[] = [];
-    photosToUpload: File[] = [];
 
 
     mapCenter: google.maps.LatLngLiteral = { lat: 44.85454389856495, lng: 24.871015675879697 };
@@ -66,7 +61,7 @@ export class AddPropertyComponent implements OnInit {
     };
 
     constructor(
-        private datePipe: DatePipe,
+        //private datePipe: DatePipe,
         private store: StoreService,
         private fb: FormBuilder,
         private router: Router,
@@ -255,8 +250,11 @@ export class AddPropertyComponent implements OnInit {
 
     updateSellValidators() {
         console.log('Sell Validators Called');
+        this.security.setValue(null);
+        this.maintenance.setValue(null);
         this.security.clearValidators()
         this.maintenance.clearValidators();
+
     }
 
     noDigitsOrNumbersValidator(): ValidatorFn {
@@ -330,56 +328,87 @@ export class AddPropertyComponent implements OnInit {
         this.nextClicked = true;
         if (this.allTabsValid()) {
             this.mapProperty();
-            this.store.housingService.addProperty(this.property).subscribe(
-                () => {
+            // this.store.housingService.addProperty().subscribe(
+            //     () => {
 
 
-                    if (this.photosToUpload.length > 0) {
+            //         if (this.photosToUpload.length > 0) {
 
 
-                    }
+            //         }
 
-                    console.log(this.addPropertyForm + '\n\n\n');
-                    console.log(this.property);
-                    if (this.sellRent.value === '2') {
-                        this.router.navigate(['/rent-property']);
-                    } else {
-                        this.router.navigate(['/']);
-                    }
-                    this.store.alertifyService.success('Congrats, your property listed successfully on our website');
-                }
-            );
+            //         console.log(this.addPropertyForm + '\n\n\n');
+            //         console.log(this.property);
+            //         if (this.sellRent.value === '2') {
+            //             this.router.navigate(['/rent-property']);
+            //         } else {
+            //             this.router.navigate(['/']);
+            //         }
+            //         this.store.alertifyService.success('Congrats, your property listed successfully on our website');
+            //     }
+            // );
         } else {
             this.store.alertifyService.error('Please review the form and provide all valid entries');
         }
     }
 
     mapProperty(): void {
-        this.property.id = 0;
-        this.property.sellRent = +this.sellRent.value;
-        this.property.bhk = this.bhk.value;
-        this.property.propertyTypeId = this.propertyType.value;
-        this.property.name = this.name.value;
-        this.property.cityId = this.city.value;
 
-        this.property.furnishingTypeId = this.furnishingType.value;
-        this.property.price = this.price.value;
-        this.property.security = this.security.value;
-        this.property.maintenance = this.maintenance.value;
-        this.property.builtArea = this.builtArea.value;
-        this.property.carpetArea = +this.carpetArea.value;
-        this.property.floorNo = this.floorNo.value;
-        this.property.totalFloors = this.totalFloors.value;
-        this.property.latitude = this.latitude.value;
-        this.property.longitude = this.longitude.value;
-        this.property.address = this.address.value;
-        this.property.phoneNumber = this.phoneNumber.value;
+        const { sellRent, bhk, propertyType, furnishingType, name, city } = this.BasicInfo.value;
+        this.property.set("sellRent", sellRent);
+        this.property.set("bhk", bhk);
+        this.property.set("propertyType", propertyType);
+        this.property.set("furnishingType", furnishingType);
+        this.property.set("name", name);
+        this.property.set("city", city);
+        const { price, security, maintenance, builtArea, carpetArea } = this.PriceInfo.value;
+        this.property.set("price", price);
+        this.property.set("security", security);
+        this.property.set("maintenance", maintenance);
+        this.property.set("builtArea", builtArea);
+        this.property.set("carpetArea", carpetArea);
+        const { floorNo, totalFloors, phoneNumber, latitude, longitude, address } = this.AddressInfo.value;
+        this.property.set("floorNo", floorNo);
+        this.property.set("totalFloors", totalFloors);
+        this.property.set("phoneNumber", phoneNumber);
+        this.property.set("latitude", latitude);
+        this.property.set("longitude", longitude);
+        this.property.set("address", address);
+        const { readyToMove, estPossessionOn, gated, mainEntrance, description } = this.OtherInfo.value;
+        this.property.set("readyToMove", readyToMove);
+        this.property.set("estPossessionOn", estPossessionOn);
+        this.property.set("gated", gated);
+        this.property.set("mainEntrance", mainEntrance);
+        this.property.set("description", description);
 
-        this.property.readyToMove = this.readyToMove.value;
-        this.property.gated = this.gated.value;
-        this.property.mainEntrance = this.mainEntrance.value;
-        this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
-        this.property.description = this.description.value;
+        console.log(this.property.getAll("estPossessionOn"));
+        //const { price, builtArea, carpetArea } = this.PriceInfo.value;
+
+        // this.property.id = 0;
+        // this.property.sellRent = +this.sellRent.value;
+        // this.property.bhk = this.bhk.value;
+        // this.property.propertyTypeId = this.propertyType.value;
+        // this.property.name = this.name.value;
+        // this.property.cityId = this.city.value;
+
+        // this.property.furnishingTypeId = this.furnishingType.value;
+        // this.property.price = this.price.value;
+        // this.property.security = this.security.value;
+        // this.property.maintenance = this.maintenance.value;
+        // this.property.builtArea = this.builtArea.value;
+        // this.property.carpetArea = +this.carpetArea.value;
+        // this.property.floorNo = this.floorNo.value;
+        // this.property.totalFloors = this.totalFloors.value;
+        // this.property.latitude = this.latitude.value;
+        // this.property.longitude = this.longitude.value;
+        // this.property.address = this.address.value;
+        // this.property.phoneNumber = this.phoneNumber.value;
+
+        // this.property.readyToMove = this.readyToMove.value;
+        // this.property.gated = this.gated.value;
+        // this.property.mainEntrance = this.mainEntrance.value;
+        // this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
+        // this.property.description = this.description.value;
 
 
     }
@@ -425,7 +454,7 @@ export class AddPropertyComponent implements OnInit {
         const files: FileList = event.target.files;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-
+            console.log(file);
 
             const originalUrl = await this.getDataURL(file);
             if (i === 0) {
