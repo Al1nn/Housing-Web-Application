@@ -377,9 +377,6 @@ export class AddPropertyComponent implements OnInit {
         this.property.set("mainEntrance", mainEntrance);
         this.property.set("description", description);
 
-        console.log("Security ," + this.property.get("security"));
-        console.log("Maintenance ," + this.property.get("maintenance"));
-
 
     }
 
