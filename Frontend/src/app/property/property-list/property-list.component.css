@@ -1,3 +1,44 @@
+
+
+.controls{
+  width: 100%;
+  
+  justify-content: space-between;
+}
+
+.sorters{
+  background-color: transparent;
+  border: 1px solid rgb(209, 209, 209);
+  width: 45%;
+
+  padding: 10px;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  width: 45%;
+
+
+  padding: 10px;
+  
+}
+
+.filters mat-slider{
+  width: 225px;
+}
+
+
+.filter-title{
+  color: rgb(165, 165, 165);
+}
+
+.sorter-title{
+  color: rgb(165, 165, 165);
+}
+
 .autocomplete-input {
   width: 350px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='none' stroke='currentColor' stroke-width='32' d='M35.38 67.81C47.03 45.38 70.48 32 96 32h320c25.52 0 48.97 13.38 60.62 35.81 11.65 22.43 9.78 49.24-4.85 69.98L320 320.01V448c0 17.67-14.33 32-32 32-7.96 0-15.64-2.97-21.52-8.31l-64-58.18C195.33 407.22 192 398.85 192 390.13V320.01L40.23 137.79c-14.63-20.74-16.5-47.55-4.85-69.98z'/%3E%3C/svg%3E");
@@ -47,18 +88,5 @@
 }
 
 
-.filters {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: left;
-  width: 100%;
-  max-width: 600px; /* Adjust as needed */
-  /* background-color: green; */
-  margin-left: 5px;
-}
 
-.filters mat-slider{
-  width: 225px;
-}
 

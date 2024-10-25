@@ -1,83 +1,95 @@
-<div class="filters">
-  <input type="text" 
-    class="autocomplete-input form-control mb-2"
-    #autocompleteInput
-    placeholder="Filter by City"
-    (input)="keyPress($event)" autocomplete="off">
-    <ul *ngIf="FilteredCityListOptions.length > 0" 
-      class="dropdown form-control"
-      [class.show]="autocompleteInput.value !== ''"
-      [style.width.px]="autocompleteInput.offsetWidth" 
-      >
-        <li class="dropdown-item" *ngFor="let option of FilteredCityListOptions" > 
-          <button (click)="selectCity(option)">
-            <span [innerHTML]="option.city | highlight:autocompleteInput.value"></span>,
-            <span [innerHTML]="option.country | highlight:autocompleteInput.value"></span>
-            <span> ({{option.sellRentCount}} properties)</span>
-          </button>
-        </li>
-    </ul>
+<div class="controls d-flex">
 
-
-
-
-  <mat-label>Filter Built Area</mat-label>
-  <div class="d-flex mt-3">
-
-    <div class="form-group col-sm-2" style="width: 75px;"> 
-      <input min="0" value="{{min}}" [(ngModel)]="min" (ngModelChange)="onMinMaxChange()" type="number" class="form-control">
+  <div class="filters position-relative border border border-1 rounded p-4 mt-2">
+    <div class="filter-title position-absolute top-0  translate-middle-y bg-white px-2" >
+      <p class="m-0 text-secondary">Filters</p>
     </div>
-    <mat-slider min="0" max="500">
-      <input value="{{min}}" [(ngModel)]="min" (ngModelChange)="onMinMaxChange()" matSliderStartThumb>
-      <input value="{{max}}" [(ngModel)]="max"  (ngModelChange)="onMinMaxChange()" matSliderEndThumb>
-    </mat-slider>
-    
-    <div class="form-group col-sm-2" style="width: 75px;"> 
-      <input min="0" value="{{max}}" [(ngModel)]="max" (ngModelChange)="onMinMaxChange()"  type="number" class="form-control">
-    </div>   
-    
-  </div>
-
-  <br>
-
- 
-  <div class="d-flex">
-    <mat-form-field >
-        <mat-select placeholder="Sort by" [(ngModel)]="SortbyParam" (selectionChange)="onSortChange()">
-          <mat-option value="City">
-            City
-          </mat-option>
-          <mat-option value="Price">
-            Price
-          </mat-option>
-          <mat-option value="Price Per Area">
-            Price Per Area
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-   <button type="button" style="height: 55px;" mat-raised-button (click)="onSortDirection()">
-      <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down fa-xl"></i>
-      <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up fa-xl"></i>
-    </button>
-    <button type="button" style="height: 55px;" mat-raised-button (click)="clearFilters()">
-      <i class="fa-solid fa-x fa-lg"></i>
-    </button> 
-  </div>
+   
+    <input type="text" 
+      class="autocomplete-input form-control mb-2"
+      #autocompleteInput
+      placeholder="Filter by City"
+      (input)="keyPress($event)" autocomplete="off">
+      <ul *ngIf="FilteredCityListOptions.length > 0" 
+        class="dropdown form-control"
+        [class.show]="autocompleteInput.value !== ''"
+        [style.width.px]="autocompleteInput.offsetWidth" 
+        >
+          <li class="dropdown-item" *ngFor="let option of FilteredCityListOptions" > 
+            <button (click)="selectCity(option)">
+              <span [innerHTML]="option.city | highlight:autocompleteInput.value"></span>,
+              <span [innerHTML]="option.country | highlight:autocompleteInput.value"></span>
+              <span> ({{option.sellRentCount}} properties)</span>
+            </button>
+          </li>
+      </ul>
   
-  <br>
+    <mat-label>Filter Built Area</mat-label>
+    <div class="d-flex mt-3">
+  
+      <div class="form-group col-sm-2" style="width: 75px;"> 
+        <input min="0" value="{{min}}" [(ngModel)]="min" (ngModelChange)="onMinMaxChange()" type="number" class="form-control">
+      </div>
+      <mat-slider min="0" max="500">
+        <input value="{{min}}" [(ngModel)]="min" (ngModelChange)="onMinMaxChange()" matSliderStartThumb>
+        <input value="{{max}}" [(ngModel)]="max"  (ngModelChange)="onMinMaxChange()" matSliderEndThumb>
+      </mat-slider>
+      
+      <div class="form-group col-sm-2" style="width: 75px;"> 
+        <input min="0" value="{{max}}" [(ngModel)]="max" (ngModelChange)="onMinMaxChange()"  type="number" class="form-control">
+      </div>   
+      
+    </div>
+  
+   
+  
+    <div class="d-flex justify-content-left mt-1">
+      <mat-paginator 
+                    #paginator
+                    [length]="PropertiesLength"
+                    [pageSize]="this.filters.pageSize"
+                    showFirstLastButtons
+                    hidePageSize="true"
+                    (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  </div>
 
-  <div class="d-flex justify-content-left">
-    <mat-paginator 
-                  #paginator
-                  [length]="PropertiesLength"
-                  [pageSize]="this.filters.pageSize"
-                  showFirstLastButtons
-                  hidePageSize="true"
-                  (page)="onPageChange($event)">
-    </mat-paginator>
+
+  <div class="sorters  position-relative border border border-1 rounded p-4 mt-2">
+    <div class="sorter-title position-absolute top-0 translate-middle-y bg-white px-2">
+      <p class="m-0 text-secondary">Sort</p>
+   </div>
+
+    <div class="d-flex">
+      <mat-form-field >
+          <mat-select placeholder="Sort by" [(ngModel)]="SortbyParam" (selectionChange)="onSortChange()">
+            <mat-option value="City">
+              City
+            </mat-option>
+            <mat-option value="Price">
+              Price
+            </mat-option>
+            <mat-option value="Price Per Area">
+              Price Per Area
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+     <button type="button" style="height: 55px;" mat-raised-button (click)="onSortDirection()">
+        <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down fa-xl"></i>
+        <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up fa-xl"></i>
+      </button>
+      <button type="button" style="height: 55px;" mat-raised-button (click)="clearFilters()">
+        <i class="fa-solid fa-x fa-lg"></i>
+      </button> 
+    </div>
   </div>
 </div>
+
+
   
+
+
 
 <div class="row">
   <div *ngFor="let property of Properties"
