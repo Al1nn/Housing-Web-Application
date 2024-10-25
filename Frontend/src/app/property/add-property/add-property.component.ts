@@ -251,8 +251,6 @@ export class AddPropertyComponent implements OnInit {
 
     updateSellValidators() {
         console.log('Sell Validators Called');
-        this.security.setValue(1);
-        this.maintenance.setValue(1);
         this.security.clearValidators();
         this.maintenance.clearValidators();
 
@@ -352,10 +350,17 @@ export class AddPropertyComponent implements OnInit {
         this.property.set("furnishingTypeId", furnishingType);
         this.property.set("name", name);
         this.property.set("cityId", city);
-        const { price, security, maintenance, builtArea, carpetArea } = this.PriceInfo.value;
+        const { price, builtArea, carpetArea } = this.PriceInfo.value;
         this.property.set("price", price);
-        this.property.set("security", security);
-        this.property.set("maintenance", maintenance);
+
+        if (sellRent === '2') {
+            const { security, maintenance } = this.PriceInfo.value;
+            this.property.set("security", security);
+            this.property.set("maintenance", maintenance);
+        }
+
+
+
         this.property.set("builtArea", builtArea);
         this.property.set("carpetArea", carpetArea);
         const { floorNo, totalFloors, phoneNumber, latitude, longitude, address } = this.AddressInfo.value;
@@ -372,34 +377,8 @@ export class AddPropertyComponent implements OnInit {
         this.property.set("mainEntrance", mainEntrance);
         this.property.set("description", description);
 
-        console.log(this.property.getAll("files"));
-        //const { price, builtArea, carpetArea } = this.PriceInfo.value;
-
-        // this.property.id = 0;
-        // this.property.sellRent = +this.sellRent.value;
-        // this.property.bhk = this.bhk.value;
-        // this.property.propertyTypeId = this.propertyType.value;
-        // this.property.name = this.name.value;
-        // this.property.cityId = this.city.value;
-
-        // this.property.furnishingTypeId = this.furnishingType.value;
-        // this.property.price = this.price.value;
-        // this.property.security = this.security.value;
-        // this.property.maintenance = this.maintenance.value;
-        // this.property.builtArea = this.builtArea.value;
-        // this.property.carpetArea = +this.carpetArea.value;
-        // this.property.floorNo = this.floorNo.value;
-        // this.property.totalFloors = this.totalFloors.value;
-        // this.property.latitude = this.latitude.value;
-        // this.property.longitude = this.longitude.value;
-        // this.property.address = this.address.value;
-        // this.property.phoneNumber = this.phoneNumber.value;
-
-        // this.property.readyToMove = this.readyToMove.value;
-        // this.property.gated = this.gated.value;
-        // this.property.mainEntrance = this.mainEntrance.value;
-        // this.property.estPossessionOn = this.datePipe.transform(this.estPossessionOn.value, 'MM/dd/yyyy') as string;
-        // this.property.description = this.description.value;
+        console.log("Security ," + this.property.get("security"));
+        console.log("Maintenance ," + this.property.get("maintenance"));
 
 
     }
@@ -441,17 +420,18 @@ export class AddPropertyComponent implements OnInit {
         }
     }
 
-    async onPhotoSelected(event: any) {
+    onPhotoSelected(event: any) {
         const files: FileList = event.target.files;
         this.property.delete("files");
 
-        for (let i = 0; i < files.length; i++) {
+        for (let i = files.length - 1; i >= 0; i--) {
             const file = files[i];
             this.property.append("files", file);
 
-            const originalUrl = await this.getDataURL(file);
-            if (i === 0) {
-                this.propertyView.photo = originalUrl;
+            if (i === files.length - 1) {
+                this.getDataURL(file).then((result) => {
+                    this.propertyView.photo = result;
+                });
             }
 
         }
@@ -460,12 +440,6 @@ export class AddPropertyComponent implements OnInit {
 
     }
 
-
-    updateCityAndCountry(selectedText: string) {
-        const [city, country] = selectedText.split(',').map(item => item.trim());
-        this.propertyView.city = city;
-        this.propertyView.country = country;
-    }
 
     getDataURL(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
@@ -480,6 +454,14 @@ export class AddPropertyComponent implements OnInit {
             reader.readAsDataURL(file);
         });
     }
+
+    updateCityAndCountry(selectedText: string) {
+        const [city, country] = selectedText.split(',').map(item => item.trim());
+        this.propertyView.city = city;
+        this.propertyView.country = country;
+    }
+
+
 
 
 }

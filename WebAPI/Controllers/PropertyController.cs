@@ -5,6 +5,7 @@ using WebAPI.Dtos;
 using WebAPI.Errors;
 using WebAPI.Interfaces;
 using WebAPI.Models;
+using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using WebAPI.Extensions;
@@ -305,6 +306,7 @@ namespace WebAPI.Controllers
             var property = await uow.PropertyRepository.GetPropertyByIdAsync(id);
             ApiError apiError = new ApiError();
             int userId = GetUserId();
+           
 
             if (property == null)
             {
@@ -314,12 +316,56 @@ namespace WebAPI.Controllers
                 return NotFound(apiError);
             }
 
-            if(property.PostedBy != userId)
+            if(!IsAdmin())
             {
                 apiError.ErrorCode = Unauthorized().StatusCode;
-                apiError.ErrorMessage = "You must be owner to delete";
+                apiError.ErrorMessage = "You must be admin to delete";
                 apiError.ErrorDetails = "";
                 return Unauthorized(apiError);
+            }
+
+            if(property.Photos != null)
+            {
+                string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes");
+                string thumbnailsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails");
+
+                if (!Directory.Exists(originalSizesDirectory))
+                {
+                    Directory.CreateDirectory(originalSizesDirectory);
+                }
+
+                if (!Directory.Exists(thumbnailsDirectory))
+                {
+                    Directory.CreateDirectory(thumbnailsDirectory);
+                }
+
+
+                foreach (var photo in property.Photos)
+                {
+                    string originalPhotoDirectory = Path.Combine(originalSizesDirectory, photo.FileName);
+                    string thumbnailsPhotoDirectory = Path.Combine(thumbnailsDirectory, photo.FileName);
+
+                    System.IO.File.Delete(originalPhotoDirectory);
+                    System.IO.File.Delete(thumbnailsPhotoDirectory);
+
+                    //if(System.IO.File.Exists(originalPhotoDirectory) && System.IO.File.Exists(thumbnailsPhotoDirectory))
+                    //{
+                        
+                    //}
+                    //else
+                    //{
+                    //    apiError.ErrorCode = NotFound().StatusCode;
+                    //    apiError.ErrorMessage = $"The directory of photo : {photo.FileName}, was not found";
+                    //    apiError.ErrorDetails = "Path doesnt exist";
+                    //    return NotFound(apiError);
+                    //}
+                    
+
+               
+                    
+                   
+                }
+
             }
 
             uow.PropertyRepository.DeleteProperty(id);
