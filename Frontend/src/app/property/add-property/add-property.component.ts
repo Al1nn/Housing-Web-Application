@@ -35,7 +35,6 @@ export class AddPropertyComponent implements OnInit {
     furnishTypes: IKeyValuePair[];
     cityList: ICity[];
 
-
     FilteredPlaces: string[] = [];
 
 
@@ -330,25 +329,15 @@ export class AddPropertyComponent implements OnInit {
         this.nextClicked = true;
         if (this.allTabsValid()) {
             this.mapProperty();
-            // this.store.housingService.addProperty().subscribe(
-            //     () => {
+            this.store.housingService.addProperty(this.property).subscribe(() => {
+                this.store.alertifyService.success("Your Property Listed Successfully");
+                if (this.sellRent.value === '2') {
+                    this.router.navigate(['/rent-property']);
+                } else {
+                    this.router.navigate(['/']);
+                }
+            })
 
-
-            //         if (this.photosToUpload.length > 0) {
-
-
-            //         }
-
-            //         console.log(this.addPropertyForm + '\n\n\n');
-            //         console.log(this.property);
-            //         if (this.sellRent.value === '2') {
-            //             this.router.navigate(['/rent-property']);
-            //         } else {
-            //             this.router.navigate(['/']);
-            //         }
-            //         this.store.alertifyService.success('Congrats, your property listed successfully on our website');
-            //     }
-            // );
         } else {
             this.store.alertifyService.error('Please review the form and provide all valid entries');
         }
@@ -359,10 +348,10 @@ export class AddPropertyComponent implements OnInit {
         const { sellRent, bhk, propertyType, furnishingType, name, city } = this.BasicInfo.value;
         this.property.set("sellRent", sellRent);
         this.property.set("bhk", bhk);
-        this.property.set("propertyType", propertyType);
-        this.property.set("furnishingType", furnishingType);
+        this.property.set("propertyTypeId", propertyType);
+        this.property.set("furnishingTypeId", furnishingType);
         this.property.set("name", name);
-        this.property.set("city", city);
+        this.property.set("cityId", city);
         const { price, security, maintenance, builtArea, carpetArea } = this.PriceInfo.value;
         this.property.set("price", price);
         this.property.set("security", security);
@@ -383,7 +372,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.set("mainEntrance", mainEntrance);
         this.property.set("description", description);
 
-        console.log(this.property.getAll("estPossessionOn"));
+        console.log(this.property.getAll("files"));
         //const { price, builtArea, carpetArea } = this.PriceInfo.value;
 
         // this.property.id = 0;
@@ -454,9 +443,11 @@ export class AddPropertyComponent implements OnInit {
 
     async onPhotoSelected(event: any) {
         const files: FileList = event.target.files;
+        this.property.delete("files");
+
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            console.log(file);
+            this.property.append("files", file);
 
             const originalUrl = await this.getDataURL(file);
             if (i === 0) {
@@ -464,9 +455,8 @@ export class AddPropertyComponent implements OnInit {
             }
 
         }
-    }
 
-    uploadPropertyPhotos() {
+
 
     }
 
