@@ -17,6 +17,7 @@ import { StoreService } from '../../store_services/store.service';
 })
 @AutoUnsubscribe()
 export class PropertyListComponent implements OnInit, OnDestroy {
+
     @ViewChild('paginator') paginator: MatPaginator;
     @ViewChild('autocompleteInput') autoCompleteInput: ElementRef;
     @Input() Properties: Property[];
@@ -239,6 +240,27 @@ export class PropertyListComponent implements OnInit, OnDestroy {
         this.min = 0;
         this.max = 500;
         this.autoCompleteInput.nativeElement.value = '';
+
+        this.filters = {
+            pageNumber: 1,
+            pageSize: 4
+        };
+        this.paginator.pageIndex = 0;
+        this.isFiltering = false;
+        if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {
+            this.store.housingService.getUserPaginatedProperty(this.filters.pageNumber, this.filters.pageSize).subscribe(data => {
+                this.paginator.length = data.totalRecords;
+                this.Properties = data.properties;
+            });
+            return;
+        }
+        this.store.housingService.getPaginatedProperty(this.SellRent, this.filters.pageNumber, this.filters.pageSize).subscribe(data => {
+            this.paginator.length = data.totalRecords;
+            this.Properties = data.properties;
+        });
+    }
+
+    clearSorters() {
         this.SortbyParam = '';
         this.SortDirection = 'asc';
         this.filters = {

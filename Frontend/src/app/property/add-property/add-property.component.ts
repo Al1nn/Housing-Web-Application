@@ -198,6 +198,16 @@ export class AddPropertyComponent implements OnInit {
             this.furnishTypes = data;
         });
 
+        this.sellRent.valueChanges.subscribe((value) => {
+            if (value === '2') {
+                this.updateRentValidators();
+            } else {
+                this.updateSellValidators();
+            }
+
+
+        });
+
         this.initializeAutocomplete();
     }
 
@@ -244,16 +254,32 @@ export class AddPropertyComponent implements OnInit {
     }
 
     updateRentValidators() {
-        console.log('Rent validators called');
-        this.security.setValidators([Validators.required, this.numericValidator(), Validators.min(1)]);
-        this.maintenance.setValidators([Validators.required, this.numericValidator(), Validators.min(1)]);
+        console.log("Rent Validators set");
+        this.security.setValidators([
+            Validators.required,
+            this.numericValidator(),
+            Validators.min(0)
+        ]);
+        this.maintenance.setValidators([
+            Validators.required,
+            this.numericValidator(),
+            Validators.min(0)
+        ]);
+
+        this.security.updateValueAndValidity();
+        this.maintenance.updateValueAndValidity();
     }
 
     updateSellValidators() {
-        console.log('Sell Validators Called');
+        console.log("Sell Validators Set");
         this.security.clearValidators();
         this.maintenance.clearValidators();
 
+        this.security.setValue(0);
+        this.maintenance.setValue(0);
+
+        this.security.updateValueAndValidity();
+        this.maintenance.updateValueAndValidity();
     }
 
     noDigitsOrNumbersValidator(): ValidatorFn {

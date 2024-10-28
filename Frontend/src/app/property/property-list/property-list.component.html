@@ -52,6 +52,9 @@
                     hidePageSize="true"
                     (page)="onPageChange($event)">
       </mat-paginator>
+      <button type="button" style="height: 55px;" mat-raised-button (click)="clearFilters()">
+        <i class="fa-solid fa-x fa-lg"></i>
+      </button> 
     </div>
   </div>
 
@@ -79,7 +82,7 @@
         <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down fa-xl"></i>
         <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up fa-xl"></i>
       </button>
-      <button type="button" style="height: 55px;" mat-raised-button (click)="clearFilters()">
+      <button type="button" style="height: 55px;" mat-raised-button (click)="clearSorters()">
         <i class="fa-solid fa-x fa-lg"></i>
       </button> 
     </div>

@@ -97,3 +97,11 @@ $my-first-app-theme: mat.define-theme((
 .mat-mdc-list-option .mdc-radio__inner-circle {
   display: none;
 }
+
+.mat-mdc-raised-button:not(:disabled) {
+    color: black !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: white !important;
+}

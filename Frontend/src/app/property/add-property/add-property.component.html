@@ -106,8 +106,8 @@
               <tab heading="Pricing and Area" formGroupName="PriceInfo">
 
                 <div class="form-group col-12 mt-3">
-                  <label *ngIf="sellRent.value == 1">Price (in USD)</label>
-                  <label *ngIf="sellRent.value == 2">Rent (in USD)</label>
+                  <label *ngIf="sellRent.value == '1'">Price (in USD)</label>
+                  <label *ngIf="sellRent.value == '2'">Rent (in USD)</label>
                   <input type="text" class="form-control" formControlName="price" #propPrice
                          (keyup)="propertyView.price = +propPrice.value">
                   <div class="error-block" *ngIf="price.invalid && (nextClicked || price.touched)">
@@ -122,7 +122,7 @@
                     </ng-container>
                   </div>
                 </div>
-                <div *ngIf="sellRent.value == 2">
+                <div *ngIf="sellRent.value == '2'">
 
                   <div class="form-group col-12 mt-3">
                     <label>Security (in USD)</label>
