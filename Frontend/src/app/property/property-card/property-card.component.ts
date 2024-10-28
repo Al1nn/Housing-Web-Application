@@ -21,6 +21,7 @@ export class PropertyCardComponent {
     @Input() hideIcons: boolean;
     loggedInUser: string;
     thumbnailFolder: string = environment.thumbnailFolder;
+    isSmallScreen: boolean = false;
 
 
 

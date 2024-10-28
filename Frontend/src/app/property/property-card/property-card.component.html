@@ -1,4 +1,5 @@
-<div class="card h-100">
+
+<div class="card">
   <div class="card-img-wrapper">
     <img *ngIf="property_index.photo" class="card-img-top img-fluid" src="{{thumbnailFolder + property_index.photo}}">
     <img *ngIf="!property_index.photo"  class="card-img-top img-fluid" src="../../../assets/images/house_default.jpg">
@@ -36,3 +37,4 @@
       Area:  <span class="font-highlight">{{property_index.builtArea}} Sq Ft </span> </h6>
   </div>
 </div>
+

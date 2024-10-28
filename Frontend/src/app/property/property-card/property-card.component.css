@@ -1,5 +1,7 @@
+
 .card{
-  min-height: 510px;
+  min-height: 550px;
+  grid-template-columns: repeat(4, 1fr);
 }
 .card-body h1{
   font-family: 'Times New Roman', Times, serif, bold;

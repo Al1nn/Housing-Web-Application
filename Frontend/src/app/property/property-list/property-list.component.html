@@ -1,6 +1,6 @@
-<div class="controls d-flex">
+<div class="controls d-flex ">
 
-  <div class="filters position-relative border border border-1 rounded p-4 mt-2">
+  <div class="filters position-relative border border border-1 rounded p-4 mt-2 w-100 w-md-100 ">
     <div class="filter-title position-absolute top-0  translate-middle-y bg-white px-2" >
       <p class="m-0 text-secondary">Filters</p>
     </div>
@@ -59,7 +59,7 @@
   </div>
 
 
-  <div class="sorters  position-relative border border border-1 rounded p-4 mt-2">
+  <div class="sorters  position-relative border border border-1 rounded p-4 mt-2  w-100 w-md-100">
     <div class="sorter-title position-absolute top-0 translate-middle-y bg-white px-2">
       <p class="m-0 text-secondary">Sort</p>
    </div>
@@ -96,7 +96,7 @@
 
 <div class="row">
   <div *ngFor="let property of Properties"
-    class="shadow-lg col-sm-3 p-3">
+    class="shadow-lg col-lg-3 col-md-6 col-sm-12 p-2">
     <app-property-card [property_index]="property" ></app-property-card>
   </div>
 </div>
