@@ -20,6 +20,7 @@ import { PropertyDetailPopupMessageComponent } from '../property-detail-popup-me
 @AutoUnsubscribe()
 export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
 
+
     @ViewChild('editFormTabs', { static: false }) formTabs: TabsetComponent;
     editPropertyForm: FormGroup;
 
@@ -114,6 +115,10 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
                 'postedBy': this.property.postedBy
             }
         });
+    }
+
+    likeProperty() {
+        console.log("Liked Property From Admin");
     }
 
 }

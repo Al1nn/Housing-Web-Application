@@ -64,28 +64,22 @@
       <p class="m-0 text-secondary">Sort</p>
    </div>
 
-    <div class="d-flex">
-      <mat-form-field >
-          <mat-select placeholder="Sort by" [(ngModel)]="SortbyParam" (selectionChange)="onSortChange()">
-            <mat-option value="City">
-              City
-            </mat-option>
-            <mat-option value="Price">
-              Price
-            </mat-option>
-            <mat-option value="Price Per Area">
-              Price Per Area
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-     <button type="button" style="height: 55px;" mat-raised-button (click)="onSortDirection()">
-        <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down fa-xl"></i>
-        <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up fa-xl"></i>
-      </button>
-      <button type="button" style="height: 55px;" mat-raised-button (click)="clearSorters()">
-        <i class="fa-solid fa-x fa-lg"></i>
-      </button> 
+   <div class="d-flex align-items-center">
+    <div class="me-3">
+      <select class="form-select" [(ngModel)]="SortbyParam" (ngModelChange)="onSortChange()">
+        <option value="City">City</option>
+        <option value="Price">Price</option>
+        <option value="Price Per Area">Price Per Area</option>
+      </select>
     </div>
+    <button class="btn btn-light me-2" type="button" (click)="onSortDirection()">
+      <i *ngIf="SortDirection === 'asc'" class="fas fa-sort-alpha-down"></i>
+      <i *ngIf="SortDirection === 'desc'" class="fas fa-sort-alpha-up"></i>
+    </button>
+    <button class="btn btn-light"  type="button" (click)="clearSorters()">
+      <i class="fa-solid fa-x"></i>
+    </button>
+  </div>
   </div>
 </div>
 

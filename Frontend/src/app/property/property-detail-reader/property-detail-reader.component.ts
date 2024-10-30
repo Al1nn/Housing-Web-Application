@@ -14,6 +14,7 @@ import { PropertyDetailPopupMessageComponent } from '../property-detail-popup-me
 })
 export class PropertyDetailReaderComponent implements OnInit {
 
+
     public propertyId: number;
     property = new Property();
 
@@ -70,4 +71,8 @@ export class PropertyDetailReaderComponent implements OnInit {
 
     }
 
+
+    likeProperty() {
+        console.log("Property Liked From Reader");
+    }
 }
