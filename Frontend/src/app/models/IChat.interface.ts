@@ -2,6 +2,7 @@ export interface IChat {
     id?: string | null;
     lastMessage: string;
     lastMessageDate: string;
+    lastMessageBy: string;
     userID_first: string;
     userName_first: string;
     userPhoto_first: string;

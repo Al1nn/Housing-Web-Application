@@ -59,9 +59,7 @@
                <div class="chat-last-message">{{ chat.lastMessage }}</div>
              </div>
              <!-- Add message count badge -->
-             <div class="message-count" *ngIf="chat.messagesCount > 0">
-               {{ chat.messagesCount }}
-             </div>
+             
            </div>
            
            <ng-template #showSender>
@@ -73,19 +71,21 @@
                  matListItemAvatar
                  [src]="chat.userPhoto_other ? thumbnailFolder + chat.userPhoto_other : '../../assets/user_images/user_default.jpg'"
                />
-               <div class="chat-info">
-                 <div class="chat-header">
-                   <span class="chat-name">{{ chat.userName_other }}</span>
-                   <span class="chat-date">{{ chat.lastMessageDate }}</span>
-                 </div>
-                 <div class="chat-last-message">{{ chat.lastMessage }}</div>
-               </div>
-               <!-- Add message count badge -->
-               <div class="message-count" *ngIf="chat.messagesCount > 0">
-                 {{ chat.messagesCount }}
-               </div>
-             </div>
+                <div class="chat-info">
+                  <div class="chat-header">
+                    <span class="chat-name">{{ chat.userName_other }}</span>
+                    <span class="chat-date">{{ chat.lastMessageDate }}</span>
+                  </div>
+                  <div class="chat-last-message">{{ chat.lastMessage }}</div>
+                </div>
+                <!-- Add message count badge -->
+                
+              </div>
            </ng-template>
+
+           <div class="message-count" *ngIf="chat.messagesCount > 0 && chat.lastMessageBy !== this.token.unique_name">
+            {{ chat.messagesCount }}
+          </div>
          </mat-list-option>
    </mat-selection-list>
 

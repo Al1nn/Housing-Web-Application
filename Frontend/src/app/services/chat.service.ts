@@ -57,6 +57,7 @@ export class ChatService {
         const newChat: IChat = {
             lastMessage: '',
             lastMessageDate: new Date().toLocaleString(),
+            lastMessageBy: '',
             userID_first: userID_first,
             userName_first: userName_first,
             userPhoto_first: userPhoto_first,
@@ -149,6 +150,7 @@ export class ChatService {
                     [`${this.chatPath}/${chatId}/messages/${messageKey}`]: message,
                     [`${this.chatPath}/${chatId}/lastMessage`]: message.text,
                     [`${this.chatPath}/${chatId}/lastMessageDate`]: message.sentDate,
+                    [`${this.chatPath}/${chatId}/lastMessageBy`]: message.senderName,
                     [`${this.chatPath}/${chatId}/messagesCount`]: currentCount + 1
                 };
 

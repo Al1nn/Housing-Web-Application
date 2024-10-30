@@ -83,6 +83,7 @@ mat-list-option:last-child{
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-right: 20px;
     font-size: 12px;
     font-weight: 500;
     padding: 0 6px;
