@@ -37,7 +37,9 @@
       <div class="card-footer"  *ngIf="!(+nameId === property.postedBy)">
         
         <div class="btn-group d-flex">
-          <button class="btn btn-primary" (click)="likeProperty()" ><i class="fa-regular fa-heart"></i> Like</button>
+          <button class="btn btn-primary" (click)="likeProperty()" >
+            <i class="fa-heart" [ngClass]="{'fa-solid': isLiked, 'fa-regular': !isLiked}"></i> Like
+          </button>
           <button class="btn btn-success" (click)="openMessagesModal()"><i class="fa-regular fa-message"></i> Message</button>
         </div>
 

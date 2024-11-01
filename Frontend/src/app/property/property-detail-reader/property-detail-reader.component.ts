@@ -23,12 +23,15 @@ export class PropertyDetailReaderComponent implements OnInit {
     galleryImages: GalleryItem[];
     age: string;
     nameId: string;
+    isLiked: boolean = false;
+
     constructor(private dialogRef: MatDialog, private store: StoreService, private route: ActivatedRoute, private router: Router) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
         this.route.data.subscribe((data) => {
             this.property = data['property'];
+            console.log(this.property);
         });
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
@@ -73,6 +76,7 @@ export class PropertyDetailReaderComponent implements OnInit {
 
 
     likeProperty() {
+        this.isLiked = !this.isLiked;
         console.log("Property Liked From Reader");
     }
 }

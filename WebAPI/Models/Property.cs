@@ -31,7 +31,8 @@ namespace WebAPI.Models
         public int Maintenance { get; set; }
         public DateTime EstPossessionOn { get; set; }
         public string Description { get; set; }
-
+        
+        public ICollection<PropertyLike> PropertyLikes { get; set; }
         public ICollection<Photo> Photos { get; set; }
         public DateTime PostedOn { get; set; } = DateTime.Now;
 

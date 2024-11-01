@@ -253,6 +253,33 @@ namespace WebAPI.Migrations
                     b.ToTable("Properties");
                 });
 
+            modelBuilder.Entity("WebAPI.Models.PropertyLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LastUpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LikedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyId");
+
+                    b.ToTable("PropertyLikes");
+                });
+
             modelBuilder.Entity("WebAPI.Models.PropertyType", b =>
                 {
                     b.Property<int>("Id")
@@ -393,6 +420,17 @@ namespace WebAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("WebAPI.Models.PropertyLike", b =>
+                {
+                    b.HasOne("WebAPI.Models.Property", "Property")
+                        .WithMany("PropertyLikes")
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Property");
+                });
+
             modelBuilder.Entity("WebAPI.Models.Role", b =>
                 {
                     b.HasOne("WebAPI.Models.User", "User")
@@ -407,6 +445,8 @@ namespace WebAPI.Migrations
             modelBuilder.Entity("WebAPI.Models.Property", b =>
                 {
                     b.Navigation("Photos");
+
+                    b.Navigation("PropertyLikes");
                 });
 
             modelBuilder.Entity("WebAPI.Models.User", b =>
