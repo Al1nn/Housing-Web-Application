@@ -109,6 +109,7 @@ namespace WebAPI.Data.Repo
             var properties = await dc.Properties
                             .Include(p => p.PropertyType)
                             .Include(p => p.FurnishingType)
+                            .Include(p => p.PropertyLikes)
                             .Include(p => p.City)
                             .Include(p => p.User)
                             .Include(p => p.Photos)
@@ -132,5 +133,7 @@ namespace WebAPI.Data.Repo
         {
             dc.Properties.Update(property); 
         }
+
+        
     }
 }

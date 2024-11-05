@@ -702,7 +702,105 @@ namespace WebAPI.Controllers
             
         }
 
-       
+        [HttpGet("like/{propId}")]
+        [Authorize]
+        public async Task<IActionResult> LikeProperty(int propId)
+        {
+            ApiError apiError = new ApiError();
+            int userId = GetUserId();
+            var property = await uow.PropertyRepository.GetPropertyDetailAsync(propId);
+
+            if(property == null)
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such property or photo exists";
+                apiError.ErrorDetails = "You delete a non-existent property";
+                return BadRequest(apiError);
+            }
+
+
+            PropertyLike like = new PropertyLike();
+            like.PropertyId = propId;
+            like.LastUpdatedBy = userId;
+            like.LikedBy = userId;
+            like.LastUpdatedOn = DateTime.Now;
+            
+            property.PropertyLikes.Add(like);
+
+
+            await uow.SaveAsync();
+
+            return Ok();
+        }
+
+        [HttpGet("unlike/{propId}")]
+        [Authorize]
+        public async Task<IActionResult> UnlikeProperty(int propId)
+        {
+
+            ApiError apiError = new ApiError();
+            int userId = GetUserId();
+
+            var property = await uow.PropertyRepository.GetPropertyDetailAsync(propId);
+
+            if (property == null)
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such property or photo exists";
+                apiError.ErrorDetails = "You delete a non-existent property";
+                return BadRequest(apiError);
+            }
+
+            // I need to remove from Property Likes where LikedBy = userId . I have like property.PropertyLikes.Remove() 
+            var like = property.PropertyLikes.FirstOrDefault(l => l.LikedBy == userId);
+
+            if (like == null) {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such like from property exists";
+                apiError.ErrorDetails = "You delete a non-existent like";
+                return BadRequest(apiError);
+            }
+
+            property.PropertyLikes.Remove(like); 
+
+            if (await uow.SaveAsync() ) return Ok();
+
+
+            apiError.ErrorCode = BadRequest().StatusCode;
+            apiError.ErrorMessage = "Unknown Error Occured";
+            apiError.ErrorDetails = "I dont know";
+            return Ok(apiError);
+        }
+
+        [HttpGet("isLiked/{propId}")]
+        [Authorize]
+        public async Task<IActionResult> PropertyLiked(int propId)
+        {
+            ApiError apiError = new ApiError();
+            int userId = GetUserId();
+
+            var property = await uow.PropertyRepository.GetPropertyDetailAsync(propId);
+
+            if (property == null)
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "No such property or photo exists";
+                apiError.ErrorDetails = "You delete a non-existent property";
+                return BadRequest(apiError);
+            }
+
+            // I need to remove from Property Likes where LikedBy = userId . I have like property.PropertyLikes.Remove() 
+            var like = property.PropertyLikes.FirstOrDefault(l => l.LikedBy == userId);
+
+            if (like == null)
+            {
+                return Ok(false);
+            }
+
+
+            return Ok(true);
+        }
+
 
     }
 }
