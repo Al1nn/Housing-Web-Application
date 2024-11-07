@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Property } from '../../models/Property.interface';
 import { environment } from '../../../environments/environment';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,7 +30,7 @@ export class PropertyContactsComponent implements OnInit {
     }
     isLiked: boolean = false;
 
-    constructor(private store: StoreService, private route: ActivatedRoute, private dialogRef: MatDialog) { }
+    constructor(private store: StoreService, private route: ActivatedRoute, private dialogRef: MatDialog, private router: Router) { }
 
     ngOnInit() {
         this.propertyId = +this.route.snapshot.params['id'];
@@ -39,9 +39,12 @@ export class PropertyContactsComponent implements OnInit {
         });
         this.setMapCenter();
         this.nameId = this.store.authService.decodeToken()?.nameid as string;
-        this.store.housingService.isPropertyLiked(this.propertyId).subscribe(data => {
-            this.isLiked = data;
-        });
+        if (this.nameId) {
+            this.store.housingService.isPropertyLiked(this.propertyId).subscribe(data => {
+                this.isLiked = data;
+            });
+        }
+
     }
 
     setMapCenter() {
@@ -65,6 +68,13 @@ export class PropertyContactsComponent implements OnInit {
 
     likeProperty() {
         this.isLiked = !this.isLiked;
+
+        if (!this.nameId) {
+            this.isLiked = false;
+            this.router.navigate(['user/login']);
+            this.store.alertifyService.error("You must log in to like properties");
+            return;
+        }
 
         if (this.isLiked) {
             this.store.housingService.likeProperty(this.propertyId).subscribe(() => {
