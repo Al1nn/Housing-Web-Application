@@ -35,9 +35,12 @@ export class PropertyDetailReaderComponent implements OnInit {
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
         this.nameId = this.store.authService.decodeToken()?.nameid as string;
-        this.store.housingService.isPropertyLiked(this.propertyId).subscribe(data => {
-            this.isLiked = data;
-        });
+        if (this.nameId) {
+            this.store.housingService.isPropertyLiked(this.propertyId).subscribe(data => {
+                this.isLiked = data;
+            });
+        }
+
     }
 
     getPropertyPhotos(): GalleryItem[] {
@@ -58,7 +61,7 @@ export class PropertyDetailReaderComponent implements OnInit {
     }
 
     openMessagesModal() {
-        if (localStorage && !localStorage.getItem('token')) {
+        if (!this.nameId) {
             this.router.navigate(['user/login']);
             this.store.alertifyService.error("You must log in before sending messages");
             return;
@@ -78,6 +81,13 @@ export class PropertyDetailReaderComponent implements OnInit {
 
     likeProperty() {
         this.isLiked = !this.isLiked;
+
+        if (!this.nameId) {
+            this.isLiked = false;
+            this.router.navigate(['user/login']);
+            this.store.alertifyService.error("You must log in to like properties");
+            return;
+        }
 
         if (this.isLiked) {
             this.store.housingService.likeProperty(this.propertyId).subscribe(() => {
