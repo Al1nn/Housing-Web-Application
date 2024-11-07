@@ -31,13 +31,14 @@ export class PropertyDetailOwnerComponent implements OnInit {
         this.propertyId = +this.route.snapshot.params['id'];
         this.route.data.subscribe((data) => {
             this.property = data['property'];
-            console.log(this.property);
         });
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.nameId = this.store.authService.decodeToken()?.nameid as string;
         this.galleryImages = this.getPropertyPhotos();
 
-
+        this.store.housingService.isPropertyLiked(this.propertyId).subscribe(data => {
+            this.isLiked = data;
+        });
     }
 
     getPropertyPhotos(): GalleryItem[] {
