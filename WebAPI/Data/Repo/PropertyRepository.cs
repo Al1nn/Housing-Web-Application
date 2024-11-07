@@ -114,7 +114,7 @@ namespace WebAPI.Data.Repo
                             .Include(p => p.User)
                             .Include(p => p.Photos)
                             .Where(p => p.Id == id)
-                            .FirstAsync();
+                            .FirstOrDefaultAsync();
             return properties;
         }
 

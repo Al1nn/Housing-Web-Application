@@ -160,6 +160,36 @@ export class HousingService {
         return this.http.delete<Property>(this.baseUrl + '/property/delete/' + id, httpOptions);
     }
 
+    likeProperty(id: number) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+
+        return this.http.get(this.baseUrl + '/property/like/' + id, httpOptions);
+    }
+
+    unlikeProperty(id: number) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+
+        return this.http.get(this.baseUrl + '/property/unlike/' + id, httpOptions);
+    }
+
+    isPropertyLiked(id: number): Observable<boolean> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            })
+        };
+
+        return this.http.get<boolean>(this.baseUrl + '/property/isLiked/' + id, httpOptions);
+    }
+
 
     addPropertyPhoto(propertyId: number, formData: FormData) {
         const httpOptions = {
@@ -182,6 +212,7 @@ export class HousingService {
             observe: 'events'
         });
     }
+
 
 
 

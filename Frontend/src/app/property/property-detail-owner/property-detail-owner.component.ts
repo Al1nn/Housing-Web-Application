@@ -75,6 +75,18 @@ export class PropertyDetailOwnerComponent implements OnInit {
 
     likeProperty() {
         this.isLiked = !this.isLiked;
+
+        if (this.isLiked) {
+            this.store.housingService.likeProperty(this.propertyId).subscribe(() => {
+                this.property.likes += 1;
+            });
+
+        } else {
+            this.store.housingService.unlikeProperty(this.propertyId).subscribe(() => {
+                this.property.likes -= 1;
+            });
+        }
+
         console.log("Liked Property from Owner : ", this.isLiked);
     }
 }

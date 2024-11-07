@@ -36,7 +36,9 @@ export class PropertyDetailReaderComponent implements OnInit {
         this.age = this.store.housingService.getPropertyAge(this.property.estPossessionOn);
         this.galleryImages = this.getPropertyPhotos();
         this.nameId = this.store.authService.decodeToken()?.nameid as string;
-
+        this.store.housingService.isPropertyLiked(this.propertyId).subscribe(data => {
+            this.isLiked = data;
+        });
     }
 
     getPropertyPhotos(): GalleryItem[] {
@@ -77,6 +79,18 @@ export class PropertyDetailReaderComponent implements OnInit {
 
     likeProperty() {
         this.isLiked = !this.isLiked;
-        console.log("Property Liked From Reader");
+
+        if (this.isLiked) {
+            this.store.housingService.likeProperty(this.propertyId).subscribe(() => {
+                this.property.likes += 1;
+            });
+
+        } else {
+            this.store.housingService.unlikeProperty(this.propertyId).subscribe(() => {
+                this.property.likes -= 1;
+            });
+        }
+
+        console.log("Liked Property From Reader");
     }
 }

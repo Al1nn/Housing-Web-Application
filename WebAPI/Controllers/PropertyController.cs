@@ -295,7 +295,9 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetPropertyDetail(int id)
         {
             var property = await uow.PropertyRepository.GetPropertyDetailAsync(id);
+            
             var propertyDto = mapper.Map<PropertyDetailDto>(property);
+            propertyDto.Likes = property.PropertyLikes.Count; 
             return Ok(propertyDto);
         }
 

@@ -35,6 +35,8 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
     thumbnailFolder: string = environment.thumbnailFolder;
     age: string;
     nameId: string;
+    isLiked: boolean = false;
+
     constructor(
         private store: StoreService
         , private route: ActivatedRoute
@@ -57,6 +59,9 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
         this.galleryImages = this.getPropertyPhotos();
         this.nameId = this.store.authService.decodeToken()?.nameid as string;
 
+        this.store.housingService.isPropertyLiked(this.propertyId).subscribe(data => {
+            this.isLiked = data;
+        });
 
     }
 
@@ -119,6 +124,19 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
     }
 
     likeProperty() {
+        this.isLiked = !this.isLiked;
+
+        if (this.isLiked) {
+            this.store.housingService.likeProperty(this.propertyId).subscribe(() => {
+                this.property.likes += 1;
+            });
+
+        } else {
+            this.store.housingService.unlikeProperty(this.propertyId).subscribe(() => {
+                this.property.likes -= 1;
+            });
+        }
+
         console.log("Liked Property From Admin");
     }
 

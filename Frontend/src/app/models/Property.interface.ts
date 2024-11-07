@@ -30,7 +30,7 @@ export class Property implements IPropertyBase {
     estPossessionOn: string;
     photo?: string | null;
     description?: string;
-    likes?: number;
+    likes: number;
     postedBy: number;
     photos?: IPhoto[];
 }

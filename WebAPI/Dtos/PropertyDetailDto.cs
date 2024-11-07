@@ -19,5 +19,7 @@ namespace WebAPI.Dtos
         public int PostedBy { get; set; }
      
         public ICollection<PhotoDto> Photos { get; set; }
+
+        public int Likes { get; set; }
     }
 }
