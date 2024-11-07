@@ -8,6 +8,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { StoreService } from '../../store_services/store.service';
+import { Router } from '@angular/router';
 
 
 
@@ -33,7 +34,8 @@ export class UserRegisterComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private store: StoreService
+        private store: StoreService,
+        private router: Router
     ) { }
 
     get username() {
@@ -155,6 +157,7 @@ export class UserRegisterComponent implements OnInit {
             this.store.authService.registerUser(this.userData()).subscribe(() => {
                 this.onReset();
                 this.store.alertifyService.success('Congrats, you are now registered');
+                this.router.navigate(['user/login']);
             });
         }
     }

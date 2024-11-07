@@ -14,6 +14,7 @@ import { StoreService } from '../../store_services/store.service';
 })
 export class PropertyContactsComponent implements OnInit {
 
+
     public propertyId: number;
     property = new Property();
     public mainPhotoUrl: string;
@@ -27,6 +28,7 @@ export class PropertyContactsComponent implements OnInit {
         disableDoubleClickZoom: false,
         draggable: true
     }
+    isLiked: boolean = false;
 
     constructor(private store: StoreService, private route: ActivatedRoute, private dialogRef: MatDialog) { }
 
@@ -37,7 +39,9 @@ export class PropertyContactsComponent implements OnInit {
         });
         this.setMapCenter();
         this.nameId = this.store.authService.decodeToken()?.nameid as string;
-
+        this.store.housingService.isPropertyLiked(this.propertyId).subscribe(data => {
+            this.isLiked = data;
+        });
     }
 
     setMapCenter() {
@@ -57,6 +61,23 @@ export class PropertyContactsComponent implements OnInit {
                 'postedBy': this.property.postedBy
             }
         });
+    }
+
+    likeProperty() {
+        this.isLiked = !this.isLiked;
+
+        if (this.isLiked) {
+            this.store.housingService.likeProperty(this.propertyId).subscribe(() => {
+                this.property.likes += 1;
+            });
+
+        } else {
+            this.store.housingService.unlikeProperty(this.propertyId).subscribe(() => {
+                this.property.likes -= 1;
+            });
+        }
+
+        console.log("Property Liked From Contacts");
     }
 
 }

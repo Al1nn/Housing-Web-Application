@@ -24,6 +24,7 @@ export class UserSettingsDeleteModalComponent implements OnInit {
         this.store.usersService.deleteAccount().subscribe(() => {
             if (localStorage) {
                 localStorage.removeItem('token');
+                this.store.setLoggedIn(false);
             }
             this.store.alertifyService.success("Account Deleted");
             this.router.navigate(['/']);
