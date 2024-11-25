@@ -398,7 +398,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.set("address", address);
         const { readyToMove, estPossessionOn, gated, mainEntrance, description } = this.OtherInfo.value;
         this.property.set("readyToMove", readyToMove);
-        this.property.set("estPossessionOn", this.datePipe.transform(estPossessionOn, 'MM/dd/yyyy') as string);
+        this.property.set("estPossessionOn", this.datePipe.transform(estPossessionOn, 'yyyy-mm-dd') as string);
         this.property.set("gated", gated);
         this.property.set("mainEntrance", mainEntrance);
         this.property.set("description", description);

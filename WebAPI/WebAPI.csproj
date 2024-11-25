@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>false</InvariantGlobalization>
-    <UserSecretsId>fa79e205-42db-418e-9d03-56eff3ba6dc7</UserSecretsId>
+    <UserSecretsId>af20d484-b088-4980-946f-2fd969f21e76</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Proxy\" />
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\UPLOADS\originalSizes\" />
     <Folder Include="wwwroot\UPLOADS\thumbnails\" />
   </ItemGroup>
