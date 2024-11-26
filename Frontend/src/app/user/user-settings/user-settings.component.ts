@@ -113,6 +113,7 @@ export class UserSettingsComponent implements OnInit {
             if (localStorage) {
                 localStorage.setItem('token', data.token);
                 this.userCard = this.store.authService.decodeToken() as IToken;
+                this.store.setLoggedIn(true);
             }
             this.store.alertifyService.success("Profile Picture Successfully Updated");
         });
