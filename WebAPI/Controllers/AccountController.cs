@@ -161,14 +161,6 @@ namespace WebAPI.Controllers
 
             try
             {
-                var format = await SixLabors.ImageSharp.Image.DetectFormatAsync(originalPath);
-                if (format == null) {
-                    apiError.ErrorCode = BadRequest().StatusCode;
-                    apiError.ErrorMessage = "Invalid or unsupported image format.";
-                    apiError.ErrorDetails = "";
-                    return BadRequest(apiError);
-                }
-                
                 using (var stream = new FileStream(originalPath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
