@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Globalization;
 using WebAPI.Dtos;
 using WebAPI.Models;
 
@@ -16,7 +17,9 @@ namespace WebAPI.Helpers
                 .ForMember(d => d.Username, opt => opt.MapFrom(src => src.Username))
                 .ForMember(d => d.Photo, opt => opt.MapFrom(src => src.Photo));
 
-            CreateMap<Property, PropertyDto>().ReverseMap();
+            CreateMap<Property, PropertyDto>()
+                
+                .ReverseMap();
 
 
             CreateMap<Property, PropertyDetailDto>().ReverseMap();

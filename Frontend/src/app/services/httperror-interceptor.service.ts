@@ -21,7 +21,7 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
             catchError((error: HttpErrorResponse) => {
                 const errorMessage = this.setError(error);
                 console.error('HTTP Error:', error);
-                this.alertifyService.error(errorMessage); // WHY IT GETS ME HERE , AFTER RELOADING THE PAGE ? ? ? ? ?  I DO HAVE THE TOKEN , RETAAARD
+                this.alertifyService.error(errorMessage); 
                 return throwError(() => new Error(errorMessage));
             })
         );
@@ -52,6 +52,10 @@ export class HttpErrorInterceptorService implements HttpInterceptor {
 
         if (error.status === 0) {
             return 'Unable to connect to the server. Please check your internet connection.';
+        }
+
+        if(error.status === ErrorCode.badRequest){
+            return error.error?.errorMessage;
         }
 
         if (error.status === ErrorCode.unauthorised) {

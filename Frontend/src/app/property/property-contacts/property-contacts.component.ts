@@ -50,8 +50,8 @@ export class PropertyContactsComponent implements OnInit {
     setMapCenter() {
         if (this.property && this.property.latitude && this.property.longitude) {
             this.mapCenter = {
-                lat: this.property.latitude,
-                lng: this.property.longitude
+                lat: +this.property.latitude,
+                lng: +this.property.longitude
             };
         }
     }

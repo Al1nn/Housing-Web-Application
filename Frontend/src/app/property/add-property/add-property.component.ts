@@ -393,8 +393,14 @@ export class AddPropertyComponent implements OnInit {
         this.property.set("floorNo", floorNo);
         this.property.set("totalFloors", totalFloors);
         this.property.set("phoneNumber", phoneNumber);
-        this.property.set("latitude", latitude);
+
+
+
+        this.property.set("latitude", latitude); 
         this.property.set("longitude", longitude);
+
+        console.log("Latitude AFTER :", this.property.get("latitude"));
+        console.log("Longitude AFTER :", this.property.get("longitude"));
         this.property.set("address", address);
         const { readyToMove, estPossessionOn, gated, mainEntrance, description } = this.OtherInfo.value;
         this.property.set("readyToMove", readyToMove);

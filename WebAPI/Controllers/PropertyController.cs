@@ -10,6 +10,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using WebAPI.Extensions;
 using Castle.Components.DictionaryAdapter.Xml;
+using System.Globalization;
 
 
 
@@ -465,6 +466,7 @@ namespace WebAPI.Controllers
 
            
             var property = mapper.Map<Property>(propertyDto);
+            
             var userId = GetUserId();
 
 

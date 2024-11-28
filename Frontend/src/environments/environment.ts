@@ -3,5 +3,4 @@ export const environment = {
     baseUrl: 'http://localhost:5207/api',
     thumbnailFolder: 'http://localhost:5207/UPLOADS/thumbnails/',
     originalPictureFolder: 'http://localhost:5207/UPLOADS/originalSizes/',
-    vapidKey: 'BGCEGvkxPqVpnLISTQ0a9cPshdwehs9OMmKwZz2LTTTUSTFOfy3rkXix16fCN7T1vXV_MRfPrjQhaTs26SmIMPk'
 };
