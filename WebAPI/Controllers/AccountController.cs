@@ -148,20 +148,7 @@ namespace WebAPI.Controllers
                 return NotFound(apiError);
             }
 
-            if(!user.Photo.IsEmpty())
-            {
-                var oldThumbnailPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails", user.Photo);
-                var oldOriginalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes", user.Photo);
-
-                if (System.IO.File.Exists(oldThumbnailPath))
-                {
-                    System.IO.File.Delete(oldThumbnailPath);
-                }
-                if (System.IO.File.Exists(oldOriginalPath))
-                {
-                    System.IO.File.Delete(oldOriginalPath);
-                }
-            }
+            
 
             string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes");
             string thumbnailsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails");
@@ -172,22 +159,63 @@ namespace WebAPI.Controllers
             var originalPath = Path.Combine(originalSizesDirectory, fileName);
             var thumbnailPath = Path.Combine(thumbnailsDirectory, fileName);
 
-            using (var stream = new FileStream(originalPath, FileMode.Create))
+            try
             {
-                await file.CopyToAsync(stream);
-            }
-
-            using (var thumbnail = await SixLabors.ImageSharp.Image.LoadAsync(originalPath))
-            {
-                var resizeOptions = new ResizeOptions
+                var format = await SixLabors.ImageSharp.Image.DetectFormatAsync(originalPath);
+                if (format == null) {
+                    apiError.ErrorCode = BadRequest().StatusCode;
+                    apiError.ErrorMessage = "Invalid or unsupported image format.";
+                    apiError.ErrorDetails = "";
+                    return BadRequest(apiError);
+                }
+                
+                using (var stream = new FileStream(originalPath, FileMode.Create))
                 {
-                    Mode = ResizeMode.Crop,
-                    Size = new Size(250, 250),
-                    Position = AnchorPositionMode.Center
-                };
+                    await file.CopyToAsync(stream);
+                }
+                
+                using (var thumbnail = await SixLabors.ImageSharp.Image.LoadAsync(originalPath))
+                {
+                    var resizeOptions = new ResizeOptions
+                    {
+                        Mode = ResizeMode.Crop,
+                        Size = new Size(250, 250),
+                        Position = AnchorPositionMode.Center
+                    };
 
-                thumbnail.Mutate(x => x.Resize(resizeOptions));
-                await thumbnail.SaveAsync(thumbnailPath);
+                    thumbnail.Mutate(x => x.Resize(resizeOptions));
+                    await thumbnail.SaveAsync(thumbnailPath);
+                }
+            }
+            catch (SixLabors.ImageSharp.UnknownImageFormatException ex)
+            {
+                apiError.ErrorCode = BadRequest().StatusCode;
+                apiError.ErrorMessage = "The image format is invalid or unsupported.";
+                apiError.ErrorDetails = ex.Message;
+                return BadRequest(apiError);
+            }
+            catch (Exception ex)
+            {
+                apiError.ErrorCode = StatusCode(500).StatusCode;
+                apiError.ErrorMessage = "An error occurred while processing the image.";
+                apiError.ErrorDetails = ex.Message;
+                return StatusCode(500, apiError);
+            }
+            
+            
+            if(!user.Photo.IsEmpty())
+            {
+                var oldThumbnailPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails", user.Photo);
+                var oldOriginalPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes", user.Photo);
+            
+                if (System.IO.File.Exists(oldThumbnailPath))
+                {
+                    System.IO.File.Delete(oldThumbnailPath);
+                }
+                if (System.IO.File.Exists(oldOriginalPath))
+                {
+                    System.IO.File.Delete(oldOriginalPath);
+                }
             }
 
             user.Photo = fileName;
