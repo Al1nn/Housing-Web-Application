@@ -16,6 +16,8 @@ import { IKeyValuePair } from '../../models/IKeyValuePair';
 import { ICity } from '../../models/ICity.interface';
 import { StoreService } from '../../store_services/store.service';
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-add-property',
@@ -65,7 +67,8 @@ export class AddPropertyComponent implements OnInit {
         private store: StoreService,
         private fb: FormBuilder,
         private router: Router,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private http: HttpClient
     ) { }
 
     get BasicInfo() {
@@ -488,6 +491,28 @@ export class AddPropertyComponent implements OnInit {
         const [city, country] = selectedText.split(',').map(item => item.trim());
         this.propertyView.city = city;
         this.propertyView.country = country;
+
+
+        //Here I need to determine the latitude and longitude of {this.propertyView.city, this.propertyView.country } using google maps geocoder or whatever
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+            city + ',' + country
+          )}&key=${environment.googleKey}`;
+
+          this.http.get(url).subscribe(
+            (response: any) => {
+              if (response.status === 'OK' && response.results.length > 0) {
+                const location = response.results[0].geometry.location;
+                this.mapCenter = { lat: location.lat, lng: location.lng};
+                this.markerPosition = this.mapCenter;
+                console.log('Coordinates:', location.lat, location.lng);
+              } else {
+                console.error('Geocoding API error:', response.status);
+              }
+            },
+            (error) => {
+              console.error('API request error:', error);
+            }
+          );  
     }
 
 
