@@ -95,7 +95,9 @@
                     </option>
                   </datalist>
                   <div class="error-block" *ngIf="city.invalid && (nextClicked || city.touched)">
-                    Please select City
+                    <span *ngIf="city.errors?.['required']">Please insert City</span>
+                    <span *ngIf="city.errors?.['noDigitsOrNumbers']">City must not contain digits</span>
+                    <span *ngIf="city.errors?.['invalidCity']">Please select a valid city from the suggestions.</span>
                   </div>
                 </div>
                 

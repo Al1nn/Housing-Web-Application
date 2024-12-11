@@ -6,6 +6,7 @@ import {
     FormBuilder,
     FormControl,
     FormGroup,
+    ValidationErrors,
     ValidatorFn,
     Validators,
 } from '@angular/forms';
@@ -225,7 +226,7 @@ export class AddPropertyComponent implements OnInit {
                 propertyType: [null, Validators.required],
                 furnishingType: [null, Validators.required],
                 name: [null, [Validators.required, this.noDigitsOrNumbersValidator()]],
-                city: [null, Validators.required],
+                city: [null, [Validators.required, this.noDigitsOrNumbersValidator(), this.cityAutocompleteValidator()]], //Add city custom validators also, for country, format is like City, Country ( but countries can be USA, UK, so , do something)
             }),
             PriceInfo: this.fb.group({
                 price: [null, [Validators.required, this.numericValidator()]],
@@ -301,6 +302,27 @@ export class AddPropertyComponent implements OnInit {
             return valid ? null : { 'numeric': true };
         };
     }
+
+    cityAutocompleteValidator(): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+          const value = control.value;
+        
+          if (!value) {
+            return null;
+          }
+    
+          const selectedCity = this.cityList.find(
+            (city) => `${city.name}, ${city.country}` === value
+          );
+      
+          if (!selectedCity) {
+            return { invalidCity: true }; 
+          }
+      
+          return null;
+        };
+      }
+   
 
     initializeAutocomplete() {
         const autocomplete = new google.maps.places.Autocomplete(
@@ -496,19 +518,19 @@ export class AddPropertyComponent implements OnInit {
             clearTimeout(this.debounceTimer);
         }
 
-        if(text.includes(',')){
+        if(!this.city.hasError('invalidCity')){ // only if the invalidCity is false 
             this.debounceTimer =  window.setTimeout( () => {
                 
                 
                 const [cityView, countryView] = text.split(',').map(item => item.trim());
 
-                if(cityView !== '' && countryView !== ''){
-                    console.log(text);
-                    this.propertyView.city = cityView;
-                    this.propertyView.country = countryView;
+               
+                console.log(text);
+                this.propertyView.city = cityView;
+                this.propertyView.country = countryView;
                 
-                    this.selectedCityId = this.cityList.find( city => city.name === cityView)?.id as number;
-                }
+                this.selectedCityId = this.cityList.find( city => city.name === cityView)?.id as number;
+                
                 
             
             }, 500);
