@@ -17,6 +17,8 @@ import { IKeyValuePair } from '../../models/IKeyValuePair';
 import { ICity } from '../../models/ICity.interface';
 import { StoreService } from '../../store_services/store.service';
 import { DatePipe } from '@angular/common';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -73,6 +75,7 @@ export class AddPropertyComponent implements OnInit {
         private fb: FormBuilder,
         private router: Router,
         private datePipe: DatePipe,
+        private http: HttpClient
     ) { }
 
     get BasicInfo() {
@@ -531,8 +534,26 @@ export class AddPropertyComponent implements OnInit {
                 
                 this.selectedCityId = this.cityList.find( city => city.name === cityView)?.id as number;
                 
+                // Here i need to use the google API 
+                const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+                    cityView + ',' + countryView
+                  )}&key=${environment.googleKey}`;
                 
-            
+                  this.http.get(url).subscribe(
+                    (response: any) => {
+                      if (response.status === 'OK' && response.results.length > 0) {
+                        const location = response.results[0].geometry.location;
+                        this.mapCenter = { lat: location.lat, lng: location.lng};
+                        this.markerPosition = this.mapCenter;
+                        console.log('Coordinates:', location.lat, location.lng);
+                      } else {
+                        console.error('Geocoding API error:', response.status);
+                      }
+                    },
+                    (error) => {
+                      console.error('API request error:', error);
+                    }
+                  );
             }, 500);
         }
 
