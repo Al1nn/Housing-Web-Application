@@ -143,7 +143,7 @@ namespace WebAPI.Data.Repo
             {
                 string originalSizesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "originalSizes");
                 string thumbnailsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UPLOADS", "thumbnails");
-
+               
                 if (!Directory.Exists(originalSizesDirectory))
                 {
                     Directory.CreateDirectory(originalSizesDirectory);
@@ -153,6 +153,8 @@ namespace WebAPI.Data.Repo
                 {
                     Directory.CreateDirectory(thumbnailsDirectory);
                 }
+
+               
 
                 string uniqueId = Guid.NewGuid().ToString();
                 var fileName = uniqueId + '-' + file.FileName;

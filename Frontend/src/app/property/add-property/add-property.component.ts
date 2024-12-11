@@ -488,32 +488,52 @@ export class AddPropertyComponent implements OnInit {
     }
 
     updateCityAndCountry(selectedText: string) {
+        // Check if the input is valid
+        if (!selectedText || !selectedText.includes(',')) {
+          console.error('Invalid city and country format.');
+          alert('Please select a valid city and country from the list.');
+          return;
+        }
+      
+        // Split the input into city and country
         const [city, country] = selectedText.split(',').map(item => item.trim());
         this.propertyView.city = city;
         this.propertyView.country = country;
-
-
-        //Here I need to determine the latitude and longitude of {this.propertyView.city, this.propertyView.country } using google maps geocoder or whatever
+      
+        // Validate that the city and country exist in the predefined list
+        if (!this.cityList.some(c => c.name === city && c.country === country)) {
+          console.error('Selected city and country not found in the list.');
+          alert('The selected city and country are not valid.');
+          return;
+        }
+      
+        // Create the API request URL
         const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-            city + ',' + country
-          )}&key=${environment.googleKey}`;
-
-          this.http.get(url).subscribe(
-            (response: any) => {
-              if (response.status === 'OK' && response.results.length > 0) {
-                const location = response.results[0].geometry.location;
-                this.mapCenter = { lat: location.lat, lng: location.lng};
-                this.markerPosition = this.mapCenter;
-                console.log('Coordinates:', location.lat, location.lng);
-              } else {
-                console.error('Geocoding API error:', response.status);
-              }
-            },
-            (error) => {
-              console.error('API request error:', error);
+          city + ', ' + country
+        )}&key=${environment.googleKey}`;
+      
+        // Call the Google Maps Geocoding API
+        this.http.get(url).subscribe(
+          (response: any) => {
+            if (response.status === 'OK' && response.results.length > 0) {
+              // Extract the latitude and longitude
+              const location = response.results[0].geometry.location;
+              this.mapCenter = { lat: location.lat, lng: location.lng };
+              this.markerPosition = this.mapCenter;
+              console.log(`Coordinates: Latitude ${location.lat}, Longitude ${location.lng}`);
+            } else {
+              console.error('Geocoding API error:', response.status);
+              alert('Could not find location. Please check the city and country.');
             }
-          );  
-    }
+          },
+          (error) => {
+            console.error('API request error:', error);
+            alert('Error connecting to the geocoding service. Please try again later.');
+          }
+        );
+      }
+      
+      
 
 
 
