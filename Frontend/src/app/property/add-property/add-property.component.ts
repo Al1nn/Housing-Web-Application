@@ -16,8 +16,8 @@ import { IKeyValuePair } from '../../models/IKeyValuePair';
 import { ICity } from '../../models/ICity.interface';
 import { StoreService } from '../../store_services/store.service';
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+
+
 
 @Component({
     selector: 'app-add-property',
@@ -25,6 +25,8 @@ import { environment } from '../../../environments/environment';
     styleUrls: ['./add-property.component.css'],
 })
 export class AddPropertyComponent implements OnInit {
+
+
 
     @ViewChild('formTabs', { static: false }) formTabs: TabsetComponent;
     addPropertyForm: FormGroup;
@@ -38,13 +40,13 @@ export class AddPropertyComponent implements OnInit {
     cityList: ICity[];
 
     FilteredPlaces: string[] = [];
-
+    selectedCityId: number = 0;
 
     mapCenter: google.maps.LatLngLiteral = { lat: 44.85454389856495, lng: 24.871015675879697 };
     mapZoom = 10;
     markerPosition: google.maps.LatLngLiteral = this.mapCenter;
     advancedMarker: google.maps.marker.AdvancedMarkerElementOptions;
-    geocoder = new google.maps.Geocoder();
+    geocoder = new google.maps.Geocoder(); //undefined is not a constructor
 
     propertyView: IPropertyBase = {
         id: 0,
@@ -62,13 +64,14 @@ export class AddPropertyComponent implements OnInit {
         photo: '',
     };
 
+    private debounceTimer: number;
+
     constructor(
         //private datePipe: DatePipe,
         private store: StoreService,
         private fb: FormBuilder,
         private router: Router,
         private datePipe: DatePipe,
-        private http: HttpClient
     ) { }
 
     get BasicInfo() {
@@ -372,13 +375,14 @@ export class AddPropertyComponent implements OnInit {
 
     mapProperty(): void {
 
-        const { sellRent, bhk, propertyType, furnishingType, name, city } = this.BasicInfo.value;
+        const { sellRent, bhk, propertyType, furnishingType, name } = this.BasicInfo.value;
         this.property.set("sellRent", sellRent);
         this.property.set("bhk", bhk);
         this.property.set("propertyTypeId", propertyType);
         this.property.set("furnishingTypeId", furnishingType);
         this.property.set("name", name);
-        this.property.set("cityId", city);
+        this.property.set("cityId", this.selectedCityId.toString());
+        console.log(this.property.get("cityId"));
         const { price, builtArea, carpetArea } = this.PriceInfo.value;
         this.property.set("price", price);
 
@@ -487,51 +491,37 @@ export class AddPropertyComponent implements OnInit {
         });
     }
 
-    updateCityAndCountry(selectedText: string) {
-        // Check if the input is valid
-        if (!selectedText || !selectedText.includes(',')) {
-          console.error('Invalid city and country format.');
-          alert('Please select a valid city and country from the list.');
-          return;
+    updateCityAndCountry(text: string) {
+        if(this.debounceTimer){
+            clearTimeout(this.debounceTimer);
         }
-      
-        // Split the input into city and country
-        const [city, country] = selectedText.split(',').map(item => item.trim());
-        this.propertyView.city = city;
-        this.propertyView.country = country;
-      
-        // Validate that the city and country exist in the predefined list
-        if (!this.cityList.some(c => c.name === city && c.country === country)) {
-          console.error('Selected city and country not found in the list.');
-          alert('The selected city and country are not valid.');
-          return;
+
+        if(text.includes(',')){
+            this.debounceTimer =  window.setTimeout( () => {
+                
+                
+                const [cityView, countryView] = text.split(',').map(item => item.trim());
+
+                if(cityView !== '' && countryView !== ''){
+                    console.log(text);
+                    this.propertyView.city = cityView;
+                    this.propertyView.country = countryView;
+                
+                    this.selectedCityId = this.cityList.find( city => city.name === cityView)?.id as number;
+                }
+                
+            
+            }, 500);
         }
-      
-        // Create the API request URL
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-          city + ', ' + country
-        )}&key=${environment.googleKey}`;
-      
-        // Call the Google Maps Geocoding API
-        this.http.get(url).subscribe(
-          (response: any) => {
-            if (response.status === 'OK' && response.results.length > 0) {
-              // Extract the latitude and longitude
-              const location = response.results[0].geometry.location;
-              this.mapCenter = { lat: location.lat, lng: location.lng };
-              this.markerPosition = this.mapCenter;
-              console.log(`Coordinates: Latitude ${location.lat}, Longitude ${location.lng}`);
-            } else {
-              console.error('Geocoding API error:', response.status);
-              alert('Could not find location. Please check the city and country.');
-            }
-          },
-          (error) => {
-            console.error('API request error:', error);
-            alert('Error connecting to the geocoding service. Please try again later.');
-          }
-        );
-      }
+
+        
+
+
+    }
+
+    citySelected(id: string) {
+        console.log(id);
+    }
       
       
 
