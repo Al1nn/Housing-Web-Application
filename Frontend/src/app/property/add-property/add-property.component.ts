@@ -229,7 +229,7 @@ export class AddPropertyComponent implements OnInit {
                 propertyType: [null, Validators.required],
                 furnishingType: [null, Validators.required],
                 name: [null, [Validators.required, this.noDigitsOrNumbersValidator()]],
-                city: [null, [Validators.required, this.noDigitsOrNumbersValidator(), this.cityAutocompleteValidator()]], //Add city custom validators also, for country, format is like City, Country ( but countries can be USA, UK, so , do something)
+                city: [null, [Validators.required, this.noDigitsOrNumbersValidator(), this.cityAutocompleteValidator()]], 
             }),
             PriceInfo: this.fb.group({
                 price: [null, [Validators.required, this.numericValidator()]],
@@ -240,12 +240,14 @@ export class AddPropertyComponent implements OnInit {
             }),
             AddressInfo: this.fb.group({
                 floorNo: [null, [Validators.required, this.numericValidator()]],
-                totalFloors: [null, [Validators.required, this.numericValidator()]],
+                totalFloors: [null, [Validators.required, this.numericValidator() ]], 
                 address: [null, Validators.required],
                 latitude: [null],
                 longitude: [null],
-                phoneNumber: [null, [Validators.required, this.numericValidator(), Validators.maxLength(15)]],
-            }),
+                phoneNumber: [null, [Validators.required, this.numericValidator(), Validators.maxLength(15)]],   
+            },
+            { validators: this.floorNoValidator}
+            ),
 
             OtherInfo: this.fb.group({
                 readyToMove: [null, Validators.required],
@@ -258,6 +260,9 @@ export class AddPropertyComponent implements OnInit {
             PhotosInfo: this.fb.group({
                 photos: [null, Validators.required]
             })
+            
+
+            
         });
 
 
@@ -304,6 +309,12 @@ export class AddPropertyComponent implements OnInit {
             const valid = /^\d*\.?\d*$/.test(control.value);
             return valid ? null : { 'numeric': true };
         };
+    }
+
+    floorNoValidator(fc: AbstractControl): ValidationErrors | null {
+        return fc.get('floorNo')?.value <= fc.get('totalFloors')?.value
+            ? null
+            : { floorExceedsTotal: true };
     }
 
     cityAutocompleteValidator(): ValidatorFn {

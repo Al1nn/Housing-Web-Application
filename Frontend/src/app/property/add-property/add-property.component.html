@@ -235,6 +235,10 @@
                     <span *ngIf="!totalFloors.hasError('required') && totalFloors.hasError('numeric')">
                       Total Floors must be a number
                     </span>
+                  
+                  </span>
+                  <span class="error-block" *ngIf="AddressInfo.hasError('floorExceedsTotal') && totalFloors.valid">
+                    Floor exceeds total
                   </span>
                 </div>
 
