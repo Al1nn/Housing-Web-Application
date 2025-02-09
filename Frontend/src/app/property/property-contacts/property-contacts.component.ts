@@ -87,7 +87,7 @@ export class PropertyContactsComponent implements OnInit {
             });
         }
 
-        console.log("Property Liked From Contacts");
+       
     }
 
 }

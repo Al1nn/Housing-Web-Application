@@ -147,7 +147,7 @@ export class UserRegisterComponent implements OnInit {
         return this.formData;
     }
     onSubmit() {
-        console.log(this.registerationForm);
+        
 
 
 

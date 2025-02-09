@@ -10,17 +10,17 @@ import { BehaviorSubject } from 'rxjs';
 
 
 
+
 @Injectable({
     providedIn: 'root'
 })
 export class StoreService {
     private loggedInSubject = new BehaviorSubject<boolean>(false);
-
+    private notificationListenerSubject = new BehaviorSubject<boolean>(false);
 
 
     loggedIn$ = this.loggedInSubject.asObservable();
-
-
+    notificationListener$ = this.notificationListenerSubject.asObservable();
 
 
 
@@ -28,7 +28,9 @@ export class StoreService {
         this.loggedInSubject.next(state);
     }
 
-
+    setListening(state: boolean): void {
+        this.notificationListenerSubject.next(state);
+    }
 
     constructor(public housingService: HousingService,
         public alertifyService: AlertifyService,

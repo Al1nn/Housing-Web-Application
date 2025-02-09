@@ -56,7 +56,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
             this.chatId = await firstValueFrom(
                 this.store.chatService.findExistingChat(this.token.nameid, other_id)
             );
-            console.log('Chat ID:', this.chatId);
+           
             if (this.chatId === null) {
                 await this.createNewChat(other_id);
             } else {
@@ -72,9 +72,9 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
 
     private async deleteNotifications() {
         if (this.token) {
-            this.store.chatService.deleteNotification(this.token.nameid, this.data.postedBy.toString()).subscribe(() => {
-                console.log("Notification deleted successfully");
-            });
+            // this.store.chatService.deleteNotification(this.token.nameid, this.data.postedBy.toString()).subscribe(() => {
+               
+            // });
         }
     }
 
@@ -90,7 +90,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     private async setFlags() {
         if (this.chatId) {
             this.store.chatService.setFlag(this.chatId, this.token.nameid).subscribe(() => {
-                console.log("Flag set successfully");
+              
             });
         }
     }
@@ -98,7 +98,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     private async setUserOffline() {
         if (this.chatId) {
             this.store.chatService.setUserOffline(this.chatId, this.token.nameid).subscribe(() => {
-                console.log("Current user set offline");
+               
             })
         }
     }
@@ -106,7 +106,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
     private async setUserOnline() {
         if (this.chatId) {
             this.store.chatService.setUserOnline(this.chatId, this.token.nameid).subscribe(() => {
-                console.log("Current user set ONLINE");
+          
             })
         }
     }
@@ -128,7 +128,7 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
                     userPhotoOther
                 )
             );
-            console.log('New Chat Created with ID:', this.chatId);
+           
         } catch (error) {
             console.error('Error creating new chat:', error);
         }

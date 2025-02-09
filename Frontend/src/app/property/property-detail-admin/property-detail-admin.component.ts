@@ -136,7 +136,7 @@ export class PropertyDetailAdminComponent implements OnInit, OnDestroy {
             });
         }
 
-        console.log("Liked Property From Admin");
+       
     }
 
 }

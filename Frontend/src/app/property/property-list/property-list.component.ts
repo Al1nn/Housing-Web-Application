@@ -218,7 +218,7 @@ export class PropertyListComponent implements OnInit, OnDestroy {
     }
 
     onSortChange() {
-        console.log('Sort by:', this.SortbyParam);
+        
         this.filters.sortByParam = this.SortbyParam;
         this.filters.pageNumber = 1;
         if (this.urlSegments.length > 0 && this.urlSegments[0].path.includes('property-dashboard')) {

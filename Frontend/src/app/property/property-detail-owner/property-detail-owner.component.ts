@@ -88,6 +88,5 @@ export class PropertyDetailOwnerComponent implements OnInit {
             });
         }
 
-        console.log("Liked Property from Owner : ", this.isLiked);
     }
 }

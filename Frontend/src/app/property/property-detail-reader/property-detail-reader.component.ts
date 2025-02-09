@@ -100,6 +100,6 @@ export class PropertyDetailReaderComponent implements OnInit {
             });
         }
 
-        console.log("Liked Property From Reader");
+      
     }
 }

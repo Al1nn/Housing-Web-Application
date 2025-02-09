@@ -23,7 +23,7 @@ export class PropertyDetailDeletePopupComponent implements OnInit {
     ngOnInit() {
         this.propertyId = this.data.propertyId;
 
-        console.log(this.data.sellRent);
+        
     }
 
     closeDeleteModal() {

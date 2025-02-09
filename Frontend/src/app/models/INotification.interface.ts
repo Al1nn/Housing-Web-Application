@@ -1,15 +1,12 @@
-export interface IUser {
-    userId: string;
-    userName: string;
+export interface IUserNotificationList{
+    destinationId: string; 
     notifications: INotification[];
 }
 
-
-
 export interface INotification {
-    userId: string;
-    userPicture: string;
-    userName: string;
+    senderId: string;
+    senderPhoto: string;
+    senderName: string;
     notification: string;
     dateTime: string;
 }

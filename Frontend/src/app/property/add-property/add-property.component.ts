@@ -269,7 +269,7 @@ export class AddPropertyComponent implements OnInit {
     }
 
     updateRentValidators() {
-        console.log("Rent Validators set");
+       
         this.security.setValidators([
             Validators.required,
             this.numericValidator(),
@@ -286,7 +286,7 @@ export class AddPropertyComponent implements OnInit {
     }
 
     updateSellValidators() {
-        console.log("Sell Validators Set");
+       
         this.security.clearValidators();
         this.maintenance.clearValidators();
 
@@ -418,7 +418,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.set("furnishingTypeId", furnishingType);
         this.property.set("name", name);
         this.property.set("cityId", this.selectedCityId.toString());
-        console.log(this.property.get("cityId"));
+        
         const { price, builtArea, carpetArea } = this.PriceInfo.value;
         this.property.set("price", price);
 
@@ -442,8 +442,7 @@ export class AddPropertyComponent implements OnInit {
         this.property.set("latitude", latitude); 
         this.property.set("longitude", longitude);
 
-        console.log("Latitude AFTER :", this.property.get("latitude"));
-        console.log("Longitude AFTER :", this.property.get("longitude"));
+      
         this.property.set("address", address);
         const { readyToMove, estPossessionOn, gated, mainEntrance, description } = this.OtherInfo.value;
         this.property.set("readyToMove", readyToMove);
@@ -539,7 +538,7 @@ export class AddPropertyComponent implements OnInit {
                 const [cityView, countryView] = text.split(',').map(item => item.trim());
 
                
-                console.log(text);
+               
                 this.propertyView.city = cityView;
                 this.propertyView.country = countryView;
                 
@@ -556,7 +555,6 @@ export class AddPropertyComponent implements OnInit {
                         const location = response.results[0].geometry.location;
                         this.mapCenter = { lat: location.lat, lng: location.lng};
                         this.markerPosition = this.mapCenter;
-                        console.log('Coordinates:', location.lat, location.lng);
                       } else {
                         console.error('Geocoding API error:', response.status);
                       }
@@ -573,9 +571,7 @@ export class AddPropertyComponent implements OnInit {
 
     }
 
-    citySelected(id: string) {
-        console.log(id);
-    }
+    
       
       
 

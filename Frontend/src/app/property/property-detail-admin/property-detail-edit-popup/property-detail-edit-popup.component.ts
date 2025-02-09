@@ -226,10 +226,7 @@ export class PropertyDetailEditPopupComponent implements OnInit {
         this.property.city = cityArray[0];
         this.property.country = cityArray[1];
         this.property.cityId = cityId;
-        console.log('Property : ');
-        console.log(this.property);
-        console.log('Unmodified Property : ');
-        console.log(this.unmodifiedProperty);
+       
     }
 
     openMapsModal() {

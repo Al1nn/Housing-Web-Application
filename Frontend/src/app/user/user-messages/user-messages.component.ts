@@ -52,7 +52,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             switchMap(value => this.filterUsers(value as string))
         );
-
+        
         this.chats$ = this.store.chatService.getAllChatsByUser(this.token.nameid);
     }
 
@@ -64,10 +64,10 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             this.chatId = await firstValueFrom(
                 this.store.chatService.findExistingChat(this.token.nameid, userIdOther)
             );
-            this.store.chatService.deleteNotification(this.token.nameid, userCard.id.toString()).subscribe(() => {
-                console.log("Notifications Deleted Successfully");
-            });
-            console.log('Chat ID:', this.chatId);
+            // this.store.chatService.deleteNotification(this.token.nameid, userCard.id.toString()).subscribe(() => {
+                
+            // });
+            
             if (this.chatId === null) {
                 await this.createNewChat(userCard);
             } else {
@@ -104,7 +104,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
                     userPhotoOther
                 )
             );
-            console.log('New Chat Created with ID:', this.chatId);
+            
         } catch (error) {
             console.error('Error creating new chat:', error);
         }
@@ -129,6 +129,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             });
 
             await this.listenForMessages();
+            
         }
     }
 
@@ -137,7 +138,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
     private async setFlags() {
         if (this.chatId) {
             this.store.chatService.setFlag(this.chatId, this.token.nameid).subscribe(() => {
-                console.log("Flag set successfully");
+                
             });
         }
     }
@@ -145,7 +146,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
     private async setUserOffline() {
         if (this.chatId) {
             this.store.chatService.setUserOffline(this.chatId, this.token.nameid).subscribe(() => {
-                console.log("Current user set offline");
+                
             })
         }
     }
@@ -153,13 +154,13 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
     private async setUserOnline() {
         if (this.chatId) {
             this.store.chatService.setUserOnline(this.chatId, this.token.nameid).subscribe(() => {
-                console.log("Current user set ONLINE");
+                
             })
         }
     }
 
     async onOptionSelected(chat: IChat) {
-        console.log("Previous Chat ID :", this.chatId);
+        
 
         if (this.chatId !== null) {
             this.setUserOffline();
@@ -167,15 +168,15 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
 
 
         if (!(this.token.nameid === chat.userID_first)) {
-            this.store.chatService.deleteNotification(chat.userID_other, chat.userID_first).subscribe(() => {
-                console.log("Notification deleted succesfully");
-            });
+            // this.store.chatService.deleteNotification(chat.userID_other, chat.userID_first).subscribe(() => {
+        
+            // });
             this.displayPicture = chat.userPhoto_first;
             this.displayName = chat.userName_first;
         } else {
-            this.store.chatService.deleteNotification(chat.userID_first, chat.userID_other).subscribe(() => {
-                console.log("Notification deleted succesfully");
-            });
+            // this.store.chatService.deleteNotification(chat.userID_first, chat.userID_other).subscribe(() => {
+        
+            // });
             this.displayPicture = chat.userPhoto_other;
             this.displayName = chat.userName_other;
         }
@@ -185,13 +186,13 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
         await this.setUserOnline();
         await this.setFlags();
         await this.listenForMessages();
-        console.log("Current chat id : ", this.chatId);
+        
 
 
     }
 
     async onSuggestionSelected(user: IUserCard) {
-        console.log(this.chatId)
+        
         await this.setUserOffline();
         await this.checkForExistingChat(user);
     }
