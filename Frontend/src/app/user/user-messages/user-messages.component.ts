@@ -67,6 +67,9 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             // this.store.chatService.deleteNotification(this.token.nameid, userCard.id.toString()).subscribe(() => {
                 
             // });
+
+            console.log("Our Own ID : " + this.token.nameid);
+            console.log(" Other Conversation Account : " + userCard.id.toString());
             
             if (this.chatId === null) {
                 await this.createNewChat(userCard);
@@ -171,12 +174,22 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             // this.store.chatService.deleteNotification(chat.userID_other, chat.userID_first).subscribe(() => {
         
             // });
+
+            console.log("Our own id : " + this.token.nameid);
+            console.log("CHAT user FIRST ID : " + chat.userID_first);
+            console.log("CHAT user OTHER ID : " + chat.userID_other);
+
             this.displayPicture = chat.userPhoto_first;
             this.displayName = chat.userName_first;
         } else {
             // this.store.chatService.deleteNotification(chat.userID_first, chat.userID_other).subscribe(() => {
         
             // });
+
+            console.log("Our own id : " + this.token.nameid);
+            console.log("CHAT user FIRST ID : " + chat.userID_first);
+            console.log("CHAT user OTHER ID : " + chat.userID_other);
+
             this.displayPicture = chat.userPhoto_other;
             this.displayName = chat.userName_other;
         }

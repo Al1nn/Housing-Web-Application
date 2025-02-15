@@ -241,7 +241,7 @@ export class ChatService {
         };
     
         try {
-          // Check for duplicates before sending
+         
           const isDuplicate = await this.checkForDuplicateNotification(notification, destinationId);
           
           if (isDuplicate) {
@@ -258,6 +258,7 @@ export class ChatService {
               return throwError(() => error);
             })
           );
+
         } catch (error) {
           console.error('Error in sendNotification:', error);
           return throwError(() => error);
@@ -338,66 +339,6 @@ export class ChatService {
         );
     }
 
-    // private sendNotification() {
-        
-    // }
-
-    // deleteNotification(currentUserID: string, otherUserID: string): Observable<void> {
-    //     const notificationsRef: AngularFireObject<{ [key: string]: any }> = this.db.object(`users/${currentUserID}/notifications`);
-
-    //     return notificationsRef.valueChanges().pipe(
-    //         take(1),
-    //         switchMap((notifications: { [key: string]: any } | null) => {
-    //             if (!notifications) {
-    //                 console.log("No notifications found");
-    //                 return of(void 0);
-    //             }
-
-    //             const updatedNotifications: { [key: string]: any } = {};
-    //             let hasChanges = false;
-
-    //             Object.entries(notifications).forEach(([key, value]) => {
-    //                 if (typeof value === 'object' && value.userId !== otherUserID) {
-    //                     updatedNotifications[key] = value;
-    //                 } else {
-    //                     hasChanges = true;
-    //                     console.log(`Removing notification with key: ${key}`);
-    //                 }
-    //             });
-
-    //             if (hasChanges) {
-    //                 return from(notificationsRef.set(updatedNotifications));
-    //             } else {
-    //                 console.log("No notifications to remove");
-    //                 return of(void 0);
-    //             }
-    //         }),
-    //         map(() => {
-    //             console.log("Notifications update process completed");
-    //         }),
-    //         catchError(error => {
-    //             console.error("Error in notification removal process:", error);
-    //             return throwError(() => new Error("Failed to remove notifications"));
-    //         })
-    //     );
-    // }
-
-    // deleteNotificationAtIndex(userId: string, notificationIndex: number): Promise<void> {
-    //     return this.db.object(`users/${userId}/notifications/${notificationIndex}`).remove();
-    // }
-
-    // listenToNotifications(userId: string): Observable<INotification[]> {
-
-    //     return this.db.object<{ [key: string]: INotification }>(`users/${userId}/notifications`)
-    //         .valueChanges()
-    //         .pipe(
-    //             map(notifications => {
-    //                 if (!notifications) {
-    //                     return [];
-    //                 }
-    //                 return Object.values(notifications);
-    //             })
-    //         );
-    // }
+   
 
 }
