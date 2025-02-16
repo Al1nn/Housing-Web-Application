@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { StoreService } from '../store_services/store.service';
 import { INotification } from '../models/INotification.interface';
@@ -32,7 +32,7 @@ export class NavBarComponent implements OnInit {
     constructor(
         public store: StoreService,
         private router: Router,
-  
+        private cdr : ChangeDetectorRef
     ) { }
 
     ngOnInit(): void {
@@ -48,6 +48,7 @@ export class NavBarComponent implements OnInit {
         }));
 
 
+        
         this.checkForLoggedIn();
     }
 
@@ -68,9 +69,20 @@ export class NavBarComponent implements OnInit {
             this.loggedInUser = token.unique_name;
             this.profilePicture = token.profile_picture;
 
+            this.subscription.add(
+                this.store.chatService.listenNotifications(token.nameid).subscribe(notifications => {
+                    this.matBadger = notifications.length;
+                    this.newNotifications = notifications;
+                    this.cdr.detectChanges();
+                })
+            );
             
         }
     }
+
+    // private listenToNotifications() : void {
+
+    // }
 
     isOnlyReader(): boolean {
         return this.store.authService.isOnlyReader();

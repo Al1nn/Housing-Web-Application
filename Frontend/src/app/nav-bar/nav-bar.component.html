@@ -24,15 +24,15 @@
 
   <div class="user-bar d-flex" style="margin-left: auto; margin-right: 50px;" *ngIf="loggedIn ; else noAccount">
     
-    <!-- <div class="dropdown notification-dropdown" dropdown *ngIf="matBadger > 0 ; else noNotifications">
+    <div class="dropdown notification-dropdown" dropdown *ngIf="matBadger > 0 ; else noNotifications">
       <button mat-icon-button class="me-2"   aria-label="Notifications" dropdownToggle (click)="false">
         <mat-icon style="color: white;"  [matBadge]="matBadger" aria-hidden="false" >notifications</mat-icon>
       </button>
       <div class="dropdown-menu notification-menu" *dropdownMenu>
         <div *ngFor="let notification of newNotifications; let i = index;" class="dropdown-item" routerLink="/user/messages">
           <div class="notification-avatar">
-            <img class="user-image" *ngIf="notification.userPicture; else noPicture" 
-              [src]="thumbnailFolder + notification.userPicture" 
+            <img class="user-image" *ngIf="notification.senderPhoto; else noPicture" 
+              [src]="thumbnailFolder + notification.senderPhoto" 
               alt="User Profile Picture">
             <ng-template #noPicture>
               <img class="user-image" src="/assets/user_images/user_default.jpg" alt="Default User Image">
@@ -40,7 +40,7 @@
           </div>
           <div class="notification-content">
             <div class="notification-header">
-              <span class="user-name">{{notification.userName}}</span>
+              <span class="user-name">{{notification.senderName}}</span>
               <div class="notification-actions">
                 <span class="notification-time">{{notification.dateTime}}</span>
                
@@ -51,7 +51,7 @@
         
         </div>
       </div>
-    </div> -->
+    </div>
 
    
 

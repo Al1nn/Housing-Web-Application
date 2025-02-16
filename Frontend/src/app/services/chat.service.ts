@@ -199,7 +199,7 @@ export class ChatService {
           
           // Get recent notifications
           const snapshot = await this.db.list(notificationPath, ref =>
-            ref.orderByChild('dateTime')
+            ref.orderByChild('senderId')
             // Limit the query to recent notifications for better performance
             .limitToLast(10)
           ).query.once('value');
@@ -260,6 +260,16 @@ export class ChatService {
           console.error('Error in sendNotification:', error);
           return throwError(() => error);
         }
+      }
+
+      listenNotifications(destinationId: string): Observable<INotification[]> {
+        const notificationPath = `notifications/${destinationId}`;
+        
+        return this.db.list<INotification>(notificationPath).snapshotChanges().pipe(
+          map(changes =>
+            changes.map(c => ({ key: c.payload.key, ...c.payload.val() as INotification }))
+          )
+        );
       }
     
     

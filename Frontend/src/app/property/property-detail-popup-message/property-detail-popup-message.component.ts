@@ -70,11 +70,13 @@ export class PropertyDetailPopupMessageComponent implements OnInit, OnDestroy {
         }
     }
 
-    private async deleteNotifications() {
+    private deleteNotifications() {
         if (this.token) {
             // this.store.chatService.deleteNotification(this.token.nameid, this.data.postedBy.toString()).subscribe(() => {
                
             // });
+
+            this.store.chatService.removeNotification(this.data.postedBy.toString(), this.token.nameid);
         }
     }
 
