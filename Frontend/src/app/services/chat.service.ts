@@ -193,7 +193,6 @@ export class ChatService {
     private async checkForDuplicateNotification(
         notification: INotification,
         destinationId: string,
-        timeWindowMinutes: number = 5
       ): Promise<boolean> {
         try {
           const notificationPath = `notifications/${destinationId}`;
@@ -210,18 +209,16 @@ export class ChatService {
           }
     
           const notifications = snapshot.val();
-          const currentTime = new Date();
-          const timeWindow = timeWindowMinutes * 60 * 1000; // Convert to milliseconds
+          
+          
     
           // Check for duplicates within the time window
           return Object.values(notifications).some((existingNotification: any) => {
-            const notificationTime = new Date(existingNotification.dateTime);
-            const timeDifference = currentTime.getTime() - notificationTime.getTime();
+            
+            
     
             return (
-              existingNotification.senderId === notification.senderId &&
-              existingNotification.notification === notification.notification &&
-              timeDifference <= timeWindow
+              existingNotification.senderId === notification.senderId 
             );
           });
         } catch (error) {
@@ -266,34 +263,65 @@ export class ChatService {
       }
     
     
-
-
-
-
-
-    setFlag(chatId: string, userId: string): Observable<void> { // Setez flagul seen = true, de la mesaj, si recalculez messagesCount
-        return this.db.object(`${this.chatPath}/${chatId}`).valueChanges().pipe(
-            take(1),
-            switchMap((chat: any) => {
-                const updates: { [key: string]: any } = {};
-                let unseenCount = 0;
-                if (chat.messages) {
-                    Object.keys(chat.messages).forEach(messageKey => {
-                        if (chat.messages[messageKey].seen === false && chat.messages[messageKey].senderId !== userId) {
-                            updates[`${this.chatPath}/${chatId}/messages/${messageKey}/seen`] = true;
-                            unseenCount++;
-                        }
-                    });
+      async removeNotification(senderId: string, destinationId: string): Promise<void> {
+        try {
+            const notificationPath = `notifications/${destinationId}`;
+    
+            // Get all notifications for the destinationId
+            const snapshot = await this.db.list(notificationPath).query.once('value');
+    
+            if (!snapshot.exists()) {
+                console.log('No notifications found for destination:', destinationId);
+                return;
+            }
+    
+            const updates: any = {};
+            snapshot.forEach(childSnapshot => {
+                const notification = childSnapshot.val();
+                if (notification.senderId === senderId) {
+                    updates[childSnapshot.key!] = null; // Mark for deletion
                 }
-
-                const newMessagesCount = Math.max(0, (chat.messagesCount || 0) - unseenCount);
-                updates[`${this.chatPath}/${chatId}/messagesCount`] = newMessagesCount;
-
-                return from(this.db.object('/').update(updates));
-            }),
-            map(() => void 0)
-        );
+            });
+    
+            if (Object.keys(updates).length > 0) {
+                await this.db.object(notificationPath).update(updates);
+                console.log(`Notifications from senderId ${senderId} removed successfully.`);
+            } else {
+                console.log(`No matching notifications found for senderId: ${senderId}`);
+            }
+    
+        } catch (error) {
+            console.error('Error removing notification:', error);
+        }
     }
+    
+
+
+
+
+        setFlag(chatId: string, userId: string): Observable<void> { // Setez flagul seen = true, de la mesaj, si recalculez messagesCount
+            return this.db.object(`${this.chatPath}/${chatId}`).valueChanges().pipe(
+                take(1),
+                switchMap((chat: any) => {
+                    const updates: { [key: string]: any } = {};
+                    let unseenCount = 0;
+                    if (chat.messages) {
+                        Object.keys(chat.messages).forEach(messageKey => {
+                            if (chat.messages[messageKey].seen === false && chat.messages[messageKey].senderId !== userId) {
+                                updates[`${this.chatPath}/${chatId}/messages/${messageKey}/seen`] = true;
+                                unseenCount++;
+                            }
+                        });
+                    }
+
+                    const newMessagesCount = Math.max(0, (chat.messagesCount || 0) - unseenCount);
+                    updates[`${this.chatPath}/${chatId}/messagesCount`] = newMessagesCount;
+
+                    return from(this.db.object('/').update(updates));
+                }),
+                map(() => void 0)
+            );
+        }
 
 
 
