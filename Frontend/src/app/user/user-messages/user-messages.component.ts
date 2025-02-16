@@ -133,7 +133,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
             });
 
             await this.listenForMessages();
-            
+            this.scrollMessages();
         }
     }
 
@@ -198,7 +198,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
         }
 
         this.chatId = chat.id as string;
-
+        this.scrollToBottom();
         await this.setUserOnline();
         await this.setFlags();
         await this.listenForMessages();
@@ -208,7 +208,7 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
     }
 
     async onSuggestionSelected(user: IUserCard) {
-        
+        this.scrollToBottom();
         await this.setUserOffline();
         await this.checkForExistingChat(user);
     }
@@ -231,5 +231,13 @@ export class UserMessagesComponent implements OnInit, OnDestroy {
                 this.endOfChat.nativeElement.scrollIntoView({ behavior: 'smooth' });
             }
         }, 300);
+    }
+
+    scrollMessages() {
+        setTimeout(() => {
+            if (this.endOfChat) {
+                this.endOfChat.nativeElement.scrollIntoView({ behavior: 'instant' });
+            } 
+        }, 50);
     }
 }
