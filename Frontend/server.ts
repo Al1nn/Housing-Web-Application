@@ -4,7 +4,7 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import AppServerModule from './src/main.server';
-import 'localstorage-polyfill';
+
 
 global['localStorage'] = localStorage;
 // The Express app is exported so that it can be used by serverless Functions.
