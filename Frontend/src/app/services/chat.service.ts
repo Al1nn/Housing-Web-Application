@@ -277,7 +277,7 @@ export class ChatService {
         try {
             const notificationPath = `notifications/${destinationId}`;
     
-            // Get all notifications for the destinationId
+          
             const snapshot = await this.db.list(notificationPath).query.once('value');
     
             if (!snapshot.exists()) {
@@ -289,7 +289,7 @@ export class ChatService {
             snapshot.forEach(childSnapshot => {
                 const notification = childSnapshot.val();
                 if (notification.senderId === senderId) {
-                    updates[childSnapshot.key!] = null; // Mark for deletion
+                    updates[childSnapshot.key!] = null; 
                 }
             });
     
@@ -309,7 +309,7 @@ export class ChatService {
 
 
 
-        setFlag(chatId: string, userId: string): Observable<void> { // Setez flagul seen = true, de la mesaj, si recalculez messagesCount
+        setFlag(chatId: string, userId: string): Observable<void> { 
             return this.db.object(`${this.chatPath}/${chatId}`).valueChanges().pipe(
                 take(1),
                 switchMap((chat: any) => {

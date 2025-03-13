@@ -11,13 +11,11 @@
         IPropertyTypeRepository PropertyTypeRepository { get; }
 
         IFurnishingTypeRepository FurnishingTypeRepository { get; }
-
-        ITreeRepository TreeRepository { get; }
+        
 
         ICurrencyRepository CurrencyRepository { get; }
 
         public Task<bool> SaveAsync();
-
-        public Task<bool> SaveTreeAsync();
+        
     }
 }

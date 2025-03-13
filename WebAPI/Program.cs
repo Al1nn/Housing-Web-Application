@@ -34,7 +34,7 @@ connectionBuilder.Password = builder.Configuration.GetSection("DBPassword").Valu
 
 var connectionString = connectionBuilder.ConnectionString;
 
-var treeConnectionString = builder.Configuration.GetConnectionString("Tree");
+
 
 
 builder.Services.AddDbContext<DataContext>(options =>
@@ -51,18 +51,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 });
 
-builder.Services.AddDbContext<TreeContext>(options =>
-{
-    options.UseSqlServer(treeConnectionString
-    , sqlServerOptionsAction: sqlOptions =>
-    {
-        sqlOptions.EnableRetryOnFailure(
-         maxRetryCount: 5,
-         maxRetryDelay: TimeSpan.FromSeconds(30),
-         errorNumbersToAdd: null);
-    }
-    );
-});
+
 
 builder.Services.AddControllers().AddNewtonsoftJson((x) =>
 {

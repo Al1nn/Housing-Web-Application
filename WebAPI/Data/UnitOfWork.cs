@@ -8,12 +8,10 @@ namespace WebAPI.Data
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DataContext dc;
-        private readonly TreeContext tc;
-   
-        public UnitOfWork(DataContext dc, TreeContext tc)
+        
+        public UnitOfWork(DataContext dc)
         {
             this.dc = dc;
-            this.tc = tc;
         }
 
 
@@ -34,17 +32,12 @@ namespace WebAPI.Data
         public ICurrencyRepository CurrencyRepository => new CurrencyRepository(dc);  
 
         // Add more repos
-        public ITreeRepository TreeRepository => new TreeRepository(tc);
-
 
         public async Task<bool> SaveAsync()
         {
             return await dc.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> SaveTreeAsync()
-        {
-            return await tc.SaveChangesAsync() > 0;
-        }
+        
     }
 }
