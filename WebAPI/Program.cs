@@ -20,13 +20,13 @@ string dbCredentials = "";
 string dbPassword = "";
 if (builder.Environment.IsProduction())
 {
-    dbCredentials = "Default_Production";
-    dbPassword = "DBPassword_Production";
+    dbCredentials = "ConnectionStrings:Production";
+    dbPassword = "ConnectionStrings:DBPassword_Production";
 }
 else if (builder.Environment.IsDevelopment())
 {
-    dbCredentials = "Default";
-    dbPassword = "DBPassword";
+    dbCredentials = "ConnectionStrings:Development";
+    dbPassword = "ConnectionStrings:DBPassword_Development";
 }
 
 var connectionBuilder = new SqlConnectionStringBuilder(
