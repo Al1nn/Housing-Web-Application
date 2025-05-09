@@ -16,24 +16,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables(prefix: "MYFIRSTAPP_");
 
 
-string dbCredentials = "";
-string dbPassword = "";
+string dbConnectionName = "";
+string dbPasswordKey = "";
+
 if (builder.Environment.IsProduction())
 {
-    dbCredentials = "ConnectionStrings:Production";
-    dbPassword = "ConnectionStrings:DBPassword_Production";
+    dbConnectionName = "Production";
+    dbPasswordKey = "ConnectionStrings:DBPassword_Production";
 }
 else if (builder.Environment.IsDevelopment())
 {
-    dbCredentials = "ConnectionStrings:Development";
-    dbPassword = "ConnectionStrings:DBPassword_Development";
+    dbConnectionName = "Development";
+    dbPasswordKey = "ConnectionStrings:DBPassword_Development";
 }
 
 var connectionBuilder = new SqlConnectionStringBuilder(
-        builder.Configuration.GetConnectionString(dbCredentials));
+    builder.Configuration.GetConnectionString(dbConnectionName));
 
+connectionBuilder.Password = builder.Configuration[dbPasswordKey];
 
-connectionBuilder.Password = builder.Configuration.GetSection(dbPassword).Value;
 
 var connectionString = connectionBuilder.ConnectionString;
 

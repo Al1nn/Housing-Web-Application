@@ -9,7 +9,7 @@ using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using WebAPI.Extensions;
-using Castle.Components.DictionaryAdapter.Xml;
+
 using System.Globalization;
 
 
