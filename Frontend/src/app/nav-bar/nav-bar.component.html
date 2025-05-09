@@ -59,7 +59,7 @@
       <img class="img-fluid rounded-circle user-image" *ngIf="this.profilePicture; else noPicture" 
       [src]="thumbnailFolder + this.profilePicture" alt="User Profile Picture">
       <ng-template #noPicture>
-        <img class="img-fluid rounded-circle user-image" src="/assets/user_images/user_default.jpg" alt="Default User Image">
+        <img class="img-fluid rounded-circle user-image" src="../../assets/user_images/user_default.jpg" alt="Default User Image">
       </ng-template>
 
       <a href="#" class="dropdown-toggle text-light" dropdownToggle (click)="false">
