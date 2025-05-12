@@ -1,4 +1,4 @@
-# TutorialAngular
+# Housing Web application
 
 ## List of necessary commands
 1. npm install
