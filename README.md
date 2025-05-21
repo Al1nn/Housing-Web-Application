@@ -28,6 +28,65 @@
   </li>
 </ul>
 
+<h2>For Property Owners</h2>
+
+<ul>
+  <li>
+    <h3>Free Property Listing:</h3><p> List your property with detailed specifications</p>
+  </li>
+  <li>
+    <h3>Property Management:</h3><p> Update details, upload multiple photos, and track interest</p>
+  </li>
+  <li>
+    <h3>User Dashboard:</h3><p> Manage all your properties in one place</p>
+  </li>
+  <li>
+    <h3>Real-time Communication:</h3><p>Chat with potential buyers or renters directly</p>
+  </li>
+</ul>
+
+<h2>Platform Features</h2>
+
+<ul>
+  <li>
+    <h3>User Authentication:</h3><p>Secure registration and login system</p>
+  </li>
+  <li>
+    <h3>Multi-role Support:</h3><p>Different access levels for admins, owners, and readers</p>
+  </li>
+  <li>
+    <h3>Responsive Design:</h3><p>Seamless experience across desktop and mobile devices</p>
+  </li>
+  <li>
+    <h3>Real-time Messaging</h3><p>Instant communication between users</p>
+  </li>
+</ul>
 
 
+<h2>Technology Stack</h2>
 
+<ul>
+  <li>
+    <h3>Frontend:</h3><p>Angular with TypeScript</p>  
+  </li>
+  <li>
+    <h3>Backend:</h3><p>ASP.NET Core Web API</p>
+  </li>
+  <li>
+    <h3>Database:</h3><p>Microsoft SQL Server</p>
+  </li>
+  <li>
+    <h3>Authentication:</h3><p>JWT with role-based authorization</p>
+  </li>
+  <li>
+    <h3>Styling:</h3><p>Bootstrap, Angular Material, CSS</p>
+  </li>
+  <li>
+    <h3>Maps Integration:</h3><p>Google Maps API</p>
+  </li>
+  <li>
+    <h3>Real-Time Communication:</h3><p>Google Firebase</p>
+  </li>
+</ul>
+
+<h2>Application Screenshots</h2>
