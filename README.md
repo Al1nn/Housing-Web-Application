@@ -177,29 +177,40 @@
 <h2>Installation and Setup</h2>
 
 <p>
-  # Clone the repository
+Clone the repository:
 git clone https://github.com/yourusername/hspa.git
 
-# Navigate to the project directory
+Navigate to the project directory:
 cd hspa
 
-# Install dependencies for the frontend
+Install dependencies for the frontend:
 cd frontend
 npm install
 
-# Start the frontend application
+Start the frontend application:
 ng serve
 
-# Navigate to the backend directory
+Navigate to the backend directory:
 cd ../backend
 
-# Restore .NET packages
+Restore .NET packages:
 dotnet restore
 
-# Run the backend application
+Run the backend application:
 dotnet run
 </p>
 
+<h2>Testing</h2>
+
+<p>
+  Run frontend tests:
+  cd frontend
+  ng test
+
+  Run backend tests:
+  cd backend
+  dotnet test
+</p>
 
 
 
