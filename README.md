@@ -177,39 +177,39 @@
 <h2>Installation and Setup</h2>
 
 <p>
-Clone the repository:
-git clone https://github.com/yourusername/hspa.git
+Clone the repository:<br>
+git clone https://github.com/Al1nn/Housing-Web-Application.git<br>
 
-Navigate to the project directory:
-cd hspa
+Navigate to the project directory:<br>
+cd hspa<br>
 
-Install dependencies for the frontend:
-cd frontend
-npm install
+Install dependencies for the frontend:<br>
+cd frontend<br>
+npm install<br>
 
-Start the frontend application:
-ng serve
+Start the frontend application:<br>
+ng serve<br>
 
-Navigate to the backend directory:
-cd ../backend
+Navigate to the backend directory:<br>
+cd ../backend<br>
 
-Restore .NET packages:
-dotnet restore
+Restore .NET packages:<br>
+dotnet restore<br>
 
-Run the backend application:
-dotnet run
+Run the backend application:<br>
+dotnet run<br>
 </p>
 
 <h2>Testing</h2>
 
 <p>
-  Run frontend tests:
-  cd frontend
-  ng test
+  Run frontend tests:<br>
+  cd frontend<br>
+  ng test<br>
 
-  Run backend tests:
-  cd backend
-  dotnet test
+  Run backend tests:<br>
+  cd backend<br>
+  dotnet test<br>
 </p>
 
 
