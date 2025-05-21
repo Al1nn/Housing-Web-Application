@@ -89,4 +89,11 @@
   </li>
 </ul>
 
-<h2>Application Screenshots</h2>
+<h1>Application Screenshots</h1>
+
+<h2>Property Listings</h2>
+
+<img width="1800" alt="Screenshot 2025-05-21 at 6 03 22 PM" src="https://github.com/user-attachments/assets/eaee48c6-06cb-436e-b0a2-5eb6ea43311a" />
+
+<p>Browse through various property listings with filter options</p>
+
