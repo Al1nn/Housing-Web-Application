@@ -154,7 +154,25 @@
   </li>
 </ul>
 
+<h2>Future Enhancements</h2>
 
+<ul>
+  <li>
+    <p>Integration with payment gateways for premium listings</p>
+  </li>
+  <li>
+    <p>AI-powered property recommendations</p>
+  </li>
+  <li>
+    <p>Virtual property tours</p>
+  </li>
+  <li>
+    <p>Advanced analytics for property owners</p>
+  </li>
+  <li>
+    <p>Mobile applications for iOS and Android</p>
+  </li>
+</ul>
 
 
 
