@@ -97,3 +97,73 @@
 
 <p>Browse through various property listings with filter options</p>
 
+<h2>Property Details</h2>
+
+<img width="1324" alt="Screenshot 2025-05-21 at 6 09 35 PM" src="https://github.com/user-attachments/assets/b0ead293-fdf4-4be3-9e2d-52f1fde6be70" />
+<img width="1325" alt="Screenshot 2025-05-21 at 6 08 47 PM" src="https://github.com/user-attachments/assets/582a76fe-9e31-4ca5-b551-8c13ce66493a" />
+
+<p>Detailed view of property with specifications and photos</p>
+
+<h2>User Registration</h2>
+
+<img width="1800" alt="Screenshot 2025-05-21 at 6 04 08 PM" src="https://github.com/user-attachments/assets/1b7e41d2-97b8-4a8b-b68d-12e14db4e773" />
+
+<p>Simple and secure user registration process</p>
+
+<h2>Chat Interface</h2>
+
+<img width="1322" alt="Screenshot 2025-05-21 at 6 07 22 PM" src="https://github.com/user-attachments/assets/e36a34e6-4676-42d2-91b0-4a035131bd0f" />
+
+<p>Real-time messaging between property seekers and owners</p>
+
+<h2>Property Listing Form</h2>
+
+<img width="1786" alt="Screenshot 2025-05-21 at 6 05 34 PM" src="https://github.com/user-attachments/assets/d0dad6d6-b172-4d95-b84e-e481f3231ec5" />
+
+<p>Intuitive interface for adding new properties with location selection</p>
+
+<h2>Key Technical Implementations</h2>
+
+<ul>
+  <li>
+    <h3>Reactive Forms </h3><p>for robust validation and form management</p>
+  </li>
+  <li>
+    <h3>Lazy Loading Modules </h3><p>for optimized performance</p>
+  </li>
+  <li>
+    <h3>JWT Authentication </h3><p>with secure token management</p>
+  </li>
+  <li>
+    <h3>Repository Pattern </h3><p>for clean data access abstraction</p>
+  </li>
+  <li>
+    <h3>Dependency Injection </h3><p>for loose coupling and testability</p>
+  </li>
+  <li>
+    <h3>RESTful API </h3><p>design for seamless communication</p>
+  </li>
+  <li>
+    <h3>Real-Time Notifications </h3><p>using Google Firebase</p>
+  </li>
+  <li>
+    <h3>Responsive UI </h3><p>with mobile-first approach</p>
+  </li>
+  <li>
+    <h3>Role-based Authorization </h3> <p>for secure access control</p>
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
