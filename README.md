@@ -181,7 +181,7 @@ Clone the repository:<br>
 git clone https://github.com/Al1nn/Housing-Web-Application.git<br>
 
 Navigate to the project directory:<br>
-cd hspa<br>
+cd Housing-Web-Application<br>
 
 Install dependencies for the frontend:<br>
 cd frontend<br>
@@ -191,7 +191,7 @@ Start the frontend application:<br>
 ng serve<br>
 
 Navigate to the backend directory:<br>
-cd ../backend<br>
+cd ../WebAPI<br>
 
 Restore .NET packages:<br>
 dotnet restore<br>
@@ -208,7 +208,7 @@ dotnet run<br>
   ng test<br>
 
   Run backend tests:<br>
-  cd backend<br>
+  cd WebAPI<br>
   dotnet test<br>
 </p>
 
