@@ -31,7 +31,7 @@ import { MatButtonModule } from '@angular/material/button';
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
-        AngularFireModule.initializeApp({ "projectId": "myfirstapp-a15e1", "appId": "1:859208953616:web:f9a1026cb308c49963bf95", "databaseURL": "https://your_firebase_url.firebasedatabase.app", "storageBucket": "myfirstapp-a15e1.appspot.com", "apiKey": "your_google_api_key", "authDomain": "url.firebaseapp.com", "messagingSenderId": "859208953616" }),
+        AngularFireModule.initializeApp({ "projectId": "your_project_id", "appId": "1:859208953616:web:f9a1026cb308c49963bf95", "databaseURL": "https://your_firebase_url.firebasedatabase.app", "storageBucket": "myfirstapp-a15e1.appspot.com", "apiKey": "your_google_api_key", "authDomain": "url.firebaseapp.com", "messagingSenderId": "859208953616" }),
         AngularFireDatabaseModule,
         MatBadgeModule,
         MatIconModule,
@@ -54,7 +54,7 @@ import { MatButtonModule } from '@angular/material/button';
             multi: true
         },
         provideHttpClient(withInterceptorsFromDi()),
-        provideFirebaseApp(() => initializeApp({ "projectId": "myfirstapp-a15e1", "appId": "1:859208953616:web:f9a1026cb308c49963bf95", "databaseURL": "https://your_firebase_url.firebasedatabase.app", "storageBucket": "myfirstapp-a15e1.appspot.com", "apiKey": "your_google_api_key", "authDomain": "url.firebaseapp.com", "messagingSenderId": "859208953616" })),
+        provideFirebaseApp(() => initializeApp({ "projectId": "your_project_id", "appId": "1:859208953616:web:f9a1026cb308c49963bf95", "databaseURL": "https://your_firebase_url.firebasedatabase.app", "storageBucket": "myfirstapp-a15e1.appspot.com", "apiKey": "your_google_api_key", "authDomain": "url.firebaseapp.com", "messagingSenderId": "859208953616" })),
         provideDatabase(() => getDatabase()),
     ]
 })
