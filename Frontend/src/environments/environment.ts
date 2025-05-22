@@ -1,7 +1,7 @@
 export const environment = {
     production: false,
-    baseUrl: 'http://localhost:5207/api',
-    thumbnailFolder: 'http://localhost:5207/UPLOADS/thumbnails/',
-    originalPictureFolder: 'http://localhost:5207/UPLOADS/originalSizes/',
-    googleKey: 'AIzaSyAN3_n0tOjV_tJ37vc33Xpa9Kbr5ERSRGE',
+    baseUrl: 'http://your_url/api',
+    thumbnailFolder: 'http://your_url/UPLOADS/thumbnails/',
+    originalPictureFolder: 'http://your_url/UPLOADS/originalSizes/',
+    googleKey: 'your google console key',
 };
