@@ -180,7 +180,7 @@
 <h4>Clone the repository:</h4><br>
 git clone https://github.com/Al1nn/Housing-Web-Application.git<br>
 
-<h4>Navigate to the project directory:/h4><br>
+<h4>Navigate to the project directory:</h4><br>
 cd Housing-Web-Application<br>
 
 <h4>Install dependencies for the frontend:</h4><br>
