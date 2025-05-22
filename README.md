@@ -122,6 +122,12 @@
 
 <p>Intuitive interface for adding new properties with location selection</p>
 
+<h2>Property Stats Form</h2>
+
+<img width="1785" alt="Screenshot 2025-05-22 at 6 47 08 PM" src="https://github.com/user-attachments/assets/a6d1bdf9-ad42-4d64-ba8c-50fe5b32d636" />
+
+<p>This interface is designed for admin accounts only</p>
+
 <h2>Key Technical Implementations</h2>
 
 <ul>
