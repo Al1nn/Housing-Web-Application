@@ -177,37 +177,37 @@
 <h2>Installation and Setup</h2>
 
 <p>
-<h6>Clone the repository:</h6><br>
+<h4>Clone the repository:</h4><br>
 git clone https://github.com/Al1nn/Housing-Web-Application.git<br>
 
-<h6>Navigate to the project directory:/h6><br>
+<h4>Navigate to the project directory:/h4><br>
 cd Housing-Web-Application<br>
 
-<h6>Install dependencies for the frontend:</h6><br>
+<h4>Install dependencies for the frontend:</h4><br>
 cd frontend<br>
 npm install<br>
 
-<h6>Start the frontend application:</h6><br>
+<h4>Start the frontend application:</h4><br>
 ng serve<br>
 
-<h6>Navigate to the backend directory:</h6><br>
+<h4>Navigate to the backend directory:</h4><br>
 cd ../WebAPI<br>
 
-<h6>Restore .NET packages:</h6><br>
+<h4>Restore .NET packages:</h4><br>
 dotnet restore<br>
 
-<h6>Run the backend application:</h6><br>
+<h4>Run the backend application:</h4><br>
 dotnet run<br>
 </p>
 
 <h2>Testing</h2>
 
 <p>
-  <h6>Run frontend tests:</h6><br>
+  <h4>Run frontend tests:</h4><br>
   cd Frontend<br>
   ng test<br>
 
-  <h6>Run backend tests:</h6><br>
+  <h4>Run backend tests:</h4><br>
   cd WebAPI<br>
   dotnet test<br>
 </p>
