@@ -44,7 +44,12 @@ namespace WebAPI.Controllers
             return Ok(usersDto);
         }
 
-    
+        [HttpGet("userAdmins")]
+        public async Task<IActionResult> GetAdmins()
+        {
+            int count = await uow.UserRepository.GetAdminCountAsync();
+            return Ok(count);
+        }
  
         //api/account/login
         [HttpPost("login")]

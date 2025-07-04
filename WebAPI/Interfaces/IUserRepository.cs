@@ -14,7 +14,8 @@ namespace WebAPI.Interfaces
         Task<bool> UserAlreadyExists(string username);
 
         Task<User> GetUserById(int id);
-
+        
+        Task<int> GetAdminCountAsync();
         void EncryptPassword(string password, out byte[] passwordHash, out byte[] passwordKey);
 
         void UpdateUser(User user);
@@ -23,6 +24,6 @@ namespace WebAPI.Interfaces
 
         Task<IEnumerable<User>> GetOtherUsersAsync(int currentId);
         
-       
+        
     }
 }

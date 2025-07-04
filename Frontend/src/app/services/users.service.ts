@@ -28,6 +28,9 @@ export class UsersService {
         return this.http.get<IUserCard[]>(this.baseUrl + '/account/others', httpOptions);
     }
 
+    countAdmins() : Observable<number>{
+      return this.http.get<number>(this.baseUrl + '/account/userAdmins');
+    }
 
     verifyOldPassword(password: string): Observable<boolean> {
         let token = '';

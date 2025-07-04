@@ -59,6 +59,12 @@ namespace WebAPI.Data.Repo
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public async Task<int> GetAdminCountAsync()
+        {
+            return await dc.Users
+                .CountAsync(u => u.Roles.Any(role => role.Name == "Admin"));
+        }
+
         public async Task<IEnumerable<User>> GetOtherUsersAsync(int currentId)
         {
             return await dc.Users

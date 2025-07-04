@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  dissertation:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: dissertation
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=mypassword@123
+      - MSSQL_PID=Developer
+      - MSSQL_USER=sa
+    volumes:
+      - mssql-data:/var/opt/mssql
+      - mssql-ext:/var/opt/mssql-extensibility
+
+volumes:
+  mssql-data:
+  mssql-ext:

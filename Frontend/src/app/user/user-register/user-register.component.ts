@@ -94,6 +94,13 @@ export class UserRegisterComponent implements OnInit {
 
 
     ngOnInit() {
+        this.store.usersService.countAdmins().subscribe(data => {
+
+
+          if(data === 10){
+            this.rolesItems.shift();
+          }
+        });
         this.createRegistrationForm();
     }
 
@@ -147,7 +154,7 @@ export class UserRegisterComponent implements OnInit {
         return this.formData;
     }
     onSubmit() {
-        
+
 
 
 
