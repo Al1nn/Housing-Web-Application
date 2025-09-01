@@ -7,6 +7,7 @@ using SixLabors.ImageSharp;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Identity.Client.Utils;
 using WebAPI.Dtos;
 using WebAPI.Errors;
 using WebAPI.Extensions;
@@ -285,7 +286,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Register([FromForm] LoginReqDto loginReq)
         {
             ApiError apiError = new ApiError();
-            if (loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsEmpty() || loginReq.PhoneNumber.IsEmpty() || loginReq.Roles.Count == 0 || loginReq.Roles.IsNullOrEmpty())
+            if (loginReq.Username.IsEmpty() || loginReq.Password.IsEmpty() || loginReq.Email.IsEmpty() || loginReq.PhoneNumber.IsEmpty() || loginReq.Roles.Count == 0 || !loginReq.Roles.Any())
             {
                 apiError.ErrorCode = BadRequest().StatusCode;
                 apiError.ErrorMessage = "User credentials cannot be blank or unselected";
